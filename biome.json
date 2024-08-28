@@ -3,6 +3,9 @@
 	"organizeImports": {
 		"enabled": true
 	},
+	"files": {
+		"ignore": ["@mf-types/**", "**/*.gen.ts"]
+	},
 	"vcs": {
 		"enabled": true,
 		"clientKind": "git",
@@ -10,7 +13,9 @@
 	},
 	"formatter": {
 		"indentStyle": "tab",
-		"indentWidth": 2
+		"lineWidth": 160,
+		"indentWidth": 2,
+		"enabled": true
 	},
 	"javascript": {
 		"formatter": {
@@ -20,6 +25,15 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
+			"suspicious": {
+				"noArrayIndexKey": "off"
+			},
+			"a11y": {
+				"useKeyWithClickEvents": "off"
+			},
+			"correctness": {
+				"useExhaustiveDependencies": "off"
+			},
 			"recommended": true
 		}
 	}
