@@ -10,33 +10,46 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root'
-import { Route as IndexImport } from './routes/index'
+import { Route as rootRoute } from './routes/__root';
+import { Route as IndexImport } from './routes/index';
+import { Route as RouletteImport } from './routes/roulette';
 
 // Create/Update Routes
 
+const RouletteRoute = RouletteImport.update({
+	path: '/roulette',
+	getParentRoute: () => rootRoute,
+} as any);
+
 const IndexRoute = IndexImport.update({
-  path: '/',
-  getParentRoute: () => rootRoute,
-} as any)
+	path: '/',
+	getParentRoute: () => rootRoute,
+} as any);
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
-  interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
-      parentRoute: typeof rootRoute
-    }
-  }
+	interface FileRoutesByPath {
+		'/': {
+			id: '/';
+			path: '/';
+			fullPath: '/';
+			preLoaderRoute: typeof IndexImport;
+			parentRoute: typeof rootRoute;
+		};
+		'/roulette': {
+			id: '/roulette';
+			path: '/roulette';
+			fullPath: '/roulette';
+			preLoaderRoute: typeof RouletteImport;
+			parentRoute: typeof rootRoute;
+		};
+	}
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexRoute })
+export const routeTree = rootRoute.addChildren({ IndexRoute, RouletteRoute });
 
 /* prettier-ignore-end */
 
@@ -46,11 +59,15 @@ export const routeTree = rootRoute.addChildren({ IndexRoute })
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/"
+        "/",
+        "/roulette"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/roulette": {
+      "filePath": "roulette.tsx"
     }
   }
 }

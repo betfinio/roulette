@@ -18,5 +18,5 @@ declare module '@tanstack/react-router' {
 const rootElement = document.getElementById('root');
 if (rootElement && !rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
-	root.render(<RouterProvider router={router} />);
+	root.render(<RouterProvider router={router} basepath={'/games'} />);
 }

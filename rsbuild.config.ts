@@ -20,25 +20,25 @@ const getApp = () => {
 function getOutput() {
 	switch (process.env.PUBLIC_ENVIRONMENT) {
 		case 'development':
-			return 'https://template.betfin.dev';
+			return 'https://roulette.betfin.dev';
 		case 'production':
-			return 'https://template.betfin.io';
+			return 'https://roulette.betfin.io';
 		case 'production-ua':
-			return 'https://template.betfin.gg';
+			return 'https://roulette.betfin.gg';
 		default:
-			return 'http://localhost:4000';
+			return 'http://localhost:4001';
 	}
 }
 
 export default defineConfig({
 	server: {
-		port: 4000,
+		port: 4001,
 	},
 	dev: {
-		assetPrefix: 'http://localhost:4000',
+		assetPrefix: 'http://localhost:4001',
 	},
 	html: {
-		title: 'BetFin Games',
+		title: 'BetFin Roulette',
 		favicon: './src/assets/favicon.svg',
 	},
 	output: {

@@ -1,14 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: ['class'],
-	important: '.template',
-	content: [
-		'./pages/**/*.{ts,tsx}',
-		'./components/**/*.{ts,tsx}',
-		'./app/**/*.{ts,tsx}',
-		'./src/**/*.{ts,tsx}',
-		'./@mf-types/**/*.*',
-	],
+	important: '.roulette',
+	content: ['./pages/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './app/**/*.{ts,tsx}', './src/**/*.{ts,tsx}', './@mf-types/**/*.*'],
 	prefix: '',
 	theme: {
 		container: {
