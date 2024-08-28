@@ -6,6 +6,6 @@ export const Route = createFileRoute('/')({
 });
 
 function Index() {
-	const { t } = useTranslation('', { keyPrefix: 'template' });
+	const { t } = useTranslation('', { keyPrefix: 'roulette' });
 	return <div className={'border border-red-roulette px-4 py-2 rounded-md text-white h-full'}>{t('title')}</div>;
 }

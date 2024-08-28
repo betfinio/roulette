@@ -3,5 +3,5 @@ import { createRootRoute } from '@tanstack/react-router';
 import { Root } from 'betfinio_app/root';
 
 export const Route = createRootRoute({
-	component: () => <Root id={'template'} instance={instance} />,
+	component: () => <Root id={'roulette'} instance={instance} />,
 });
