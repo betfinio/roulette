@@ -1,0 +1,54 @@
+.ball-container {
+  perspective: 1000px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ball {
+  border-radius: 50%;
+  background: yellow;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.symbol {
+  font-size: 3rem;
+  font-weight: bold;
+  color: black;
+  position: absolute;
+  top: 0;
+  animation: rollSymbol infinite linear;
+  animation-timing-function: steps(5);
+  transform-origin: 50% 50%;
+}
+
+@keyframes rollSymbol {
+  0% {
+    top: 0;
+    opacity: 1;
+  }
+  20% {
+    top: 50%;
+    opacity: 1;
+  }
+  40% {
+    top: 100%;
+    opacity: 0;
+  }
+  60% {
+    top: 100%;
+    opacity: 0;
+  }
+  80% {
+    top: -50%;
+    opacity: 0;
+  }
+  100% {
+    top: 0;
+    opacity: 1;
+  }
+}

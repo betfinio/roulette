@@ -2,70 +2,97 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-	background: #0F121D;
+html,
+body {
+  background: #0f121d;
+  overflow-x: hidden;
 }
 
 @layer base {
-	:root {
-		--background: 0 0% 100%;
-		--foreground: 0 0% 3.9%;
-		--card: 0 0% 100%;
-		--card-foreground: 0 0% 3.9%;
-		--popover: 0 0% 100%;
-		--popover-foreground: 0 0% 3.9%;
-		--primary: 0 0% 9%;
-		--primary-foreground: 0 0% 98%;
-		--secondary: 0 0% 96.1%;
-		--secondary-foreground: 0 0% 9%;
-		--muted: 0 0% 96.1%;
-		--muted-foreground: 0 0% 45.1%;
-		--accent: 0 0% 96.1%;
-		--accent-foreground: 0 0% 9%;
-		--destructive: 0 84.2% 60.2%;
-		--destructive-foreground: 0 0% 98%;
-		--border: 0 0% 89.8%;
-		--input: 0 0% 89.8%;
-		--ring: 0 0% 3.9%;
-		--radius: 0.5rem;
-		--chart-1: 12 76% 61%;
-		--chart-2: 173 58% 39%;
-		--chart-3: 197 37% 24%;
-		--chart-4: 43 74% 66%;
-		--chart-5: 27 87% 67%;
-	}
+  :root {
+    --spinningAnimationSpeed: 30s;
+    --spinningSpeed: 9s;
+    --background: 0 0% 100%;
+    --foreground: 0 0% 3.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+    --ring: 0 0% 3.9%;
+    --radius: 0.5rem;
+    --chart-1: 12 76% 61%;
+    --chart-2: 173 58% 39%;
+    --chart-3: 197 37% 24%;
+    --chart-4: 43 74% 66%;
+    --chart-5: 27 87% 67%;
+    --white: 0, 0%, 100%;
+    --green: hsl(153, 54%, 48%);
+    --orange: hsl(0, 86%, 68%);
+    --red: hsl(346, 71%, 54%);
+    --black: hsl(199, 21%, 15%);
+    --purple: hsl(300, 100%, 32%);
+    --purple-lighter: hsl(291, 81%, 71%);
+    --yellow: hsl(46, 100%, 60%);
+    --blue: hsl(195, 100%, 46%);
+    --blue-purple: hsl(233, 82%, 71%);
+    --blue-shiny: hsl(245, 100%, 70%);
+    --gold: hsl(46, 93%, 46%);
+    --silver: hsl(218, 10%, 63%);
+    --bronze: hsl(27, 89%, 59%);
+    --border-primary: hsl(226, 33%, 12%);
+    --bg-primary: hsl(232, 27%, 22%);
+    --bg-sec: hsl(229, 31%, 11%);
+    --bg-lighter: hsl(231, 40%, 17%);
+    --bg-darker: hsl(227, 32%, 9%);
+    --text-gray: hsl(228, 11%, 47%);
+    --min-width-sm: 344px;
+  }
 
-	.dark {
-		--background: 0 0% 3.9%;
-		--foreground: 0 0% 98%;
-		--card: 0 0% 3.9%;
-		--card-foreground: 0 0% 98%;
-		--popover: 0 0% 3.9%;
-		--popover-foreground: 0 0% 98%;
-		--primary: 0 0% 98%;
-		--primary-foreground: 0 0% 9%;
-		--secondary: 0 0% 14.9%;
-		--secondary-foreground: 0 0% 98%;
-		--muted: 0 0% 14.9%;
-		--muted-foreground: 0 0% 63.9%;
-		--accent: 0 0% 14.9%;
-		--accent-foreground: 0 0% 98%;
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 0 0% 98%;
-		--border: 0 0% 14.9%;
-		--input: 0 0% 14.9%;
-		--ring: 0 0% 83.1%;
-		--chart-1: 220 70% 50%;
-		--chart-2: 160 60% 45%;
-		--chart-3: 30 80% 55%;
-		--chart-4: 280 65% 60%;
-		--chart-5: 340 75% 55%;
-	}
+  .dark {
+    --spinningAnimationSpeed: 30s;
+    --spinningSpeed: 9s;
+    --background: 0 0% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+    --ring: 0 0% 83.1%;
+    --chart-1: 220 70% 50%;
+    --chart-2: 160 60% 45%;
+    --chart-3: 30 80% 55%;
+    --chart-4: 280 65% 60%;
+    --chart-5: 340 75% 55%;
+  }
 }
 
 @layer base {
-	* {
-		@apply border-border;
-		user-select: none;
-	}
+  * {
+    @apply border-border;
+    user-select: none;
+  }
 }
