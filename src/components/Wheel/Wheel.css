@@ -365,9 +365,9 @@ console.log($STEP_2)
 
 .roulette-wheel-inner::before {
   top: 24%;
-  bottom: 21%;
-  left: 18%;
-  right: 22%;
+  bottom: 24%;
+  left: 21%;
+  right: 21%;
   content: "";
   color: #fff;
   font-size: 60px;
@@ -376,13 +376,6 @@ console.log($STEP_2)
   display: flex; /* 🚨🚨🚨 IMPORTANT 🚨🚨🚨 DO NOT REMOVE THIS 🚨🚨🚨 */
 }
 
-.roulette-wheel-inner.rest::before {
-  transition: top 0.5s ease-in, right 0.5s ease-in, bottom 0.5s ease-in, left 0.5s ease-in;
-  top: 25%;
-  right: 25%;
-  bottom: 24%;
-  left: 14%;
-}
 
 @keyframes rotate {
   0% {
