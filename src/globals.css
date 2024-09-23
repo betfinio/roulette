@@ -2,12 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-html, body {
-	background: #0F121D;
+html,
+body {
+	background: #0f121d;
+	overflow-x: hidden;
 }
 
 @layer base {
 	:root {
+		--spinningAnimationSpeed: 30s;
+		--spinningSpeed: 9s;
 		--background: 0 0% 100%;
 		--foreground: 0 0% 3.9%;
 		--card: 0 0% 100%;
@@ -33,9 +37,32 @@ html, body {
 		--chart-3: 197 37% 24%;
 		--chart-4: 43 74% 66%;
 		--chart-5: 27 87% 67%;
+		--white: 0, 0%, 100%;
+		--green: hsl(153, 54%, 48%);
+		--orange: hsl(0, 86%, 68%);
+		--red: hsl(346, 71%, 54%);
+		--black: hsl(199, 21%, 15%);
+		--purple: hsl(300, 100%, 32%);
+		--purple-lighter: hsl(291, 81%, 71%);
+		--yellow: hsl(46, 100%, 60%);
+		--blue: hsl(195, 100%, 46%);
+		--blue-purple: hsl(233, 82%, 71%);
+		--blue-shiny: hsl(245, 100%, 70%);
+		--gold: hsl(46, 93%, 46%);
+		--silver: hsl(218, 10%, 63%);
+		--bronze: hsl(27, 89%, 59%);
+		--border-primary: hsl(226, 33%, 12%);
+		--bg-primary: hsl(232, 27%, 22%);
+		--bg-sec: hsl(229, 31%, 11%);
+		--bg-lighter: hsl(231, 40%, 17%);
+		--bg-darker: hsl(227, 32%, 9%);
+		--text-gray: hsl(228, 11%, 47%);
+		--min-width-sm: 344px;
 	}
 
 	.dark {
+		--spinningAnimationSpeed: 30s;
+		--spinningSpeed: 9s;
 		--background: 0 0% 3.9%;
 		--foreground: 0 0% 98%;
 		--card: 0 0% 3.9%;

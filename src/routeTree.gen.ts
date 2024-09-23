@@ -10,46 +10,83 @@
 
 // Import Routes
 
-import { Route as rootRoute } from './routes/__root';
-import { Route as IndexImport } from './routes/index';
-import { Route as RouletteImport } from './routes/roulette';
+import { Route as rootRoute } from './routes/__root'
+import { Route as RouletteImport } from './routes/roulette'
+import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
 const RouletteRoute = RouletteImport.update({
-	path: '/roulette',
-	getParentRoute: () => rootRoute,
-} as any);
+  path: '/roulette',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
-	path: '/',
-	getParentRoute: () => rootRoute,
-} as any);
+  path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
 
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
-	interface FileRoutesByPath {
-		'/': {
-			id: '/';
-			path: '/';
-			fullPath: '/';
-			preLoaderRoute: typeof IndexImport;
-			parentRoute: typeof rootRoute;
-		};
-		'/roulette': {
-			id: '/roulette';
-			path: '/roulette';
-			fullPath: '/roulette';
-			preLoaderRoute: typeof RouletteImport;
-			parentRoute: typeof rootRoute;
-		};
-	}
+  interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/roulette': {
+      id: '/roulette'
+      path: '/roulette'
+      fullPath: '/roulette'
+      preLoaderRoute: typeof RouletteImport
+      parentRoute: typeof rootRoute
+    }
+  }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexRoute, RouletteRoute });
+export interface FileRoutesByFullPath {
+  '/': typeof IndexRoute
+  '/roulette': typeof RouletteRoute
+}
+
+export interface FileRoutesByTo {
+  '/': typeof IndexRoute
+  '/roulette': typeof RouletteRoute
+}
+
+export interface FileRoutesById {
+  __root__: typeof rootRoute
+  '/': typeof IndexRoute
+  '/roulette': typeof RouletteRoute
+}
+
+export interface FileRouteTypes {
+  fileRoutesByFullPath: FileRoutesByFullPath
+  fullPaths: '/' | '/roulette'
+  fileRoutesByTo: FileRoutesByTo
+  to: '/' | '/roulette'
+  id: '__root__' | '/' | '/roulette'
+  fileRoutesById: FileRoutesById
+}
+
+export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
+  RouletteRoute: typeof RouletteRoute
+}
+
+const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
+  RouletteRoute: RouletteRoute,
+}
+
+export const routeTree = rootRoute
+  ._addFileChildren(rootRouteChildren)
+  ._addFileTypes<FileRouteTypes>()
 
 /* prettier-ignore-end */
 
