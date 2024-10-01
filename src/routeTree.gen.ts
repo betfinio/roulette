@@ -11,7 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as RouletteImport } from './routes./routes/roulette
+import { Route as RouletteImport } from './routes/roulette'
 import { Route as LiveRouletteImport } from './routes/live-roulette'
 import { Route as IndexImport } from './routes/index'
 
