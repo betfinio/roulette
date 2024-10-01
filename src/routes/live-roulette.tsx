@@ -5,7 +5,7 @@ import { Game } from '../game/Game';
 
 const queryClient = new QueryClient();
 
-export const Route = createFileRoute('/roulette')({
+export const Route = createFileRoute('/live-roulette')({
 	component: () => (
 		<div className="">
 			<QueryClientProvider client={queryClient}>

@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: ['class'],
-	important: '.roulette',
+	important: '.liro',
 	content: ['./src/**/*.{ts,tsx}'],
 	prefix: '',
 	theme: {
@@ -45,6 +45,9 @@ module.exports = {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))',
 				},
+			},
+			borderWidth: {
+				default: 'var(--border-default)',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

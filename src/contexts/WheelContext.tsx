@@ -1,4 +1,5 @@
-import { type ReactNode, createContext, useContext, useState } from 'react';
+import { type ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 interface WheelContextProps {
 	isWheelWheelSpinning: boolean;
@@ -12,6 +13,10 @@ interface WheelContextProps {
 	placeChip: (number: number | string, position: string, relatedNumbers: number[]) => void;
 	getChipColor: (value: number) => string;
 	changeIsDebug: () => void;
+	isAmerican: boolean;
+	isVertical: boolean;
+	isMobile: boolean;
+	isTablet: boolean;
 	isDebugMode: boolean;
 	selectedNumber: string;
 	setSelectedNumber: (number: string) => void;
@@ -67,6 +72,19 @@ export const WheelProvider: React.FC<WheelProviderProps> = ({ children }) => {
 	const [fallingSpeed, setFallingSpeed] = useState(8);
 	const [rotationSpeed, setRotationSpeed] = useState(5);
 	const [resizeFactor, setResizeFactor] = useState(0.3);
+	const [isAmerican, setIsAmerican] = useState(false);
+
+	// Detectar quando a largura da tela é menor que 1024px
+	const isMobile = useMediaQuery({ query: '(max-width: 639px)' });
+	// Estado inicial de isVertical
+	const [isVertical, setIsVertical] = useState(isMobile);
+
+	const isTablet = useMediaQuery({ minWidth: 640, maxWidth: 1023 });
+
+	// Efeito para atualizar o isVertical quando a largura da tela muda
+	useEffect(() => {
+		setIsVertical(isMobile);
+	}, [isMobile]);
 
 	const handleDoSpin = (betNumber: string) => {
 		setSelectedNumber(betNumber);
@@ -132,6 +150,10 @@ export const WheelProvider: React.FC<WheelProviderProps> = ({ children }) => {
 				placeChip,
 				getChipColor,
 				changeIsDebug,
+				isAmerican,
+				isVertical,
+				isMobile,
+				isTablet,
 				isDebugMode,
 				selectedNumber,
 				setSelectedNumber,

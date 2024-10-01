@@ -44,7 +44,7 @@ body {
 		--black: hsl(199, 21%, 15%);
 		--purple: hsl(300, 100%, 32%);
 		--purple-lighter: hsl(291, 81%, 71%);
-		--yellow: hsl(46, 100%, 60%);
+		--yellow: hsl(47, 100%, 50%);
 		--blue: hsl(195, 100%, 46%);
 		--blue-purple: hsl(233, 82%, 71%);
 		--blue-shiny: hsl(245, 100%, 70%);
@@ -58,6 +58,8 @@ body {
 		--bg-darker: hsl(227, 32%, 9%);
 		--text-gray: hsl(228, 11%, 47%);
 		--min-width-sm: 344px;
+		--max-w-global: 822px;
+		--border-default: 1px;
 	}
 
 	.dark {

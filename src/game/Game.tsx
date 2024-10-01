@@ -1,42 +1,120 @@
-import miniTableImg from '../assets/images/mini-table.svg';
+import { useState } from 'react';
 import BetHistory from '../components/BetHistory/BetHistory';
 import BetStatusHeader from '../components/BetStatusHeader/BetStatusHeader';
+import PageNavigation from '../components/PageNavigation/PageNavigation';
+import ResultHistory from '../components/ResultHistory/ResultHistory';
+import StatsDisplay from '../components/StatsDisplay/StatsDisplay';
 import TableBet from '../components/TableBet/TableBet';
 import TableGrid from '../components/TableGrid/TableGrid';
+import { TableRacetrack } from '../components/TableRacetrack/TableRacetrack';
 import CoinRainEffect from '../components/Wheel/CoinRainEffect';
 import Wheel from '../components/Wheel/Wheel';
+import { useWheel } from '../contexts/WheelContext';
 
 export const Game = () => {
+	const { isVertical, isTablet } = useWheel();
+	const [currentPage, setCurrentPage] = useState(1);
+
 	return (
-		<div className="flex flex-col items-center justify-center w-full gap-y-2">
-			<div className="relative w-full mt-2">
-				<div className="relative">
-					<BetStatusHeader />
-				</div>
-				<div className="relative mt-betstatus-offset h-wheel-height overflow-hidden">
-					<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
-					<div className="relative h-full z-0">
-						<Wheel />
+		<div className="relative w-full flex flex-col items-center justify-center gap-y-2">
+			<CoinRainEffect />
+
+			{/* Para Mobile */}
+			{isVertical ? (
+				<div className="flex flex-col items-center justify-center w-full gap-y-2">
+					{/* Conteúdo Principal no Mobile */}
+					<div className={`relative w-full mt-2 ${!isVertical && 'max-w-[--max-w-global]'}`}>
+						<div className="relative">
+							<BetStatusHeader />
+						</div>
+						<div className="relative overflow-hidden">
+							<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
+							<div className={`relative w-full h-full mx-auto flex ${isVertical ? 'max-w-sm' : 'max-w-5xl'}`}>
+								{!isVertical && <ResultHistory />}
+								<Wheel />
+								{!isVertical && <StatsDisplay />}
+							</div>
+						</div>
+					</div>
+					<TableRacetrack />
+					<div className={`${isVertical && 'w-[var(--min-width-sm)]'} flex flex-col gap-y-6 mb-8`}>
+						<TableGrid />
+						<BetHistory />
+						<TableBet />
 					</div>
 				</div>
-			</div>
-			<div className="w-[var(--min-width-sm)] flex items-center justify-between">
-				<div className="flex items-center space-x-2 text-sm">
-					<span>See my bets</span>
-					<label className="relative inline-flex items-center cursor-pointer">
-						<input type="checkbox" className="sr-only peer" />
-						<div className="w-10 h-5 bg-primaryDark peer-focus:outline-none peer-focus:ring-2 peer-focus:ring-[var(--yellow)] rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-[var(--yellow)] after:border after:rounded-full after:h-4 after:w-4 after:transition-all dark:border-[#151A2A] dark:border-[1px] peer-checked:bg-[var(--yellow)]" />
-					</label>
-					<span>All bets</span>
+			) : isTablet ? (
+				// Para Tablet - Layout em 3 partes com navegação
+				<div className="relative w-full max-w-6xl mt-4">
+					{currentPage === 1 && (
+						<div className="relative flex-1 flex flex-col w-full mt-2 max-w-[--max-w-global] mx-auto">
+							<div className="relative">
+								<BetStatusHeader />
+							</div>
+							<div className="relative overflow-hidden">
+								<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
+								<div className="relative w-full h-full mx-auto flex max-w-5xl">
+									<ResultHistory />
+									<Wheel />
+									<StatsDisplay />
+								</div>
+							</div>
+						</div>
+					)}
+
+					{currentPage === 2 && (
+						<div className="relative flex-1 flex flex-col w-full mt-2 max-w-[--max-w-global] mx-auto">
+							<BetStatusHeader />
+							<TableRacetrack />
+							<TableGrid />
+						</div>
+					)}
+
+					{currentPage === 3 && (
+						<div className="relative flex-1 flex flex-col w-full mt-2 max-w-[--max-w-global] mx-auto">
+							<BetStatusHeader />
+							<div className="w-full mt-6 max-w-6xl">
+								<TableBet />
+							</div>
+						</div>
+					)}
+					<div className="max-w-[--max-w-global] mx-auto">
+						<PageNavigation currentPage={currentPage} totalPages={3} setCurrentPage={setCurrentPage} />
+					</div>
 				</div>
-				<img src={miniTableImg} alt="Mini Table" className="h-12" />
-			</div>
-			<div className="w-[var(--min-width-sm)] flex flex-col gap-y-6 mb-8">
-				<TableGrid />
-				<BetHistory />
-				<TableBet />
-			</div>
-			<CoinRainEffect />
+			) : (
+				// Para Desktop
+				<div className="flex justify-between w-full max-w-6xl mx-auto">
+					{/* Conteúdo Principal no Desktop */}
+					<div className="relative flex-1 flex flex-col w-full mt-2 max-w-[--max-w-global]">
+						<div className="relative">
+							<BetStatusHeader />
+						</div>
+						<div className="relative overflow-hidden">
+							<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
+							<div className="relative w-full h-full mx-auto flex max-w-5xl">
+								<ResultHistory />
+								<Wheel />
+								<StatsDisplay />
+							</div>
+						</div>
+						<TableRacetrack />
+						<TableGrid />
+					</div>
+
+					{/* BetHistory ao lado direito do conteúdo principal */}
+					<div className="ml-4 flex-shrink-0 w-[300px]">
+						<BetHistory />
+					</div>
+				</div>
+			)}
+
+			{/* TableBet no Desktop abaixo de tudo */}
+			{!isVertical && !isTablet && (
+				<div className="w-full mt-6 max-w-6xl">
+					<TableBet />
+				</div>
+			)}
 		</div>
 	);
 };

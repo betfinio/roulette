@@ -1,4 +1,4 @@
-export interface TableConfigItem {
+export interface TableConfigVerticalItem {
 	centerSelection?: number[];
 	topSelection?: number[];
 	leftSelection?: number[];
@@ -11,10 +11,10 @@ export interface TableConfigItem {
 	className?: string;
 }
 
-export const tableConfig: {
+export const tableConfigVertical: {
 	redNumbers: number[];
 	blackNumbers: number[];
-	[key: number]: TableConfigItem;
+	[key: number]: TableConfigVerticalItem;
 } = {
 	redNumbers: [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36],
 	blackNumbers: [2, 4, 6, 8, 10, 11, 13, 15, 17, 20, 22, 24, 26, 28, 29, 31, 33, 35],
@@ -23,14 +23,14 @@ export const tableConfig: {
 		topSelection: [0, 1],
 		leftSelection: [1, 2, 3],
 		topLeftSelection: [0, 1, 2, 3],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	2: {
 		centerSelection: [2],
 		topSelection: [0, 2],
 		leftSelection: [1, 2],
 		topLeftSelection: [0, 1, 2],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	3: {
 		centerSelection: [3],
@@ -39,21 +39,21 @@ export const tableConfig: {
 		rightSelection: [1, 2, 3],
 		topLeftSelection: [0, 2, 3],
 		topRightSelection: [0, 1, 2, 3],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	4: {
 		centerSelection: [4],
 		topSelection: [1, 4],
 		leftSelection: [4, 5, 6],
 		topLeftSelection: [1, 2, 3, 4, 5, 6],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	5: {
 		centerSelection: [5],
 		topSelection: [2, 5],
 		leftSelection: [4, 5],
 		topLeftSelection: [1, 2, 4, 5],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	6: {
 		centerSelection: [6],
@@ -62,21 +62,21 @@ export const tableConfig: {
 		rightSelection: [4, 5, 6],
 		topLeftSelection: [2, 3, 5, 6],
 		topRightSelection: [1, 2, 3, 4, 5, 6],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	7: {
 		centerSelection: [7],
 		topSelection: [4, 7],
 		leftSelection: [7, 8, 9],
 		topLeftSelection: [4, 5, 6, 7, 8, 9],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	8: {
 		centerSelection: [8],
 		topSelection: [5, 8],
 		leftSelection: [7, 8],
 		topLeftSelection: [4, 5, 7, 8],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	9: {
 		centerSelection: [9],
@@ -85,21 +85,21 @@ export const tableConfig: {
 		rightSelection: [7, 8, 9],
 		topLeftSelection: [5, 6, 8, 9],
 		topRightSelection: [4, 5, 6, 7, 8, 9],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	10: {
 		centerSelection: [10],
 		topSelection: [7, 10],
 		leftSelection: [10, 11, 12],
 		topLeftSelection: [7, 8, 9, 10, 11, 12],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	11: {
 		centerSelection: [11],
 		topSelection: [8, 11],
 		leftSelection: [10, 11],
 		topLeftSelection: [7, 8, 10, 11],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	12: {
 		centerSelection: [12],
@@ -108,21 +108,21 @@ export const tableConfig: {
 		rightSelection: [10, 11, 12],
 		topLeftSelection: [8, 9, 11, 12],
 		topRightSelection: [7, 8, 9, 10, 11, 12],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	13: {
 		centerSelection: [13],
 		topSelection: [10, 13],
 		leftSelection: [13, 14, 15],
 		topLeftSelection: [10, 11, 12, 13, 14, 15],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	14: {
 		centerSelection: [14],
 		topSelection: [11, 14],
 		leftSelection: [13, 14],
 		topLeftSelection: [10, 11, 13, 14],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	15: {
 		centerSelection: [15],
@@ -131,21 +131,21 @@ export const tableConfig: {
 		rightSelection: [13, 14, 15],
 		topLeftSelection: [11, 12, 14, 15],
 		topRightSelection: [10, 11, 12, 13, 14, 15],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	16: {
 		centerSelection: [16],
 		topSelection: [13, 16],
 		leftSelection: [16, 17, 18],
 		topLeftSelection: [13, 14, 15, 16, 17, 18],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	17: {
 		centerSelection: [17],
 		topSelection: [14, 17],
 		leftSelection: [16, 17],
 		topLeftSelection: [13, 14, 16, 17],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	18: {
 		centerSelection: [18],
@@ -154,21 +154,21 @@ export const tableConfig: {
 		rightSelection: [16, 17, 18],
 		topLeftSelection: [14, 15, 17, 18],
 		topRightSelection: [13, 14, 15, 16, 17, 18],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	19: {
 		centerSelection: [19],
 		topSelection: [16, 19],
 		leftSelection: [19, 20, 21],
 		topLeftSelection: [16, 17, 18, 19, 20, 21],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	20: {
 		centerSelection: [20],
 		topSelection: [17, 20],
 		leftSelection: [19, 20],
 		topLeftSelection: [16, 17, 19, 20],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	21: {
 		centerSelection: [21],
@@ -177,21 +177,21 @@ export const tableConfig: {
 		rightSelection: [19, 20, 21],
 		topLeftSelection: [17, 18, 20, 21],
 		topRightSelection: [16, 17, 18, 19, 20, 21],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	22: {
 		centerSelection: [22],
 		topSelection: [19, 22],
 		leftSelection: [22, 23, 24],
 		topLeftSelection: [19, 20, 21, 22, 23, 24],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	23: {
 		centerSelection: [23],
 		topSelection: [20, 23],
 		leftSelection: [22, 23],
 		topLeftSelection: [19, 20, 22, 23],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	24: {
 		centerSelection: [24],
@@ -200,21 +200,21 @@ export const tableConfig: {
 		rightSelection: [22, 23, 24],
 		topLeftSelection: [20, 21, 23, 24],
 		topRightSelection: [19, 20, 21, 22, 23, 24],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	25: {
 		centerSelection: [25],
 		topSelection: [22, 25],
 		leftSelection: [25, 26, 27],
 		topLeftSelection: [22, 23, 24, 25, 26, 27],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	26: {
 		centerSelection: [26],
 		topSelection: [23, 26],
 		leftSelection: [25, 26],
 		topLeftSelection: [22, 23, 25, 26],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	27: {
 		centerSelection: [27],
@@ -223,21 +223,21 @@ export const tableConfig: {
 		rightSelection: [25, 26, 27],
 		topLeftSelection: [23, 24, 26, 27],
 		topRightSelection: [22, 23, 24, 25, 26, 27],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	28: {
 		centerSelection: [28],
 		topSelection: [25, 28],
 		leftSelection: [28, 29, 30],
 		topLeftSelection: [25, 26, 27, 28, 29, 30],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	29: {
 		centerSelection: [29],
 		topSelection: [26, 29],
 		leftSelection: [28, 29],
 		topLeftSelection: [25, 26, 28, 29],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	30: {
 		centerSelection: [30],
@@ -246,21 +246,21 @@ export const tableConfig: {
 		rightSelection: [28, 29, 30],
 		topLeftSelection: [26, 27, 29, 30],
 		topRightSelection: [25, 26, 27, 28, 29, 30],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	31: {
 		centerSelection: [31],
 		topSelection: [28, 31],
 		leftSelection: [31, 32, 33],
 		topLeftSelection: [28, 29, 30, 31, 32, 33],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	32: {
 		centerSelection: [32],
 		topSelection: [29, 32],
 		leftSelection: [31, 32],
 		topLeftSelection: [28, 29, 31, 32],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	33: {
 		centerSelection: [33],
@@ -269,21 +269,21 @@ export const tableConfig: {
 		rightSelection: [31, 32, 33],
 		topLeftSelection: [29, 30, 32, 33],
 		topRightSelection: [28, 29, 30, 31, 32, 33],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	34: {
 		centerSelection: [34],
 		topSelection: [31, 34],
 		leftSelection: [34, 35, 36],
 		topLeftSelection: [31, 32, 33, 34, 35, 36],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 	35: {
 		centerSelection: [35],
 		topSelection: [32, 35],
 		leftSelection: [34, 35],
 		topLeftSelection: [31, 32, 34, 35],
-		className: 'black-square-v',
+		className: 'black-square',
 	},
 	36: {
 		centerSelection: [36],
@@ -292,6 +292,6 @@ export const tableConfig: {
 		rightSelection: [34, 35, 36],
 		topLeftSelection: [32, 33, 35, 36],
 		topRightSelection: [31, 32, 33, 34, 35, 36],
-		className: 'red-square-v',
+		className: 'red-square',
 	},
 };

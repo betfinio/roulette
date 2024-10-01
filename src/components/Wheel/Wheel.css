@@ -5,12 +5,12 @@
 }
 
 .roulette-wheel-container {
-	width: 100%;
 	user-select: none;
 	font-size: 18px;
 	font-weight: 500;
 	font-family: "Rounds", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 	line-height: 1.15;
+	font-optical-sizing: auto;
 }
 
 /* European wheel setup with 37 numbers (1-36 and 0) */
@@ -259,7 +259,16 @@ console.log($STEP_2)
 	transform: rotateZ(-2477deg);
 }
 
-.roulette-wheel-plate {
+.roulette-wheel-plate-v {
+	background-color: #808080;
+	width: 350px;
+	height: 350px;
+	margin: 12px;
+	border-radius: 50%;
+	position: relative;
+}
+
+.roulette-wheel-plate-h {
 	background-color: #808080;
 	width: 350px;
 	height: 350px;
@@ -284,13 +293,13 @@ console.log($STEP_2)
 	right: -6px;
 	bottom: -6px;
 	left: -6px;
-	border: 6px solid var(--black);
-	box-shadow: inset 0px 0px 0px 2px var(--black), 0px 0px 0px 2px var(--black);
+	border: 6px solid var(--bg-sec);
+	box-shadow: inset 0px 0px 0px 2px var(--black), 0px 0px 0px 2px var(--bg-sec);
 }
 .roulette-wheel-plate::before {
 	background: rgba(0, 0, 0, 0.65);
-	border: 1px solid var(--black);
-	box-shadow: inset 0px 0px 0px 2px var(--black);
+	border: 1px solid var(--bg-sec);
+	box-shadow: inset 0px 0px 0px 2px var(--bg-sec);
 	top: 12%;
 	left: 12%;
 	right: 12%;
@@ -356,7 +365,7 @@ console.log($STEP_2)
 	bottom: 24%;
 	left: 24%;
 	background-color: var(--black);
-	border: 3px solid var(--black);
+	border: 3px solid var(--bg-primary);
 	background-image: url("../../assets/roulette-center.svg");
 	background-position: center;
 	background-size: cover;

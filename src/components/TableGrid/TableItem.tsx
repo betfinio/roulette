@@ -1,7 +1,7 @@
 import type React from 'react';
+import { useState } from 'react';
 import './TableItem.css';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useState } from 'react';
 
 interface TableItemProps {
 	number: number | string;
@@ -16,6 +16,7 @@ interface TableItemProps {
 	bottomRightSelection?: number[];
 	isRangeButton?: boolean;
 	isZero?: boolean;
+	isVertical: boolean;
 	className?: string;
 	onHoverNumbers?: (numbers: number[]) => void;
 	onLeaveHover?: () => void;
@@ -31,6 +32,8 @@ interface TableItemProps {
 
 type PositionType = 'center' | 'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
+const MAX_CHIPS = 5;
+
 const TableItem: React.FC<TableItemProps> = ({
 	number,
 	centerSelection,
@@ -42,6 +45,8 @@ const TableItem: React.FC<TableItemProps> = ({
 	topRightSelection,
 	bottomLeftSelection,
 	bottomRightSelection,
+	isZero = false,
+	isVertical = true,
 	className = '',
 	isRangeButton = false,
 	onHoverNumbers,
@@ -52,9 +57,7 @@ const TableItem: React.FC<TableItemProps> = ({
 	onClick,
 }) => {
 	const [showAlert, setShowAlert] = useState(false);
-
-	// Estado global para controlar a contagem de fichas adicionadas
-	const [chipCounts, setChipCounts] = useState({
+	const [chipCounts, setChipCounts] = useState<Record<PositionType, number>>({
 		center: 0,
 		top: 0,
 		left: 0,
@@ -65,8 +68,6 @@ const TableItem: React.FC<TableItemProps> = ({
 		bottomLeft: 0,
 		bottomRight: 0,
 	});
-
-	// Estado para tremores por posição
 	const [shake, setShake] = useState<Record<PositionType, boolean>>({
 		center: false,
 		top: false,
@@ -79,46 +80,68 @@ const TableItem: React.FC<TableItemProps> = ({
 		bottomRight: false,
 	});
 
-	const maxChipsToShow = 5; // Limite de fichas
+	const [isHovered, setIsHovered] = useState(false);
 
-	// Função que adiciona uma ficha e incrementa a contagem global
-	const addChip = (position: PositionType, relatedNumbers: number[]) => {
-		if (chipCounts[position] < maxChipsToShow) {
-			setChipCounts((prevCounts) => ({
-				...prevCounts,
-				[position]: prevCounts[position] + 1,
-			}));
-			onClick?.(position, relatedNumbers);
-		} else {
-			triggerAlert(); // Exibir alerta e tremer
-			triggerShake(position); // Chamar tremida na posição afetada
+	const handleMouseOver = (position: PositionType, event?: React.MouseEvent) => {
+		event?.stopPropagation();
+		setIsHovered(true);
+		const relatedNumbers = selectionMap[position];
+		if (relatedNumbers) {
+			onHoverNumbers?.(relatedNumbers);
+		}
+	};
+
+	const handleMouseOut = (position: PositionType, event?: React.MouseEvent) => {
+		event?.stopPropagation();
+		setIsHovered(false);
+		onLeaveHover?.();
+	};
+
+	const positions: PositionType[] = ['center', 'top', 'left', 'right', 'bottom', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
+
+	const selectionMap: Record<PositionType, number[] | undefined> = {
+		center: centerSelection,
+		top: topSelection,
+		left: leftSelection,
+		right: rightSelection,
+		bottom: bottomSelection,
+		topLeft: topLeftSelection,
+		topRight: topRightSelection,
+		bottomLeft: bottomLeftSelection,
+		bottomRight: bottomRightSelection,
+	};
+
+	const handleInteraction = (position: PositionType, action: 'hover' | 'leave' | 'click', event?: React.MouseEvent) => {
+		event?.stopPropagation();
+		const relatedNumbers = selectionMap[position];
+		if (action === 'hover' && relatedNumbers) {
+			onHoverNumbers?.(relatedNumbers);
+		} else if (action === 'leave') {
+			onLeaveHover?.();
+		} else if (action === 'click' && relatedNumbers) {
+			if (chipCounts[position] < MAX_CHIPS) {
+				setChipCounts((prev) => ({
+					...prev,
+					[position]: prev[position] + 1,
+				}));
+				onClick?.(position, relatedNumbers);
+			} else {
+				triggerAlert();
+				triggerShake(position);
+			}
 		}
 	};
 
 	const triggerAlert = () => {
 		if (!showAlert) {
 			setShowAlert(true);
-			setTimeout(() => setShowAlert(false), 1500); // Mostra o alerta por 1.5 segundos
+			setTimeout(() => setShowAlert(false), 1500);
 		}
 	};
 
-	const triggerShake = (position: string) => {
-		setShake({ ...shake, [position]: true });
-		setTimeout(() => setShake({ ...shake, [position]: false }), 500);
-	};
-
-	const handleHover = (numbers: number[]) => {
-		onHoverNumbers?.(numbers);
-	};
-
-	const handleLeave = () => {
-		onLeaveHover?.();
-	};
-
-	const handleClick = (position: PositionType, relatedNumbers?: number[]) => {
-		if (relatedNumbers?.length) {
-			addChip(position, relatedNumbers);
-		}
+	const triggerShake = (position: PositionType) => {
+		setShake((prev) => ({ ...prev, [position]: true }));
+		setTimeout(() => setShake((prev) => ({ ...prev, [position]: false })), 500);
 	};
 
 	const abbreviateValue = (value: number) => {
@@ -129,30 +152,27 @@ const TableItem: React.FC<TableItemProps> = ({
 
 	const renderChip = (position: PositionType) => {
 		const chipsForPosition = chipsOnThisNumber.filter((chip) => chip.position === position);
+		const chipsToRender = chipsForPosition.slice(0, MAX_CHIPS);
+		const totalOffset = chipsToRender.length * 2;
+		const startOffset = totalOffset / 2;
 
-		const maxChipsToShow = Math.min(chipsForPosition.length, 5);
-		const totalOffset = maxChipsToShow * 2; // Deslocamento total a ser distribuído
-		const startOffset = totalOffset / 2; // Começar a centralização
-
-		return chipsForPosition.slice(0, maxChipsToShow).map((chip, index) => {
+		return chipsToRender.map((chip, index) => {
 			const zIndex = chipCounts[position] + index + 1;
-			const offset = (index + 1) * 2; // Deslocamento progressivo
-
-			// Deslocamento para centralizar as fichas
+			const offset = (index + 1) * 2;
 			const xOffset = offset - startOffset;
 			const yOffset = offset - startOffset;
 
 			return (
 				<div
 					key={`${chip.number}-${chip.position}-${index}`}
-					className="pointer-events-none absolute"
+					className="pointer-events-none absolute scale-105"
 					style={{
 						zIndex,
 						transform: `translate(${xOffset}px, ${yOffset}px)`,
 					}}
 				>
 					{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
-					<svg width="32" height="32" viewBox="0 0 154 154" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<svg width="36" height="36" viewBox="0 0 154 154" fill="none" xmlns="http://www.w3.org/2000/svg">
 						<path
 							d="M77.0001 154C119.526 154 154 119.526 154 77C154 34.4741 119.526 0 77.0001 0C34.4741 0 0 34.4741 0 77C0 119.526 34.4741 154 77.0001 154Z"
 							fill="#131624"
@@ -239,15 +259,50 @@ const TableItem: React.FC<TableItemProps> = ({
 		});
 	};
 
+	// Helper function to convert camelCase to kebab-case
+	const toKebabCase = (str: string) => str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
+
+	const renderSelectionBall = (position: PositionType) => {
+		const selection = selectionMap[position];
+		if (!selection?.length) return null;
+
+		return (
+			<motion.div
+				className={`selection-ball ${toKebabCase(position)}-ball ${!isDebugMode ? 'hidden-balls' : ''} ${shake[position] ? 'shake' : ''}`}
+				onMouseOver={(e) => handleMouseOver('center', e)}
+				onMouseOut={(e) => handleMouseOut('center', e)}
+				onClick={(e) => handleInteraction(position, 'click', e)}
+			>
+				{renderChip(position)}
+			</motion.div>
+		);
+	};
+
+	const containerClass = `text-xs ${
+		isRangeButton
+			? isVertical
+				? 'table-external-item-v'
+				: 'table-external-item-h'
+			: isVertical
+				? isZero
+					? 'table-item-v-zero'
+					: 'table-item-v'
+				: isZero
+					? 'table-item-h-zero'
+					: 'table-item-h'
+	} ${className}`;
+
+	const numberDisplayClass = `${isRangeButton ? (isVertical ? 'side-item-v-text' : 'side-item-h-text') : 'number-display'}`;
+
 	return (
 		<motion.div
-			className={`text-xs ${isRangeButton ? 'table-external-item-v' : 'table-item-v'} ${className}`}
+			className={containerClass}
 			transition={{ duration: 0.5 }}
-			onMouseEnter={() => handleHover(centerSelection || [])}
-			onMouseLeave={handleLeave}
-			onClick={() => handleClick('center', centerSelection)}
+			onMouseOver={(e) => handleMouseOver('center', e)}
+			onMouseOut={(e) => handleMouseOut('center', e)}
+			onClick={() => handleInteraction('center', 'click')}
 		>
-			{/* Alerta animado */}
+			{/* Alert */}
 			<AnimatePresence>
 				{showAlert && (
 					<motion.div
@@ -257,159 +312,16 @@ const TableItem: React.FC<TableItemProps> = ({
 						transition={{ duration: 0.5 }}
 						className="fixed top-4 left-0 right-0 text-center bg-red-500 text-white p-2 rounded-md"
 					>
-						Chip staking limit: 5
+						Chip staking limit: {MAX_CHIPS}
 					</motion.div>
 				)}
 			</AnimatePresence>
 
-			<div className={`${isRangeButton ? 'side-item-v-text' : 'number-display'}`}>{number !== 'Black' && number !== 'Red' ? number : ''}</div>
+			{/* Number Display */}
+			<div className={numberDisplayClass}>{number !== 'Black' && number !== 'Red' ? number : ''}</div>
 
-			{centerSelection?.length && (
-				<motion.div
-					className={`selection-ball center-ball ${!isDebugMode ? 'hidden-balls' : ''}`}
-					onMouseEnter={(e) => {
-						e.stopPropagation();
-						handleHover(centerSelection);
-					}}
-					onMouseLeave={handleLeave}
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClick('center', centerSelection);
-					}}
-				>
-					{renderChip('center')}
-				</motion.div>
-			)}
-
-			{/* Adicionando os chips para outras posições */}
-			{topSelection?.length && (
-				<motion.div
-					className={`selection-ball top-ball ${!isDebugMode ? 'hidden-balls' : ''}`}
-					onMouseEnter={(e) => {
-						e.stopPropagation();
-						handleHover(topSelection);
-					}}
-					onMouseLeave={handleLeave}
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClick('top', topSelection);
-					}}
-				>
-					{renderChip('top')}
-				</motion.div>
-			)}
-			{leftSelection?.length && (
-				<motion.div
-					className={`selection-ball left-ball ${!isDebugMode ? 'hidden-balls' : ''}`}
-					onMouseEnter={(e) => {
-						e.stopPropagation();
-						handleHover(leftSelection);
-					}}
-					onMouseLeave={handleLeave}
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClick('left', leftSelection);
-					}}
-				>
-					{renderChip('left')}
-				</motion.div>
-			)}
-			{rightSelection?.length && (
-				<motion.div
-					className={`selection-ball right-ball ${!isDebugMode ? 'hidden-balls' : ''}`}
-					onMouseEnter={(e) => {
-						e.stopPropagation();
-						handleHover(rightSelection);
-					}}
-					onMouseLeave={handleLeave}
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClick('right', rightSelection);
-					}}
-				>
-					{renderChip('right')}
-				</motion.div>
-			)}
-			{bottomSelection?.length && (
-				<motion.div
-					className={`selection-ball bottom-ball ${!isDebugMode ? 'hidden-balls' : ''}`}
-					onMouseEnter={(e) => {
-						e.stopPropagation();
-						handleHover(bottomSelection);
-					}}
-					onMouseLeave={handleLeave}
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClick('bottom', bottomSelection);
-					}}
-				>
-					{renderChip('bottom')}
-				</motion.div>
-			)}
-			{topLeftSelection?.length && (
-				<motion.div
-					className={`selection-ball top-left-ball ${!isDebugMode ? 'hidden-balls' : ''}`}
-					onMouseEnter={(e) => {
-						e.stopPropagation();
-						handleHover(topLeftSelection);
-					}}
-					onMouseLeave={handleLeave}
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClick('topLeft', topLeftSelection);
-					}}
-				>
-					{renderChip('topLeft')}
-				</motion.div>
-			)}
-			{topRightSelection?.length && (
-				<motion.div
-					className={`selection-ball top-right-ball ${!isDebugMode ? 'hidden-balls' : ''}`}
-					onMouseEnter={(e) => {
-						e.stopPropagation();
-						handleHover(topRightSelection);
-					}}
-					onMouseLeave={handleLeave}
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClick('topRight', topRightSelection);
-					}}
-				>
-					{renderChip('topRight')}
-				</motion.div>
-			)}
-			{bottomLeftSelection?.length && (
-				<motion.div
-					className={`selection-ball bottom-left-ball ${!isDebugMode ? 'hidden-balls' : ''}`}
-					onMouseEnter={(e) => {
-						e.stopPropagation();
-						handleHover(bottomLeftSelection);
-					}}
-					onMouseLeave={handleLeave}
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClick('bottomLeft', bottomLeftSelection);
-					}}
-				>
-					{renderChip('bottomLeft')}
-				</motion.div>
-			)}
-			{bottomRightSelection?.length && (
-				<motion.div
-					className={`selection-ball bottom-right-ball ${!isDebugMode ? 'hidden-balls' : ''}`}
-					onMouseEnter={(e) => {
-						e.stopPropagation();
-						handleHover(bottomRightSelection);
-					}}
-					onMouseLeave={handleLeave}
-					onClick={(e) => {
-						e.stopPropagation();
-						handleClick('bottomRight', bottomRightSelection);
-					}}
-				>
-					{renderChip('bottomRight')}
-				</motion.div>
-			)}
+			{/* Render Selection Balls */}
+			{positions.map((position) => renderSelectionBall(position))}
 		</motion.div>
 	);
 };

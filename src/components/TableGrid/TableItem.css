@@ -11,6 +11,19 @@
 	font-weight: 600;
 }
 
+.table-item-v-zero {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 40px;
+	border-radius: 6px;
+	border: 1px solid #1e292e;
+	cursor: pointer;
+	font-weight: 600;
+}
+
 .table-external-item-v {
 	position: relative;
 	display: flex;
@@ -23,22 +36,46 @@
 	cursor: pointer;
 }
 
-.table-external-item-v .chip-svg {
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 100;
-	pointer-events: none;
-	position: absolute;
+.table-item-h {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 55px;
+	border-radius: 6px;
+	border: 1px solid #1e292e;
+	cursor: pointer;
+	font-weight: 600;
 }
 
-.table-item-v .chip-svg {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 100;
-	pointer-events: none;
+.table-item-h-zero {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 55px;
+	height: 100%;
+	border-radius: 6px;
+	border: 1px solid #1e292e;
+	cursor: pointer;
+	font-weight: 600;
+}
+
+.table-external-item-h {
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 55px;
+	border-radius: 6px;
+	border: 1px solid #1e292e;
+	cursor: pointer;
+}
+
+.side-item-h-text {
+	transform: rotate(0deg);
 }
 
 .selection-ball {
@@ -58,16 +95,7 @@
 
 .hidden-balls {
 	background-color: transparent;
-	pointer-events: all;
-}
-
-.chip-svg {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 100;
-	pointer-events: none;
+	/* pointer-events: all; */
 }
 
 .center-ball {

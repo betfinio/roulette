@@ -1,65 +1,101 @@
 {
 	"myBets": [
 		{
-			"date": "2023-09-17, 15:13:54",
+			"roundTime": "2023-09-17, 15:13:54",
 			"round": "#12345",
+			"players": 12,
 			"sum": "50080",
 			"coin": "coinWhite",
 			"winning": "451605",
 			"winNumber": "01:04",
 			"transactionId": "23e4...661a",
+			"transactionHash": "0x23e4abcde...661a12345",
 			"completed": false
 		},
 		{
-			"date": "2023-09-17, 15:13:55",
+			"roundTime": "2023-09-17, 15:13:55",
 			"round": "#12346",
+			"players": 8,
 			"sum": "16066",
 			"coin": "coinGreen",
 			"winning": "210580",
 			"winNumber": "8",
 			"transactionId": "37a2...337c",
+			"transactionHash": "0x37a2bcdef...337c67890",
 			"completed": true
 		},
 		{
-			"date": "2023-09-17, 15:13:56",
+			"roundTime": "2023-09-17, 15:13:56",
 			"round": "#12347",
+			"players": 10,
 			"sum": "80500",
 			"coin": "coinWhite",
 			"winning": "0",
 			"winNumber": "0",
 			"transactionId": "17b7...885y",
+			"transactionHash": "0x17b7cdefg...885y54321",
 			"completed": true
 		},
 		{
-			"date": "2023-09-17, 15:03:56",
-			"round": "#12347",
+			"roundTime": "2023-09-17, 15:03:56",
+			"round": "#12348",
+			"players": 15,
 			"sum": "80500",
 			"coin": "coinWhite",
 			"winning": "0",
 			"winNumber": "3",
-			"transactionId": "17b7...885y",
+			"transactionId": "18c8...996z",
+			"transactionHash": "0x18c8defgh...996z65432",
 			"completed": true
 		}
 	],
 	"allRounds": [
 		{
-			"date": "2023-09-17, 15:13:57",
+			"roundTime": "2023-09-17, 15:13:57",
 			"round": "#12350",
+			"players": 14,
 			"sum": "60000",
 			"coin": "coinWhite",
 			"winning": "100000",
 			"winNumber": "4",
 			"transactionId": "23e4...662a",
+			"transactionHash": "0x23e4abcde...662a23456",
 			"completed": true
 		},
 		{
-			"date": "2023-09-17, 15:13:58",
+			"roundTime": "2023-09-17, 15:13:58",
 			"round": "#12351",
+			"players": 9,
 			"sum": "12000",
 			"coin": "coinGreen",
 			"winning": "24000",
 			"winNumber": "6",
 			"transactionId": "37a2...337b",
+			"transactionHash": "0x37a2bcdef...337b78901",
+			"completed": true
+		},
+		{
+			"roundTime": "2023-09-17, 15:14:00",
+			"round": "#12352",
+			"players": 11,
+			"sum": "45000",
+			"coin": "coinWhite",
+			"winning": "90000",
+			"winNumber": "12",
+			"transactionId": "49d3...448c",
+			"transactionHash": "0x49d3cdefg...448c89012",
+			"completed": true
+		},
+		{
+			"roundTime": "2023-09-17, 15:14:02",
+			"round": "#12353",
+			"players": 13,
+			"sum": "30000",
+			"coin": "coinGreen",
+			"winning": "60000",
+			"winNumber": "15",
+			"transactionId": "5ae4...559d",
+			"transactionHash": "0x5ae4defgh...559d90123",
 			"completed": true
 		}
 	]

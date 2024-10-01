@@ -11,13 +11,19 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as RouletteImport } from './routes/roulette'
+import { Route as RouletteImport } from './routes./routes/roulette
+import { Route as LiveRouletteImport } from './routes/live-roulette'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
 
 const RouletteRoute = RouletteImport.update({
   path: '/roulette',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LiveRouletteRoute = LiveRouletteImport.update({
+  path: '/live-roulette',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -37,6 +43,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/live-roulette': {
+      id: '/live-roulette'
+      path: '/live-roulette'
+      fullPath: '/live-roulette'
+      preLoaderRoute: typeof LiveRouletteImport
+      parentRoute: typeof rootRoute
+    }
     '/roulette': {
       id: '/roulette'
       path: '/roulette'
@@ -51,36 +64,41 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/live-roulette': typeof LiveRouletteRoute
   '/roulette': typeof RouletteRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/live-roulette': typeof LiveRouletteRoute
   '/roulette': typeof RouletteRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/live-roulette': typeof LiveRouletteRoute
   '/roulette': typeof RouletteRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/roulette'
+  fullPaths: '/' | '/live-roulette' | '/roulette'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/roulette'
-  id: '__root__' | '/' | '/roulette'
+  to: '/' | '/live-roulette' | '/roulette'
+  id: '__root__' | '/' | '/live-roulette' | '/roulette'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LiveRouletteRoute: typeof LiveRouletteRoute
   RouletteRoute: typeof RouletteRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LiveRouletteRoute: LiveRouletteRoute,
   RouletteRoute: RouletteRoute,
 }
 
@@ -97,11 +115,15 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/live-roulette",
         "/roulette"
       ]
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/live-roulette": {
+      "filePath": "live-roulette.tsx"
     },
     "/roulette": {
       "filePath": "roulette.tsx"
