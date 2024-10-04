@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
+import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import { getColor } from '@/src/lib/roulette';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import type { FC } from 'react';
 
 interface ILastResultRowProps {
@@ -28,10 +29,7 @@ export const LastResultRow: FC<ILastResultRowProps> = ({ result, index }) => {
 					'row-start-7': index === 6,
 				},
 			)}
-			initial={{ opacity: 0, y: -20 }}
-			animate={{ opacity: 1, y: 0 }}
-			exit={{ opacity: 0, y: 20 }}
-			transition={{ duration: 0.5 }}
+			{...SLIDE_DOWN_ANIMATION}
 		>
 			{result}
 		</motion.div>

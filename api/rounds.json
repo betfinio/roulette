@@ -1,993 +1,821 @@
 [
 	{
-		"id": "145093",
-		"startTime": "2024-10-04T11:36:24.170Z",
-		"endTime": "2024-10-04T11:37:24.170Z",
-		"status": "completed",
-		"players": 9,
-		"betSum": 1126000,
-		"winningNumber": "33",
-		"winningAmount": 744000,
-		"winners": [
-			{
-				"nickname": "DarkTiger81",
-				"amountWon": 132000
-			},
-			{
-				"nickname": "MightyBear77",
-				"amountWon": 370000
-			},
-			{
-				"nickname": "WildEagle98",
-				"amountWon": 54000
-			},
-			{
-				"nickname": "SilentShark26",
-				"amountWon": 188000
-			}
-		]
-	},
-	{
-		"id": "117733",
-		"startTime": "2024-10-04T11:37:34.232Z",
-		"endTime": "2024-10-04T11:38:34.232Z",
-		"status": "completed",
-		"players": 6,
-		"betSum": 1404000,
-		"winningNumber": "27",
-		"winningAmount": 288000,
-		"winners": [
-			{
-				"nickname": "DarkTiger96",
-				"amountWon": 288000
-			}
-		]
-	},
-	{
-		"id": "499297",
-		"startTime": "2024-10-04T11:38:44.308Z",
-		"endTime": "2024-10-04T11:39:44.308Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 1031000,
-		"winningNumber": "7",
-		"winningAmount": 320000,
-		"winners": [
-			{
-				"nickname": "MightyBear14",
-				"amountWon": 190000
-			},
-			{
-				"nickname": "SwiftDragon20",
-				"amountWon": 130000
-			}
-		]
-	},
-	{
-		"id": "847203",
-		"startTime": "2024-10-04T11:39:54.375Z",
-		"endTime": "2024-10-04T11:40:54.375Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 1027000,
-		"winningNumber": "27",
-		"winningAmount": 255000,
-		"winners": [
-			{
-				"nickname": "HappyDragon55",
-				"amountWon": 75000
-			},
-			{
-				"nickname": "SilentPanther24",
-				"amountWon": 180000
-			}
-		]
-	},
-	{
-		"id": "369971",
-		"startTime": "2024-10-04T11:41:04.443Z",
-		"endTime": "2024-10-04T11:42:04.443Z",
+		"id": "251324",
+		"startTime": "2024-10-04T13:50:01.616Z",
+		"endTime": "2024-10-04T13:51:01.616Z",
 		"status": "completed",
 		"players": 8,
-		"betSum": 1564000,
-		"winningNumber": "0",
-		"winningAmount": 5602000,
+		"betSum": 1752000,
+		"winningNumber": "14",
+		"winningAmount": 4160000,
 		"winners": [
 			{
-				"nickname": "BraveTiger27",
-				"amountWon": 3135000
+				"nickname": "LuckyTiger33",
+				"amountWon": 850000
 			},
 			{
-				"nickname": "CrazyWolf41",
-				"amountWon": 1752000
+				"nickname": "WildShark60",
+				"amountWon": 8000
 			},
 			{
-				"nickname": "SwiftPanther81",
-				"amountWon": 715000
+				"nickname": "HappyPhoenix12",
+				"amountWon": 19000
+			},
+			{
+				"nickname": "BraveTiger64",
+				"amountWon": 445000
+			},
+			{
+				"nickname": "BraveBear90",
+				"amountWon": 495000
+			},
+			{
+				"nickname": "WildEagle49",
+				"amountWon": 2343000
 			}
 		]
 	},
 	{
-		"id": "964427",
-		"startTime": "2024-10-04T11:42:14.512Z",
-		"endTime": "2024-10-04T11:43:14.512Z",
+		"id": "403585",
+		"startTime": "2024-10-04T13:51:11.693Z",
+		"endTime": "2024-10-04T13:52:11.693Z",
+		"status": "completed",
+		"players": 9,
+		"betSum": 1713000,
+		"winningNumber": "15",
+		"winningAmount": 0,
+		"winners": []
+	},
+	{
+		"id": "951739",
+		"startTime": "2024-10-04T13:52:21.769Z",
+		"endTime": "2024-10-04T13:53:21.769Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 939000,
+		"winningNumber": "0",
+		"winningAmount": 352000,
+		"winners": [
+			{
+				"nickname": "WildTiger12",
+				"amountWon": 352000
+			}
+		]
+	},
+	{
+		"id": "487290",
+		"startTime": "2024-10-04T13:53:31.870Z",
+		"endTime": "2024-10-04T13:54:31.870Z",
+		"status": "completed",
+		"players": 9,
+		"betSum": 875000,
+		"winningNumber": "20",
+		"winningAmount": 1880000,
+		"winners": [
+			{
+				"nickname": "SilentEagle92",
+				"amountWon": 1880000
+			}
+		]
+	},
+	{
+		"id": "346008",
+		"startTime": "2024-10-04T13:54:41.961Z",
+		"endTime": "2024-10-04T13:55:41.961Z",
 		"status": "completed",
 		"players": 7,
-		"betSum": 1096000,
+		"betSum": 1003000,
+		"winningNumber": "31",
+		"winningAmount": 398000,
+		"winners": [
+			{
+				"nickname": "SilentPanther27",
+				"amountWon": 20000
+			},
+			{
+				"nickname": "BraveTiger76",
+				"amountWon": 378000
+			}
+		]
+	},
+	{
+		"id": "974690",
+		"startTime": "2024-10-04T13:55:52.037Z",
+		"endTime": "2024-10-04T13:56:52.037Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 897000,
 		"winningNumber": "7",
 		"winningAmount": 0,
 		"winners": []
 	},
 	{
-		"id": "202410",
-		"startTime": "2024-10-04T11:43:24.583Z",
-		"endTime": "2024-10-04T11:44:24.583Z",
+		"id": "411125",
+		"startTime": "2024-10-04T13:57:02.150Z",
+		"endTime": "2024-10-04T13:58:02.150Z",
 		"status": "completed",
-		"players": 7,
-		"betSum": 1481000,
-		"winningNumber": "28",
-		"winningAmount": 5205000,
+		"players": 9,
+		"betSum": 1163000,
+		"winningNumber": "3",
+		"winningAmount": 2269000,
 		"winners": [
 			{
-				"nickname": "DarkFox19",
-				"amountWon": 4840000
+				"nickname": "SwiftPanther27",
+				"amountWon": 1488000
 			},
 			{
-				"nickname": "MightyEagle29",
-				"amountWon": 85000
+				"nickname": "SwiftPanther33",
+				"amountWon": 189000
 			},
 			{
-				"nickname": "HappyLion36",
+				"nickname": "CrazyWolf18",
+				"amountWon": 22000
+			},
+			{
+				"nickname": "BraveLion28",
+				"amountWon": 570000
+			}
+		]
+	},
+	{
+		"id": "907035",
+		"startTime": "2024-10-04T13:58:12.536Z",
+		"endTime": "2024-10-04T13:59:12.536Z",
+		"status": "completed",
+		"players": 6,
+		"betSum": 787000,
+		"winningNumber": "33",
+		"winningAmount": 1664000,
+		"winners": [
+			{
+				"nickname": "DarkTiger30",
+				"amountWon": 1664000
+			}
+		]
+	},
+	{
+		"id": "563903",
+		"startTime": "2024-10-04T14:15:38.309Z",
+		"endTime": "2024-10-04T14:16:38.309Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 1094000,
+		"winningNumber": "7",
+		"winningAmount": 1054000,
+		"winners": [
+			{
+				"nickname": "SilentEagle74",
+				"amountWon": 474000
+			},
+			{
+				"nickname": "HappyBear14",
+				"amountWon": 550000
+			},
+			{
+				"nickname": "WildEagle19",
+				"amountWon": 30000
+			}
+		]
+	},
+	{
+		"id": "356706",
+		"startTime": "2024-10-04T14:16:48.434Z",
+		"endTime": "2024-10-04T14:17:48.434Z",
+		"status": "completed",
+		"players": 7,
+		"betSum": 1206000,
+		"winningNumber": "10",
+		"winningAmount": 432000,
+		"winners": [
+			{
+				"nickname": "MightyDragon11",
+				"amountWon": 432000
+			}
+		]
+	},
+	{
+		"id": "737199",
+		"startTime": "2024-10-04T14:17:58.559Z",
+		"endTime": "2024-10-04T14:18:58.559Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 1114000,
+		"winningNumber": "32",
+		"winningAmount": 48000,
+		"winners": [
+			{
+				"nickname": "BraveTiger32",
+				"amountWon": 48000
+			}
+		]
+	},
+	{
+		"id": "988315",
+		"startTime": "2024-10-04T14:19:08.682Z",
+		"endTime": "2024-10-04T14:20:08.682Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 904000,
+		"winningNumber": "9",
+		"winningAmount": 586000,
+		"winners": [
+			{
+				"nickname": "HappyDragon78",
+				"amountWon": 150000
+			},
+			{
+				"nickname": "BraveLion98",
+				"amountWon": 56000
+			},
+			{
+				"nickname": "WildTiger93",
+				"amountWon": 380000
+			}
+		]
+	},
+	{
+		"id": "380580",
+		"startTime": "2024-10-04T14:20:18.812Z",
+		"endTime": "2024-10-04T14:21:18.812Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 1394000,
+		"winningNumber": "23",
+		"winningAmount": 1990000,
+		"winners": [
+			{
+				"nickname": "FlyingEagle41",
+				"amountWon": 1452000
+			},
+			{
+				"nickname": "WildLion60",
+				"amountWon": 108000
+			},
+			{
+				"nickname": "FlyingBear68",
+				"amountWon": 30000
+			},
+			{
+				"nickname": "MightyFox28",
+				"amountWon": 400000
+			}
+		]
+	},
+	{
+		"id": "620983",
+		"startTime": "2024-10-04T14:21:28.933Z",
+		"endTime": "2024-10-04T14:22:28.933Z",
+		"status": "completed",
+		"players": 7,
+		"betSum": 1120000,
+		"winningNumber": "23",
+		"winningAmount": 836000,
+		"winners": [
+			{
+				"nickname": "LuckyLion57",
+				"amountWon": 836000
+			}
+		]
+	},
+	{
+		"id": "707354",
+		"startTime": "2024-10-04T14:22:39.046Z",
+		"endTime": "2024-10-04T14:23:39.046Z",
+		"status": "completed",
+		"players": 9,
+		"betSum": 1997000,
+		"winningNumber": "5",
+		"winningAmount": 5576000,
+		"winners": [
+			{
+				"nickname": "CrazyPhoenix49",
+				"amountWon": 1032000
+			},
+			{
+				"nickname": "CrazyPhoenix34",
+				"amountWon": 3784000
+			},
+			{
+				"nickname": "FlyingPanther83",
+				"amountWon": 760000
+			}
+		]
+	},
+	{
+		"id": "899924",
+		"startTime": "2024-10-04T14:23:49.168Z",
+		"endTime": "2024-10-04T14:24:49.168Z",
+		"status": "completed",
+		"players": 11,
+		"betSum": 2069000,
+		"winningNumber": "19",
+		"winningAmount": 140000,
+		"winners": [
+			{
+				"nickname": "DarkBear66",
+				"amountWon": 140000
+			}
+		]
+	},
+	{
+		"id": "425810",
+		"startTime": "2024-10-04T14:24:59.297Z",
+		"endTime": "2024-10-04T14:25:59.297Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 1153000,
+		"winningNumber": "31",
+		"winningAmount": 586000,
+		"winners": [
+			{
+				"nickname": "BraveShark41",
+				"amountWon": 196000
+			},
+			{
+				"nickname": "DarkTiger98",
+				"amountWon": 390000
+			}
+		]
+	},
+	{
+		"id": "121818",
+		"startTime": "2024-10-04T14:26:09.424Z",
+		"endTime": "2024-10-04T14:27:09.424Z",
+		"status": "completed",
+		"players": 10,
+		"betSum": 1620000,
+		"winningNumber": "9",
+		"winningAmount": 315000,
+		"winners": [
+			{
+				"nickname": "WildEagle13",
+				"amountWon": 112000
+			},
+			{
+				"nickname": "DarkPanther94",
+				"amountWon": 60000
+			},
+			{
+				"nickname": "FlyingBear73",
+				"amountWon": 83000
+			},
+			{
+				"nickname": "HappyPanther82",
+				"amountWon": 60000
+			}
+		]
+	},
+	{
+		"id": "679428",
+		"startTime": "2024-10-04T14:27:19.550Z",
+		"endTime": "2024-10-04T14:28:19.550Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 1039000,
+		"winningNumber": "17",
+		"winningAmount": 3089000,
+		"winners": [
+			{
+				"nickname": "WildFox27",
+				"amountWon": 63000
+			},
+			{
+				"nickname": "DarkPhoenix30",
+				"amountWon": 946000
+			},
+			{
+				"nickname": "MightyDragon83",
+				"amountWon": 1980000
+			},
+			{
+				"nickname": "WildEagle49",
+				"amountWon": 100000
+			}
+		]
+	},
+	{
+		"id": "591607",
+		"startTime": "2024-10-04T14:28:29.673Z",
+		"endTime": "2024-10-04T14:29:29.673Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 942000,
+		"winningNumber": "20",
+		"winningAmount": 246000,
+		"winners": [
+			{
+				"nickname": "BraveFox63",
+				"amountWon": 6000
+			},
+			{
+				"nickname": "MightyShark91",
+				"amountWon": 240000
+			}
+		]
+	},
+	{
+		"id": "198741",
+		"startTime": "2024-10-04T14:29:39.799Z",
+		"endTime": "2024-10-04T14:30:39.799Z",
+		"status": "completed",
+		"players": 9,
+		"betSum": 1754000,
+		"winningNumber": "24",
+		"winningAmount": 2948000,
+		"winners": [
+			{
+				"nickname": "HappyWolf25",
+				"amountWon": 10000
+			},
+			{
+				"nickname": "DarkShark15",
+				"amountWon": 1848000
+			},
+			{
+				"nickname": "HappyTiger79",
+				"amountWon": 480000
+			},
+			{
+				"nickname": "LuckyLion44",
+				"amountWon": 610000
+			}
+		]
+	},
+	{
+		"id": "508284",
+		"startTime": "2024-10-04T14:30:49.936Z",
+		"endTime": "2024-10-04T14:31:49.936Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 1225000,
+		"winningNumber": "11",
+		"winningAmount": 432000,
+		"winners": [
+			{
+				"nickname": "WildBear52",
+				"amountWon": 432000
+			}
+		]
+	},
+	{
+		"id": "678834",
+		"startTime": "2024-10-04T14:32:00.058Z",
+		"endTime": "2024-10-04T14:33:00.058Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 957000,
+		"winningNumber": "32",
+		"winningAmount": 0,
+		"winners": []
+	},
+	{
+		"id": "972272",
+		"startTime": "2024-10-04T14:33:10.185Z",
+		"endTime": "2024-10-04T14:34:10.185Z",
+		"status": "completed",
+		"players": 11,
+		"betSum": 1520000,
+		"winningNumber": "24",
+		"winningAmount": 677000,
+		"winners": [
+			{
+				"nickname": "CrazyLion20",
+				"amountWon": 93000
+			},
+			{
+				"nickname": "SilentLion20",
+				"amountWon": 584000
+			}
+		]
+	},
+	{
+		"id": "134731",
+		"startTime": "2024-10-04T14:34:20.312Z",
+		"endTime": "2024-10-04T14:35:20.312Z",
+		"status": "completed",
+		"players": 7,
+		"betSum": 1088000,
+		"winningNumber": "4",
+		"winningAmount": 859000,
+		"winners": [
+			{
+				"nickname": "CrazyBear76",
+				"amountWon": 160000
+			},
+			{
+				"nickname": "WildBear19",
+				"amountWon": 544000
+			},
+			{
+				"nickname": "HappyBear83",
+				"amountWon": 155000
+			}
+		]
+	},
+	{
+		"id": "802693",
+		"startTime": "2024-10-04T14:35:30.432Z",
+		"endTime": "2024-10-04T14:36:30.432Z",
+		"status": "completed",
+		"players": 10,
+		"betSum": 1499000,
+		"winningNumber": "26",
+		"winningAmount": 6360000,
+		"winners": [
+			{
+				"nickname": "HappyPanther67",
+				"amountWon": 5916000
+			},
+			{
+				"nickname": "DarkPhoenix42",
+				"amountWon": 236000
+			},
+			{
+				"nickname": "WildLion57",
+				"amountWon": 140000
+			},
+			{
+				"nickname": "MightyLion98",
+				"amountWon": 68000
+			}
+		]
+	},
+	{
+		"id": "600129",
+		"startTime": "2024-10-04T14:36:40.557Z",
+		"endTime": "2024-10-04T14:37:40.557Z",
+		"status": "completed",
+		"players": 9,
+		"betSum": 1565000,
+		"winningNumber": "23",
+		"winningAmount": 909000,
+		"winners": [
+			{
+				"nickname": "SilentPanther65",
+				"amountWon": 473000
+			},
+			{
+				"nickname": "BraveShark28",
+				"amountWon": 70000
+			},
+			{
+				"nickname": "BraveDragon45",
+				"amountWon": 22000
+			},
+			{
+				"nickname": "SwiftPanther72",
+				"amountWon": 344000
+			}
+		]
+	},
+	{
+		"id": "525779",
+		"startTime": "2024-10-04T14:37:50.690Z",
+		"endTime": "2024-10-04T14:38:50.690Z",
+		"status": "completed",
+		"players": 9,
+		"betSum": 1184000,
+		"winningNumber": "1",
+		"winningAmount": 472000,
+		"winners": [
+			{
+				"nickname": "CrazyWolf61",
+				"amountWon": 100000
+			},
+			{
+				"nickname": "HappyWolf43",
+				"amountWon": 372000
+			}
+		]
+	},
+	{
+		"id": "585058",
+		"startTime": "2024-10-04T14:39:00.746Z",
+		"endTime": "2024-10-04T14:40:00.746Z",
+		"status": "completed",
+		"players": 6,
+		"betSum": 1228000,
+		"winningNumber": "12",
+		"winningAmount": 3417000,
+		"winners": [
+			{
+				"nickname": "DarkShark18",
+				"amountWon": 2992000
+			},
+			{
+				"nickname": "SilentDragon97",
+				"amountWon": 425000
+			}
+		]
+	},
+	{
+		"id": "950743",
+		"startTime": "2024-10-04T14:40:10.807Z",
+		"endTime": "2024-10-04T14:41:10.807Z",
+		"status": "completed",
+		"players": 7,
+		"betSum": 1125000,
+		"winningNumber": "2",
+		"winningAmount": 2375000,
+		"winners": [
+			{
+				"nickname": "FlyingWolf16",
+				"amountWon": 1704000
+			},
+			{
+				"nickname": "LuckyPanther20",
+				"amountWon": 671000
+			}
+		]
+	},
+	{
+		"id": "549453",
+		"startTime": "2024-10-04T14:41:20.891Z",
+		"endTime": "2024-10-04T14:42:20.891Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 1390000,
+		"winningNumber": "20",
+		"winningAmount": 5414000,
+		"winners": [
+			{
+				"nickname": "HappyFox86",
+				"amountWon": 288000
+			},
+			{
+				"nickname": "MightyLion81",
+				"amountWon": 66000
+			},
+			{
+				"nickname": "FlyingLion26",
+				"amountWon": 5060000
+			}
+		]
+	},
+	{
+		"id": "890707",
+		"startTime": "2024-10-04T14:42:30.968Z",
+		"endTime": "2024-10-04T14:43:30.968Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 1373000,
+		"winningNumber": "14",
+		"winningAmount": 448000,
+		"winners": [
+			{
+				"nickname": "MightyDragon57",
+				"amountWon": 288000
+			},
+			{
+				"nickname": "FlyingDragon57",
+				"amountWon": 160000
+			}
+		]
+	},
+	{
+		"id": "780956",
+		"startTime": "2024-10-04T14:43:41.050Z",
+		"endTime": "2024-10-04T14:44:41.050Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 986000,
+		"winningNumber": "13",
+		"winningAmount": 422000,
+		"winners": [
+			{
+				"nickname": "LuckyPanther35",
+				"amountWon": 87000
+			},
+			{
+				"nickname": "SilentEagle91",
+				"amountWon": 255000
+			},
+			{
+				"nickname": "LuckyFox44",
+				"amountWon": 80000
+			}
+		]
+	},
+	{
+		"id": "723830",
+		"startTime": "2024-10-04T14:44:51.113Z",
+		"endTime": "2024-10-04T14:45:51.113Z",
+		"status": "completed",
+		"players": 9,
+		"betSum": 1150000,
+		"winningNumber": "13",
+		"winningAmount": 775000,
+		"winners": [
+			{
+				"nickname": "HappyTiger19",
+				"amountWon": 244000
+			},
+			{
+				"nickname": "WildLion91",
+				"amountWon": 61000
+			},
+			{
+				"nickname": "WildEagle98",
+				"amountWon": 470000
+			}
+		]
+	},
+	{
+		"id": "807662",
+		"startTime": "2024-10-04T14:46:01.202Z",
+		"endTime": "2024-10-04T14:47:01.202Z",
+		"status": "completed",
+		"players": 8,
+		"betSum": 1321000,
+		"winningNumber": "28",
+		"winningAmount": 911000,
+		"winners": [
+			{
+				"nickname": "FlyingEagle14",
+				"amountWon": 184000
+			},
+			{
+				"nickname": "SwiftDragon52",
+				"amountWon": 42000
+			},
+			{
+				"nickname": "FlyingFox42",
+				"amountWon": 664000
+			},
+			{
+				"nickname": "MightyDragon46",
+				"amountWon": 21000
+			}
+		]
+	},
+	{
+		"id": "570519",
+		"startTime": "2024-10-04T14:47:11.276Z",
+		"endTime": "2024-10-04T14:48:11.276Z",
+		"status": "completed",
+		"players": 11,
+		"betSum": 1497000,
+		"winningNumber": "0",
+		"winningAmount": 1632000,
+		"winners": [
+			{
+				"nickname": "WildShark90",
+				"amountWon": 1632000
+			}
+		]
+	},
+	{
+		"id": "919188",
+		"startTime": "2024-10-04T14:48:21.373Z",
+		"endTime": "2024-10-04T14:49:21.373Z",
+		"status": "completed",
+		"players": 10,
+		"betSum": 1829000,
+		"winningNumber": "26",
+		"winningAmount": 5426000,
+		"winners": [
+			{
+				"nickname": "SwiftFox10",
+				"amountWon": 2368000
+			},
+			{
+				"nickname": "WildShark10",
+				"amountWon": 2860000
+			},
+			{
+				"nickname": "HappyEagle33",
+				"amountWon": 198000
+			}
+		]
+	},
+	{
+		"id": "382544",
+		"startTime": "2024-10-04T14:49:31.440Z",
+		"endTime": "2024-10-04T14:50:31.440Z",
+		"status": "completed",
+		"players": 10,
+		"betSum": 1071000,
+		"winningNumber": "3",
+		"winningAmount": 2487000,
+		"winners": [
+			{
+				"nickname": "SwiftWolf32",
+				"amountWon": 47000
+			},
+			{
+				"nickname": "BraveFox94",
+				"amountWon": 2160000
+			},
+			{
+				"nickname": "SwiftDragon48",
 				"amountWon": 280000
 			}
 		]
 	},
 	{
-		"id": "107157",
-		"startTime": "2024-10-04T11:44:34.651Z",
-		"endTime": "2024-10-04T11:45:34.651Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 1139000,
-		"winningNumber": "1",
-		"winningAmount": 2535000,
-		"winners": [
-			{
-				"nickname": "FlyingTiger77",
-				"amountWon": 39000
-			},
-			{
-				"nickname": "MightyFox93",
-				"amountWon": 128000
-			},
-			{
-				"nickname": "BraveDragon13",
-				"amountWon": 864000
-			},
-			{
-				"nickname": "DarkWolf52",
-				"amountWon": 1504000
-			}
-		]
-	},
-	{
-		"id": "156431",
-		"startTime": "2024-10-04T11:45:44.726Z",
-		"endTime": "2024-10-04T11:46:44.726Z",
-		"status": "completed",
-		"players": 7,
-		"betSum": 1652000,
-		"winningNumber": "20",
-		"winningAmount": 482000,
-		"winners": [
-			{
-				"nickname": "BraveEagle21",
-				"amountWon": 180000
-			},
-			{
-				"nickname": "BravePanther37",
-				"amountWon": 210000
-			},
-			{
-				"nickname": "SwiftLion50",
-				"amountWon": 92000
-			}
-		]
-	},
-	{
-		"id": "124326",
-		"startTime": "2024-10-04T11:46:54.850Z",
-		"endTime": "2024-10-04T11:47:54.850Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 1029000,
-		"winningNumber": "27",
-		"winningAmount": 1320000,
-		"winners": [
-			{
-				"nickname": "CrazyPanther20",
-				"amountWon": 1320000
-			}
-		]
-	},
-	{
-		"id": "978490",
-		"startTime": "2024-10-04T11:48:04.978Z",
-		"endTime": "2024-10-04T11:49:04.978Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 1592000,
-		"winningNumber": "20",
-		"winningAmount": 6292000,
-		"winners": [
-			{
-				"nickname": "SwiftFox41",
-				"amountWon": 360000
-			},
-			{
-				"nickname": "FlyingWolf66",
-				"amountWon": 4590000
-			},
-			{
-				"nickname": "LuckyBear33",
-				"amountWon": 1342000
-			}
-		]
-	},
-	{
-		"id": "948903",
-		"startTime": "2024-10-04T11:49:15.103Z",
-		"endTime": "2024-10-04T11:50:15.103Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 1246000,
-		"winningNumber": "14",
-		"winningAmount": 1445000,
-		"winners": [
-			{
-				"nickname": "WildWolf29",
-				"amountWon": 1376000
-			},
-			{
-				"nickname": "MightyFox70",
-				"amountWon": 69000
-			}
-		]
-	},
-	{
-		"id": "495891",
-		"startTime": "2024-10-04T11:50:25.231Z",
-		"endTime": "2024-10-04T11:51:25.231Z",
-		"status": "completed",
-		"players": 7,
-		"betSum": 814000,
-		"winningNumber": "3",
-		"winningAmount": 443000,
-		"winners": [
-			{
-				"nickname": "WildFox58",
-				"amountWon": 228000
-			},
-			{
-				"nickname": "BraveEagle97",
-				"amountWon": 44000
-			},
-			{
-				"nickname": "SwiftPanther17",
-				"amountWon": 147000
-			},
-			{
-				"nickname": "WildTiger41",
-				"amountWon": 24000
-			}
-		]
-	},
-	{
-		"id": "650906",
-		"startTime": "2024-10-04T11:51:35.354Z",
-		"endTime": "2024-10-04T11:52:35.354Z",
-		"status": "completed",
-		"players": 9,
-		"betSum": 1308000,
-		"winningNumber": "20",
-		"winningAmount": 402000,
-		"winners": [
-			{
-				"nickname": "CrazyPhoenix27",
-				"amountWon": 32000
-			},
-			{
-				"nickname": "HappyDragon13",
-				"amountWon": 228000
-			},
-			{
-				"nickname": "DarkTiger72",
-				"amountWon": 142000
-			}
-		]
-	},
-	{
-		"id": "666739",
-		"startTime": "2024-10-04T11:52:45.487Z",
-		"endTime": "2024-10-04T11:53:45.487Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 833000,
-		"winningNumber": "6",
-		"winningAmount": 45000,
-		"winners": [
-			{
-				"nickname": "SilentTiger66",
-				"amountWon": 33000
-			},
-			{
-				"nickname": "WildWolf12",
-				"amountWon": 12000
-			}
-		]
-	},
-	{
-		"id": "290341",
-		"startTime": "2024-10-04T11:53:55.577Z",
-		"endTime": "2024-10-04T11:54:55.577Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 1441000,
-		"winningNumber": "26",
-		"winningAmount": 213000,
-		"winners": [
-			{
-				"nickname": "LuckyFox71",
-				"amountWon": 75000
-			},
-			{
-				"nickname": "WildPhoenix96",
-				"amountWon": 138000
-			}
-		]
-	},
-	{
-		"id": "283631",
-		"startTime": "2024-10-04T11:55:05.639Z",
-		"endTime": "2024-10-04T11:56:05.639Z",
-		"status": "completed",
-		"players": 7,
-		"betSum": 973000,
-		"winningNumber": "34",
-		"winningAmount": 582000,
-		"winners": [
-			{
-				"nickname": "FlyingPhoenix59",
-				"amountWon": 320000
-			},
-			{
-				"nickname": "BraveFox20",
-				"amountWon": 94000
-			},
-			{
-				"nickname": "SwiftShark43",
-				"amountWon": 168000
-			}
-		]
-	},
-	{
-		"id": "830318",
-		"startTime": "2024-10-04T11:56:15.708Z",
-		"endTime": "2024-10-04T11:57:15.708Z",
-		"status": "completed",
-		"players": 7,
-		"betSum": 765000,
-		"winningNumber": "1",
-		"winningAmount": 2529000,
-		"winners": [
-			{
-				"nickname": "SwiftPhoenix91",
-				"amountWon": 120000
-			},
-			{
-				"nickname": "LuckyPhoenix89",
-				"amountWon": 2409000
-			}
-		]
-	},
-	{
-		"id": "859097",
-		"startTime": "2024-10-04T11:57:25.772Z",
-		"endTime": "2024-10-04T11:58:25.772Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 1180000,
-		"winningNumber": "8",
-		"winningAmount": 5230000,
-		"winners": [
-			{
-				"nickname": "BraveFox71",
-				"amountWon": 140000
-			},
-			{
-				"nickname": "MightyLion68",
-				"amountWon": 8000
-			},
-			{
-				"nickname": "HappyLion56",
-				"amountWon": 2112000
-			},
-			{
-				"nickname": "MightyPanther78",
-				"amountWon": 2970000
-			}
-		]
-	},
-	{
-		"id": "416974",
-		"startTime": "2024-10-04T11:58:35.840Z",
-		"endTime": "2024-10-04T11:59:35.840Z",
-		"status": "completed",
-		"players": 12,
-		"betSum": 1385000,
-		"winningNumber": "5",
-		"winningAmount": 6098000,
-		"winners": [
-			{
-				"nickname": "SilentDragon53",
-				"amountWon": 4624000
-			},
-			{
-				"nickname": "CrazyLion95",
-				"amountWon": 63000
-			},
-			{
-				"nickname": "HappyTiger85",
-				"amountWon": 1024000
-			},
-			{
-				"nickname": "CrazyTiger58",
-				"amountWon": 243000
-			},
-			{
-				"nickname": "FlyingDragon53",
-				"amountWon": 144000
-			}
-		]
-	},
-	{
-		"id": "961268",
-		"startTime": "2024-10-04T11:59:45.910Z",
-		"endTime": "2024-10-04T12:00:45.910Z",
-		"status": "completed",
-		"players": 11,
-		"betSum": 1459000,
-		"winningNumber": "18",
-		"winningAmount": 903000,
-		"winners": [
-			{
-				"nickname": "BraveDragon84",
-				"amountWon": 582000
-			},
-			{
-				"nickname": "WildShark30",
-				"amountWon": 67000
-			},
-			{
-				"nickname": "SilentBear83",
-				"amountWon": 240000
-			},
-			{
-				"nickname": "WildEagle40",
-				"amountWon": 14000
-			}
-		]
-	},
-	{
-		"id": "243623",
-		"startTime": "2024-10-04T12:00:55.984Z",
-		"endTime": "2024-10-04T12:01:55.984Z",
-		"status": "completed",
-		"players": 9,
-		"betSum": 1584000,
-		"winningNumber": "4",
-		"winningAmount": 7000000,
-		"winners": [
-			{
-				"nickname": "MightyLion53",
-				"amountWon": 3400000
-			},
-			{
-				"nickname": "SilentWolf65",
-				"amountWon": 200000
-			},
-			{
-				"nickname": "MightyPhoenix59",
-				"amountWon": 3400000
-			}
-		]
-	},
-	{
-		"id": "839199",
-		"startTime": "2024-10-04T12:02:06.056Z",
-		"endTime": "2024-10-04T12:03:06.056Z",
-		"status": "completed",
-		"players": 7,
-		"betSum": 913000,
-		"winningNumber": "23",
-		"winningAmount": 0,
-		"winners": []
-	},
-	{
-		"id": "664198",
-		"startTime": "2024-10-04T12:03:16.128Z",
-		"endTime": "2024-10-04T12:04:16.128Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 1427000,
-		"winningNumber": "2",
-		"winningAmount": 4050000,
-		"winners": [
-			{
-				"nickname": "FlyingPanther94",
-				"amountWon": 256000
-			},
-			{
-				"nickname": "LuckyPhoenix70",
-				"amountWon": 3036000
-			},
-			{
-				"nickname": "SilentEagle86",
-				"amountWon": 550000
-			},
-			{
-				"nickname": "SwiftDragon20",
-				"amountWon": 136000
-			},
-			{
-				"nickname": "BraveEagle54",
-				"amountWon": 72000
-			}
-		]
-	},
-	{
-		"id": "705001",
-		"startTime": "2024-10-04T12:04:26.187Z",
-		"endTime": "2024-10-04T12:05:26.187Z",
-		"status": "completed",
-		"players": 9,
-		"betSum": 1835000,
-		"winningNumber": "29",
-		"winningAmount": 865000,
-		"winners": [
-			{
-				"nickname": "FlyingPhoenix88",
-				"amountWon": 200000
-			},
-			{
-				"nickname": "FlyingShark74",
-				"amountWon": 395000
-			},
-			{
-				"nickname": "SilentLion58",
-				"amountWon": 270000
-			}
-		]
-	},
-	{
-		"id": "150823",
-		"startTime": "2024-10-04T12:05:36.255Z",
-		"endTime": "2024-10-04T12:06:36.255Z",
-		"status": "completed",
-		"players": 9,
-		"betSum": 1487000,
-		"winningNumber": "9",
-		"winningAmount": 684000,
-		"winners": [
-			{
-				"nickname": "HappyLion11",
-				"amountWon": 420000
-			},
-			{
-				"nickname": "CrazyDragon19",
-				"amountWon": 264000
-			}
-		]
-	},
-	{
-		"id": "484694",
-		"startTime": "2024-10-04T12:06:46.324Z",
-		"endTime": "2024-10-04T12:07:46.324Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 1461000,
-		"winningNumber": "35",
-		"winningAmount": 429000,
-		"winners": [
-			{
-				"nickname": "CrazyDragon67",
-				"amountWon": 53000
-			},
-			{
-				"nickname": "BraveWolf65",
-				"amountWon": 376000
-			}
-		]
-	},
-	{
-		"id": "524224",
-		"startTime": "2024-10-04T12:07:56.395Z",
-		"endTime": "2024-10-04T12:08:56.395Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 1457000,
-		"winningNumber": "30",
-		"winningAmount": 3916000,
-		"winners": [
-			{
-				"nickname": "BraveTiger75",
-				"amountWon": 3916000
-			}
-		]
-	},
-	{
-		"id": "357683",
-		"startTime": "2024-10-04T12:09:06.480Z",
-		"endTime": "2024-10-04T12:10:06.480Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 1802000,
-		"winningNumber": "3",
-		"winningAmount": 1068000,
-		"winners": [
-			{
-				"nickname": "SilentLion47",
-				"amountWon": 60000
-			},
-			{
-				"nickname": "FlyingPanther70",
-				"amountWon": 1008000
-			}
-		]
-	},
-	{
-		"id": "813957",
-		"startTime": "2024-10-04T12:10:16.549Z",
-		"endTime": "2024-10-04T12:11:16.549Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 1055000,
-		"winningNumber": "36",
-		"winningAmount": 1360000,
-		"winners": [
-			{
-				"nickname": "DarkEagle30",
-				"amountWon": 73000
-			},
-			{
-				"nickname": "BraveDragon34",
-				"amountWon": 1012000
-			},
-			{
-				"nickname": "DarkBear74",
-				"amountWon": 248000
-			},
-			{
-				"nickname": "DarkShark59",
-				"amountWon": 27000
-			}
-		]
-	},
-	{
-		"id": "776703",
-		"startTime": "2024-10-04T12:11:26.622Z",
-		"endTime": "2024-10-04T12:12:26.622Z",
-		"status": "completed",
-		"players": 11,
-		"betSum": 1415000,
-		"winningNumber": "35",
-		"winningAmount": 45000,
-		"winners": [
-			{
-				"nickname": "MightyDragon13",
-				"amountWon": 45000
-			}
-		]
-	},
-	{
-		"id": "569108",
-		"startTime": "2024-10-04T12:12:36.710Z",
-		"endTime": "2024-10-04T12:13:36.710Z",
-		"status": "completed",
-		"players": 7,
-		"betSum": 800000,
-		"winningNumber": "23",
-		"winningAmount": 388000,
-		"winners": [
-			{
-				"nickname": "DarkLion26",
-				"amountWon": 380000
-			},
-			{
-				"nickname": "SilentPhoenix81",
-				"amountWon": 8000
-			}
-		]
-	},
-	{
-		"id": "727291",
-		"startTime": "2024-10-04T12:13:46.782Z",
-		"endTime": "2024-10-04T12:14:46.782Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 979000,
-		"winningNumber": "21",
-		"winningAmount": 430000,
-		"winners": [
-			{
-				"nickname": "DarkDragon20",
-				"amountWon": 46000
-			},
-			{
-				"nickname": "FlyingLion34",
-				"amountWon": 58000
-			},
-			{
-				"nickname": "DarkEagle96",
-				"amountWon": 300000
-			},
-			{
-				"nickname": "SwiftLion80",
-				"amountWon": 26000
-			}
-		]
-	},
-	{
-		"id": "592322",
-		"startTime": "2024-10-04T12:14:56.857Z",
-		"endTime": "2024-10-04T12:15:56.857Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 2154000,
-		"winningNumber": "18",
-		"winningAmount": 860000,
-		"winners": [
-			{
-				"nickname": "LuckyDragon41",
-				"amountWon": 440000
-			},
-			{
-				"nickname": "SilentFox28",
-				"amountWon": 420000
-			}
-		]
-	},
-	{
-		"id": "262360",
-		"startTime": "2024-10-04T12:16:06.926Z",
-		"endTime": "2024-10-04T12:17:06.926Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 1514000,
-		"winningNumber": "29",
-		"winningAmount": 1220000,
-		"winners": [
-			{
-				"nickname": "MightyEagle67",
-				"amountWon": 272000
-			},
-			{
-				"nickname": "DarkEagle59",
-				"amountWon": 355000
-			},
-			{
-				"nickname": "SwiftShark45",
-				"amountWon": 368000
-			},
-			{
-				"nickname": "BravePhoenix86",
-				"amountWon": 225000
-			}
-		]
-	},
-	{
-		"id": "258025",
-		"startTime": "2024-10-04T12:17:16.992Z",
-		"endTime": "2024-10-04T12:18:16.992Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 1635000,
-		"winningNumber": "20",
-		"winningAmount": 1309000,
-		"winners": [
-			{
-				"nickname": "WildShark21",
-				"amountWon": 814000
-			},
-			{
-				"nickname": "HappyLion55",
-				"amountWon": 495000
-			}
-		]
-	},
-	{
-		"id": "988815",
-		"startTime": "2024-10-04T12:18:27.096Z",
-		"endTime": "2024-10-04T12:19:27.096Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 786000,
-		"winningNumber": "7",
-		"winningAmount": 138000,
-		"winners": [
-			{
-				"nickname": "SwiftLion82",
-				"amountWon": 138000
-			}
-		]
-	},
-	{
-		"id": "144438",
-		"startTime": "2024-10-04T12:19:37.164Z",
-		"endTime": "2024-10-04T12:20:37.164Z",
-		"status": "completed",
-		"players": 9,
-		"betSum": 962000,
-		"winningNumber": "20",
-		"winningAmount": 91000,
-		"winners": [
-			{
-				"nickname": "CrazyDragon28",
-				"amountWon": 91000
-			}
-		]
-	},
-	{
-		"id": "830239",
-		"startTime": "2024-10-04T12:20:47.229Z",
-		"endTime": "2024-10-04T12:21:47.229Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 1311000,
-		"winningNumber": "12",
-		"winningAmount": 1272000,
-		"winners": [
-			{
-				"nickname": "CrazyLion70",
-				"amountWon": 208000
-			},
-			{
-				"nickname": "CrazyBear68",
-				"amountWon": 776000
-			},
-			{
-				"nickname": "CrazyPhoenix55",
-				"amountWon": 288000
-			}
-		]
-	},
-	{
-		"id": "329775",
-		"startTime": "2024-10-04T12:21:57.295Z",
-		"endTime": "2024-10-04T12:22:57.295Z",
-		"status": "completed",
-		"players": 10,
-		"betSum": 1220000,
-		"winningNumber": "12",
-		"winningAmount": 419000,
-		"winners": [
-			{
-				"nickname": "MightyLion13",
-				"amountWon": 1000
-			},
-			{
-				"nickname": "HappyBear25",
-				"amountWon": 68000
-			},
-			{
-				"nickname": "DarkWolf83",
-				"amountWon": 350000
-			}
-		]
-	},
-	{
-		"id": "947666",
-		"startTime": "2024-10-04T12:23:07.369Z",
-		"endTime": "2024-10-04T12:24:07.369Z",
-		"status": "completed",
-		"players": 6,
-		"betSum": 533000,
-		"winningNumber": "6",
-		"winningAmount": 1606000,
-		"winners": [
-			{
-				"nickname": "WildFox16",
-				"amountWon": 1496000
-			},
-			{
-				"nickname": "WildPanther80",
-				"amountWon": 110000
-			}
-		]
-	},
-	{
-		"id": "728684",
-		"startTime": "2024-10-04T12:24:17.470Z",
-		"endTime": "2024-10-04T12:25:17.470Z",
-		"status": "completed",
-		"players": 7,
-		"betSum": 1064000,
-		"winningNumber": "36",
-		"winningAmount": 0,
-		"winners": []
-	},
-	{
-		"id": "343428",
-		"startTime": "2024-10-04T12:25:27.574Z",
-		"endTime": "2024-10-04T12:26:27.574Z",
-		"status": "completed",
-		"players": 8,
-		"betSum": 1857000,
-		"winningNumber": "35",
-		"winningAmount": 422000,
-		"winners": [
-			{
-				"nickname": "DarkPanther37",
-				"amountWon": 185000
-			},
-			{
-				"nickname": "SwiftPhoenix78",
-				"amountWon": 85000
-			},
-			{
-				"nickname": "CrazyBear78",
-				"amountWon": 152000
-			}
-		]
-	},
-	{
-		"id": "986499",
-		"startTime": "2024-10-04T12:26:37.663Z",
-		"endTime": "2024-10-04T12:27:37.663Z",
-		"status": "completed",
-		"players": 9,
-		"betSum": 1439000,
-		"winningNumber": "5",
-		"winningAmount": 462000,
-		"winners": [
-			{
-				"nickname": "LuckyLion25",
-				"amountWon": 21000
-			},
-			{
-				"nickname": "DarkPanther93",
-				"amountWon": 270000
-			},
-			{
-				"nickname": "CrazyEagle69",
-				"amountWon": 171000
-			}
-		]
-	},
-	{
-		"id": "896007",
-		"startTime": "2024-10-04T12:27:47.742Z",
-		"endTime": "2024-10-04T12:28:47.742Z",
-		"status": "completed",
-		"players": 7,
-		"betSum": 1857000,
-		"winningNumber": "31",
-		"winningAmount": 944000,
-		"winners": [
-			{
-				"nickname": "FlyingFox23",
-				"amountWon": 294000
-			},
-			{
-				"nickname": "CrazyFox24",
-				"amountWon": 650000
-			}
-		]
-	},
-	{
-		"id": "614325",
-		"startTime": "2024-10-04T12:28:57.814Z",
-		"endTime": "2024-10-04T12:29:57.814Z",
+		"id": "297394",
+		"startTime": "2024-10-04T14:50:41.530Z",
+		"endTime": "2024-10-04T14:51:41.530Z",
 		"status": "waiting",
 		"players": 0,
 		"betSum": 0

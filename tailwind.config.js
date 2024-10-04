@@ -85,6 +85,9 @@ module.exports = {
 				'green-roulette': {
 					DEFAULT: 'hsl(var(--green-roulette))',
 				},
+				bonus: {
+					DEFAULT: 'hsl(var(--bonus))',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

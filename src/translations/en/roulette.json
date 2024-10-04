@@ -16,5 +16,10 @@
 		"maxBet": "Max bet",
 		"potentialWin": "Potential Win"
 	},
-	"singlePlayer": "Single Player"
+	"singlePlayer": "Single Player",
+	"playerStat": {
+		"hotAndCold": "Hot/Cold",
+		"redAndBlack": "Red/Black",
+		"oddAndEven": "Odd/Even"
+	}
 }

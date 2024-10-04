@@ -10,6 +10,7 @@ import CoinRainEffect from '../components/Wheel/CoinRainEffect';
 import Wheel from '../components/Wheel/Wheel';
 import BetStatusHeader from '../components/roulette/BetStatusHeader/BetStatusHeader';
 import { LastResults } from '../components/roulette/LastResults/LastResults';
+import { PlayerStat } from '../components/roulette/PlayerStat/PlayerStat';
 import { useWheel } from '../contexts/WheelContext';
 
 export const Game = () => {
@@ -33,7 +34,7 @@ export const Game = () => {
 							<div className={`relative w-full h-full mx-auto flex ${isVertical ? 'max-w-sm' : 'max-w-5xl'}`}>
 								{!isVertical && <LastResults />}
 								<Wheel />
-								{!isVertical && <StatsDisplay />}
+								{!isVertical && <PlayerStat />}
 							</div>
 						</div>
 					</div>
@@ -57,7 +58,7 @@ export const Game = () => {
 								<div className="relative w-full h-full mx-auto flex max-w-5xl">
 									<LastResults />
 									<Wheel />
-									<StatsDisplay />
+									<PlayerStat />
 								</div>
 							</div>
 						</div>
@@ -97,7 +98,7 @@ export const Game = () => {
 								{/* <ResultHistory /> */}
 								<LastResults />
 								<Wheel />
-								<StatsDisplay />
+								<PlayerStat />
 							</div>
 						</div>
 						<TableRacetrack />
