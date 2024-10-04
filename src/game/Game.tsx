@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import BetHistory from '../components/BetHistory/BetHistory';
-import BetStatusHeader from '../components/BetStatusHeader/BetStatusHeader';
 import PageNavigation from '../components/PageNavigation/PageNavigation';
 import ResultHistory from '../components/ResultHistory/ResultHistory';
 import StatsDisplay from '../components/StatsDisplay/StatsDisplay';
@@ -9,6 +8,7 @@ import TableGrid from '../components/TableGrid/TableGrid';
 import { TableRacetrack } from '../components/TableRacetrack/TableRacetrack';
 import CoinRainEffect from '../components/Wheel/CoinRainEffect';
 import Wheel from '../components/Wheel/Wheel';
+import BetStatusHeader from '../components/roulette/BetStatusHeader/BetStatusHeader';
 import { useWheel } from '../contexts/WheelContext';
 
 export const Game = () => {

@@ -1,3 +1,20 @@
 {
-	"title": "Live roulette"
+	"winningPool": "Winning Pool",
+	"maxPayout": "Max Payout",
+	"totalBet": "Total Bet",
+	"potentialWin": "Potential Win",
+	"paytable": "Paytable",
+	"howToPlay": "How to play",
+	"report": "Report",
+	"roulette": "Roulette",
+	"payTable": {
+		"learnMore": "Learn more",
+		"paytable": "Paytable",
+		"betType": "Bet type",
+		"payout": "Payout",
+		"minBet": "Min bet",
+		"maxBet": "Max bet",
+		"potentialWin": "Potential Win"
+	},
+	"singlePlayer": "Single Player"
 }

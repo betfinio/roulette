@@ -1,0 +1,14 @@
+sources:
+  - name: roulette
+    handler:
+      graphql:
+        endpoint: ${PUBLIC_ROULETTE_GRAPH_URL}
+ 
+
+codegen:
+  scalars:
+    BigInt: bigint
+    Bytes: string
+
+documents:
+  - ./src/schema.graphql

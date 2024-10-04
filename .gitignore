@@ -18,3 +18,20 @@ bun.lockb
 
 .env.development.local
 .env.production.local
+
+#types
+
+@mf-types/
+
+#gql
+
+*.gen.*
+
+src/routeTree.gen.ts
+
+graphql.schema.json
+
+src/gql/
+
+
+.graphclient/

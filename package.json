@@ -3,22 +3,32 @@
 	"private": true,
 	"version": "1.0.0",
 	"scripts": {
+		"prebuild": "graphclient build",
 		"build": "rsbuild build",
-		"check": "biome check --write",
-		"dev": "rsbuild dev --open",
-		"prod": "rsbuild dev --env-mode production --open",
-		"local": "rsbuild dev --env-mode localhost --open",
+		"check": "biome check",
+		"dev": "bun run build:schema:dev && rsbuild dev --open",
+		"prod": "bun run build:schema:prod && rsbuild dev --env-mode production --open",
+		"local": "bun run build:schema:local && rsbuild dev --env-mode localhost --open",
 		"format": "biome format --write",
-		"preview": "rsbuild preview"
+		"preview": "rsbuild preview",
+		"build:schema:local": "dotenv -e .env.localhost.local -- graphclient build",
+		"build:schema:dev": "dotenv -e .env.development.local -- graphclient build",
+		"build:schema:prod": "dotenv -e .env.production.local -- graphclient build"
 	},
 	"dependencies": {
+		"@betfinio/abi": "^1.0.8",
+		"@betfinio/ui": "^1.0.6",
+		"@graphprotocol/client-cli": "^3.0.7",
 		"@module-federation/enhanced": "^0.3.5",
 		"@supabase/supabase-js": "^2.45.4",
 		"@tanstack/react-query": "^5.56.2",
 		"@tanstack/react-router": "^1.58.3",
 		"@tanstack/react-table": "^8.20.5",
+		"@types/lodash": "^4.17.9",
+		"@uidotdev/usehooks": "^2.4.1",
 		"biome": "^0.3.3",
 		"class-variance-authority": "^0.7.0",
+		"clsx": "^2.1.1",
 		"consola": "^3.2.3",
 		"cors": "^2.8.5",
 		"express": "^4.21.0",
@@ -27,6 +37,7 @@
 		"i18next-icu": "^2.3.0",
 		"intl-messageformat": "^10.5.14",
 		"lefthook": "^1.7.15",
+		"lodash": "^4.17.21",
 		"lucide-react": "^0.417.0",
 		"react": "^18.3.1",
 		"react-dom": "^18.3.1",
@@ -41,6 +52,7 @@
 	},
 	"devDependencies": {
 		"@biomejs/biome": "^1.9.2",
+		"@radix-ui/react-separator": "^1.1.0",
 		"@rsbuild/core": "^1.0.5",
 		"@rsbuild/plugin-react": "^1.0.2",
 		"@tanstack/router-plugin": "^1.58.4",
@@ -48,6 +60,8 @@
 		"@types/express": "^5.0.0",
 		"@types/react": "^18.3.8",
 		"@types/react-dom": "^18.3.0",
-		"typescript": "^5.6.2"
+		"dotenv-cli": "^7.4.2",
+		"typescript": "^5.6.2",
+		"vaul": "^1.0.0"
 	}
 }

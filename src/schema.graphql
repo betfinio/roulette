@@ -1,0 +1,25 @@
+query RouletteMyLandeds($address: Bytes) {
+	landeds(where: { player: $address }, orderBy: blockTimestamp, orderDirection: desc, first: 50) {
+		player
+		bet
+		result
+		requestId
+		winAmount
+		betAmount
+		blockTimestamp
+		transactionHash
+	}
+}
+query RouletteAllLandeds {
+	landeds(orderBy: blockTimestamp, orderDirection: desc, first: 50) {
+		player
+		bet
+		result
+		requestId
+		winAmount
+		betAmount
+		blockTimestamp
+		transactionHash
+	}
+}
+
