@@ -79,6 +79,12 @@ module.exports = {
 				'red-roulette': {
 					DEFAULT: 'hsl(var(--red-roulette))',
 				},
+				'black-roulette': {
+					DEFAULT: 'hsl(var(--black-roulette))',
+				},
+				'green-roulette': {
+					DEFAULT: 'hsl(var(--green-roulette))',
+				},
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

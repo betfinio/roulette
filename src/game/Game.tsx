@@ -9,6 +9,7 @@ import { TableRacetrack } from '../components/TableRacetrack/TableRacetrack';
 import CoinRainEffect from '../components/Wheel/CoinRainEffect';
 import Wheel from '../components/Wheel/Wheel';
 import BetStatusHeader from '../components/roulette/BetStatusHeader/BetStatusHeader';
+import { LastResults } from '../components/roulette/LastResults/LastResults';
 import { useWheel } from '../contexts/WheelContext';
 
 export const Game = () => {
@@ -30,7 +31,7 @@ export const Game = () => {
 						<div className="relative overflow-hidden">
 							<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 							<div className={`relative w-full h-full mx-auto flex ${isVertical ? 'max-w-sm' : 'max-w-5xl'}`}>
-								{!isVertical && <ResultHistory />}
+								{!isVertical && <LastResults />}
 								<Wheel />
 								{!isVertical && <StatsDisplay />}
 							</div>
@@ -54,7 +55,7 @@ export const Game = () => {
 							<div className="relative overflow-hidden">
 								<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 								<div className="relative w-full h-full mx-auto flex max-w-5xl">
-									<ResultHistory />
+									<LastResults />
 									<Wheel />
 									<StatsDisplay />
 								</div>
@@ -93,7 +94,8 @@ export const Game = () => {
 						<div className="relative overflow-hidden">
 							<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 							<div className="relative w-full h-full mx-auto flex max-w-5xl">
-								<ResultHistory />
+								{/* <ResultHistory /> */}
+								<LastResults />
 								<Wheel />
 								<StatsDisplay />
 							</div>
