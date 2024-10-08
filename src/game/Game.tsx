@@ -5,12 +5,12 @@ import ResultHistory from '../components/ResultHistory/ResultHistory';
 import StatsDisplay from '../components/StatsDisplay/StatsDisplay';
 import TableBet from '../components/TableBet/TableBet';
 import TableGrid from '../components/TableGrid/TableGrid';
-import { TableRacetrack } from '../components/TableRacetrack/TableRacetrack';
 import CoinRainEffect from '../components/Wheel/CoinRainEffect';
 import Wheel from '../components/Wheel/Wheel';
 import BetStatusHeader from '../components/roulette/BetStatusHeader/BetStatusHeader';
 import { LastResults } from '../components/roulette/LastResults/LastResults';
 import { PlayerStat } from '../components/roulette/PlayerStat/PlayerStat';
+import { TableRaceTrack } from '../components/roulette/TableRaceTrack/TableRaceTrack';
 import { useWheel } from '../contexts/WheelContext';
 
 export const Game = () => {
@@ -38,7 +38,7 @@ export const Game = () => {
 							</div>
 						</div>
 					</div>
-					<TableRacetrack />
+					<TableRaceTrack />
 					<div className={`${isVertical && 'w-[var(--min-width-sm)]'} flex flex-col gap-y-6 mb-8`}>
 						<TableGrid />
 						<BetHistory />
@@ -67,7 +67,7 @@ export const Game = () => {
 					{currentPage === 2 && (
 						<div className="relative flex-1 flex flex-col w-full mt-2 max-w-[--max-w-global] mx-auto">
 							<BetStatusHeader />
-							<TableRacetrack />
+							<TableRaceTrack />
 							<TableGrid />
 						</div>
 					)}
@@ -101,7 +101,9 @@ export const Game = () => {
 								<PlayerStat />
 							</div>
 						</div>
-						<TableRacetrack />
+
+						{/* <TableRaceTrack/> */}
+						<TableRaceTrack />
 						<TableGrid />
 					</div>
 

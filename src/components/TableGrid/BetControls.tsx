@@ -135,7 +135,7 @@ const BetControls: React.FC = () => {
 							/>
 
 							{/* SVG da Ficha */}
-							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
+
 							<svg width="50" height="50" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M22 44C34.1503 44 44 34.1503 44 22C44 9.84973 34.1503 0 22 0C9.84973 0 0 9.84973 0 22C0 34.1503 9.84973 44 22 44Z" fill="#131624" />
 								<path
@@ -303,7 +303,7 @@ const BetControls: React.FC = () => {
 							/>
 
 							{/* SVG da Ficha */}
-							{/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
+
 							<svg width="50" height="50" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
 								<path d="M22 44C34.1503 44 44 34.1503 44 22C44 9.84973 34.1503 0 22 0C9.84973 0 0 9.84973 0 22C0 34.1503 9.84973 44 22 44Z" fill="#131624" />
 								<path

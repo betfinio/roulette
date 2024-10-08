@@ -3,6 +3,7 @@ import {
 	calculatePotentialWin,
 	changeChip,
 	doublePlace,
+	fetchChipsByPosition,
 	fetchLastRouletteBets,
 	fetchLimits,
 	fetchLocalBets,
@@ -14,14 +15,15 @@ import {
 	undoPlace,
 	unplace,
 } from '@/src/lib/roulette/api';
-import type { FuncProps, Limit, LocalBet, RouletteBet, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
+import type { ChiPlaceProps, Limit, LocalBet, RouletteBet, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
 import { RouletteContract } from '@betfinio/abi';
 import { ZeroAddress } from '@betfinio/abi';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useDebounce } from '@uidotdev/usehooks';
+import { useDebounce, useMediaQuery as useMediaQueryLib } from '@uidotdev/usehooks';
 import type { WriteContractReturnType } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { toast } from 'betfinio_app/use-toast';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -126,7 +128,7 @@ export const useSelectedChip = () =>
 export const usePlace = () => {
 	const queryClient = useQueryClient();
 	const { data: chip = 0 } = useSelectedChip();
-	return useMutation<void, Error, FuncProps>({
+	return useMutation<void, Error, ChiPlaceProps>({
 		mutationKey: ['roulette', 'place'],
 		mutationFn: (e) => place(e, chip),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
@@ -176,7 +178,7 @@ export const useSpin = () => {
 
 export const useUnplace = () => {
 	const queryClient = useQueryClient();
-	return useMutation<void, Error, FuncProps>({
+	return useMutation<void, Error, ChiPlaceProps>({
 		mutationKey: ['roulette', 'unplace'],
 		mutationFn: (e) => unplace(e),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
@@ -226,5 +228,21 @@ export const useProofRandom = (request: bigint) => {
 		initialData: ZeroAddress,
 		queryKey: ['roulette', 'proof', request.toString()],
 		queryFn: () => fetchProofTx(request, config),
+	});
+};
+
+export const useMediaQuery = () => {
+	const isMobile = useMediaQueryLib('(max-width: 639px)');
+	const isTablet = useMediaQueryLib('(min-width: 640px) and (max-width: 1023px)');
+
+	const isVertical = isMobile;
+
+	return { isMobile, isTablet, isVertical };
+};
+
+export const useGetChipsForPosition = (position: string) => {
+	return useQuery<LocalBet[]>({
+		queryKey: ['roulette', 'local', 'bets', position],
+		queryFn: () => fetchChipsByPosition(position),
 	});
 };

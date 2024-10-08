@@ -201,3 +201,11 @@ export function bitMapToNumbers(bet: RouletteSubBet): { amount: bigint; numbers:
 
 	return { numbers, amount, value: betCodes[numbers.join('&')] };
 }
+
+export const getChipColor = (value: number) => {
+	if (value <= 1000) return 'var(--blue)';
+	if (value <= 5000) return 'var(--blue-purple)';
+	if (value <= 10000) return 'var(--purple-lighter)';
+	if (value <= 50000) return 'var(--orange)';
+	return 'var(--yellow)';
+};

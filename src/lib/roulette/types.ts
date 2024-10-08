@@ -15,15 +15,16 @@ export interface RouletteSubBet {
 export interface LocalBet {
 	numbers: number[];
 	amount: number;
-	item: number;
+	item: string;
 }
 
 export interface SpinParams {
 	bets: LocalBet[];
 }
 
-export interface FuncProps {
-	item: number;
+export interface ChiPlaceProps {
+	item: string;
+
 	numbers: number[];
 }
 

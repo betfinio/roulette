@@ -11,7 +11,7 @@ interface WheelContextProps {
 	undoLastBet: () => void;
 	cleanAllBets: () => void;
 	placeChip: (number: number | string, position: string, relatedNumbers: number[]) => void;
-	getChipColor: (value: number) => string;
+
 	changeIsDebug: () => void;
 	isAmerican: boolean;
 	isVertical: boolean;
@@ -124,14 +124,6 @@ export const WheelProvider: React.FC<WheelProviderProps> = ({ children }) => {
 		setBetHistory([...betHistory, `Aposta em ${number} (${position} - ${relatedNumbers.join(', ')}): ${activeChipValue}`]);
 	};
 
-	const getChipColor = (value: number) => {
-		if (value <= 1000) return 'var(--blue)';
-		if (value <= 5000) return 'var(--blue-purple)';
-		if (value <= 10000) return 'var(--purple-lighter)';
-		if (value <= 50000) return 'var(--orange)';
-		return 'var(--yellow)';
-	};
-
 	const changeIsDebug = () => setIsDebugMode((prev) => !prev);
 
 	return (
@@ -148,7 +140,7 @@ export const WheelProvider: React.FC<WheelProviderProps> = ({ children }) => {
 				undoLastBet,
 				cleanAllBets,
 				placeChip,
-				getChipColor,
+
 				changeIsDebug,
 				isAmerican,
 				isVertical,

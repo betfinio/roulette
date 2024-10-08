@@ -1,17 +1,55 @@
 import type React from 'react';
 import { useState } from 'react';
 import './TableGrid.css';
+import { getBlack, getRed } from '@/src/lib/roulette';
 import { useWheel } from '../../contexts/WheelContext';
 import BetControls from './BetControls';
 import TableItem from './TableItem';
 import { tableConfigHorizontal } from './tableConfigHorizontal';
 import { tableConfigVertical } from './tableConfigVertical';
 
-const getNumbers = (isVertical: boolean): number[] => {
+const getNumbers = (isVertical: boolean): string[] => {
 	if (isVertical) {
-		return Array.from({ length: 36 }, (_, index) => index + 1);
+		return Array.from({ length: 36 }, (_, index) => (index + 1).toString());
 	}
-	return [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34];
+	return [
+		'3',
+		'6',
+		'9',
+		'12',
+		'15',
+		'18',
+		'21',
+		'24',
+		'27',
+		'30',
+		'33',
+		'36',
+		'2',
+		'5',
+		'8',
+		'11',
+		'14',
+		'17',
+		'20',
+		'23',
+		'26',
+		'29',
+		'32',
+		'35',
+		'1',
+		'4',
+		'7',
+		'10',
+		'13',
+		'16',
+		'19',
+		'22',
+		'25',
+		'28',
+		'31',
+		'34',
+	];
 };
 
 const getCenterSelectionForExtraItem = (index: number, isVertical: boolean): number[] => {
@@ -37,7 +75,7 @@ const getCenterSelectionForExtraItem = (index: number, isVertical: boolean): num
 
 const TableGrid: React.FC = () => {
 	const [hoveredNumbers, setHoveredNumbers] = useState<number[]>([]);
-	const { placeChip, isDebugMode, getChipColor, placedChips, isAmerican, isVertical } = useWheel();
+	const { placeChip, isDebugMode, placedChips, isAmerican, isVertical } = useWheel();
 
 	const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
 	const numbers = getNumbers(isVertical);
@@ -62,15 +100,12 @@ const TableGrid: React.FC = () => {
 							key={zero}
 							number={zero}
 							centerSelection={[0]}
-							placedChips={getPlacedChipsForNumber(zero)}
 							isVertical={isVertical}
 							className={`grid-item-${isVertical ? 'v' : 'h'} ${zeroClassName} ${
 								isNumberHovered(0) && !isDebugMode ? 'grid-item-highlighted' : ''
 							} ${isDebugMode && 'grid-item-debug'}`}
 							onHoverNumbers={handleHoverNumbers}
 							onLeaveHover={handleLeaveHover}
-							isDebugMode={isDebugMode}
-							getChipColor={getChipColor}
 							onClick={(position, relatedNumbers) => placeChip(0, position, relatedNumbers)}
 						/>
 					))}
@@ -81,109 +116,93 @@ const TableGrid: React.FC = () => {
 			<TableItem
 				isZero
 				key={0}
-				number={0}
+				number={'0'}
 				centerSelection={[0]}
-				placedChips={getPlacedChipsForNumber(0)}
 				isVertical={isVertical}
 				className={`grid-item-${isVertical ? 'v' : 'h'} ${zeroClassName} ${
 					isNumberHovered(0) && !isDebugMode ? 'grid-item-highlighted' : ''
 				} ${isDebugMode && 'grid-item-debug'}`}
 				onHoverNumbers={handleHoverNumbers}
 				onLeaveHover={handleLeaveHover}
-				isDebugMode={isDebugMode}
-				getChipColor={getChipColor}
 				onClick={(position, relatedNumbers) => placeChip(0, position, relatedNumbers)}
 			/>
 		);
 	};
 
 	const SideTable: React.FC = () => {
-		const sideItemsConfig = [
-			{
-				number: '1 to 18',
+		const sideItemsConfig = {
+			'1 to 18': {
 				centerSelection: numbersVertical.slice(0, 18),
 				className: 'common-square',
 			},
-			{
-				number: 'Even',
+			Even: {
 				centerSelection: numbersVertical.filter((n) => n % 2 === 0),
 				className: 'common-square',
 			},
-			{
-				number: 'Red',
-				centerSelection: tableConfig.redNumbers,
+			Red: {
+				centerSelection: getRed(),
 				className: 'red-square',
 			},
-			{
-				number: 'Black',
-				centerSelection: tableConfig.blackNumbers,
+			Black: {
+				centerSelection: getBlack(),
 				className: 'black-square',
 			},
-			{
-				number: 'Odd',
+			Odd: {
 				centerSelection: numbersVertical.filter((n) => n % 2 !== 0),
 				className: 'common-square',
 			},
-			{
-				number: '19 to 36',
+			'19 to 36': {
 				centerSelection: numbersVertical.slice(18, 36),
 				className: 'common-square',
 			},
-		];
+		};
 
-		const dozenItemsConfig = [
-			{
-				number: '1 to 12',
+		const dozenItemsConfig = {
+			'1 to 12': {
 				centerSelection: numbersVertical.slice(0, 12),
 				className: 'common-square',
 			},
-			{
-				number: '13 to 24',
+
+			'13 to 24': {
 				centerSelection: numbersVertical.slice(12, 24),
 				className: 'common-square',
 			},
-			{
-				number: '25 to 36',
+
+			'25 to 36': {
 				centerSelection: numbersVertical.slice(24, 36),
 				className: 'common-square',
 			},
-		];
+		};
 
 		return (
 			<>
 				<div className={`side-table-container-${isVertical ? 'v' : 'h'} side-items-dozen`}>
-					{sideItemsConfig.map((item) => (
+					{(Object.keys(sideItemsConfig) as unknown as Array<keyof typeof sideItemsConfig>).map((key) => (
 						<TableItem
-							key={item.number}
-							number={item.number}
+							key={key}
+							number={key}
 							isVertical={isVertical}
 							isRangeButton
-							centerSelection={item.centerSelection}
+							centerSelection={sideItemsConfig[key].centerSelection}
 							onHoverNumbers={handleHoverNumbers}
 							onLeaveHover={handleLeaveHover}
-							isDebugMode={isDebugMode}
-							placedChips={getPlacedChipsForNumber(item.number)}
-							getChipColor={getChipColor}
-							onClick={(position, relatedNumbers) => placeChip(item.number, position, item.centerSelection)}
-							className={`side-item-${isVertical ? 'v row-span-2' : 'h col-span-1'} ${item.className}`}
+							onClick={(position, relatedNumbers) => placeChip(key, position, sideItemsConfig[key].centerSelection)}
+							className={`side-item-${isVertical ? 'v row-span-2' : 'h col-span-1'} ${sideItemsConfig[key].className}`}
 						/>
 					))}
 				</div>
 				<div className={`side-table-container-${isVertical ? 'v' : 'h'} side-items-main`}>
-					{dozenItemsConfig.map((item) => (
+					{(Object.keys(dozenItemsConfig) as unknown as Array<keyof typeof dozenItemsConfig>).map((key) => (
 						<TableItem
-							key={item.number}
-							number={item.number}
+							key={key}
+							number={key}
 							isVertical={isVertical}
 							isRangeButton
-							centerSelection={item.centerSelection}
+							centerSelection={dozenItemsConfig[key].centerSelection}
 							onHoverNumbers={handleHoverNumbers}
 							onLeaveHover={handleLeaveHover}
-							isDebugMode={isDebugMode}
-							placedChips={getPlacedChipsForNumber(item.number)}
-							getChipColor={getChipColor}
-							onClick={(position, relatedNumbers) => placeChip(item.number, position, item.centerSelection)}
-							className={`side-item-${isVertical ? 'v row-span-4' : 'h col-span-2'} ${item.className}`}
+							onClick={(position, relatedNumbers) => placeChip(key, position, dozenItemsConfig[key].centerSelection)}
+							className={`side-item-${isVertical ? 'v row-span-4' : 'h col-span-2'} ${dozenItemsConfig[key].className}`}
 						/>
 					))}
 				</div>
@@ -203,10 +222,7 @@ const TableGrid: React.FC = () => {
 						{...tableConfig[item]}
 						onHoverNumbers={handleHoverNumbers}
 						onLeaveHover={handleLeaveHover}
-						className={`${tableConfig[item]?.className} ${isNumberHovered(item) ? 'grid-item-highlighted' : ''} ${isDebugMode && 'grid-item-debug'}`}
-						isDebugMode={isDebugMode}
-						placedChips={getPlacedChipsForNumber(item)}
-						getChipColor={getChipColor}
+						className={`${tableConfig[item]?.className} ${isNumberHovered(+item) ? 'grid-item-highlighted' : ''} ${isDebugMode && 'grid-item-debug'}`}
 						onClick={(position, relatedNumbers) => placeChip(item, position, relatedNumbers)}
 					/>
 				))}
@@ -224,11 +240,8 @@ const TableGrid: React.FC = () => {
 						number={item}
 						isVertical={isVertical}
 						centerSelection={getCenterSelectionForExtraItem(index, isVertical)}
-						placedChips={getPlacedChipsForNumber(item)}
 						onHoverNumbers={handleHoverNumbers}
 						onLeaveHover={handleLeaveHover}
-						isDebugMode={isDebugMode}
-						getChipColor={getChipColor}
 						onClick={(position, relatedNumbers) => placeChip(item, position, relatedNumbers)}
 						className={`grid-item-${isVertical ? 'v' : 'h'} common-square`}
 					/>

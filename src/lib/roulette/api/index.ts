@@ -1,6 +1,6 @@
 import { FIRST_BLOCK, PARTNER, ROULETTE } from '@/src/global.ts';
 import { encodeBet } from '@/src/lib/roulette';
-import type { FuncProps, Limit, LocalBet, RouletteBet, RouletteSubBet, SpinParams } from '@/src/lib/roulette/types.ts';
+import type { ChiPlaceProps, Limit, LocalBet, RouletteBet, RouletteSubBet, SpinParams } from '@/src/lib/roulette/types.ts';
 import { PartnerContract, RouletteBetContract, RouletteContract, arrayFrom } from '@betfinio/abi';
 import { ZeroAddress } from '@betfinio/abi';
 import { multicall, readContract, writeContract } from '@wagmi/core';
@@ -15,6 +15,11 @@ export const fetchLocalBets = (): LocalBet[] => {
 		return [];
 	}
 	return JSON.parse(data) as LocalBet[];
+};
+export const fetchChipsByPosition = (position: string): LocalBet[] => {
+	const bets = fetchLocalBets();
+
+	return bets.filter((bet) => bet.item === position);
 };
 
 export const fetchLimits = async (config: Config): Promise<Limit[]> => {
@@ -163,9 +168,9 @@ export const fetchSelectedChip = async (): Promise<number> => {
 	return Number(localStorage.getItem('chip') || 10000);
 };
 
-export const place = async (params: FuncProps, chip: number) => {
+export const place = async (params: ChiPlaceProps, chip: number) => {
 	const old = fetchLocalBets();
-	if (params.numbers.length === 0 && params.item === 0) {
+	if (params.numbers.length === 0) {
 		localStorage.setItem('bets', JSON.stringify([]));
 		return;
 	}
@@ -208,9 +213,9 @@ export const spin = async (params: SpinParams, config: Config) => {
 	});
 };
 
-export const unplace = async (params: FuncProps) => {
+export const unplace = async (params: ChiPlaceProps) => {
 	const old = fetchLocalBets();
-	if (params.numbers.length === 0 && params.item === 0) {
+	if (params.numbers.length === 0) {
 		localStorage.setItem('bets', JSON.stringify([]));
 		return;
 	}
@@ -234,7 +239,7 @@ export const getRequiredAllowance = (): number => {
 
 export const doublePlace = async () => {
 	const bets = fetchLocalBets();
-	const betsMap = [...bets, ...bets].reduce((acc: Record<number, LocalBet[]>, val) => {
+	const betsMap = [...bets, ...bets].reduce((acc: Record<string, LocalBet[]>, val) => {
 		if (acc[val.item]) {
 			acc[val.item].push(val);
 		} else {
