@@ -2,6 +2,7 @@ import type React from 'react';
 import { useState } from 'react';
 import './TableGrid.css';
 import { getBlack, getRed } from '@/src/lib/roulette';
+import { useGetDebugMode } from '@/src/lib/roulette/query';
 import { useWheel } from '../../contexts/WheelContext';
 import BetControls from './BetControls';
 import TableItem from './TableItem';
@@ -74,8 +75,9 @@ const getCenterSelectionForExtraItem = (index: number, isVertical: boolean): num
 };
 
 const TableGrid: React.FC = () => {
+	const { data: isDebugMode } = useGetDebugMode();
 	const [hoveredNumbers, setHoveredNumbers] = useState<number[]>([]);
-	const { placeChip, isDebugMode, placedChips, isAmerican, isVertical } = useWheel();
+	const { placeChip, isAmerican, isVertical } = useWheel();
 
 	const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
 	const numbers = getNumbers(isVertical);
@@ -84,7 +86,6 @@ const TableGrid: React.FC = () => {
 	const handleHoverNumbers = (numbers: number[]) => setHoveredNumbers(numbers);
 	const handleLeaveHover = () => setHoveredNumbers([]);
 	const isNumberHovered = (number: number) => hoveredNumbers.includes(number);
-	const getPlacedChipsForNumber = (number: number | string) => placedChips.filter((chip) => chip.number === number);
 
 	const ZeroItem: React.FC = () => {
 		const zeroClassName = isAmerican

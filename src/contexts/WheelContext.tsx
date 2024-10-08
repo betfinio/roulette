@@ -12,22 +12,15 @@ interface WheelContextProps {
 	cleanAllBets: () => void;
 	placeChip: (number: number | string, position: string, relatedNumbers: number[]) => void;
 
-	changeIsDebug: () => void;
 	isAmerican: boolean;
 	isVertical: boolean;
 	isMobile: boolean;
 	isTablet: boolean;
-	isDebugMode: boolean;
 	selectedNumber: string;
 	setSelectedNumber: (number: string) => void;
 	startSpin: () => void;
 	stopSpin: () => void;
-	placedChips: {
-		number: number | string;
-		value: number;
-		position: string;
-		relatedNumbers: number[];
-	}[];
+
 	// Estados para controlar o CoinRainEffect
 	isRainActive: boolean;
 	setRainActive: (isActive: boolean) => void;
@@ -54,7 +47,6 @@ export const WheelProvider: React.FC<WheelProviderProps> = ({ children }) => {
 	const [betHistory, setBetHistory] = useState<string[]>([]);
 	const [totalBet, setTotalBet] = useState(0);
 	const [activeChipValue, setActiveChipValue] = useState(1000);
-	const [isDebugMode, setIsDebugMode] = useState(false);
 	const [selectedNumber, setSelectedNumber] = useState('');
 	const [placedChips, setPlacedChips] = useState<
 		{
@@ -124,8 +116,6 @@ export const WheelProvider: React.FC<WheelProviderProps> = ({ children }) => {
 		setBetHistory([...betHistory, `Aposta em ${number} (${position} - ${relatedNumbers.join(', ')}): ${activeChipValue}`]);
 	};
 
-	const changeIsDebug = () => setIsDebugMode((prev) => !prev);
-
 	return (
 		<WheelContext.Provider
 			value={{
@@ -141,17 +131,14 @@ export const WheelProvider: React.FC<WheelProviderProps> = ({ children }) => {
 				cleanAllBets,
 				placeChip,
 
-				changeIsDebug,
 				isAmerican,
 				isVertical,
 				isMobile,
 				isTablet,
-				isDebugMode,
 				selectedNumber,
 				setSelectedNumber,
 				startSpin,
 				stopSpin,
-				placedChips,
 				isRainActive,
 				setRainActive,
 				rainIntensity,

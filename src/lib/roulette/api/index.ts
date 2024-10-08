@@ -296,3 +296,15 @@ export const fetchProofTx = async (request: bigint, config: Config): Promise<Add
 	}
 	return ZeroAddress;
 };
+
+export const fetchDebugMode = (): boolean => {
+	const data = localStorage.getItem('roulette-debug');
+	if (!data) {
+		return false;
+	}
+	return JSON.parse(data);
+};
+
+export const setDebugMode = async (nextDebug: boolean) => {
+	localStorage.setItem('roulette-debug', JSON.stringify(nextDebug));
+};

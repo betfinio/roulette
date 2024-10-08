@@ -4,6 +4,7 @@ import {
 	changeChip,
 	doublePlace,
 	fetchChipsByPosition,
+	fetchDebugMode,
 	fetchLastRouletteBets,
 	fetchLimits,
 	fetchLocalBets,
@@ -11,6 +12,7 @@ import {
 	fetchRouletteBets,
 	fetchSelectedChip,
 	place,
+	setDebugMode,
 	spin,
 	undoPlace,
 	unplace,
@@ -244,5 +246,21 @@ export const useGetChipsForPosition = (position: string) => {
 	return useQuery<LocalBet[]>({
 		queryKey: ['roulette', 'local', 'bets', position],
 		queryFn: () => fetchChipsByPosition(position),
+	});
+};
+
+export const useGetDebugMode = () => {
+	return useQuery<boolean>({
+		queryKey: ['roulette', 'local', 'debug'],
+		queryFn: fetchDebugMode,
+	});
+};
+export const useSetDebugMode = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation<void, Error, boolean>({
+		mutationKey: ['roulette', 'local', 'debug'],
+		mutationFn: (e) => setDebugMode(e),
+		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'debug'] }),
 	});
 };

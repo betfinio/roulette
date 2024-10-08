@@ -1,19 +1,40 @@
+import { useGetDebugMode } from '@/src/lib/roulette/query';
+import { cn } from 'betfinio_app/lib/utils';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { BetChips } from '../BetChip/BetChips';
+export type PositionType = 'center' | 'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
 interface BetPlacePointProps {
 	positionId: string;
+	position: PositionType;
 	onMouseOver: (event?: React.MouseEvent) => void;
 	onMouseOut: (event?: React.MouseEvent) => void;
 	onClick: (event?: React.MouseEvent) => void;
 }
-export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, ...events }) => {
-	// Helper function to convert camelCase to kebab-case
-	const toKebabCase = (str: string) => str.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-	const isDebugMode = false;
+export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, ...events }) => {
+	const { data: isDebugMode } = useGetDebugMode();
+
+	// Mapping positions to Tailwind classes
+	const positionClasses: Record<PositionType, string> = {
+		center: 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2',
+		top: 'top-[-13px] left-1/2 transform -translate-x-1/2',
+		left: 'top-1/2 left-[-11.5px] transform -translate-y-1/2 ',
+		right: 'top-1/2 right-[-12px] transform -translate-y-1/2',
+		bottom: 'bottom-[-11.7px] left-1/2 transform -translate-x-1/2',
+		topLeft: 'top-[-13px] left-[-12px]',
+		topRight: 'top-[-13px] right-[-12px]',
+		bottomLeft: 'bottom-[-11.7px] left-[-12px]',
+		bottomRight: 'bottom-[-11.7px] right-[-12px]',
+	} as const;
 	return (
-		<motion.div className={`selection-ball ${toKebabCase(positionId.split('-')[1])}-ball ${!isDebugMode ? 'hidden-balls' : ''} `} {...events}>
+		<motion.div
+			className={cn('absolute w-5 h-5 bg-muted/40 rounded-full flex items-center justify-center z-10 opacity-100', positionClasses[position], {
+				'bg-muted/40': isDebugMode,
+				'bg-transparent': !isDebugMode,
+			})}
+			{...events}
+		>
 			<BetChips positionId={positionId} />
 		</motion.div>
 	);

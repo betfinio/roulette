@@ -1,10 +1,7 @@
 import type React from 'react';
-import { useState } from 'react';
 import './TableItem.css';
-import { Bet } from '@betfinio/ui/dist/icons';
-import { motion } from 'framer-motion';
-import { BetChips } from '../roulette/BetChip/BetChips';
-import { BetPlacePoint } from '../roulette/BetPlacePoint/BetPlacePoint';
+
+import { BetPlacePoint, type PositionType } from '../roulette/BetPlacePoint/BetPlacePoint';
 
 interface TableItemProps {
 	number: string;
@@ -26,10 +23,6 @@ interface TableItemProps {
 
 	onClick?: (position: string, relatedNumbers: number[], number: string | number) => void;
 }
-
-type PositionType = 'center' | 'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
-
-const MAX_CHIPS = 5;
 
 const TableItem: React.FC<TableItemProps> = ({
 	number,
@@ -117,6 +110,7 @@ const TableItem: React.FC<TableItemProps> = ({
 					<BetPlacePoint
 						key={position}
 						positionId={`${number}-${position}`}
+						position={position}
 						onMouseOver={(e) => handleInteraction(position, 'hover', e)}
 						onMouseOut={(e) => handleInteraction(position, 'leave', e)}
 						onClick={(e) => handleInteraction(position, 'click', e)}
