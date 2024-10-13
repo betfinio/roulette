@@ -1,57 +1,13 @@
 import type React from 'react';
 import { useState } from 'react';
 import './TableGrid.css';
-import { getBlack, getRed } from '@/src/lib/roulette';
+import { getBlack, getGridNumbers, getRed } from '@/src/lib/roulette';
 import { useGetDebugMode } from '@/src/lib/roulette/query';
 import { useWheel } from '../../contexts/WheelContext';
 import BetControls from './BetControls';
 import TableItem from './TableItem';
 import { tableConfigHorizontal } from './tableConfigHorizontal';
 import { tableConfigVertical } from './tableConfigVertical';
-
-const getNumbers = (isVertical: boolean): string[] => {
-	if (isVertical) {
-		return Array.from({ length: 36 }, (_, index) => (index + 1).toString());
-	}
-	return [
-		'3',
-		'6',
-		'9',
-		'12',
-		'15',
-		'18',
-		'21',
-		'24',
-		'27',
-		'30',
-		'33',
-		'36',
-		'2',
-		'5',
-		'8',
-		'11',
-		'14',
-		'17',
-		'20',
-		'23',
-		'26',
-		'29',
-		'32',
-		'35',
-		'1',
-		'4',
-		'7',
-		'10',
-		'13',
-		'16',
-		'19',
-		'22',
-		'25',
-		'28',
-		'31',
-		'34',
-	];
-};
 
 const getCenterSelectionForExtraItem = (index: number, isVertical: boolean): number[] => {
 	const numbersVertical = Array.from({ length: 36 }, (_, index) => index + 1);
@@ -77,10 +33,10 @@ const getCenterSelectionForExtraItem = (index: number, isVertical: boolean): num
 const TableGrid: React.FC = () => {
 	const { data: isDebugMode } = useGetDebugMode();
 	const [hoveredNumbers, setHoveredNumbers] = useState<number[]>([]);
-	const { placeChip, isAmerican, isVertical } = useWheel();
+	const { placeChip, isVertical } = useWheel();
 
 	const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
-	const numbers = getNumbers(isVertical);
+	const numbers = getGridNumbers(isVertical);
 	const numbersVertical = Array.from({ length: 36 }, (_, index) => index + 1);
 
 	const handleHoverNumbers = (numbers: number[]) => setHoveredNumbers(numbers);
@@ -88,31 +44,8 @@ const TableGrid: React.FC = () => {
 	const isNumberHovered = (number: number) => hoveredNumbers.includes(number);
 
 	const ZeroItem: React.FC = () => {
-		const zeroClassName = isAmerican
-			? `zero-${isVertical ? 'v' : 'h'} zero-american-${isVertical ? 'v' : 'h'}`
-			: `zero-${isVertical ? 'v' : 'h'} zero-european-${isVertical ? 'v' : 'h'}`;
+		const zeroClassName = `zero-${isVertical ? 'v' : 'h'} zero-european-${isVertical ? 'v' : 'h'}`;
 
-		if (isAmerican) {
-			return (
-				<div className={`zero-american-wrapper-${isVertical ? 'v' : 'h'}`}>
-					{['0', '00'].map((zero) => (
-						<TableItem
-							isZero
-							key={zero}
-							number={zero}
-							centerSelection={[0]}
-							isVertical={isVertical}
-							className={`grid-item-${isVertical ? 'v' : 'h'} ${zeroClassName} ${
-								isNumberHovered(0) && !isDebugMode ? 'grid-item-highlighted' : ''
-							} ${isDebugMode && 'grid-item-debug'}`}
-							onHoverNumbers={handleHoverNumbers}
-							onLeaveHover={handleLeaveHover}
-							onClick={(position, relatedNumbers) => placeChip(0, position, relatedNumbers)}
-						/>
-					))}
-				</div>
-			);
-		}
 		return (
 			<TableItem
 				isZero

@@ -209,3 +209,49 @@ export const getChipColor = (value: number) => {
 	if (value <= 50000) return 'var(--orange)';
 	return 'var(--yellow)';
 };
+
+export const getGridNumbers = (isVertical: boolean): string[] => {
+	if (isVertical) {
+		return Array.from({ length: 36 }, (_, index) => (index + 1).toString());
+	}
+	return [
+		'3',
+		'6',
+		'9',
+		'12',
+		'15',
+		'18',
+		'21',
+		'24',
+		'27',
+		'30',
+		'33',
+		'36',
+		'2',
+		'5',
+		'8',
+		'11',
+		'14',
+		'17',
+		'20',
+		'23',
+		'26',
+		'29',
+		'32',
+		'35',
+		'1',
+		'4',
+		'7',
+		'10',
+		'13',
+		'16',
+		'19',
+		'22',
+		'25',
+		'28',
+		'31',
+		'34',
+	];
+};
+
+export const numbersVertical = Array.from({ length: 36 }, (_, index) => index + 1);

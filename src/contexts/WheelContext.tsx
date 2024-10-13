@@ -12,7 +12,6 @@ interface WheelContextProps {
 	cleanAllBets: () => void;
 	placeChip: (number: number | string, position: string, relatedNumbers: number[]) => void;
 
-	isAmerican: boolean;
 	isVertical: boolean;
 	isMobile: boolean;
 	isTablet: boolean;
@@ -64,7 +63,6 @@ export const WheelProvider: React.FC<WheelProviderProps> = ({ children }) => {
 	const [fallingSpeed, setFallingSpeed] = useState(8);
 	const [rotationSpeed, setRotationSpeed] = useState(5);
 	const [resizeFactor, setResizeFactor] = useState(0.3);
-	const [isAmerican, setIsAmerican] = useState(false);
 
 	// Detectar quando a largura da tela é menor que 1024px
 	const isMobile = useMediaQuery({ query: '(max-width: 639px)' });
@@ -131,7 +129,6 @@ export const WheelProvider: React.FC<WheelProviderProps> = ({ children }) => {
 				cleanAllBets,
 				placeChip,
 
-				isAmerican,
 				isVertical,
 				isMobile,
 				isTablet,

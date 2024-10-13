@@ -1,6 +1,6 @@
 import type React from 'react';
-import './TableItem.css';
 
+import { cn } from 'betfinio_app/lib/utils';
 import { BetPlacePoint, type PositionType } from '../roulette/BetPlacePoint/BetPlacePoint';
 
 interface TableItemProps {
@@ -46,7 +46,7 @@ const TableItem: React.FC<TableItemProps> = ({
 }) => {
 	const positions: PositionType[] = ['center', 'top', 'left', 'right', 'bottom', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
 
-	const selectionMap: Record<PositionType, number[] | undefined> = {
+	const selectionMap: Record<PositionType, number[] | undefined> & { [key: string]: number[] | undefined } = {
 		center: centerSelection,
 		top: topSelection,
 		left: leftSelection,
@@ -57,6 +57,13 @@ const TableItem: React.FC<TableItemProps> = ({
 		bottomLeft: bottomLeftSelection,
 		bottomRight: bottomRightSelection,
 	};
+
+	const hasOnlyCenterSelection = Object.keys(selectionMap).every((selection) => {
+		if (selection === 'center') {
+			return selectionMap[selection]?.length;
+		}
+		return !selectionMap[selection]?.length;
+	});
 
 	const handleInteraction = (position: PositionType, action: 'hover' | 'leave' | 'click', event?: React.MouseEvent) => {
 		event?.stopPropagation();
@@ -74,31 +81,30 @@ const TableItem: React.FC<TableItemProps> = ({
 		}
 	};
 
-	const containerClass = `text-xs ${
-		isRangeButton
-			? isVertical
-				? 'table-external-item-v'
-				: 'table-external-item-h '
-			: isVertical
-				? isZero
-					? 'table-item-v-zero'
-					: 'table-item-v'
-				: isZero
-					? 'table-item-h-zero'
-					: 'table-item-h'
-	} ${className}`;
-
-	const numberDisplayClass = `${isRangeButton ? (isVertical ? 'side-item-v-text' : 'side-item-h-text') : 'number-display'}`;
-
 	return (
 		<div
-			className={containerClass}
+			className={cn(
+				'text-xs  md:text-base cursor-pointer relative flex items-center justify-center',
+				{
+					' w-10 h-full rounded border border-border ': isRangeButton && isVertical,
+					' w-full  ': isRangeButton && !isVertical,
+					' w-full  rounded border border-border  font-semibold': !isRangeButton && !isVertical,
+					' w-full h-10 rounded border border-border  font-semibold': !isRangeButton && isVertical,
+				},
+				className,
+			)}
 			onMouseOver={(e) => handleInteraction('center', 'hover', e)}
 			onMouseOut={(e) => handleInteraction('center', 'leave', e)}
-			onClick={() => handleInteraction('center', 'click')}
+			onClick={() => hasOnlyCenterSelection && handleInteraction('center', 'click')}
 		>
 			{/* Number Display */}
-			<div className={numberDisplayClass}>{number !== 'Black' && number !== 'Red' ? number : ''}</div>
+			<div
+				className={cn({
+					'rotate-90 whitespace-nowrap': isVertical && isRangeButton,
+				})}
+			>
+				{number !== 'Black' && number !== 'Red' ? number : ''}
+			</div>
 
 			{/* Render Selection Balls */}
 

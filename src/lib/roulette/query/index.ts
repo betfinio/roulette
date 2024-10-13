@@ -2,6 +2,7 @@ import { ROULETTE } from '@/src/global.ts';
 import {
 	calculatePotentialWin,
 	changeChip,
+	clearAllBets,
 	doublePlace,
 	fetchChipsByPosition,
 	fetchDebugMode,
@@ -262,5 +263,14 @@ export const useSetDebugMode = () => {
 		mutationKey: ['roulette', 'local', 'debug'],
 		mutationFn: (e) => setDebugMode(e),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'debug'] }),
+	});
+};
+
+export const useClearAllBets = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationKey: ['roulette', 'clear', 'bets'],
+		mutationFn: () => clearAllBets(),
+		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
 	});
 };

@@ -308,3 +308,7 @@ export const fetchDebugMode = (): boolean => {
 export const setDebugMode = async (nextDebug: boolean) => {
 	localStorage.setItem('roulette-debug', JSON.stringify(nextDebug));
 };
+
+export const clearAllBets = async () => {
+	localStorage.setItem('bets', JSON.stringify([]));
+};

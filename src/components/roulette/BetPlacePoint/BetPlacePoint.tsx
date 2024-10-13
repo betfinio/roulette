@@ -29,10 +29,14 @@ export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, ..
 	} as const;
 	return (
 		<motion.div
-			className={cn('absolute w-5 h-5 bg-muted/40 rounded-full flex items-center justify-center z-10 opacity-100', positionClasses[position], {
-				'bg-muted/40': isDebugMode,
-				'bg-transparent': !isDebugMode,
-			})}
+			className={cn(
+				'absolute w-[30%] max-w-10 aspect-square bg-muted/40 rounded-full flex items-center justify-center z-10 opacity-100',
+				positionClasses[position],
+				{
+					'bg-muted/40': isDebugMode,
+					'bg-transparent': !isDebugMode,
+				},
+			)}
 			{...events}
 		>
 			<BetChips positionId={positionId} />

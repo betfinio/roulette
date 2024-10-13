@@ -25,15 +25,15 @@
 }
 
 .table-external-item-v {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 100%;
-  border-radius: 6px;
-  border: 1px solid #1e292e;
-  cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 100%;
+    border-radius: 6px;
+    border: 1px solid #1e292e;
+    cursor: pointer;
 }
 
 .table-item-h {
