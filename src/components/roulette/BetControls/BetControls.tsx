@@ -2,12 +2,14 @@ import { getChipColor } from '@/src/lib/roulette';
 import { useLimits, useMediaQuery, useSelectedChip } from '@/src/lib/roulette/query';
 import { BetControlChip } from './BetControlChip';
 
-import { valueToNumber } from '@betfinio/abi';
+import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { Button } from 'betfinio_app/button';
 import { useMemo, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { ChangeBetModal } from './ChangeBetModal';
 import { ExtraControls } from './ExtraControls';
 import { RangeWithButtons } from './RangeWithButtons';
+import { Spin } from './Spin';
 
 export const BetControls = () => {
 	const [openBetChangeModal, setOpenBetChangeModal] = useState(false);
@@ -34,20 +36,13 @@ export const BetControls = () => {
 				<div className="flex-col gap-y-2 w-full flex items-center bg-card p-4 rounded-lg border border-border">
 					{/* Grupo 1: Botão de Fazer Aposta */}
 					<div className="flex flex-col items-center justify-start">
-						<Button
-							disabled={
-								// isWheelWheelSpinning
-								false
-							}
-						>
-							Spin
-						</Button>
+						<Spin />
 					</div>
 				</div>
 
 				{/* Container 2: Range de Fichas */}
-				<div className="gap-y-2 flex items-center bg-card p-4 rounded-lg border border-border">
-					<div className="flex w-full items-center justify-center">
+				<div className="gap-y-2 flex items-center bg-card p-4 rounded-lg border border-border w-full">
+					<div className="flex w-full items-center justify-center ">
 						<RangeWithButtons limits={limits} />
 					</div>
 					<div className="relative flex items-center justify-center">
@@ -81,19 +76,11 @@ export const BetControls = () => {
 		<>
 			<ChangeBetModal initialValue={activeChipValue} max={limits.max} min={limits.min} open={openBetChangeModal} setOpen={setOpenBetChangeModal} />
 			<div className="md:flex-row md:justify-between gap-x-2 flex md:w-full border border-border items-center bg-card px-2 py-4 rounded-xl mt-6 md:px-6">
-				<div className="md:w-fit flex flex-col items-center justify-start">
-					<Button
-						className="min-w-40"
-						disabled={
-							// isWheelWheelSpinning
-							false
-						}
-					>
-						Spin
-					</Button>
+				<div className="flex flex-col items-center justify-start">
+					<Spin />
 				</div>
-				<div className="md:w-fit flex items-center justify-center gap-x-2">
-					<div className="flex w-full items-center justify-center">
+				<div className=" flex items-center justify-center gap-x-2 w-full">
+					<div className="flex  items-center justify-center w-full">
 						<RangeWithButtons limits={limits} />
 					</div>
 					<div className="relative flex items-center justify-center">

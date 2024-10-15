@@ -1,7 +1,9 @@
 import { useChangeChip, useSelectedChip } from '@/src/lib/roulette/query';
 import { Button } from 'betfinio_app/button';
 import { CircleX, Minus, PlusIcon, Undo2 } from 'lucide-react';
+import millify from 'millify';
 import { type FC, useRef, useState } from 'react';
+import RouletteSlider from '../../RouletteSlider/RouletteSlider';
 
 interface IRangeWithButtonsProps {
 	limits: { min: number; max: number };
@@ -38,29 +40,43 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 		}
 		setIncrementSpeed(1);
 	};
+
+	const marks = [
+		{
+			value: limits.min,
+
+			label: millify(limits.min),
+		},
+
+		{
+			value: limits.max / 4,
+			label: millify(limits.max / 4),
+		},
+		{
+			value: (limits.max / 4) * 2,
+			label: millify((limits.max / 4) * 2),
+		},
+		{
+			value: (limits.max / 4) * 3,
+			label: millify((limits.max / 4) * 3),
+		},
+
+		{
+			value: limits.max,
+
+			label: millify(limits.max),
+		},
+	];
+
+	console.log(marks, 'marks');
 	return (
 		<>
 			<Button variant="tertiary" onMouseDown={() => startIncrement('decrease')} onMouseUp={stopIncrement} onMouseLeave={stopIncrement} onClick={handleMinus}>
 				<Minus />
 			</Button>
-			<div className="flex flex-col mb-4">
-				<div className="flex justify-between  text-[9px] md:text-xs mb-1 px-2">
-					<span>1k</span>
-					<span>5k</span>
-					<span>10k</span>
-					<span>50k</span>
-					<span>100k</span>
-				</div>
-				<div className="relative w-full flex items-center">
-					<input
-						type="range"
-						min="1"
-						max="100"
-						step="1"
-						value={activeChipValue / 1000}
-						//   onChange={handleChipChange}
-						className="w-full h-[2px] appearance-none bg-background cursor-pointer accent-[var(--yellow)]"
-					/>
+			<div className="flex flex-col mb-4 w-full">
+				<div className="relative w-full flex items-center px-4">
+					<RouletteSlider minPrice={limits.min} maxPrice={limits.max} marks={marks} value={activeChipValue} setSliderValue={(amount) => change({ amount })} />
 				</div>
 			</div>
 			<Button variant="tertiary" onMouseDown={() => startIncrement('increase')} onMouseUp={stopIncrement} onMouseLeave={stopIncrement} onClick={handlePlus}>

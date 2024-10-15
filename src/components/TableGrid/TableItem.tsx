@@ -86,10 +86,10 @@ const TableItem: React.FC<TableItemProps> = ({
 			className={cn(
 				'text-xs  md:text-base cursor-pointer relative flex items-center justify-center',
 				{
-					' w-10 h-full rounded border border-border ': isRangeButton && isVertical,
+					' w-10 h-full rounded-lg border border-border ': isRangeButton && isVertical,
 					' w-full  ': isRangeButton && !isVertical,
-					' w-full  rounded border border-border  font-semibold': !isRangeButton && !isVertical,
-					' w-full h-10 rounded border border-border  font-semibold': !isRangeButton && isVertical,
+					' w-full  rounded-lg border border-border  font-semibold': !isRangeButton && !isVertical,
+					' w-full h-10 rounded-lg border border-border  font-semibold': !isRangeButton && isVertical,
 				},
 				className,
 			)}

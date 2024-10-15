@@ -1,6 +1,5 @@
 import { getChipColor } from '@/src/lib/roulette';
 import { useSelectedChip } from '@/src/lib/roulette/query';
-import { cn } from 'betfinio_app/lib/utils';
 
 export const BetControlChip = () => {
 	const { data: activeChipValue = 0 } = useSelectedChip();

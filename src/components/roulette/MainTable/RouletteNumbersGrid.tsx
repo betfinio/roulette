@@ -33,10 +33,10 @@ export const RouletteNumbersGrid: FC<IRouletteNumbersGridProps> = ({ onHoverNumb
 					{...tableConfig[item]}
 					onHoverNumbers={onHoverNumbers}
 					onLeaveHover={onLeaveHover}
-					className={cn(`${tableConfig[item]?.className} outline outline-4 outline-transparent transition-all duration-300 delay-100`, {
-						'outline outline-green-roulette ': isNumberHovered(+item) && !isDebugMode,
-						'outline outline-muted/50 ': !isNumberHovered(+item) && isDebugMode,
-						'outline-accent-secondary-foreground': isNumberSelected(+item),
+					className={cn(`${tableConfig[item]?.className} border-transparent border-4 outline-transparent transition-all duration-300 delay-100`, {
+						' border-green-roulette ': isNumberHovered(+item) && !isDebugMode,
+						' border-muted/50 ': !isNumberHovered(+item) && isDebugMode,
+						'border-accent-secondary-foreground': isNumberSelected(+item),
 						' aspect-square': !isVertical,
 					})}
 					onClick={(position, relatedNumbers) =>
