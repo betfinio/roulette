@@ -255,3 +255,54 @@ export const getGridNumbers = (isVertical: boolean): string[] => {
 };
 
 export const numbersVertical = Array.from({ length: 36 }, (_, index) => index + 1);
+
+// Function to generate European roulette numbers with alternating colors
+export const getWheelNumbers = () => [
+	'0',
+	'32',
+	'15',
+	'19',
+	'4',
+	'21',
+	'2',
+	'25',
+	'17',
+	'34',
+	'6',
+	'27',
+	'13',
+	'36',
+	'11',
+	'30',
+	'8',
+	'23',
+	'10',
+	'5',
+	'24',
+	'16',
+	'33',
+	'1',
+	'20',
+	'14',
+	'31',
+	'9',
+	'22',
+	'18',
+	'29',
+	'7',
+	'28',
+	'12',
+	'35',
+	'3',
+	'26',
+];
+
+// Function to format the time for display
+export const formatTime = (milliseconds: number): string => {
+	const totalSeconds = Math.floor(milliseconds / 1000);
+	const minutes = Math.floor(totalSeconds / 60)
+		.toString()
+		.padStart(2, '0');
+	const seconds = (totalSeconds % 60).toString().padStart(2, '0');
+	return `${minutes}:${seconds}`;
+};

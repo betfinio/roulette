@@ -32,7 +32,8 @@
 			"a11y": {
 				"useKeyWithClickEvents": "off",
 				"noSvgWithoutTitle": "off",
-				"useKeyWithMouseEvents": "off"
+				"useKeyWithMouseEvents": "off",
+				"useMediaCaption": "off"
 			},
 			"correctness": {
 				"useExhaustiveDependencies": "off"

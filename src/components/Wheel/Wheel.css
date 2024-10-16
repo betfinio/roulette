@@ -245,7 +245,7 @@ console.log($STEP_2)
 }
 .roulette-wheel-inner[data-spintoindex="32"]::before {
 	transform: rotateZ(-2512deg);
-}
+}	
 .roulette-wheel-inner[data-spintoindex="33"]::before {
 	transform: rotateZ(-2503deg);
 }

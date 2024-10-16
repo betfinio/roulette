@@ -6,22 +6,19 @@ import StatsDisplay from '../components/StatsDisplay/StatsDisplay';
 import TableBet from '../components/TableBet/TableBet';
 import TableGrid from '../components/TableGrid/TableGrid';
 import CoinRainEffect from '../components/Wheel/CoinRainEffect';
-import Wheel from '../components/Wheel/Wheel';
 import BetStatusHeader from '../components/roulette/BetStatusHeader/BetStatusHeader';
 import { LastResults } from '../components/roulette/LastResults/LastResults';
 import { MainTable } from '../components/roulette/MainTable/MainTable';
 import { PlayerStat } from '../components/roulette/PlayerStat/PlayerStat';
 import { TableRaceTrack } from '../components/roulette/TableRaceTrack/TableRaceTrack';
+import Wheel from '../components/roulette/Wheel/Wheel';
 import { useWheel } from '../contexts/WheelContext';
 
 export const Game = () => {
 	const { isVertical, isTablet } = useWheel();
 	const [currentPage, setCurrentPage] = useState(1);
-	console.log('IsTablet', isTablet);
 	return (
 		<div className="relative w-full flex flex-col items-center justify-center gap-y-2">
-			<CoinRainEffect />
-
 			{/* Para Mobile */}
 			{isVertical ? (
 				<div className="flex flex-col items-center justify-center w-full gap-y-2">
