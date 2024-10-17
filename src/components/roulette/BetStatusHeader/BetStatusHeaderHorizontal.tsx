@@ -31,8 +31,8 @@ export const BetStatusHeaderHorizontal = () => {
 		return winningPool / 20n;
 	}, [winningPool]);
 	return (
-		<div className=" rounded-lg bg-card items-center border border-border p-3 px-7 flex justify-between min-h-16">
-			<div className="flex  gap-9">
+		<div className=" rounded-lg bg-card items-center border border-border p-3 px-4 flex justify-between min-h-16 gap-2 md:gap-4">
+			<div className="flex gap-2 md:gap-9">
 				<div className="flex gap-1 items-center">
 					<Bag className={'w-8 text-accent-secondary-foreground'} />
 					<div>
@@ -50,7 +50,7 @@ export const BetStatusHeaderHorizontal = () => {
 				</div>
 			</div>
 			<Separator orientation="vertical" className="h-8" />
-			<div className="flex  gap-9">
+			<div className="flex  gap-2 md:gap-9">
 				<div>
 					<p>{t('totalBet')}</p>
 					<p className="font-bold">
@@ -68,7 +68,7 @@ export const BetStatusHeaderHorizontal = () => {
 					</p>
 				</div>
 			</div>
-			<Separator orientation="vertical" className="h-8" />
+			<Separator orientation="vertical" className="h-8 mr-auto" />
 			<div className=" gap-2   flex ">
 				<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
 					<DialogContent>

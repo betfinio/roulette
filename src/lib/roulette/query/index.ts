@@ -110,9 +110,10 @@ export const useRouletteState = () => {
 		abi: RouletteContract.abi,
 		address: ROULETTE,
 		eventName: 'Landed',
-		onLogs: (landedLogs) => {
+		onLogs: async (landedLogs) => {
 			// @ts-ignore
 			if (landedLogs[0].args.roller.toString().toLowerCase() === address.toLowerCase()) {
+				queryClient.invalidateQueries({ queryKey: ['roulette'] });
 				// @ts-ignore
 				updateState({ state: 'landed', result: Number(landedLogs[0].args.result), bet: landedLogs[0].args.bet });
 			}
@@ -273,4 +274,29 @@ export const useClearAllBets = () => {
 		mutationFn: () => clearAllBets(),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
 	});
+};
+
+export const useRouletteNumbersState = () => {
+	const queryClient = useQueryClient();
+	const state = useQuery<{ hovered: number[]; selected: number[] }>({
+		queryKey: ['roulette', 'numbers'],
+		initialData: { hovered: [], selected: [] },
+	});
+
+	const { data: bets = [] } = useLocalBets();
+
+	const selected = bets.flatMap((e) => e.numbers);
+
+	const updateState = (props: { hovered?: number[]; selected?: number[] }) => {
+		queryClient.setQueryData(['roulette', 'numbers'], { ...state.data, ...props });
+		queryClient.invalidateQueries({ queryKey: ['roulette', 'numbers'] });
+	};
+
+	const isNumberHovered = (number: number) => state.data.hovered.includes(number);
+	const isNumberSelected = (number: number) => selected.includes(number);
+
+	const onHoverNumbers = (numbers: number[]) => updateState({ hovered: numbers });
+	const onLeaveHover = () => updateState({ hovered: [] });
+
+	return { state, updateState, isNumberHovered, isNumberSelected, onHoverNumbers, onLeaveHover };
 };

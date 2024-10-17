@@ -1,20 +1,16 @@
-import { useGetDebugMode, useMediaQuery, usePlace } from '@/src/lib/roulette/query';
+import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import type { FC } from 'react';
 import TableItem from '../../TableGrid/TableItem';
 
-interface IZeroItemProps {
-	isNumberHovered: (number: number) => boolean;
-	onHoverNumbers: (numbers: number[]) => void;
-	onLeaveHover: () => void;
-	isNumberSelected: (number: number) => boolean;
-}
-export const ZeroItem: FC<IZeroItemProps> = ({ isNumberHovered, onHoverNumbers, onLeaveHover, isNumberSelected }) => {
+export const ZeroItem: FC = () => {
 	const { isVertical } = useMediaQuery();
 	const zeroClassName = isVertical ? 'col-span-3 h-10' : 'h-full'; // `zero-${isVertical ? "v" : "h"} zero-european-${isVertical ? "v" : "h"}`;
 	const { mutate: place } = usePlace();
 
 	const { data: isDebugMode } = useGetDebugMode();
+
+	const { isNumberHovered, isNumberSelected, onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
 
 	return (
 		<TableItem

@@ -9,9 +9,9 @@ export const Sounds = () => {
 	const coinRainSound = useRef<HTMLAudioElement | null>(null);
 	return (
 		<>
-			<audio ref={spinSound} src={spinSoundFile} />
+			{/* <audio ref={spinSound} src={spinSoundFile} />
 			<audio ref={winSound} src={winSoundFile} />
-			<audio ref={coinRainSound} src={coinRainSoundFile} />
+			<audio ref={coinRainSound} src={coinRainSoundFile} /> */}
 		</>
 	);
 };

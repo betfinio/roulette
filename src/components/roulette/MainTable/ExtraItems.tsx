@@ -1,4 +1,4 @@
-import { useMediaQuery, usePlace } from '@/src/lib/roulette/query';
+import { useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import type { FC } from 'react';
 import TableItem from '../../TableGrid/TableItem';
@@ -24,13 +24,10 @@ const getCenterSelectionForExtraItem = (index: number, isVertical: boolean): num
 	return [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34];
 };
 
-interface IExtraItemsProps {
-	onHoverNumbers: (numbers: number[]) => void;
-	onLeaveHover: () => void;
-}
-export const ExtraItems: FC<IExtraItemsProps> = ({ onHoverNumbers, onLeaveHover }) => {
+export const ExtraItems: FC = () => {
 	const { mutate: place } = usePlace();
 	const extraItems = ['1st', '2nd', '3rd'];
+	const { onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
 
 	const { isVertical } = useMediaQuery();
 	return (

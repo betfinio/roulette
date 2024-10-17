@@ -1,5 +1,6 @@
 import { getChipColor } from '@/src/lib/roulette';
 import { useSelectedChip } from '@/src/lib/roulette/query';
+import millify from 'millify';
 
 export const BetControlChip = () => {
 	const { data: activeChipValue = 0 } = useSelectedChip();
@@ -62,7 +63,7 @@ export const BetControlChip = () => {
 				</linearGradient>
 			</defs>
 			<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="black" className="text-[10px] font-bold tabular-nums" color="black">
-				{activeChipValue >= 1000 ? `${(activeChipValue / 1000).toFixed(0)}k` : activeChipValue}
+				{millify(activeChipValue)}
 			</text>
 		</svg>
 	);

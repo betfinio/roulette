@@ -1,5 +1,5 @@
 import { getRequiredAllowance } from '@/src/lib/roulette/api';
-import { useRouletteState, useSpin } from '@/src/lib/roulette/query';
+import { useLocalBets, useRouletteState, useSpin } from '@/src/lib/roulette/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { useAllowanceModal } from 'betfinio_app/allowance';
 import { Button } from 'betfinio_app/button';
@@ -18,6 +18,7 @@ export const Spin: FC = () => {
 	const { data: allowance = 0n, isFetching: loading } = useAllowance(address);
 	const { state: wheelStateData } = useRouletteState();
 	const wheelState = wheelStateData.data;
+	const { data: bets = [] } = useLocalBets();
 
 	const handleSpin = () => {
 		if (address === ZeroAddress) {
@@ -46,11 +47,11 @@ export const Spin: FC = () => {
 			return;
 		}
 
-		spin({ bets: JSON.parse(localStorage.getItem('bets') || '[]') });
+		spin({ bets });
 	};
 
 	return (
-		<Button onClick={handleSpin} disabled={wheelState.state === 'spinning' || address === undefined || loading}>
+		<Button className="w-full" onClick={handleSpin} disabled={wheelState.state === 'spinning' || address === undefined || loading}>
 			Spin
 		</Button>
 	);

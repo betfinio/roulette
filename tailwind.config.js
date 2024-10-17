@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	darkMode: ['class'],
+	important: '.roulette',
 	content: ['./components/**/*.{ts,tsx}', './src/**/*.{ts,tsx}'],
 	theme: {
 		container: {

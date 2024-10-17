@@ -2,7 +2,7 @@ import { useChangeChip } from '@/src/lib/roulette/query';
 import { Dialog, DialogClose, DialogContent } from 'betfinio_app/dialog';
 import { toast } from 'betfinio_app/use-toast';
 import millify from 'millify';
-import { type ChangeEvent, type FC, useState } from 'react';
+import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 
 interface IChangeBetModalProps {
 	initialValue: number;
@@ -20,6 +20,13 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 			setValue(Number(inputValue));
 		}
 	};
+
+	useEffect(() => {
+		if (open) {
+			setValue(initialValue);
+		}
+	}, [open]);
+
 	const handleSave = () => {
 		const num = Number(value);
 		if (num > max) {
@@ -33,12 +40,15 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 				variant: 'destructive',
 			});
 		} else {
+			change({ amount: Number(value) });
+
+			setValue(Number(value));
 			handleClose();
 		}
 	};
 
 	const handleClose = () => {
-		change({ amount: Number(value) });
+		setOpen(false);
 	};
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>

@@ -1,11 +1,9 @@
 import { getChipColor } from '@/src/lib/roulette';
 import { useLimits, useMediaQuery, useSelectedChip } from '@/src/lib/roulette/query';
-import { BetControlChip } from './BetControlChip';
-
-import { ZeroAddress, valueToNumber } from '@betfinio/abi';
+import { valueToNumber } from '@betfinio/abi';
 import { Button } from 'betfinio_app/button';
 import { useMemo, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { BetControlChip } from './BetControlChip';
 import { ChangeBetModal } from './ChangeBetModal';
 import { ExtraControls } from './ExtraControls';
 import { RangeWithButtons } from './RangeWithButtons';
@@ -35,13 +33,13 @@ export const BetControls = () => {
 				{/* Mobile: 3 containers separados */}
 				<div className="flex-col gap-y-2 w-full flex items-center bg-card p-4 rounded-lg border border-border">
 					{/* Grupo 1: Botão de Fazer Aposta */}
-					<div className="flex flex-col items-center justify-start">
+					<div className="flex flex-col items-center justify-start w-full">
 						<Spin />
 					</div>
 				</div>
 
 				{/* Container 2: Range de Fichas */}
-				<div className="gap-y-2 flex items-center bg-card p-4 rounded-lg border border-border w-full">
+				<div className="gap-y-2 flex items-center bg-card p-4 rounded-lg border border-border w-full flex-col">
 					<div className="flex w-full items-center justify-center ">
 						<RangeWithButtons limits={limits} />
 					</div>
@@ -75,7 +73,7 @@ export const BetControls = () => {
 	return (
 		<>
 			<ChangeBetModal initialValue={activeChipValue} max={limits.max} min={limits.min} open={openBetChangeModal} setOpen={setOpenBetChangeModal} />
-			<div className="md:flex-row md:justify-between gap-x-2 flex md:w-full border border-border items-center bg-card px-2 py-4 rounded-xl mt-6 md:px-6">
+			<div className="md:flex-row md:justify-between gap-x-2 flex w-full border border-border items-center bg-card px-2 py-4 rounded-xl mt-6 md:px-6">
 				<div className="flex flex-col items-center justify-start">
 					<Spin />
 				</div>
@@ -86,7 +84,7 @@ export const BetControls = () => {
 					<div className="relative flex items-center justify-center">
 						{/* Div com a cor atrás do SVG */}
 						<div
-							className="absolute h-11 w-11 opacity-25 blur-lg rounded-full"
+							className="absolute h-11 w-11 opacity-25 blur-lg rounded-full pointer-events-none"
 							style={{
 								backgroundColor: getChipColor(activeChipValue),
 								zIndex: 1, // Certifica que o div da cor fique atrás
@@ -95,9 +93,9 @@ export const BetControls = () => {
 
 						{/* SVG da Ficha */}
 
-						<button type="button" onClick={() => setOpenBetChangeModal(true)}>
+						<Button variant="ghost" type="button" onClick={() => setOpenBetChangeModal(true)}>
 							<BetControlChip />
-						</button>
+						</Button>
 					</div>
 				</div>
 				<div className="md:w-fit flex gap-2 md:gap-3 justify-center">

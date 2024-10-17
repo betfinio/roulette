@@ -1,5 +1,6 @@
 import { getChipColor } from '@/src/lib/roulette';
 import { useGetChipsForPosition } from '@/src/lib/roulette/query';
+import millify from 'millify';
 import type { FC } from 'react';
 
 interface BetChipsProps {
@@ -12,10 +13,6 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 	const totalOffset = chips.length * 2;
 	const startOffset = totalOffset / 2;
 
-	const abbreviateValue = (value: number) => {
-		return value >= 1000 ? `${(value / 1000).toFixed(0)}k` : value.toString();
-	};
-
 	return chips.map((chip, index) => {
 		const zIndex = chips.length + index + 1;
 		const offset = (index + 1) * 2;
@@ -25,14 +22,14 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 		return (
 			<div
 				key={index}
-				className={'pointer-events-none absolute scale-105'}
+				className={'pointer-events-none absolute w-8  scale-1 aspect-square'}
 				style={{
 					zIndex,
 					transform: `translate(${xOffset}px, ${yOffset}px)`,
 					color: getChipColor(chip.amount),
 				}}
 			>
-				<svg width="36" height="36" viewBox="0 0 154 154" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<svg viewBox="0 0 154 154" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<path
 						d="M77.0001 154C119.526 154 154 119.526 154 77C154 34.4741 119.526 0 77.0001 0C34.4741 0 0 34.4741 0 77C0 119.526 34.4741 154 77.0001 154Z"
 						fill="#131624"
@@ -105,7 +102,7 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 						fill="currentColor"
 					/>
 					<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="#000" className="text-[37px] font-semibold">
-						{abbreviateValue(chip.amount)}
+						{millify(chip.amount)}
 					</text>
 				</svg>
 			</div>

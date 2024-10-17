@@ -1,5 +1,5 @@
 import { getBlack, getRed, numbersVertical } from '@/src/lib/roulette';
-import { useMediaQuery, usePlace } from '@/src/lib/roulette/query';
+import { useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import type { FC } from 'react';
 import TableItem from '../../TableGrid/TableItem';
@@ -48,12 +48,9 @@ const dozenItemsConfig = {
 	},
 };
 
-interface ISideTableProps {
-	onHoverNumbers: (numbers: number[]) => void;
-	onLeaveHover: () => void;
-}
-export const SideTable: FC<ISideTableProps> = ({ onHoverNumbers, onLeaveHover }) => {
+export const SideTable: FC = () => {
 	const { mutate: place } = usePlace();
+	const { onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
 
 	const { isVertical } = useMediaQuery();
 	return (

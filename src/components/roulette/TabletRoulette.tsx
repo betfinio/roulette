@@ -22,7 +22,7 @@ export const TabletRoulette = () => {
 					</div>
 					<div className="relative overflow-hidden">
 						<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
-						<div className="relative w-full h-full mx-auto flex ">
+						<div className="relative w-full h-full mx-auto flex items-start">
 							<LastResults />
 							<Wheel />
 							<PlayerStat />

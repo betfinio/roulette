@@ -68,7 +68,6 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 		},
 	];
 
-	console.log(marks, 'marks');
 	return (
 		<>
 			<Button variant="tertiary" onMouseDown={() => startIncrement('decrease')} onMouseUp={stopIncrement} onMouseLeave={stopIncrement} onClick={handleMinus}>
