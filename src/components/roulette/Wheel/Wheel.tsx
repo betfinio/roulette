@@ -130,7 +130,7 @@ export const Wheel = () => {
 	return (
 		<div className="w-full max-w-2xl mx-auto lg:drop-shadow-[0_0_20px_rgba(0,172,231,0.45)] rounded-full">
 			<motion.div className="  mt-0   max-w-3xl	aspect-square pb-8" animate={wheelControlsWrapper}>
-				<motion.div style={{}} className={cn()} animate={wheelControls}>
+				<motion.div style={{}} className={cn({ 'blur-md animate-pulse': !isBetsFetched })} animate={wheelControls}>
 					<div className="relative aspect-square w-full max-w-3xl ">
 						<div className="absolute rounded-full top-[-6px] right-[-6px] bottom-[-6px] left-[-6px]]  " />
 						<RouletteWheel />

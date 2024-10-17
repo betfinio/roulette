@@ -31,7 +31,7 @@ export const BetStatusHeaderHorizontal = () => {
 		return winningPool / 20n;
 	}, [winningPool]);
 	return (
-		<div className=" rounded-lg bg-card items-center border border-border p-3 px-4 flex justify-between min-h-16 gap-2 md:gap-4">
+		<div className=" rounded-lg bg-card items-center border border-border p-3 px-4 flex justify-between min-h-16 gap-2 md:gap-4 ">
 			<div className="flex gap-2 md:gap-9">
 				<div className="flex gap-1 items-center">
 					<Bag className={'w-8 text-accent-secondary-foreground'} />

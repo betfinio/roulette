@@ -13,7 +13,7 @@ const Paytable: FC<IPaytableProps> = ({ onClose }) => {
 	const { data: limits = [] } = useLimits();
 	const { t } = useTranslation('roulette');
 	return (
-		<div className={'bg-card games rounded-lg p-4 w-full text-foreground relative'}>
+		<div className={'roulette bg-card games rounded-lg p-4 w-full text-foreground relative'}>
 			<X
 				onClick={onClose}
 				className={
