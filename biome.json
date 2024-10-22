@@ -38,7 +38,10 @@
 			"correctness": {
 				"useExhaustiveDependencies": "off"
 			},
-			"recommended": true
+			"recommended": true,
+			"complexity": {
+				"noForEach": "off"
+			}
 		}
 	}
 }

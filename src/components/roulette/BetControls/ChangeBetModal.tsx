@@ -52,11 +52,11 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 	};
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent className={'games w-[300px] bg-card rounded-lg'}>
-				<div className={' p-2 flex flex-col gap-2 text-foreground'}>
+			<DialogContent className={'games w-[300px] bg-card rounded-lg roulette'}>
+				<div className={' p-4 flex flex-col gap-2 text-foreground'}>
 					<h2 className={'text-sm text-foreground'}>Custom amount of chip:</h2>
 					<div className={'flex gap-2 items-center'}>
-						<input type="number" min={0} className={'rounded-lg bg-transparent p-2 px-4 border border-border pr-10'} value={value} onChange={handleChange} />
+						<input type="number" min={0} className={'rounded-lg bg-transparent p-2 px-4 border border-border '} value={value} onChange={handleChange} />
 						<span className={''}>BET</span>
 					</div>
 					<DialogClose>
@@ -64,7 +64,7 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 							<button className={'bg-red-roulette rounded-lg px-4 p-2 w-2/5'} type={'button'} onClick={handleClose}>
 								Cancel
 							</button>
-							<button className={'bg-success rounded-lg px-4 lg-2 w-2/5'} type={'button'} onClick={handleSave}>
+							<button className={'!bg-success rounded-lg px-4 lg-2 w-2/5'} type={'button'} onClick={handleSave}>
 								Save
 							</button>
 						</div>

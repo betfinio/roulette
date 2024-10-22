@@ -19,6 +19,7 @@ export const RouletteWheel = () => {
 				{/* Draw each number and its triangular background */}
 				{getWheelNumbers().map((number, i) => {
 					const angle = i * angleStep - Math.PI / 2; // Start at the top (-90 degrees)
+
 					const x1 = center + radius * Math.cos(angle); // Outer point of the triangle
 					const y1 = center + radius * Math.sin(angle);
 					const x2 = center + radius * Math.cos(angle + angleStep); // Next outer point of the triangle
@@ -52,7 +53,7 @@ export const RouletteWheel = () => {
 								fontFamily="Arial"
 								textAnchor="middle"
 								alignmentBaseline="middle"
-								transform={`rotate(${(angle * 180) / Math.PI + 90}, ${xText}, ${yText})`}
+								transform={`rotate(${(angle * 180) / Math.PI + 90 + -adjustmentAngle}, ${xText}, ${yText})`}
 							>
 								{number}
 							</text>

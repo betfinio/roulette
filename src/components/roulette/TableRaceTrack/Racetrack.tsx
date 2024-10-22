@@ -62,12 +62,14 @@ const Racetrack: React.FC = () => {
 								centerSelection={racetrackConfig[strategy].relatedNumbers}
 								onHoverNumbers={handleHoverNumbers}
 								onLeaveHover={handleLeaveHover}
-								onClick={(position: string, relatedNumbers: number[], number) =>
-									place({
-										numbers: relatedNumbers,
-										item: `${strategy}-${position}`,
-									})
-								}
+								onClick={(position: string, relatedNumbers: number[], number) => {
+									relatedNumbers.forEach((number) => {
+										place({
+											numbers: [number],
+											item: `${number}-${position}`,
+										});
+									});
+								}}
 								className={'!border-none w-fit relative text-white  h-4 cursor-pointer'}
 							/>
 						))}

@@ -1,4 +1,5 @@
 import BetStatusHeader from './BetStatusHeader/BetStatusHeader';
+import History from './History/HistoryTable';
 import { LastResults } from './LastResults/LastResults';
 import { MainTable } from './MainTable/MainTable';
 import { PlayerStat } from './PlayerStat/PlayerStat';
@@ -7,7 +8,7 @@ import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
 	return (
-		<div className="flex justify-between w-full flex-grow mx-auto p-4">
+		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4">
 			{/* Conteúdo Principal no Desktop */}
 			<div className="relative flex-1 flex flex-col w-full mt-2 ">
 				<div className="relative">
@@ -31,9 +32,9 @@ export const DesktopRoulette = () => {
 			</div>
 
 			{/* BetHistory ao lado direito do conteúdo principal */}
-			{/* <div className="ml-4 flex-shrink-0 w-[300px]">
-      <BetHistory />
-    </div> */}
+			<div className=" flex-shrink-0 mt-4">
+				<History />
+			</div>
 		</div>
 	);
 };

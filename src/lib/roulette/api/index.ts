@@ -4,7 +4,7 @@ import type { ChiPlaceProps, Limit, LocalBet, RouletteBet, RouletteSubBet, SpinP
 import { PartnerContract, RouletteBetContract, RouletteContract, arrayFrom } from '@betfinio/abi';
 import { ZeroAddress } from '@betfinio/abi';
 import { multicall, readContract, writeContract } from '@wagmi/core';
-import _ from 'lodash';
+import _, { merge } from 'lodash';
 import { type Address, encodeAbiParameters, parseAbiParameters } from 'viem';
 import { getContractEvents } from 'viem/actions';
 import type { Config } from 'wagmi';
@@ -201,8 +201,10 @@ export const spin = async (params: SpinParams, config: Config) => {
 			uniquesBets[key] = bet;
 		}
 	}
+
 	const newBets = Object.values(uniquesBets);
 	const preparedBets = newBets.flatMap(encodeBet);
+	console.log(preparedBets, 'preparedBets');
 	const totalAmount = newBets.reduce((sum, bet) => sum + BigInt(bet.amount) * 10n ** 18n, 0n);
 	const data = encodeAbiParameters(parseAbiParameters('uint256 count, uint256[] bets'), [BigInt(newBets.length), preparedBets]);
 	return await writeContract(config, {

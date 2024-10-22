@@ -84,7 +84,7 @@ const TableItem: React.FC<TableItemProps> = ({
 	return (
 		<div
 			className={cn(
-				'text-xs  md:text-base cursor-pointer relative flex items-center justify-center',
+				'text-xs  xl:text-base cursor-pointer relative flex items-center justify-center',
 				{
 					' w-10 h-full rounded-lg border border-border ': isRangeButton && isVertical,
 					' w-full  ': isRangeButton && !isVertical,

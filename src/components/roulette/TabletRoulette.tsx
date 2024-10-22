@@ -1,8 +1,7 @@
 import { useState } from 'react';
-import BetHistory from '../BetHistory/BetHistory';
 import PageNavigation from '../PageNavigation/PageNavigation';
-import TableBet from '../TableBet/TableBet';
 import BetStatusHeader from './BetStatusHeader/BetStatusHeader';
+import History from './History/HistoryTable';
 import { LastResults } from './LastResults/LastResults';
 import { MainTable } from './MainTable/MainTable';
 import { PlayerStat } from './PlayerStat/PlayerStat';
@@ -43,7 +42,7 @@ export const TabletRoulette = () => {
 				<div className="relative flex-1 flex flex-col w-full mt-2  mx-auto">
 					<BetStatusHeader />
 					<div className="w-full mt-6 max-w-6xl">
-						<TableBet />
+						<History />
 					</div>
 				</div>
 			)}

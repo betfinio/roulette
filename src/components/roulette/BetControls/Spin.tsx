@@ -5,7 +5,9 @@ import { useAllowanceModal } from 'betfinio_app/allowance';
 import { Button } from 'betfinio_app/button';
 import { useIsMember } from 'betfinio_app/lib/query/pass';
 import { useAllowance } from 'betfinio_app/lib/query/token';
+import { cn } from 'betfinio_app/lib/utils';
 import { useToast } from 'betfinio_app/use-toast';
+import { Loader } from 'lucide-react';
 import type { FC } from 'react';
 import { useAccount } from 'wagmi';
 
@@ -19,6 +21,8 @@ export const Spin: FC = () => {
 	const { state: wheelStateData } = useRouletteState();
 	const wheelState = wheelStateData.data;
 	const { data: bets = [] } = useLocalBets();
+
+	const isSpinning = loading || isPending;
 
 	const handleSpin = () => {
 		if (address === ZeroAddress) {
@@ -51,8 +55,13 @@ export const Spin: FC = () => {
 	};
 
 	return (
-		<Button className="w-full" onClick={handleSpin} disabled={wheelState.state === 'spinning' || address === undefined || loading}>
-			Spin
+		<Button
+			className="w-full uppercase text-xl px-8 relative"
+			onClick={handleSpin}
+			disabled={wheelState.state === 'spinning' || isSpinning || address === undefined || isPending}
+		>
+			{isSpinning && <Loader color={'black'} className={'animate-spin absolute'} />}
+			<span className={cn({ invisible: isSpinning })}>{'SPIN'}</span>
 		</Button>
 	);
 };

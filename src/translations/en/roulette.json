@@ -21,5 +21,6 @@
 		"hotAndCold": "Hot/Cold",
 		"redAndBlack": "Red/Black",
 		"oddAndEven": "Odd/Even"
-	}
+	},
+	"NotEnoughAmount": "Not enough amount"
 }

@@ -139,7 +139,7 @@ export const usePlace = () => {
 		onError: (e) =>
 			toast({
 				variant: 'destructive',
-				message: e.message,
+				description: e.message,
 			}),
 	});
 };
@@ -160,7 +160,8 @@ export const useSpin = () => {
 					openPaytable(queryClient);
 				}
 				// @ts-ignore
-				toast({ variant: 'destructive', description: errors(e.cause.reason) });
+				toast({ variant: 'destructive', description: errors(e.cause?.reason) });
+				// @ts-ignore
 			} else {
 				toast({ variant: 'destructive', description: errors('unknown') });
 			}
@@ -174,8 +175,6 @@ export const useSpin = () => {
 			});
 			await waitForTransactionReceipt(config.getClient(), { hash: data });
 			update({ variant: 'default', description: 'Transaction is confirmed', title: 'Bet placed', action: getTransactionLink(data), duration: 3000 });
-			await queryClient.invalidateQueries({ queryKey: ['roulette'] });
-			console.log(data);
 		},
 	});
 };
