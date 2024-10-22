@@ -1,5 +1,3 @@
-import BetHistory from '../BetHistory/BetHistory';
-import TableBet from '../TableBet/TableBet';
 import BetStatusHeader from './BetStatusHeader/BetStatusHeader';
 import History from './History/HistoryTable';
 import { MainTable } from './MainTable/MainTable';
@@ -25,7 +23,6 @@ export const VerticalRoulette = () => {
 				<MainTable />
 
 				<History />
-				<TableBet />
 			</div>
 		</div>
 	);

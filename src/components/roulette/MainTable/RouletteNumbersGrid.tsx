@@ -2,7 +2,7 @@ import { getGridNumbers } from '@/src/lib/roulette';
 import { useGetDebugMode, useLocalBets, useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import type { FC } from 'react';
-import TableItem from '../../TableGrid/TableItem';
+import TableItem from '../TableItem';
 import { tableConfigHorizontal } from './tableConfigHorizontal';
 import { tableConfigVertical } from './tableConfigVertical';
 

@@ -3,7 +3,7 @@ import { getColor } from '@/src/lib/roulette';
 import { usePlace } from '@/src/lib/roulette/query';
 import type React from 'react';
 import { useState } from 'react';
-import TableItem from '../../TableGrid/TableItem';
+import TableItem from '../TableItem';
 import { LeftCorner } from './LeftCorner';
 import { RightCorner } from './RightCorner';
 import { racetrackConfig } from './racetrackConfig';

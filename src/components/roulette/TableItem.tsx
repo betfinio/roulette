@@ -1,7 +1,7 @@
 import type React from 'react';
 
 import { cn } from 'betfinio_app/lib/utils';
-import { BetPlacePoint, type PositionType } from '../roulette/BetPlacePoint/BetPlacePoint';
+import { BetPlacePoint, type PositionType } from './BetPlacePoint/BetPlacePoint';
 
 interface TableItemProps {
 	number: string;

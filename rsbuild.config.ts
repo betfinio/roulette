@@ -16,7 +16,7 @@ export default defineConfig({
 		assetPrefix: 'http://localhost:4003',
 	},
 	html: {
-		title: 'BetFin Live Roulette',
+		title: 'BetFin Roulette',
 		favicon: './src/assets/favicon.svg',
 	},
 	output: {
@@ -28,12 +28,12 @@ export default defineConfig({
 			ignoreWarnings: [/Critical dependency: the request of a dependency is an expression/],
 
 			output: {
-				uniqueName: 'betfinio_liro',
+				uniqueName: 'betfinio_roulette-v2',
 			},
 			plugins: [
 				TanStackRouterRspack(),
 				new ModuleFederationPlugin({
-					name: 'betfinio_liro',
+					name: 'betfinio_roulette-v2',
 					remotes: {
 						betfinio_app: getApp(),
 					},

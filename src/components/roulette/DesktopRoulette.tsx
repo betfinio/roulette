@@ -1,4 +1,5 @@
 import BetStatusHeader from './BetStatusHeader/BetStatusHeader';
+import CoinRainEffect from './CoinRainEffect';
 import History from './History/HistoryTable';
 import { LastResults } from './LastResults/LastResults';
 import { MainTable } from './MainTable/MainTable';

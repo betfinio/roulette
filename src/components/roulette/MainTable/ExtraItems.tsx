@@ -1,7 +1,7 @@
 import { useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import type { FC } from 'react';
-import TableItem from '../../TableGrid/TableItem';
+import TableItem from '../TableItem';
 
 const getCenterSelectionForExtraItem = (index: number, isVertical: boolean): number[] => {
 	const numbersVertical = Array.from({ length: 36 }, (_, index) => index + 1);

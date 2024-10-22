@@ -5,7 +5,6 @@ import coinImage1 from '../../assets/images/coin-side-1.png';
 import coinImage2 from '../../assets/images/coin-side-2.png';
 import coinImage3 from '../../assets/images/coin-side-3.png';
 import coinImage4 from '../../assets/images/coin-side-4.png';
-import { useWheel } from '../../contexts/WheelContext';
 
 interface Coin {
 	vitesseX: number;
@@ -29,7 +28,10 @@ const CoinRainEffect: React.FC = () => {
 	const coinsRef = useRef<Coin[]>([]); // Usar ref para persistir moedas
 	const requestIdRef = useRef<number | null>(null); // Usar ref para controlar animação
 
-	const { numCoins, rainIntensity, fallingSpeed, rotationSpeed, resizeFactor, isDebugMode } = useWheel();
+	const numCoins = 100;
+	const fallingSpeed = 0.02;
+	const rotationSpeed = 1;
+	const resizeFactor = 1;
 
 	useEffect(() => {
 		if (canvasRef.current) {

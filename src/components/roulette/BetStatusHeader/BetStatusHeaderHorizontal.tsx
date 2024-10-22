@@ -4,12 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
 import { useLocalBets, usePaytable, usePotentialWin } from '@/src/lib/roulette/query';
-import { classNames } from '@/src/libs/classNames';
 import { valueToNumber } from '@betfinio/abi';
 import { Bag } from '@betfinio/ui/dist/icons';
 import { BetValue } from 'betfinio_app/BetValue';
 import { Dialog, DialogContent } from 'betfinio_app/dialog';
 import { useBalance } from 'betfinio_app/lib/query/token';
+import { cn } from 'betfinio_app/lib/utils';
 import { Separator } from 'betfinio_app/separator';
 import { useMemo } from 'react';
 import Paytable from '../Paytable/PayTable';
@@ -60,7 +60,7 @@ export const BetStatusHeaderHorizontal = () => {
 				<div className=" ">
 					<p>{t('payTable.potentialWin')}</p>
 					<p
-						className={classNames('font-bold', {
+						className={cn('font-bold', {
 							'blur-sm': isLoading,
 						})}
 					>
