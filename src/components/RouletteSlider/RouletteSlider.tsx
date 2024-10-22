@@ -43,26 +43,9 @@ const RouletteSlider: FC<RouletteSliderProps> = ({ minPrice, maxPrice, marks, va
 				max={maxPrice}
 				step={1}
 				value={[value]}
-				onValueChange={([value]) => handleSliderChange(value)}
+				onValueChange={([value]: [number]) => handleSliderChange(value)}
 				className="w-full h-2 bg-gray-300 rounded-full relative"
 			/>
-
-			{/* Vertical lines on the slider for each mark
-      <div className="relative w-full ">
-        {markPositions.map((mark) => (
-          <div
-            key={mark.value}
-            className="absolute bg-gray-500 h-4 w-3"
-            style={{
-              left: `calc(${mark.position}%)`,
-              top: '-4px', // Adjusts the vertical positioning
-          width: '1px',
-              height: '10px',
-              transform: "translateX(-50%)",
-            }}
-          />
-        ))}
-      </div> */}
 
 			{/* Marks for each value */}
 			<div className="relative w-full flex justify-between mt-3">
