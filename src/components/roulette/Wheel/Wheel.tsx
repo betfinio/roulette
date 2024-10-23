@@ -2,24 +2,29 @@ import { getWheelNumbers } from '@/src/lib/roulette';
 import { useRouletteBets, useRouletteState } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import { motion, useAnimation } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
-import { Sounds } from './Sounds';
+import { useEffect } from 'react';
 
+import logger from '@/src/config/logger';
+import type { WheelLanded, WheelLanding, WheelState } from '@/src/lib/roulette/types';
 import { ZeroAddress } from '@betfinio/abi';
+import { useQueryClient } from '@tanstack/react-query';
+import { useToast } from 'betfinio_app/use-toast';
 import { PlayIcon } from 'lucide-react';
 import { useAccount } from 'wagmi';
+import { RouletteResultToast } from '../../RouletteResultToast';
 import RouletteWheel from './RouletteWheel';
 
 export const Wheel = () => {
+	const queryClient = useQueryClient();
 	const wheelNumbers = getWheelNumbers();
 
-	const { state: wheelStateData } = useRouletteState();
+	const { state: wheelStateData, updateState } = useRouletteState();
 	const status = wheelStateData.data.state;
 
 	const { address = ZeroAddress } = useAccount();
 
 	const { data: bets = [], isFetched: isBetsFetched } = useRouletteBets(address);
-	const lastNumber = bets[0]?.winNumber ?? 0;
+	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
 
 	// Animation control
 	const wheelControlsWrapper = useAnimation();
@@ -74,10 +79,9 @@ export const Wheel = () => {
 					ease: 'linear',
 				},
 			});
-		} else if (status === 'landed') {
+		} else if (status === 'landing') {
 			const stopAngle = getAngleForNumber(lastNumber) || 0;
-			console.log(lastNumber, 'lastNumber');
-			console.log(stopAngle, 'stopAngle');
+
 			wheelControls
 				.start({
 					rotate: [stopAngle + 360, -stopAngle + 180],
@@ -87,7 +91,9 @@ export const Wheel = () => {
 					},
 				})
 				.then(() => {
-					console.log('FINISED');
+					console.log('LANDINGTHEN');
+					queryClient.invalidateQueries({ queryKey: ['roulette'] });
+					updateState({ state: 'landed' } as WheelState);
 				});
 
 			wheelControlsWrapper.start({
@@ -98,8 +104,24 @@ export const Wheel = () => {
 					ease: 'linear',
 				},
 			});
+		} else if (status === 'landed') {
+			const stopAngle = getAngleForNumber(lastNumber) || 0;
+			wheelControlsWrapper.start({
+				marginTop: '-50%',
+
+				transition: {
+					duration: 1, // Slow rotation duration
+					ease: 'linear',
+				},
+			});
+
+			wheelControls.set({
+				rotate: [-stopAngle + 180],
+			});
 		}
-	}, [status, lastNumber, wheelControls]);
+	}, [status, wheelControls]);
+
+	logger.log(status, 'status!');
 
 	return (
 		<>
@@ -113,9 +135,6 @@ export const Wheel = () => {
 						</div>
 					</motion.div>
 					<PlayIcon className={'absolute w-5 h-5 text-foreground z-5 bottom-6 rotate-[270deg] left-1/2 -translate-x-1/2'} />
-
-					{/* Sounds */}
-					<Sounds />
 				</motion.div>
 			</div>
 		</>

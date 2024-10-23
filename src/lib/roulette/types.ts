@@ -41,6 +41,11 @@ export interface WheelLanded {
 	result: number;
 	bet: Address;
 }
+export interface WheelLanding {
+	state: 'landing';
+	result: number;
+	bet: Address;
+}
 
 export interface WheelStopped {
 	state: 'stopped';
@@ -48,7 +53,7 @@ export interface WheelStopped {
 	bet: Address;
 }
 
-export type WheelState = WheelSpinning | WheelLanded | WheelStandBy | WheelStopped;
+export type WheelState = WheelSpinning | WheelLanded | WheelStandBy | WheelStopped | WheelLanding;
 
 export interface Limit {
 	title: string;

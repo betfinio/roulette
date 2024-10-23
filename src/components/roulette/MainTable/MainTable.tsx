@@ -18,6 +18,7 @@ export const MainTable = () => {
 						</div>
 						<div className={'  flex flex-col gap-y-1 items-center justify-center'}>
 							<div className={'grid grid-cols-[repeat(3,64px)] gap-1 justify-center items-center  '}>
+								<ZeroItem />
 								<RouletteNumbersGrid />
 							</div>
 							<div className="flex gap-1">

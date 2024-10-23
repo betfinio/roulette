@@ -26,7 +26,7 @@ import { useDebounce, useMediaQuery as useMediaQueryLib } from '@uidotdev/usehoo
 import type { WriteContractReturnType } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { toast } from 'betfinio_app/use-toast';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -91,18 +91,24 @@ export const useRouletteState = () => {
 	});
 
 	const updateState = (st: WheelState) => {
-		queryClient.setQueryData(['roulette', 'state'], st);
+		queryClient.setQueryData(['roulette', 'state'], { ...state.data, ...st });
+		queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 	};
 
 	useWatchContractEvent({
 		abi: RouletteContract.abi,
 		address: ROULETTE,
 		eventName: 'Rolled',
-		onLogs: (rolledLogs) => {
+
+		onLogs: async (rolledLogs) => {
+			console.log('test ROLLLEDD! inside state');
 			// @ts-ignore
 			if (rolledLogs[0].args.roller.toString().toLowerCase() === address.toLowerCase()) {
 				updateState({ state: 'spinning' });
 			}
+		},
+		onError: (error) => {
+			console.log('test ROLLLEDD ERROR! inside state', error);
 		},
 	});
 
@@ -110,13 +116,18 @@ export const useRouletteState = () => {
 		abi: RouletteContract.abi,
 		address: ROULETTE,
 		eventName: 'Landed',
+
 		onLogs: async (landedLogs) => {
+			console.log('test LANDED! inside state');
 			// @ts-ignore
 			if (landedLogs[0].args.roller.toString().toLowerCase() === address.toLowerCase()) {
-				queryClient.invalidateQueries({ queryKey: ['roulette'] });
 				// @ts-ignore
-				updateState({ state: 'landed', result: Number(landedLogs[0].args.result), bet: landedLogs[0].args.bet });
+				updateState({ state: 'landing', result: Number(landedLogs[0].args.result), bet: landedLogs[0].args.bet });
+				queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 			}
+		},
+		onError: (error) => {
+			console.log('test LANDED ERROR! inside state', error);
 		},
 	});
 
@@ -175,6 +186,7 @@ export const useSpin = () => {
 			});
 			await waitForTransactionReceipt(config.getClient(), { hash: data });
 			update({ variant: 'default', description: 'Transaction is confirmed', title: 'Bet placed', action: getTransactionLink(data), duration: 3000 });
+			//	await queryClient.invalidateQueries({ queryKey: ['roulette'] });
 		},
 	});
 };
