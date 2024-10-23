@@ -12,19 +12,21 @@ import cx from 'clsx';
 import { Search } from 'lucide-react';
 import { DateTime } from 'luxon';
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
 import { RoundModal } from './HistoryTable';
 
 const columnHelper = createColumnHelper<RouletteBet>();
 
 export const MyBetsTable = () => {
+	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const [selected, setSelected] = useState<null | RouletteBet>(null);
 	const { address = ZeroAddress } = useAccount();
 	const { data: bets = [], isLoading } = useRouletteBets(address);
 	const { isVertical } = useMediaQuery();
 	const columns = [
 		columnHelper.accessor('address', {
-			header: 'Bet address',
+			header: t('address'),
 			cell: (props) => (
 				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary-foreground whitespace-nowrap'}>
 					{truncateEthAddress(props.getValue())}
@@ -32,11 +34,11 @@ export const MyBetsTable = () => {
 			),
 		}),
 		columnHelper.accessor('created', {
-			header: 'Date',
+			header: t('date'),
 			cell: (props) => <span className={''}>{DateTime.fromMillis(Number(props.getValue()) * 1000).toFormat('DD, T:ss')}</span>,
 		}),
 		columnHelper.accessor('amount', {
-			header: 'Amount',
+			header: t('amount'),
 			cell: (props) => (
 				<span className={' font-semibold'}>
 					<BetValue value={props.getValue()} />
@@ -44,7 +46,7 @@ export const MyBetsTable = () => {
 			),
 		}),
 		columnHelper.accessor('result', {
-			header: 'Win',
+			header: t('win'),
 			cell: (props) => (
 				<span className={cx('font-semibold text-tertiary-foreground', props.getValue() > 0n && '!text-success')}>
 					<BetValue value={valueToNumber(props.getValue())} />
@@ -52,7 +54,7 @@ export const MyBetsTable = () => {
 			),
 		}),
 		columnHelper.accessor('winNumber', {
-			header: 'Result',
+			header: t('result'),
 			cell: (props) => {
 				return (
 					<span
@@ -62,7 +64,6 @@ export const MyBetsTable = () => {
 							'bg-green-roulette': getColor(props.getValue()) === 'GREEN',
 						})}
 					>
-						{' '}
 						{props.getValue()}
 					</span>
 				);
@@ -77,7 +78,7 @@ export const MyBetsTable = () => {
 	] as ColumnDef<RouletteBet, `0x${string}`>[];
 	const columnsMobile = [
 		columnHelper.accessor('address', {
-			header: 'Bet address',
+			header: t('address'),
 			cell: (props) => (
 				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary whitespace-nowrap'}>
 					{truncateEthAddress(props.getValue())}
@@ -86,7 +87,7 @@ export const MyBetsTable = () => {
 		}),
 
 		columnHelper.accessor('amount', {
-			header: 'Amount',
+			header: t('amount'),
 			cell: (props) => (
 				<span className={' font-semibold'}>
 					<BetValue value={props.getValue()} />
@@ -94,7 +95,7 @@ export const MyBetsTable = () => {
 			),
 		}),
 		columnHelper.accessor('result', {
-			header: 'Win',
+			header: t('win'),
 			cell: (props) => (
 				<span className={cx('font-semibold text-tertiary-foreground', props.getValue() > 0n && '!text-success')}>
 					<BetValue value={valueToNumber(props.getValue())} />
@@ -102,7 +103,7 @@ export const MyBetsTable = () => {
 			),
 		}),
 		columnHelper.accessor('winNumber', {
-			header: 'Result',
+			header: t('result'),
 			cell: (props) => {
 				return (
 					<span
@@ -112,7 +113,6 @@ export const MyBetsTable = () => {
 							'bg-green-roulette': getColor(props.getValue()) === 'GREEN',
 						})}
 					>
-						{' '}
 						{props.getValue()}
 					</span>
 				);
@@ -127,7 +127,7 @@ export const MyBetsTable = () => {
 	] as ColumnDef<RouletteBet, `0x${string}`>[];
 
 	if (bets.length === 0 && !isLoading) {
-		return <div className={'flex justify-center p-3'}>No bets yet</div>;
+		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
 	}
 
 	return (

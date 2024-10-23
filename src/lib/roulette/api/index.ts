@@ -4,6 +4,7 @@ import type { ChiPlaceProps, Limit, LocalBet, RouletteBet, RouletteSubBet, SpinP
 import { PartnerContract, RouletteBetContract, RouletteContract, arrayFrom } from '@betfinio/abi';
 import { ZeroAddress } from '@betfinio/abi';
 import { multicall, readContract, writeContract } from '@wagmi/core';
+import type { TFunction } from 'i18next';
 import _, { merge } from 'lodash';
 import { type Address, encodeAbiParameters, parseAbiParameters } from 'viem';
 import { getContractEvents } from 'viem/actions';
@@ -168,14 +169,14 @@ export const fetchSelectedChip = async (): Promise<number> => {
 	return Number(localStorage.getItem('chip') || 10000);
 };
 
-export const place = async (params: ChiPlaceProps, chip: number) => {
+export const place = async (params: ChiPlaceProps, chip: number, t: TFunction<'roulette', 'errors'>) => {
 	const old = fetchLocalBets();
 	if (params.numbers.length === 0) {
 		localStorage.setItem('bets', JSON.stringify([]));
 		return;
 	}
 	if (chip === 0) {
-		throw new Error('Invalid amount');
+		throw new Error(t('invalidMmount'));
 	}
 	const newBet = {
 		numbers: params.numbers,
@@ -185,7 +186,7 @@ export const place = async (params: ChiPlaceProps, chip: number) => {
 	const newBets = [...old, newBet];
 	const count = _.countBy(newBets, (e) => e.item)[params.item];
 	if (count > 5) {
-		throw new Error('You can only place 5 chips');
+		throw new Error(t('only5Chips'));
 	}
 	localStorage.setItem('bets', JSON.stringify(newBets));
 };
@@ -204,7 +205,7 @@ export const spin = async (params: SpinParams, config: Config) => {
 
 	const newBets = Object.values(uniquesBets);
 	const preparedBets = newBets.flatMap(encodeBet);
-	console.log(preparedBets, 'preparedBets');
+
 	const totalAmount = newBets.reduce((sum, bet) => sum + BigInt(bet.amount) * 10n ** 18n, 0n);
 	const data = encodeAbiParameters(parseAbiParameters('uint256 count, uint256[] bets'), [BigInt(newBets.length), preparedBets]);
 	return await writeContract(config, {

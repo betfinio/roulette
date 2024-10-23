@@ -4,21 +4,24 @@ import type { RouletteBet } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { Link } from '@tanstack/react-router';
 import { BetValue } from 'betfinio_app/BetValue';
+import { cn } from 'betfinio_app/lib/utils';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
 import cx from 'clsx';
 import { motion } from 'framer-motion';
 import { ShieldCheckIcon, X } from 'lucide-react';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { AllBetsTable } from './AllBetsTable';
 import { MyBetsTable } from './MyBets';
 
 const History = () => {
+	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	return (
 		<Tabs defaultValue={'my'}>
 			<TabsList>
-				<TabsTrigger value={'my'}>My Bets</TabsTrigger>
-				<TabsTrigger value={'all'}>All Bets</TabsTrigger>
+				<TabsTrigger value={'my'}>{t('myBets')}</TabsTrigger>
+				<TabsTrigger value={'all'}>{t('allBets')}</TabsTrigger>
 			</TabsList>
 
 			<TabsContent value={'my'}>
@@ -37,6 +40,7 @@ export const RoundModal: FC<{
 	selectedBet: RouletteBet | null;
 	onClose: () => void;
 }> = ({ selectedBet, onClose }) => {
+	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	return (
 		<motion.div
 			onClick={(e) => e.stopPropagation()}
@@ -45,7 +49,7 @@ export const RoundModal: FC<{
 			}
 		>
 			<div className={'flex items-center justify-between px-4 sm:px-0'}>
-				<p>Betting ticket</p>
+				<p>{t('bettingTicket')}</p>
 				<X
 					onClick={onClose}
 					className={'w-4 h-4 border border-current rounded-full cursor-pointer hover:text-red-roulette hover:border-red-roulette duration-200'}
@@ -53,10 +57,14 @@ export const RoundModal: FC<{
 			</div>
 
 			<div className={'mt-8'}>
-				<p className={'text-center'}>Winning</p>
+				<p className={'text-center'}>{t('winning')}</p>
 				<div className={'flex items-center justify-center gap-3'}>
-					<div className={cx('font-semibold text-4xl text-tertiary-foreground flex gap-2', (selectedBet?.result ?? 0n) > 0n && '!text-green-roulette')}>
-						{valueToNumber(selectedBet?.result) > 0 && '+'}
+					<div
+						className={cn('font-semibold text-4xl text-tertiary-foreground flex gap-2', {
+							'!text-green-roulette': valueToNumber(selectedBet?.result) > 0,
+						})}
+					>
+						{valueToNumber(selectedBet?.result ?? 0n) > 0 && '+'}
 						<BetValue withIcon className={'gap-2'} value={valueToNumber(selectedBet?.result)} iconClassName={'w-6 h-6'} />
 					</div>
 				</div>
@@ -65,7 +73,7 @@ export const RoundModal: FC<{
 			<div className={'mt-6 py-6 border-y border-border border-opacity-10'}>
 				<div className={'grid grid-cols-2 relative'}>
 					<div>
-						<div className={'text-center text-tertiary-foreground text-sm'}>Total bet</div>
+						<div className={'text-center text-tertiary-foreground text-sm'}>{t('totalBet')}</div>
 						<div className={'flex mt-2 gap-1 items-center justify-center'}>
 							<div className={'text-base'}>
 								<BetValue value={valueToNumber(selectedBet?.amount)} withIcon={true} />
@@ -76,7 +84,7 @@ export const RoundModal: FC<{
 					<div className={'w-[1px] absolute left-[50%] -translate-x-[50%] h-full bg-border bg-opacity-10'} />
 
 					<div>
-						<p className={'text-center text-tertiary-foreground text-sm'}>Win number</p>
+						<p className={'text-center text-tertiary-foreground text-sm'}>{t('winNumber')}</p>
 						<div className={'flex mt-1 gap-1 items-center justify-center'}>
 							<div
 								className={cx(' min-w-[30px] min-h-[30px] rounded-lg flex justify-center font-semibold items-center text-xs', {
@@ -85,7 +93,7 @@ export const RoundModal: FC<{
 									'bg-green-roulette': getColor(selectedBet?.winNumber ?? 0) === 'GREEN',
 								})}
 							>
-								{selectedBet?.winNumber === 42 ? <div className={'px-2'}>Waiting</div> : selectedBet?.winNumber}
+								{selectedBet?.winNumber === 42 ? <div className={'px-2'}>{t('waiting')}</div> : selectedBet?.winNumber}
 							</div>
 						</div>
 					</div>
@@ -93,7 +101,7 @@ export const RoundModal: FC<{
 			</div>
 
 			<div className={'mt-5 flex flex-col items-center'}>
-				<div className={'text-center'}>Bet ID:</div>
+				<div className={'text-center'}>{t('betID')}</div>
 				<Link
 					to={`${ETHSCAN}/address/${selectedBet?.address}`}
 					className={'block text-center underline cursor-pointer hover:text-accent-secondary-foreground duration-300 px-4 sm:hidden'}
@@ -114,7 +122,7 @@ export const RoundModal: FC<{
 			</div>
 
 			<div className={'flex items-end justify-center gap-2 mt-5'}>
-				<p className={'text-tertiary-foreground font-semibold'}>Proof of random:</p>
+				<p className={'text-tertiary-foreground font-semibold'}>{t('proofOfRandom')}</p>
 				<ShieldCheckIcon className={'text-green-roulette w-5 h-5'} />
 				<a
 					href={`${ETHSCAN}/tx/${selectedBet?.hash}`}
@@ -132,7 +140,7 @@ export const RoundModal: FC<{
 					target={'_blank'}
 					rel="noreferrer"
 				>
-					How it works?
+					{t('howItWorks')}
 				</a>
 			</div>
 		</motion.div>

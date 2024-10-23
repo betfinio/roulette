@@ -11,11 +11,10 @@ import { TabletRoulette } from './TabletRoulette';
 import { VerticalRoulette } from './VerticalRoulette';
 
 export const Roulette = () => {
-	const queryClient = useQueryClient();
 	const { isTablet, isVertical } = useMediaQuery();
 	const { address = ZeroAddress } = useAccount();
 	const { toast } = useToast();
-	const { data: bets = [], isFetched: isBetsFetched, isRefetching } = useRouletteBets(address);
+	const { data: bets = [], isRefetching } = useRouletteBets(address);
 
 	const { state: wheelStateData, updateState } = useRouletteState();
 	const status = wheelStateData.data.state;

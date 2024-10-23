@@ -23,8 +23,6 @@ export const TabletRoulette = () => {
 		}
 	}, [status]);
 
-	console.log(status, 'status');
-
 	// Define motion variants for the animations
 	const pageTransition = {
 		hidden: { opacity: 0, x: 50 },

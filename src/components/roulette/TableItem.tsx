@@ -1,6 +1,9 @@
 import type React from 'react';
 
+import type { IRouletteLanguageKeys } from '@/src/i18next';
 import { cn } from 'betfinio_app/lib/utils';
+import { isNaN as _isNaN } from 'lodash';
+import { useTranslation } from 'react-i18next';
 import { BetPlacePoint, type PositionType } from './BetPlacePoint/BetPlacePoint';
 
 interface TableItemProps {
@@ -44,6 +47,7 @@ const TableItem: React.FC<TableItemProps> = ({
 
 	onClick,
 }) => {
+	const { t } = useTranslation('roulette', { keyPrefix: 'betTable' });
 	const positions: PositionType[] = ['center', 'top', 'left', 'right', 'bottom', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
 
 	const selectionMap: Record<PositionType, number[] | undefined> & { [key: string]: number[] | undefined } = {
@@ -87,7 +91,7 @@ const TableItem: React.FC<TableItemProps> = ({
 				'text-xs  xl:text-base cursor-pointer relative flex items-center justify-center',
 				{
 					' w-10 h-full rounded-lg border border-border ': isRangeButton && isVertical,
-					' w-full  ': isRangeButton && !isVertical,
+					' w-full': isRangeButton && !isVertical,
 					' w-full  rounded-lg border border-border  font-semibold': !isRangeButton && !isVertical,
 					' w-full h-10 rounded-lg border border-border  font-semibold': !isRangeButton && isVertical,
 				},
@@ -103,7 +107,7 @@ const TableItem: React.FC<TableItemProps> = ({
 					'rotate-90 whitespace-nowrap': isVertical && isRangeButton,
 				})}
 			>
-				{number !== 'Black' && number !== 'Red' ? number : ''}
+				{number !== 'Black' && number !== 'Red' ? (!_isNaN(+number) ? number : t(number as keyof IRouletteLanguageKeys['betTable'])) : ''}
 			</div>
 
 			{/* Render Selection Balls */}

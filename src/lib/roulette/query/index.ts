@@ -6,11 +6,9 @@ import {
 	doublePlace,
 	fetchChipsByPosition,
 	fetchDebugMode,
-	fetchLastRouletteBets,
 	fetchLimits,
 	fetchLocalBets,
 	fetchProofTx,
-	fetchRouletteBets,
 	fetchSelectedChip,
 	place,
 	setDebugMode,
@@ -26,7 +24,6 @@ import { useDebounce, useMediaQuery as useMediaQueryLib } from '@uidotdev/usehoo
 import type { WriteContractReturnType } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { toast } from 'betfinio_app/use-toast';
-import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -102,14 +99,10 @@ export const useRouletteState = () => {
 		eventName: 'Rolled',
 
 		onLogs: async (rolledLogs) => {
-			console.log('test ROLLLEDD! inside state');
 			// @ts-ignore
 			if (rolledLogs[0].args.roller.toString().toLowerCase() === address.toLowerCase()) {
 				updateState({ state: 'spinning' });
 			}
-		},
-		onError: (error) => {
-			console.log('test ROLLLEDD ERROR! inside state', error);
 		},
 	});
 
@@ -119,16 +112,12 @@ export const useRouletteState = () => {
 		eventName: 'Landed',
 
 		onLogs: async (landedLogs) => {
-			console.log('test LANDED! inside state');
 			// @ts-ignore
 			if (landedLogs[0].args.roller.toString().toLowerCase() === address.toLowerCase()) {
 				// @ts-ignore
 				updateState({ state: 'landing', result: Number(landedLogs[0].args.result), bet: landedLogs[0].args.bet });
 				queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 			}
-		},
-		onError: (error) => {
-			console.log('test LANDED ERROR! inside state', error);
 		},
 	});
 
@@ -143,10 +132,11 @@ export const useSelectedChip = () =>
 
 export const usePlace = () => {
 	const queryClient = useQueryClient();
+	const { t } = useTranslation('roulette', { keyPrefix: 'errors' });
 	const { data: chip = 0 } = useSelectedChip();
 	return useMutation<void, Error, ChiPlaceProps>({
 		mutationKey: ['roulette', 'place'],
-		mutationFn: (e) => place(e, chip),
+		mutationFn: (e) => place(e, chip, t),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
 		onError: (e) =>
 			toast({
@@ -158,6 +148,7 @@ export const usePlace = () => {
 
 export const useSpin = () => {
 	const { t: errors } = useTranslation('shared', { keyPrefix: 'errors' });
+	const { t } = useTranslation('roulette');
 	const config = useConfig();
 	const queryClient = useQueryClient();
 
@@ -180,13 +171,13 @@ export const useSpin = () => {
 		},
 		onSuccess: async (data) => {
 			const { update } = toast({
-				title: 'Placing a bet',
-				description: 'Transaction is pending',
+				title: t('placingBet'),
+				description: t('transactionIsPending'),
 				variant: 'loading',
 				duration: 10000,
 			});
 			await waitForTransactionReceipt(config.getClient(), { hash: data });
-			update({ variant: 'default', description: 'Transaction is confirmed', title: 'Bet placed', action: getTransactionLink(data), duration: 3000 });
+			update({ variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
 			//	await queryClient.invalidateQueries({ queryKey: ['roulette'] });
 		},
 	});

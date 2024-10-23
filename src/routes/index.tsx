@@ -5,11 +5,11 @@ import { useTranslation } from 'react-i18next';
 export const Route = createFileRoute('/')({
 	component: () => <Index />,
 	beforeLoad: async () => {
-		throw redirect({ to: './live-roulette' });
+		throw redirect({ to: './roulette' });
 	},
 });
 
 function Index() {
 	logger.success('Hello, world!');
-	return <div className={'border border-red-roulette px-4 py-2 rounded-md text-white h-full'}>Title</div>;
+	return <div className={'border border-red-roulette px-4 py-2 rounded-md  h-full'}>Title</div>;
 }

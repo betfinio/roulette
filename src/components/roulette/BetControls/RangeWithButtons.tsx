@@ -1,6 +1,6 @@
 import { useChangeChip, useSelectedChip } from '@/src/lib/roulette/query';
 import { Button } from 'betfinio_app/button';
-import { CircleX, Minus, PlusIcon, Undo2 } from 'lucide-react';
+import { Minus, PlusIcon } from 'lucide-react';
 import millify from 'millify';
 import { type FC, useRef, useState } from 'react';
 import RouletteSlider from '../../RouletteSlider/RouletteSlider';

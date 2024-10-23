@@ -1,3 +1,5 @@
+import { Button } from 'betfinio_app/button';
+import { cn } from 'betfinio_app/lib/utils';
 import { motion } from 'framer-motion';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
@@ -9,25 +11,20 @@ interface PageNavigationProps {
 
 const PageNavigation: React.FC<PageNavigationProps> = ({ currentPage, totalPages, setCurrentPage }) => {
 	return (
-		<div className="w-full flex justify-between items-center mt-6 py-2 px-4 bg-[var(--bg-sec)] rounded-lg border-default border-[var(--border-primary)]">
-			{/* Left Arrow */}
-			{/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-			<button
-				onClick={() => setCurrentPage(currentPage - 1)}
-				disabled={currentPage === 1}
-				className={`p-2 rounded-lg bg-[var(--bg-darker)] flex items-center justify-center text-white border-default border-[var(--border-primary)] ${
-					currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''
-				}`}
-			>
+		<div className="w-full flex justify-between items-center mt-6 py-2 px-4 bg-card border rounded-lg border-border">
+			<Button variant="tertiary" onClick={() => setCurrentPage(currentPage - 1)} disabled={currentPage === 1}>
 				<FaArrowLeft />
-			</button>
+			</Button>
 
 			{/* Dots representing pages */}
 			<div className="flex space-x-2">
 				{Array.from({ length: totalPages }, (_, i) => (
 					<motion.div
 						key={i}
-						className={`h-2 w-2 rounded-full ${i + 1 === currentPage ? 'bg-[var(--yellow)]' : 'bg-gray-500'}`}
+						className={cn('h-2 w-2 rounded-full', {
+							'bg-accent-secondary-foreground': i + 1 === currentPage,
+							'bg-tertiary-foreground': i + 1 !== currentPage,
+						})}
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						transition={{ duration: 0.3 }}
@@ -35,17 +32,9 @@ const PageNavigation: React.FC<PageNavigationProps> = ({ currentPage, totalPages
 				))}
 			</div>
 
-			{/* Right Arrow */}
-			{/* biome-ignore lint/a11y/useButtonType: <explanation> */}
-			<button
-				onClick={() => setCurrentPage(currentPage + 1)}
-				disabled={currentPage === totalPages}
-				className={`p-2 rounded-lg bg-[var(--bg-darker)] flex items-center justify-center text-white border-default border-[var(--border-primary)] ${
-					currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''
-				}`}
-			>
+			<Button variant="tertiary" onClick={() => setCurrentPage(currentPage + 1)} disabled={currentPage === totalPages}>
 				<FaArrowRight />
-			</button>
+			</Button>
 		</div>
 	);
 };

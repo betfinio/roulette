@@ -23,8 +23,8 @@ export const ZeroItem: FC = () => {
 				`bg-green-roulette w-full ${zeroClassName} outline outline-4 outline-transparent transition-all duration-300 delay-100`,
 
 				{
-					' outline-green-roulette ': isNumberHovered(0) && !isDebugMode,
-					' outline-muted/50 ': !isNumberHovered(0) && isDebugMode,
+					'outline-green-roulette ': isNumberHovered(0) && !isDebugMode,
+					'outline-muted/50 ': !isNumberHovered(0) && isDebugMode,
 					'outline-accent-secondary-foreground': isNumberSelected(0),
 				},
 			)}

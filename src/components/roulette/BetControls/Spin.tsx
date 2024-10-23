@@ -9,14 +9,16 @@ import { cn } from 'betfinio_app/lib/utils';
 import { useToast } from 'betfinio_app/use-toast';
 import { Loader } from 'lucide-react';
 import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
 
 export const Spin: FC = () => {
+	const { t } = useTranslation('roulette');
 	const { toast } = useToast();
 	const { address = ZeroAddress } = useAccount();
 	const { data: isMember = false } = useIsMember(address);
-	const { requestAllowance, setResult, requested } = useAllowanceModal();
-	const { mutate: spin, data, isPending, isSuccess } = useSpin();
+	const { requestAllowance } = useAllowanceModal();
+	const { mutate: spin, isPending } = useSpin();
 	const { data: allowance = 0n, isFetching: loading } = useAllowance(address);
 	const { state: wheelStateData } = useRouletteState();
 	const wheelState = wheelStateData.data;
@@ -27,14 +29,14 @@ export const Spin: FC = () => {
 	const handleSpin = () => {
 		if (address === ZeroAddress) {
 			toast({
-				description: 'Please connect your wallet',
+				description: t('pleaseConnectYourWallet'),
 				variant: 'destructive',
 			});
 			return;
 		}
 		if (!isMember) {
 			toast({
-				description: 'Connected wallet is not member of Betfin. Ask someone for an invitation',
+				description: t('connectedWalletIsNotMember'),
 				variant: 'destructive',
 			});
 			return;
@@ -44,7 +46,7 @@ export const Spin: FC = () => {
 
 		if (valueToNumber(allowance) < Number(getRequiredAllowance())) {
 			toast({
-				description: 'Please increase your allowance',
+				description: t('pleaseIncreaseAllowance'),
 				variant: 'destructive',
 			});
 			requestAllowance?.('bet', BigInt(getRequiredAllowance()) * 10n ** 18n);
@@ -61,7 +63,7 @@ export const Spin: FC = () => {
 			disabled={wheelState.state === 'spinning' || isSpinning || address === undefined || isPending}
 		>
 			{isSpinning && <Loader color={'black'} className={'animate-spin absolute'} />}
-			<span className={cn({ invisible: isSpinning })}>{'SPIN'}</span>
+			<span className={cn('uppercase', { invisible: isSpinning })}>{t('spin')}</span>
 		</Button>
 	);
 };

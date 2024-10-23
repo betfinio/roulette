@@ -70,17 +70,24 @@ const Racetrack: React.FC = () => {
 										});
 									});
 								}}
-								className={'!border-none w-fit relative text-white  h-4 cursor-pointer'}
+								className={'!border-none w-fit relative   h-4 cursor-pointer'}
 							/>
 						))}
 					</div>
 
 					{/* SVG lines */}
 
-					<svg className="absolute w-full h-auto z-0" width="475" height="31" viewBox="0 0 475 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-						<line x1="94.2122" y1="0.547271" x2="158.212" y2="30.5473" stroke="#9999AD" />
-						<line x1="253.798" y1="1" x2="253.798" y2="31" stroke="#9999AD" />
-						<line x1="413.5" y1="1" x2="413.5" y2="31" stroke="#9999AD" />
+					<svg
+						className="absolute w-full h-auto z-0 text-foreground"
+						width="475"
+						height="31"
+						viewBox="0 0 475 31"
+						fill="none"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<line x1="94.2122" y1="0.547271" x2="158.212" y2="30.5473" stroke="currentColor" />
+						<line x1="253.798" y1="1" x2="253.798" y2="31" stroke="currentColor" />
+						<line x1="413.5" y1="1" x2="413.5" y2="31" stroke="currentColor" />
 					</svg>
 				</div>
 				{/* Bottom numbers */}
