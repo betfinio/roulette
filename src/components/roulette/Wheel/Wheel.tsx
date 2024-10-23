@@ -5,13 +5,11 @@ import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 
 import logger from '@/src/config/logger';
-import type { WheelLanded, WheelLanding, WheelState } from '@/src/lib/roulette/types';
+import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
 import { ZeroAddress } from '@betfinio/abi';
 import { useQueryClient } from '@tanstack/react-query';
-import { useToast } from 'betfinio_app/use-toast';
 import { PlayIcon } from 'lucide-react';
 import { useAccount } from 'wagmi';
-import { RouletteResultToast } from '../../RouletteResultToast';
 import RouletteWheel from './RouletteWheel';
 
 export const Wheel = () => {
@@ -72,7 +70,7 @@ export const Wheel = () => {
 			});
 
 			wheelControlsWrapper.start({
-				marginTop: '0',
+				marginTop: '5%',
 
 				transition: {
 					duration: 3, // Slow rotation duration
@@ -91,7 +89,6 @@ export const Wheel = () => {
 					},
 				})
 				.then(() => {
-					console.log('LANDINGTHEN');
 					queryClient.invalidateQueries({ queryKey: ['roulette'] });
 					updateState({ state: 'landed' } as WheelState);
 				});
@@ -125,8 +122,8 @@ export const Wheel = () => {
 
 	return (
 		<>
-			<div className="w-full max-w-2xl mx-auto lg:drop-shadow-[0_0_20px_rgba(0,172,231,0.45)] rounded-full">
-				<motion.div className=" relative  mt-0   max-w-3xl	aspect-square pb-8" animate={wheelControlsWrapper}>
+			<div className="w-full max-w-2xl mx-8 lg:mx-auto drop-shadow-[0_0_18px_rgba(0,172,231,0.45)] rounded-full">
+				<motion.div className=" relative  mt-0   max-w-3xl	aspect-square pb-10" animate={wheelControlsWrapper}>
 					<motion.div style={{}} className={cn({ 'blur-md animate-pulse': !isBetsFetched })} animate={wheelControls}>
 						<div className="relative aspect-square w-full max-w-3xl ">
 							<div className="absolute rounded-full top-[-6px] right-[-6px] bottom-[-6px] left-[-6px]]  " />

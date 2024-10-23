@@ -79,6 +79,7 @@ export const useRouletteBets = (address: Address) => {
 	return useQuery<RouletteBet[]>({
 		queryKey: ['roulette', 'bets', address],
 		queryFn: () => fetchBetsByPlayer(address),
+		refetchOnWindowFocus: false,
 	});
 };
 

@@ -1,9 +1,9 @@
 import { useMediaQuery, useRouletteBets, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
 import { ZeroAddress } from '@betfinio/abi';
+import { useQueryClient } from '@tanstack/react-query';
 import { useToast } from 'betfinio_app/use-toast';
 import { useEffect, useState } from 'react';
-import { useQueryClient } from 'react-query';
 import { useAccount } from 'wagmi';
 import { RouletteResultToast } from '../RouletteResultToast';
 import { DesktopRoulette } from './DesktopRoulette';
@@ -11,9 +11,9 @@ import { TabletRoulette } from './TabletRoulette';
 import { VerticalRoulette } from './VerticalRoulette';
 
 export const Roulette = () => {
+	const queryClient = useQueryClient();
 	const { isTablet, isVertical } = useMediaQuery();
 	const { address = ZeroAddress } = useAccount();
-	const queryClient = useQueryClient();
 	const { toast } = useToast();
 	const { data: bets = [], isFetched: isBetsFetched, isRefetching } = useRouletteBets(address);
 

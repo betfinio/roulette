@@ -10,7 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogTitle } from 'betfinio_
 import cx from 'clsx';
 import { Search } from 'lucide-react';
 import { DateTime } from 'luxon';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { RoundModal } from './HistoryTable';
 
 const columnHelper = createColumnHelper<RouletteBet>();
@@ -27,22 +27,22 @@ export const AllBetsTable = () => {
 			cell: (props) => (
 				<div className={'flex gap-2 items-center'}>
 					<Fox />
-					<span className={'text-gray-400 whitespace-nowrap'}>{truncateEthAddress(props.getValue())}</span>
+					<span className={'text-tertiary-foreground whitespace-nowrap'}>{truncateEthAddress(props.getValue())}</span>
 				</div>
 			),
 		}),
 		columnHelper.accessor('address', {
 			header: 'Address',
-			cell: (props) => <span className={'text-gray-400 whitespace-nowrap'}>{truncateEthAddress(props.getValue())}</span>,
+			cell: (props) => <span className={'text-tertiary-foreground whitespace-nowrap'}>{truncateEthAddress(props.getValue())}</span>,
 		}),
 		columnHelper.accessor('created', {
 			header: 'Date',
-			cell: (props) => <span className={'text-white'}>{DateTime.fromMillis(Number(props.getValue()) * 1000).toFormat('DD, T')}</span>,
+			cell: (props) => <span className={''}>{DateTime.fromMillis(Number(props.getValue()) * 1000).toFormat('DD, T')}</span>,
 		}),
 		columnHelper.accessor('amount', {
 			header: 'Amount',
 			cell: (props) => (
-				<span className={'text-white font-semibold'}>
+				<span className={' font-semibold'}>
 					<BetValue value={valueToNumber(props.getValue())} />
 				</span>
 			),
@@ -50,7 +50,7 @@ export const AllBetsTable = () => {
 		columnHelper.accessor('result', {
 			header: 'Win',
 			cell: (props) => (
-				<span className={cx('font-semibold text-gray-500', props.getValue() > 0n && '!text-green-500')}>
+				<span className={cx('font-semibold text-tertiary-foreground', props.getValue() > 0n && '!text-success')}>
 					<BetValue value={valueToNumber(props.getValue())} />
 				</span>
 			),
@@ -60,10 +60,10 @@ export const AllBetsTable = () => {
 			cell: (props) => {
 				return (
 					<span
-						className={cx('text-white w-10 h-10 rounded-xl flex justify-center font-semibold items-center p-3', {
+						className={cx(' w-10 h-10 rounded-xl flex justify-center font-semibold items-center p-3', {
 							'bg-red-roulette': getColor(props.getValue()) === 'RED',
-							'bg-gray-800': getColor(props.getValue()) === 'BLACK',
-							'bg-green-400': getColor(props.getValue()) === 'GREEN',
+							'bg-black-roulette': getColor(props.getValue()) === 'BLACK',
+							'bg-green-roulette': getColor(props.getValue()) === 'GREEN',
 						})}
 					>
 						{' '}
