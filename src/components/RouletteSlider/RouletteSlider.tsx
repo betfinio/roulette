@@ -1,5 +1,5 @@
 import { Slider } from 'betfinio_app/slider';
-import { type FC, useState } from 'react';
+import type { FC } from 'react';
 
 // Define the type for each mark (value and its position on the slider)
 type Mark = {

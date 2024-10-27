@@ -11,7 +11,7 @@ export const DesktopRoulette = () => {
 	return (
 		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4">
 			{/* Conteúdo Principal no Desktop */}
-			<div className="relative flex-1 flex flex-col w-full mt-2 ">
+			<div className="relative flex-1 flex flex-col w-full ">
 				<div className="relative">
 					<BetStatusHeader />
 				</div>
