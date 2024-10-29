@@ -20,7 +20,7 @@ export const ZeroItem: FC = () => {
 			centerSelection={[0]}
 			isVertical={isVertical}
 			className={cn(
-				`bg-green-roulette w-full ${zeroClassName} outline outline-4 outline-transparent transition-all duration-300 delay-100`,
+				`bg-green-roulette w-full ${zeroClassName} outline outline-4 outline-transparent transition-all duration-300`,
 
 				{
 					'outline-green-roulette ': isNumberHovered(0) && !isDebugMode,

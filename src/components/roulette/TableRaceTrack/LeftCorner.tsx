@@ -12,25 +12,25 @@ export const LeftCorner: FC<ILeftCornerProps> = ({ numbersLeft, hoveredNumbers }
 	return (
 		<svg width="44" height="86" viewBox="0 0 41 80" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path
-				className={cn('fill-black-roulette  stroke-transparent', 'transition-all  delay-200 duration-1000', {
+				className={cn('fill-black-roulette  stroke-transparent', 'transition-all   duration-300', {
 					'stroke-green-roulette   stroke-2  ': isHovered,
 				})}
 				d="M12.4733 13.7767C11.6739 13.0144 10.4036 13.0414 9.68226 13.8779C4.18729 20.2497 0.840928 28.1946 0.121222 36.5778C0.0267396 37.6783 0.894861 38.606 1.99873 38.6453L23.593 39.4158C24.6968 39.4552 25.6095 38.5875 25.8014 37.4997C26.1764 35.3745 27.0248 33.3601 28.2834 31.607C28.9276 30.7097 28.9108 29.4505 28.1114 28.6883L12.4733 13.7767Z"
 			/>
 			<path
-				className={cn('fill-red-roulette stroke-transparent ', 'transition-all  delay-200 duration-1000', {
+				className={cn('fill-red-roulette stroke-transparent ', 'transition-all   duration-300', {
 					'stroke-green-roulette   stroke-2  ': isHovered,
 				})}
 				d="M39.9745 2C39.9745 0.895433 39.0784 -0.00521583 37.9752 0.0499767C30.5221 0.422853 23.3205 2.87397 17.1875 7.12522C16.2797 7.75448 16.119 9.01482 16.7928 9.89004L29.9747 27.0115C30.6485 27.8867 31.899 28.0361 32.8591 27.49C34.4407 26.5904 36.1789 25.9988 37.9809 25.7467C39.0748 25.5937 39.9745 24.7126 39.9745 23.608V2Z"
 			/>
 			<path
-				className={cn('fill-red-roulette stroke-transparent ', 'transition-all  delay-200 duration-1000', {
+				className={cn('fill-red-roulette stroke-transparent ', 'transition-all   duration-300', {
 					'stroke-green-roulette   stroke-2  ': isHovered,
 				})}
 				d="M2.07457 42.7561C0.972908 42.8362 0.139625 43.7953 0.274678 44.8916C1.21469 52.5221 4.33481 59.7216 9.26009 65.6249C9.96772 66.4731 11.2374 66.5208 12.0491 65.7717L27.9284 51.1172C28.7401 50.3681 28.7774 49.1093 28.148 48.2016C27.0653 46.6404 26.3023 44.8798 25.9033 43.0223C25.6714 41.9423 24.7273 41.1089 23.6257 41.189L2.07457 42.7561Z"
 			/>
 			<path
-				className={cn('fill-black-roulette  stroke-transparent', 'transition-all  delay-200 duration-1000', {
+				className={cn('fill-black-roulette  stroke-transparent', 'transition-all   duration-300', {
 					'stroke-green-roulette   stroke-2  ': isHovered,
 				})}
 				d="M15.684 69.2224C14.9779 70.0718 15.0913 71.3373 15.975 72C22.3952 76.8153 30.1177 79.5884 38.1346 79.9573C39.238 80.0081 40.1305 79.1039 40.1261 77.9994L40.0399 56.3915C40.0355 55.287 39.1323 54.4094 38.0378 54.2608C36.0363 53.989 34.1138 53.2986 32.3967 52.2351C31.4576 51.6535 30.2024 51.756 29.4964 52.6054L15.684 69.2224Z"

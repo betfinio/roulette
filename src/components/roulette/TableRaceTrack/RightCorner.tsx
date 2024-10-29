@@ -12,7 +12,7 @@ export const RightCorner: FC<IRightCornerProps> = ({ numbersRight, hoveredNumber
 	return (
 		<svg width="44" height="85" viewBox="0 0 40 80" fill="none" xmlns="http://www.w3.org/2000/svg">
 			<path
-				className={cn('fill-red-roulette stroke-transparent ', 'transition-all  delay-200 duration-1000', {
+				className={cn('fill-red-roulette stroke-transparent ', 'transition-all  duration-300', {
 					'stroke-green-roulette   stroke-2  ': isHovered,
 				})}
 				d="M30.8052 17.7504C31.7006 17.1036 31.9061 15.8499 31.2154 14.9879C27.6951 10.5945 23.2819 6.98752 18.2595 4.41075C13.2371 1.83398 7.7332 0.352857 2.11125 0.0557396C1.00822 -0.00255478 0.109652 0.895577 0.106559 2.00014L0.0460136 23.6081C0.0429198 24.7126 0.940121 25.5963 2.03361 25.7524C3.6107 25.9775 5.14419 26.4635 6.56982 27.195C7.99546 27.9264 9.28468 28.8886 10.3874 30.0383C11.1519 30.8356 12.393 31.049 13.2884 30.4022L30.8052 17.7504Z"
@@ -22,7 +22,7 @@ export const RightCorner: FC<IRightCornerProps> = ({ numbersRight, hoveredNumber
 				fill="white"
 			/>
 			<path
-				className={cn('fill-black-roulette  stroke-transparent', 'transition-all  delay-200 duration-1000', {
+				className={cn('fill-black-roulette  stroke-transparent', 'transition-all  duration-300', {
 					'stroke-green-roulette   stroke-2  ': isHovered,
 				})}
 				d="M34.1573 57.1236C35.1501 57.6076 36.3524 57.1969 36.7862 56.181C38.9972 51.0036 40.0933 45.4102 39.9938 39.7663C39.8942 34.1224 38.6014 28.5712 36.2092 23.4749C35.7398 22.475 34.5239 22.1069 33.5487 22.6257L14.4719 32.7736C13.4967 33.2923 13.1412 34.5004 13.5199 35.5381C14.066 37.0346 14.3615 38.6159 14.3898 40.218C14.418 41.8201 14.1785 43.4108 13.6855 44.9257C13.3437 45.976 13.7415 47.1708 14.7344 47.6549L34.1573 57.1236Z"
@@ -32,7 +32,7 @@ export const RightCorner: FC<IRightCornerProps> = ({ numbersRight, hoveredNumber
 				fill="white"
 			/>
 			<path
-				className={cn('fill-green-roulette stroke-transparent', 'transition-all  delay-200 duration-1000', {
+				className={cn('fill-green-roulette stroke-transparent', 'transition-all  duration-300', {
 					'stroke-green-roulette   stroke-2  ': isHovered,
 				})}
 				d="M-7.99338e-05 78C-8.00304e-05 79.1046 0.895964 80.0052 1.99915 79.95C7.62191 79.6686 13.13 78.2029 18.1595 75.6403C23.1891 73.0776 27.6124 69.483 31.145 65.0994C31.8381 64.2394 31.6362 62.9851 30.7426 62.3358L13.2613 49.635C12.3677 48.9857 11.126 49.1956 10.3592 49.9907C9.25335 51.1374 7.96143 52.0959 6.53375 52.8234C5.10608 53.5508 3.57124 54.0326 1.99352 54.2533C0.899597 54.4063 -7.79482e-05 55.2874 -7.80448e-05 56.392L-7.99338e-05 78Z"

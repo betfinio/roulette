@@ -303,7 +303,7 @@ export const fetchProofTx = async (request: bigint, config: Config): Promise<Add
 export const fetchDebugMode = (): boolean => {
 	const data = localStorage.getItem('roulette-debug');
 	if (!data) {
-		return false;
+		return true;
 	}
 	return JSON.parse(data);
 };

@@ -1,7 +1,7 @@
 import { getGridNumbers } from '@/src/lib/roulette';
-import { useGetDebugMode, useLocalBets, useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
+import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
-import type { FC } from 'react';
+import { type FC, Fragment } from 'react';
 import TableItem from '../TableItem';
 import { tableConfigHorizontal } from './tableConfigHorizontal';
 import { tableConfigVertical } from './tableConfigVertical';
@@ -17,7 +17,7 @@ export const RouletteNumbersGrid: FC = () => {
 	const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
 
 	return (
-		<>
+		<Fragment>
 			{numbers.map((item) => (
 				<TableItem
 					key={item}
@@ -26,11 +26,11 @@ export const RouletteNumbersGrid: FC = () => {
 					{...tableConfig[item]}
 					onHoverNumbers={onHoverNumbers}
 					onLeaveHover={onLeaveHover}
-					className={cn(`${tableConfig[item]?.className} border-transparent border-4 outline-transparent transition-all duration-300 delay-100`, {
-						' border-green-roulette ': isNumberHovered(+item) && !isDebugMode,
-						' border-muted/50 ': !isNumberHovered(+item) && isDebugMode,
+					className={cn(`${tableConfig[item]?.className} border-transparent border-4 outline-transparent transition-all duration-200 `, {
+						'border-green-roulette ': isNumberHovered(+item) && !isDebugMode,
+						'border-muted/50 ': !isNumberHovered(+item) && isDebugMode,
 						'border-accent-secondary-foreground': isNumberSelected(+item),
-						' aspect-square': !isVertical,
+						'aspect-square': !isVertical,
 					})}
 					onClick={(position, relatedNumbers) =>
 						place({
@@ -40,6 +40,6 @@ export const RouletteNumbersGrid: FC = () => {
 					}
 				/>
 			))}
-		</>
+		</Fragment>
 	);
 };
