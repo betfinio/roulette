@@ -8,34 +8,32 @@ const getApp = () => {
 	return `betfinio_app@${process.env.PUBLIC_APP_URL}/mf-manifest.json`;
 };
 
-function getOutput() {
-	return process.env.PUBLIC_OUTPUT_URL;
-}
-
 export default defineConfig({
 	server: {
-		port: 4001,
+		port: 4003,
 	},
 	dev: {
-		assetPrefix: 'http://localhost:4001',
+		assetPrefix: 'http://localhost:4003',
 	},
 	html: {
 		title: 'BetFin Roulette',
 		favicon: './src/assets/favicon.svg',
 	},
 	output: {
-		assetPrefix: getOutput(),
+		assetPrefix: process.env.PUBLIC_OUTPUT_URL,
 	},
 	plugins: [pluginReact()],
 	tools: {
 		rspack: {
+			ignoreWarnings: [/Critical dependency: the request of a dependency is an expression/],
+
 			output: {
-				uniqueName: 'betfinio_games',
+				uniqueName: 'betfinio_roulette-v2',
 			},
 			plugins: [
 				TanStackRouterRspack(),
 				new ModuleFederationPlugin({
-					name: 'betfinio_games',
+					name: 'betfinio_roulette-v2',
 					remotes: {
 						betfinio_app: getApp(),
 					},

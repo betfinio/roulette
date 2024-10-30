@@ -1,7 +1,7 @@
 {
 	"compilerOptions": {
 		"target": "ES2020",
-		"lib": ["DOM", "ES2020"],
+		"lib": ["DOM", "ES2020", "es2023"],
 		"module": "ESNext",
 		"jsx": "react-jsx",
 		"noEmit": true,
@@ -18,5 +18,5 @@
 			"@/*": ["./*"]
 		}
 	},
-	"include": ["src"]
+	"include": ["src", "lib", "@mf-types"]
 }
