@@ -1,12 +1,11 @@
-import { FIRST_BLOCK, PARTNER, ROULETTE } from '@/src/global.ts';
+import { PARTNER, ROULETTE } from '@/src/global.ts';
 import { encodeBet } from '@/src/lib/roulette';
-import type { ChiPlaceProps, Limit, LocalBet, RouletteBet, RouletteSubBet, SpinParams } from '@/src/lib/roulette/types.ts';
-import { PartnerContract, RouletteBetContract, RouletteContract, ZeroAddress, arrayFrom } from '@betfinio/abi';
+import type { ChiPlaceProps, Limit, LocalBet, SpinParams } from '@/src/lib/roulette/types.ts';
+import { PartnerContract, RouletteContract } from '@betfinio/abi';
 import { multicall, readContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import _ from 'lodash';
-import { type Address, encodeAbiParameters, parseAbiParameters } from 'viem';
-import { getContractEvents } from 'viem/actions';
+import { encodeAbiParameters, parseAbiParameters } from 'viem';
 import type { Config } from 'wagmi';
 
 export const fetchLocalBets = (): LocalBet[] => {
@@ -57,111 +56,6 @@ export async function calculatePotentialWin(bets: LocalBet[], config: Config): P
 		args: [preparedBets],
 	})) as bigint[];
 	return result[0];
-}
-
-export const fetchRouletteBets = async (address: Address, config: Config): Promise<RouletteBet[]> => {
-	console.log('fetching roulette bets for', address);
-	const count = (await readContract(config, {
-		abi: RouletteContract.abi,
-		address: ROULETTE,
-		functionName: 'getPlayerRequestsCount',
-		args: [address],
-	})) as number;
-	const requests = await multicall(config, {
-		contracts: arrayFrom(Number(count))
-			.slice(-10)
-			.map((_, i) => ({
-				abi: RouletteContract.abi,
-				address: ROULETTE,
-				functionName: 'playerRequests',
-				args: [address, Number(count) - 1 - i],
-			})),
-	});
-	const betAddresses = await multicall(config, {
-		contracts: requests
-			.map((e) => e.result)
-			.map((r) => ({
-				abi: RouletteContract.abi,
-				address: ROULETTE,
-				functionName: 'requestBets',
-				args: [r],
-			})),
-	});
-	return (await Promise.all(betAddresses.map((e) => e.result as Address).map((bet) => populateRouletteBet(bet, config)))).filter((bet) => bet.status !== 1n);
-};
-
-export async function populateRouletteBet(bet: Address, config: Config): Promise<RouletteBet> {
-	const betData = await multicall(config, {
-		contracts: [
-			{
-				abi: RouletteBetContract.abi,
-				address: bet as Address,
-				functionName: 'getPlayer',
-			},
-			{
-				...RouletteBetContract,
-				address: bet as Address,
-				functionName: 'getResult',
-			},
-			{
-				...RouletteBetContract,
-				address: bet as Address,
-				functionName: 'getCreated',
-			},
-			{
-				...RouletteBetContract,
-				address: bet as Address,
-				functionName: 'getAmount',
-			},
-			{
-				...RouletteBetContract,
-				address: bet as Address,
-				functionName: 'getWinNumber',
-			},
-			{
-				...RouletteBetContract,
-				address: bet as Address,
-				functionName: 'getBetsCount',
-			},
-			{
-				...RouletteBetContract,
-				address: bet as Address,
-				functionName: 'getRequestId',
-			},
-			{
-				...RouletteBetContract,
-				address: bet as Address,
-				functionName: 'getStatus',
-			},
-		],
-	});
-	const count = Number(betData[5].result as number);
-	const subBets = await multicall(config, {
-		contracts: arrayFrom(count).map((i) => ({
-			...RouletteBetContract,
-			address: bet as Address,
-			functionName: 'getBet',
-			args: [i],
-		})),
-	});
-	return {
-		address: bet,
-		game: ROULETTE,
-		result: betData[1].result as bigint,
-		player: betData[0].result as string,
-		winNumber: Number(betData[4].result as number),
-		amount: betData[3].result as bigint,
-		created: betData[2].result as bigint,
-		requestId: betData[6].result as bigint,
-		status: betData[7].result as bigint,
-		bets: subBets.map(
-			(e) =>
-				({
-					amount: (e.result as bigint[])[0],
-					bitmap: (e.result as bigint[])[1],
-				}) as RouletteSubBet,
-		),
-	} as RouletteBet;
 }
 
 export const fetchSelectedChip = async (): Promise<number> => {
@@ -264,39 +158,6 @@ export const undoPlace = async () => {
 
 export const changeChip = async ({ amount }: { amount: number }) => {
 	localStorage.setItem('chip', amount.toString());
-};
-
-export const fetchLastRouletteBets = async (config: Config): Promise<RouletteBet[]> => {
-	console.log('fetching last roulette bets ');
-	const logs = await getContractEvents(config.getClient(), {
-		abi: RouletteContract.abi,
-		address: ROULETTE,
-		eventName: 'Landed',
-		fromBlock: 0n,
-		toBlock: 'latest',
-	});
-	const betAddresses = logs
-		.reverse()
-		.slice(0, 10)
-		.map((bet) => (bet.args as { bet: Address }).bet);
-	return await Promise.all(betAddresses.map((bet) => populateRouletteBet(bet, config)));
-};
-
-export const fetchProofTx = async (request: bigint, config: Config): Promise<Address> => {
-	const logs = await getContractEvents(config.getClient(), {
-		abi: RouletteContract.abi,
-		address: ROULETTE,
-		eventName: 'Landed',
-		fromBlock: BigInt(FIRST_BLOCK),
-		toBlock: 'latest',
-		args: {
-			requestId: request,
-		},
-	});
-	if (logs.length > 0) {
-		return logs[0].transactionHash;
-	}
-	return ZeroAddress;
 };
 
 export const fetchDebugMode = (): boolean => {

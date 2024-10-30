@@ -8,7 +8,6 @@ import {
 	fetchDebugMode,
 	fetchLimits,
 	fetchLocalBets,
-	fetchProofTx,
 	fetchSelectedChip,
 	place,
 	setDebugMode,
@@ -17,8 +16,7 @@ import {
 	unplace,
 } from '@/src/lib/roulette/api';
 import type { ChiPlaceProps, Limit, LocalBet, RouletteBet, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
-import { RouletteContract } from '@betfinio/abi';
-import { ZeroAddress } from '@betfinio/abi';
+import { RouletteContract, ZeroAddress } from '@betfinio/abi';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDebounce, useMediaQuery as useMediaQueryLib } from '@uidotdev/usehooks';
 import type { WriteContractReturnType } from '@wagmi/core';
@@ -229,15 +227,7 @@ export const useLastRouletteBets = (count: number) => {
 	});
 };
 
-export const useProofRandom = (request: bigint) => {
-	const config = useConfig();
-	return useQuery({
-		initialData: ZeroAddress,
-		queryKey: ['roulette', 'proof', request.toString()],
-		queryFn: () => fetchProofTx(request, config),
-	});
-};
-
+// todo move to app
 export const useMediaQuery = () => {
 	const isMobile = useMediaQueryLib('(max-width: 639px)');
 	const isTablet = useMediaQueryLib('(min-width: 640px) and (max-width: 1023px)');
