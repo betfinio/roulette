@@ -1,11 +1,10 @@
 import { FIRST_BLOCK, PARTNER, ROULETTE } from '@/src/global.ts';
 import { encodeBet } from '@/src/lib/roulette';
 import type { ChiPlaceProps, Limit, LocalBet, RouletteBet, RouletteSubBet, SpinParams } from '@/src/lib/roulette/types.ts';
-import { PartnerContract, RouletteBetContract, RouletteContract, arrayFrom } from '@betfinio/abi';
-import { ZeroAddress } from '@betfinio/abi';
+import { PartnerContract, RouletteBetContract, RouletteContract, ZeroAddress, arrayFrom } from '@betfinio/abi';
 import { multicall, readContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
-import _, { merge } from 'lodash';
+import _ from 'lodash';
 import { type Address, encodeAbiParameters, parseAbiParameters } from 'viem';
 import { getContractEvents } from 'viem/actions';
 import type { Config } from 'wagmi';
@@ -303,7 +302,7 @@ export const fetchProofTx = async (request: bigint, config: Config): Promise<Add
 export const fetchDebugMode = (): boolean => {
 	const data = localStorage.getItem('roulette-debug');
 	if (!data) {
-		return true;
+		return false;
 	}
 	return JSON.parse(data);
 };
