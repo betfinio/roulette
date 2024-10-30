@@ -22,6 +22,7 @@
 			"quoteStyle": "single"
 		}
 	},
+
 	"linter": {
 		"enabled": true,
 		"rules": {
@@ -29,12 +30,18 @@
 				"noArrayIndexKey": "off"
 			},
 			"a11y": {
-				"useKeyWithClickEvents": "off"
+				"useKeyWithClickEvents": "off",
+				"noSvgWithoutTitle": "off",
+				"useKeyWithMouseEvents": "off",
+				"useMediaCaption": "off"
 			},
 			"correctness": {
 				"useExhaustiveDependencies": "off"
 			},
-			"recommended": true
+			"recommended": true,
+			"complexity": {
+				"noForEach": "off"
+			}
 		}
 	}
 }

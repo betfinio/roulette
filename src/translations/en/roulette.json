@@ -1,0 +1,85 @@
+{
+	"winningPool": "Winning Pool",
+	"maxPayout": "Max Payout",
+	"totalBet": "Total Bet",
+	"potentialWin": "Potential Win",
+	"paytable": "Paytable",
+	"howToPlay": "How to play",
+	"report": "Report",
+	"roulette": "Roulette",
+	"clear": "Clear",
+	"undo": "Undo",
+	"spin": "Spin",
+	"pleaseConnectYourWallet": "Please connect your wallet",
+	"connectedWalletIsNotMember": "Connected wallet is not member of Betfin. Ask someone for an invitation",
+	"pleaseIncreaseAllowance": "Please increase your allowance",
+	"winning": "Winning",
+	"winNumber": "Win number",
+	"bet": "Bet",
+	"payTable": {
+		"learnMore": "Learn more",
+		"paytable": "Paytable",
+		"betType": "Bet type",
+		"payout": "Payout",
+		"minBet": "Min bet",
+		"maxBet": "Max bet",
+		"potentialWin": "Potential Win"
+	},
+	"singlePlayer": "Single Player",
+	"playerStat": {
+		"hotAndCold": "Hot/Cold",
+		"redAndBlack": "Red/Black",
+		"oddAndEven": "Odd/Even"
+	},
+	"changeBetModal": {
+		"customMmountOfChip": "Custom amount of chip",
+		"cancel": "Cancel",
+		"save": "Save",
+		"maxBetIs": "Max bet is:",
+		"minBetIs": "Min bet is:"
+	},
+	"table": {
+		"player": "Player",
+		"address": "Address",
+		"date": "Date",
+		"amount": "Amount",
+		"win": "Win",
+		"result": "Result",
+
+		"noBetsYet": "No bets yet",
+		"myBets": "My bets",
+		"allBets": "All bets",
+		"bettingTicket": "Betting ticket",
+		"winning": "Winning",
+		"totalBet": "Total bet",
+		"winNumber": "Win number",
+		"waiting": "Waiting",
+		"betID": "Bet ID:",
+		"proofOfRandom": "Proof of random:",
+		"howItWorks": "How it works?"
+	},
+	"betTable": {
+		"Odd": "Odd",
+		"1st": "1st",
+		"2nd": "2nd",
+		"3rd": "3rd",
+		"1 to 12": "1 to 12",
+		"13 to 24": "13 to 24",
+		"25 to 36": "25 to 36",
+		"Even": "Even",
+		"1 to 18": "1 to 18",
+		"19 to 36": "19 to 36",
+		"ZERO SPIEL": "ZERO SPIEL",
+		"SERIE 0/2/3": "SERIE 0/2/3",
+		"ORPHELINS": "ORPHELINS",
+		"SERIE 5/8": "SERIE 5/8"
+	},
+	"errors": {
+		"invalidMmount": "Invalid amount",
+		"only5Chips": "You can only place 5 chips"
+	},
+	"placingBet": "Placing a bet",
+	"transactionIsPending": "Transaction is pending",
+	"transactionIsConfirmed": "Transaction is confirmed",
+	"betPlaced": "Bet placed"
+}
