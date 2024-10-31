@@ -1,4 +1,4 @@
-import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
+import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import type { FC } from 'react';
 import TableItem from '../TableItem';
@@ -7,6 +7,7 @@ export const ZeroItem: FC = () => {
 	const { isVertical } = useMediaQuery();
 	const zeroClassName = isVertical ? 'col-span-3 h-10' : 'h-full'; // `zero-${isVertical ? "v" : "h"} zero-european-${isVertical ? "v" : "h"}`;
 	const { mutate: place } = usePlace();
+	const { mutate: unplace } = useUnplace();
 
 	const { data: isDebugMode } = useGetDebugMode();
 
@@ -30,6 +31,12 @@ export const ZeroItem: FC = () => {
 			)}
 			onHoverNumbers={onHoverNumbers}
 			onLeaveHover={onLeaveHover}
+			onContextMenu={(position, relatedNumbers) =>
+				unplace({
+					item: `${0}-${position}`,
+					numbers: relatedNumbers,
+				})
+			}
 			onClick={(position, relatedNumbers) =>
 				place({
 					item: `${0}-${position}`,

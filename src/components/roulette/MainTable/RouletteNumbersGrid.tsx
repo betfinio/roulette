@@ -1,5 +1,5 @@
 import { getGridNumbers } from '@/src/lib/roulette';
-import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
+import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import { type FC, Fragment } from 'react';
 import TableItem from '../TableItem';
@@ -9,6 +9,7 @@ import { tableConfigVertical } from './tableConfigVertical';
 export const RouletteNumbersGrid: FC = () => {
 	const { isVertical } = useMediaQuery();
 	const { mutate: place } = usePlace();
+	const { mutate: unplace } = useUnplace();
 	const { isNumberHovered, isNumberSelected, onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
 	const { data: isDebugMode } = useGetDebugMode();
 
@@ -34,6 +35,12 @@ export const RouletteNumbersGrid: FC = () => {
 					})}
 					onClick={(position, relatedNumbers) =>
 						place({
+							item: `${item}-${position}`,
+							numbers: relatedNumbers,
+						})
+					}
+					onContextMenu={(position, relatedNumbers) =>
+						unplace({
 							item: `${item}-${position}`,
 							numbers: relatedNumbers,
 						})

@@ -11,6 +11,7 @@ interface BetPlacePointProps {
 	onMouseOver: (event?: React.MouseEvent) => void;
 	onMouseOut: (event?: React.MouseEvent) => void;
 	onClick: (event?: React.MouseEvent) => void;
+	onContextMenu: (event?: React.MouseEvent) => void;
 }
 export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, ...events }) => {
 	const { data: isDebugMode } = useGetDebugMode();
