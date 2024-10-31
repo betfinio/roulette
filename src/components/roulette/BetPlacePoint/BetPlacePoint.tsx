@@ -15,28 +15,28 @@ interface BetPlacePointProps {
 }
 export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, ...events }) => {
 	const { data: isDebugMode } = useGetDebugMode();
-	const { isMobile } = useMediaQuery();
 
-	// Mapping positions to Tailwind classes based on isMobile
 	const positionClasses: Record<PositionType, string> = {
-		center: 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2',
-		top: ` ${!isMobile ? 'top-[-37%]' : 'top-[-50%]'} left-1/2 transform -translate-x-1/2`,
-		left: `top-1/2 ${!isMobile ? '-left-[40%]' : '-left-[32%]'} transform -translate-y-1/2`,
-		right: `top-1/2 ${!isMobile ? 'right-[-30%]' : 'right-[-25%]'} transform -translate-y-1/2`,
+		center: 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ',
+		top: 'top-[-50%]  sm:top-[-37%] left-1/2 transform -translate-x-1/2',
+		left: 'top-1/2 sm:-left-[40%] -left-[32%]  transform -translate-y-1/2 ',
+		right: 'top-1/2 sm:right-[-30%] right-[-25%] transform -translate-y-1/2',
 		bottom: 'bottom-[-37%] left-1/2 transform -translate-x-1/2',
-		topLeft: `${!isMobile ? 'top-[-37%] -left-[40%]' : 'top-[-50%] -left-[32%]'}`,
-		topRight: `${!isMobile ? 'top-[-37%] right-[-30%]' : 'top-[-50%] right-[-25%]'}`,
-		bottomLeft: 'bottom-[-37%] -left-[40%] ',
-		bottomRight: 'bottom-[-30%] right-[-30%] ',
+		topLeft: 'sm:top-[-37%] sm:-left-[40%] -left-[32%]  top-[-50%] ',
+		topRight: 'top-[-50%] sm:top-[-37%] sm:right-[-30%] right-[-25%]  ',
+		bottomLeft: 'bottom-[-37%] -left-[40%]',
+		bottomRight: 'bottom-[-30%] right-[-30%]',
 	} as const;
 	return (
 		<motion.div
-			className={cn('roulette absolute  max-w-10 aspect-square bg-muted/40  flex items-center justify-center z-10 opacity-100', positionClasses[position], {
-				'bg-muted/40': isDebugMode,
-				'bg-transparent': !isDebugMode,
-				'w-[40%]': isMobile,
-				'w-[60%]': !isMobile,
-			})}
+			className={cn(
+				'roulette absolute w-[40%]  sm:w-[60%] max-w-10 aspect-square bg-muted/40  flex items-center justify-center z-10 opacity-100',
+				positionClasses[position],
+				{
+					'bg-muted/40': isDebugMode,
+					'bg-transparent': !isDebugMode,
+				},
+			)}
 			{...events}
 		>
 			<BetChips positionId={positionId} />
