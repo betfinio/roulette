@@ -20,12 +20,12 @@ export const ZeroItem: FC = () => {
 			centerSelection={[0]}
 			isVertical={isVertical}
 			className={cn(
-				`bg-green-roulette w-full ${zeroClassName} outline outline-4 outline-transparent transition-all duration-300`,
+				`bg-green-roulette w-full ${zeroClassName}  border-4 border-transparent transition-all duration-300`,
 
 				{
-					'outline-green-roulette ': isNumberHovered(0) && !isDebugMode,
-					'outline-muted/50 ': !isNumberHovered(0) && isDebugMode,
-					'outline-accent-secondary-foreground': isNumberSelected(0),
+					'border-bonus': isNumberHovered(0) && !isDebugMode,
+					'border-muted/50 ': !isNumberHovered(0) && isDebugMode,
+					'border-accent-secondary-foreground': isNumberSelected(0),
 				},
 			)}
 			onHoverNumbers={onHoverNumbers}

@@ -27,7 +27,7 @@ export const RouletteNumbersGrid: FC = () => {
 					onHoverNumbers={onHoverNumbers}
 					onLeaveHover={onLeaveHover}
 					className={cn(`${tableConfig[item]?.className} border-transparent border-4 outline-transparent transition-all duration-200 `, {
-						'border-green-roulette ': isNumberHovered(+item) && !isDebugMode,
+						'border-bonus ': isNumberHovered(+item) && !isDebugMode,
 						'border-muted/50 ': !isNumberHovered(+item) && isDebugMode,
 						'border-accent-secondary-foreground': isNumberSelected(+item),
 						'aspect-square': !isVertical,
