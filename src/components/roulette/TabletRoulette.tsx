@@ -8,9 +8,6 @@ import { TableRaceTrack } from './TableRaceTrack/TableRaceTrack';
 import Wheel from './Wheel/Wheel';
 
 export const TabletRoulette = () => {
-	const { state: wheelStateData } = useRouletteState();
-	const status = wheelStateData.data.state;
-
 	return (
 		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4">
 			{/* Conteúdo Principal no Desktop */}
