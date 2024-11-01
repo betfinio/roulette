@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
 import { useLocalBets, usePaytable } from '@/src/lib/roulette/query';
 import { valueToNumber } from '@betfinio/abi';
+import { useChatbot } from 'betfinio_app/chatbot';
 import { Dialog, DialogContent } from 'betfinio_app/dialog';
 import { useBalance } from 'betfinio_app/lib/query/token';
 import Paytable from '../Paytable/PayTable';
@@ -49,7 +50,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 	const { data: bets = [] } = useLocalBets();
 	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
-
+	const { maximize } = useChatbot();
 	const maxPayout = useMemo(() => {
 		return winningPool / 20n;
 	}, [winningPool]);
@@ -57,7 +58,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 	const { t } = useTranslation('roulette');
 	const handleReport = () => {
 		onCloseDrawer();
-		document.getElementById('live-chat-ai-button')?.click();
+		maximize();
 	};
 
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();

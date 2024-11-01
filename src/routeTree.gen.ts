@@ -18,16 +18,19 @@ import { Route as IndexImport } from './routes/index'
 // Create/Update Routes
 
 const RouletteRoute = RouletteImport.update({
+  id: '/roulette',
   path: '/roulette',
   getParentRoute: () => rootRoute,
 } as any)
 
 const LiveRouletteRoute = LiveRouletteImport.update({
+  id: '/live-roulette',
   path: '/live-roulette',
   getParentRoute: () => rootRoute,
 } as any)
 
 const IndexRoute = IndexImport.update({
+  id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
 } as any)
