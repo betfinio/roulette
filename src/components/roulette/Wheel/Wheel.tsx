@@ -128,7 +128,7 @@ export const Wheel = () => {
 						<div className="relative aspect-square w-full max-w-3xl ">
 							<div className="absolute rounded-full top-[-6px] right-[-6px] bottom-[-6px] left-[-6px]]  " />
 							<RouletteWheel />
-							<span className="absolute z-[3] top-[24%] right-[24%] bottom-[24%] left-[24%] bg-center bg-cover bg-[url('./assets/roulette-center.svg')] " />
+							<span className="absolute z-[3] top-[12%] right-[12%] bottom-[12%] left-[12%] bg-center bg-cover bg-[url('./assets/roulette-center.svg')] " />
 						</div>
 					</motion.div>
 					<PlayIcon className={'absolute w-5 h-5 text-foreground z-5 bottom-6 rotate-[270deg] left-1/2 -translate-x-1/2'} />

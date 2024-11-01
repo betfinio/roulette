@@ -12,13 +12,14 @@ import { valueToNumber } from '@betfinio/abi';
 import { Dialog, DialogContent } from 'betfinio_app/dialog';
 import { useBalance } from 'betfinio_app/lib/query/token';
 import Paytable from '../Paytable/PayTable';
+import { BET_STATUS_HEADER } from './BetStatusHeader';
 
 export const BetStatusHeaderVertical = () => {
 	const { t } = useTranslation('roulette');
 	const [showDrawer, setShowDrawer] = useState(false);
 	return (
 		<div className="roulette">
-			<div id="BetStatusHeaderVertical" className="bg-card rounded-lg border-border py-4 px-4 m-2 mb-0 border flex items-center  h-20">
+			<div id={BET_STATUS_HEADER} className="bg-card rounded-lg border-border py-4 px-4 m-2 mb-0 border flex items-center  h-20">
 				<Drawer open={showDrawer} onOpenChange={setShowDrawer}>
 					<DrawerTrigger className="flex justify-between w-full gap-4 items-center">
 						<div className="flex gap-2 items-center">
@@ -62,7 +63,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 
 	return (
-		<div className="roulette text-foreground  flex   justify-between h-full  mx-auto rounded-b-md px-4 py-2">
+		<div id={BET_STATUS_HEADER} className="roulette text-foreground  flex   justify-between h-full  mx-auto rounded-b-md px-4 py-2">
 			<div className="space-y-2">
 				<div>
 					<p>{t('winningPool')}</p>

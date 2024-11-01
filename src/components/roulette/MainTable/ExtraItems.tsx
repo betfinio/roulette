@@ -1,4 +1,4 @@
-import { useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
+import { useMediaQuery, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import type { FC } from 'react';
 import TableItem from '../TableItem';
@@ -26,6 +26,7 @@ const getCenterSelectionForExtraItem = (index: number, isVertical: boolean): num
 
 export const ExtraItems: FC = () => {
 	const { mutate: place } = usePlace();
+	const { mutate: unplace } = useUnplace();
 	const extraItems = ['1st', '2nd', '3rd'];
 	const { onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
 
@@ -42,6 +43,12 @@ export const ExtraItems: FC = () => {
 					onLeaveHover={onLeaveHover}
 					onClick={(position, relatedNumbers) =>
 						place({
+							item: `${item}-${position}`,
+							numbers: relatedNumbers,
+						})
+					}
+					onContextMenu={(position, relatedNumbers) =>
+						unplace({
 							item: `${item}-${position}`,
 							numbers: relatedNumbers,
 						})
