@@ -6,6 +6,7 @@ import { useToast } from 'betfinio_app/use-toast';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { RouletteResultToast } from '../RouletteResultToast';
+import { BET_STATUS_HEADER } from './BetStatusHeader/BetStatusHeader';
 import { DesktopRoulette } from './DesktopRoulette';
 import { TabletRoulette } from './TabletRoulette';
 import { VerticalRoulette } from './VerticalRoulette';
@@ -31,6 +32,12 @@ export const Roulette = () => {
 			hasWon && shootConfetti();
 
 			setLastShownBet(bets[0].hash || '');
+		}
+
+		if (status === 'spinning') {
+			document.getElementById(BET_STATUS_HEADER)?.scrollIntoView({
+				behavior: 'smooth',
+			});
 		}
 	}, [status, isRefetching]);
 

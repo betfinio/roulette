@@ -10,12 +10,14 @@
 		"prod": "bun run build:schema:prod && rsbuild dev --env-mode production --open",
 		"local": "bun run build:schema:local && rsbuild dev --env-mode localhost --open",
 		"format": "biome format --write",
-		"preview": "rsbuild preview",
-		"build:schema:local": "dotenv -e .env.localhost.local -- graphclient build",
+
 		"build:schema:dev": "dotenv -e .env.development.local -- graphclient build",
-		"build:schema:prod": "dotenv -e .env.production.local -- graphclient build"
+		"build:schema:prod": "dotenv -e .env.production.local -- graphclient build",
+		"secret:dev": "bun run secret.ts -- development dev",
+		"secret:prod": "bun run secret.ts -- production prod/io"
 	},
 	"dependencies": {
+		"@aws-sdk/client-secrets-manager": "^3.687.0",
 		"@betfinio/abi": "^1.1.2",
 		"@betfinio/ui": "^1.0.10",
 		"@graphprotocol/client-cli": "^3.0.7",
@@ -62,6 +64,8 @@
 		"@rsbuild/core": "^1.0.18",
 		"@rsbuild/plugin-react": "^1.0.5",
 		"@tanstack/router-plugin": "^1.76.4",
+		"@commitlint/cli": "^19.5.0",
+		"@commitlint/config-conventional": "^19.5.0",
 		"@types/cors": "^2.8.17",
 		"@types/express": "^5.0.0",
 		"@types/react": "^18.3.12",
