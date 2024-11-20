@@ -25,6 +25,7 @@ interface TableItemProps {
 	onLeaveHover?: () => void;
 
 	onClick?: (position: string, relatedNumbers: number[], number: string | number) => void;
+	onContextMenu?: (position: string, relatedNumbers: number[], number: string | number) => void;
 }
 
 const TableItem: React.FC<TableItemProps> = ({
@@ -44,7 +45,7 @@ const TableItem: React.FC<TableItemProps> = ({
 	isRangeButton = false,
 	onHoverNumbers,
 	onLeaveHover,
-
+	onContextMenu,
 	onClick,
 }) => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'betTable' });
@@ -69,7 +70,7 @@ const TableItem: React.FC<TableItemProps> = ({
 		return !selectionMap[selection]?.length;
 	});
 
-	const handleInteraction = (position: PositionType, action: 'hover' | 'leave' | 'click', event?: React.MouseEvent) => {
+	const handleInteraction = (position: PositionType, action: 'hover' | 'leave' | 'click' | 'contextMenu', event?: React.MouseEvent) => {
 		event?.stopPropagation();
 		const relatedNumbers = selectionMap[position];
 		switch (action) {
@@ -81,6 +82,10 @@ const TableItem: React.FC<TableItemProps> = ({
 				break;
 			case 'click':
 				relatedNumbers && onClick?.(position, relatedNumbers, `${number}-${position}`);
+				break;
+			case 'contextMenu':
+				event?.preventDefault();
+				relatedNumbers && onContextMenu?.(position, relatedNumbers, `${number}-${position}`);
 				break;
 		}
 	};
@@ -124,6 +129,7 @@ const TableItem: React.FC<TableItemProps> = ({
 						onMouseOver={(e) => handleInteraction(position, 'hover', e)}
 						onMouseOut={(e) => handleInteraction(position, 'leave', e)}
 						onClick={(e) => handleInteraction(position, 'click', e)}
+						onContextMenu={(e) => handleInteraction(position, 'contextMenu', e)}
 					/>
 				);
 			})}

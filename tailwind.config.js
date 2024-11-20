@@ -40,6 +40,9 @@ module.exports = {
 					DEFAULT: 'hsl(var(--success))',
 					foreground: 'hsl(var(--success-foreground))',
 				},
+				bonus: {
+					DEFAULT: 'hsl(var(--bonus))',
+				},
 			},
 			keyframes: {
 				'rotate-wheel': {

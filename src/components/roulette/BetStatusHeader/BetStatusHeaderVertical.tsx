@@ -9,16 +9,18 @@ import { useTranslation } from 'react-i18next';
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
 import { useLocalBets, usePaytable } from '@/src/lib/roulette/query';
 import { valueToNumber } from '@betfinio/abi';
+import { useChatbot } from 'betfinio_app/chatbot';
 import { Dialog, DialogContent } from 'betfinio_app/dialog';
 import { useBalance } from 'betfinio_app/lib/query/token';
 import Paytable from '../Paytable/PayTable';
+import { BET_STATUS_HEADER } from './BetStatusHeader';
 
 export const BetStatusHeaderVertical = () => {
 	const { t } = useTranslation('roulette');
 	const [showDrawer, setShowDrawer] = useState(false);
 	return (
 		<div className="roulette">
-			<div id="BetStatusHeaderVertical" className="bg-card rounded-lg border-border py-4 px-4 m-2 mb-0 border flex items-center  h-20">
+			<div id={BET_STATUS_HEADER} className="bg-card rounded-lg border-border py-4 px-4 m-2 mb-0 border flex items-center  h-20">
 				<Drawer open={showDrawer} onOpenChange={setShowDrawer}>
 					<DrawerTrigger className="flex justify-between w-full gap-4 items-center">
 						<div className="flex gap-2 items-center">
@@ -48,7 +50,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 	const { data: bets = [] } = useLocalBets();
 	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
-
+	const { maximize } = useChatbot();
 	const maxPayout = useMemo(() => {
 		return winningPool / 20n;
 	}, [winningPool]);
@@ -56,13 +58,13 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 	const { t } = useTranslation('roulette');
 	const handleReport = () => {
 		onCloseDrawer();
-		document.getElementById('live-chat-ai-button')?.click();
+		maximize();
 	};
 
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 
 	return (
-		<div className="roulette text-foreground  flex   justify-between h-full  mx-auto rounded-b-md px-4 py-2">
+		<div id={BET_STATUS_HEADER} className="roulette text-foreground  flex   justify-between h-full  mx-auto rounded-b-md px-4 py-2">
 			<div className="space-y-2">
 				<div>
 					<p>{t('winningPool')}</p>
