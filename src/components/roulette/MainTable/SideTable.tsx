@@ -1,5 +1,5 @@
 import { getBlack, getRed, numbersVertical } from '@/src/lib/roulette';
-import { useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
+import { useMediaQuery, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import type { FC } from 'react';
 import TableItem from '../TableItem';
@@ -50,6 +50,7 @@ const dozenItemsConfig = {
 
 export const SideTable: FC = () => {
 	const { mutate: place } = usePlace();
+	const { mutate: unplace } = useUnplace();
 	const { onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
 
 	const { isVertical } = useMediaQuery();
@@ -72,6 +73,12 @@ export const SideTable: FC = () => {
 						onLeaveHover={onLeaveHover}
 						onClick={(position, relatedNumbers) =>
 							place({
+								item: `${key}-${position}`,
+								numbers: relatedNumbers,
+							})
+						}
+						onContextMenu={(position, relatedNumbers) =>
+							unplace({
 								item: `${key}-${position}`,
 								numbers: relatedNumbers,
 							})
@@ -100,6 +107,12 @@ export const SideTable: FC = () => {
 						onLeaveHover={onLeaveHover}
 						onClick={(position, relatedNumbers) =>
 							place({
+								item: `${key}-${position}`,
+								numbers: relatedNumbers,
+							})
+						}
+						onContextMenu={(position, relatedNumbers) =>
+							unplace({
 								item: `${key}-${position}`,
 								numbers: relatedNumbers,
 							})

@@ -29,7 +29,7 @@ const Racetrack: React.FC = () => {
 
 			<LeftCorner numbersLeft={numbersLeft} hoveredNumbers={hoveredNumbers} />
 			{/* Central Tracks */}
-			<div className="flex flex-col text-white">
+			<div className="flex flex-col ">
 				{/* Top numbers */}
 				<div className="flex justify-center mx-1 gap-x-1">
 					{numbersTop.map((num) => (
@@ -38,7 +38,7 @@ const Racetrack: React.FC = () => {
 							className={cn(
 								'w-7 h-7  outline outline-transparent transition-all duration-300 outline-2  flex items-center justify-center text-xs rounded-md ',
 								{
-									'outline-green-roulette': isNumberHovered(num),
+									'outline-bonus': isNumberHovered(num),
 									'bg-red-roulette': getColor(num) === 'RED',
 									'bg-black-roulette': getColor(num) === 'BLACK',
 									'bg-green-roulette': getColor(num) === 'GREEN',
@@ -98,7 +98,7 @@ const Racetrack: React.FC = () => {
 							className={cn(
 								'w-[28px] h-[28px]  outline outline-transparent transition-all duration-300 outline-2  flex items-center justify-center text-xs rounded-md ',
 								{
-									'outline-green-roulette': isNumberHovered(num),
+									'outline-bonus': isNumberHovered(num),
 									'bg-red-roulette': getColor(num) === 'RED',
 									'bg-black-roulette': getColor(num) === 'BLACK',
 									'bg-green-roulette': getColor(num) === 'GREEN',

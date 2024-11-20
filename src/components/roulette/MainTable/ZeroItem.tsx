@@ -1,4 +1,4 @@
-import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState } from '@/src/lib/roulette/query';
+import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
 import { cn } from 'betfinio_app/lib/utils';
 import type { FC } from 'react';
 import TableItem from '../TableItem';
@@ -7,6 +7,7 @@ export const ZeroItem: FC = () => {
 	const { isVertical } = useMediaQuery();
 	const zeroClassName = isVertical ? 'col-span-3 h-10' : 'h-full'; // `zero-${isVertical ? "v" : "h"} zero-european-${isVertical ? "v" : "h"}`;
 	const { mutate: place } = usePlace();
+	const { mutate: unplace } = useUnplace();
 
 	const { data: isDebugMode } = useGetDebugMode();
 
@@ -20,16 +21,22 @@ export const ZeroItem: FC = () => {
 			centerSelection={[0]}
 			isVertical={isVertical}
 			className={cn(
-				`bg-green-roulette w-full ${zeroClassName} outline outline-4 outline-transparent transition-all duration-300`,
+				`bg-green-roulette w-full ${zeroClassName}  border-4 border-transparent transition-all duration-300`,
 
 				{
-					'outline-green-roulette ': isNumberHovered(0) && !isDebugMode,
-					'outline-muted/50 ': !isNumberHovered(0) && isDebugMode,
-					'outline-accent-secondary-foreground': isNumberSelected(0),
+					'border-bonus': isNumberHovered(0) && !isDebugMode,
+					'border-muted/50 ': !isNumberHovered(0) && isDebugMode,
+					'border-accent-secondary-foreground': isNumberSelected(0),
 				},
 			)}
 			onHoverNumbers={onHoverNumbers}
 			onLeaveHover={onLeaveHover}
+			onContextMenu={(position, relatedNumbers) =>
+				unplace({
+					item: `${0}-${position}`,
+					numbers: relatedNumbers,
+				})
+			}
 			onClick={(position, relatedNumbers) =>
 				place({
 					item: `${0}-${position}`,

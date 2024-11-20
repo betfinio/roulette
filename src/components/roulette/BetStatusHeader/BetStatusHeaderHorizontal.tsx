@@ -7,18 +7,21 @@ import { useLocalBets, usePaytable, usePotentialWin } from '@/src/lib/roulette/q
 import { valueToNumber } from '@betfinio/abi';
 import { Bag } from '@betfinio/ui/dist/icons';
 import { BetValue } from 'betfinio_app/BetValue';
+import { useChatbot } from 'betfinio_app/chatbot';
 import { Dialog, DialogContent } from 'betfinio_app/dialog';
 import { useBalance } from 'betfinio_app/lib/query/token';
 import { cn } from 'betfinio_app/lib/utils';
 import { Separator } from 'betfinio_app/separator';
 import { useMemo } from 'react';
 import Paytable from '../Paytable/PayTable';
+import { BET_STATUS_HEADER } from './BetStatusHeader';
 
 export const BetStatusHeaderHorizontal = () => {
 	const { t } = useTranslation('roulette');
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
+	const { maximize } = useChatbot();
 	const handleReport = () => {
-		document.getElementById('live-chat-ai-button')?.click();
+		maximize();
 	};
 
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
@@ -31,7 +34,7 @@ export const BetStatusHeaderHorizontal = () => {
 		return winningPool / 20n;
 	}, [winningPool]);
 	return (
-		<div className=" rounded-lg bg-card items-center border border-border p-3 px-4 flex justify-between min-h-16 gap-2 md:gap-4 ">
+		<div id={BET_STATUS_HEADER} className=" rounded-lg bg-card items-center border border-border p-3 px-4 flex justify-between min-h-16 gap-2 md:gap-4 ">
 			<div className="flex gap-2 md:gap-9">
 				<div className="flex gap-1 items-center">
 					<Bag className={'w-8 text-accent-secondary-foreground'} />

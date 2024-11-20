@@ -64,7 +64,6 @@ export const RouletteWheel = () => {
 
 			{/* Center circle */}
 			<circle cx={center} cy={center} r={30} fill="bg-card" />
-			<circle cx={center} cy={center} r={195} fill="currentColor" className="text-card/80" />
 			<circle cx={center} cy={center} r={radius} strokeWidth={7} stroke="currentColor" className="text-card" fill="transparent" />
 		</svg>
 	);
