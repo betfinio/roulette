@@ -1,3 +1,4 @@
+import logger from '@/src/config/logger';
 import { ROULETTE } from '@/src/global.ts';
 import {
 	calculatePotentialWin,
@@ -154,6 +155,7 @@ export const useSpin = () => {
 		mutationKey: ['roulette', 'spin'],
 		mutationFn: (params) => spin(params, config),
 		onError: (e) => {
+			logger.error(e);
 			// @ts-ignore
 			if (e.cause?.reason) {
 				// @ts-ignore
