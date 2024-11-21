@@ -54,12 +54,12 @@ export const BetControlChip = () => {
 			/>
 			<defs>
 				<linearGradient id="paint0_linear_326_7184" x1="21.9997" y1="8.4834" x2="21.9997" y2="75.5169" gradientUnits="userSpaceOnUse">
-					<stop stop-color="currentColor" />
-					<stop offset="1" stop-color="rgba(0,0,0,0.122)" />
+					<stop stopColor="currentColor" />
+					<stop offset="1" stopColor="rgba(0,0,0,0.122)" />
 				</linearGradient>
 				<linearGradient id="paint1_linear_326_7184" x1="22" y1="0" x2="22" y2="44" gradientUnits="userSpaceOnUse">
-					<stop stop-color="currentColor" />
-					<stop offset="1" stop-color="#7B4285" />
+					<stop stopColor="currentColor" />
+					<stop offset="1" stopColor="#7B4285" />
 				</linearGradient>
 			</defs>
 			<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="black" className="text-[10px] font-bold tabular-nums" color="black">
