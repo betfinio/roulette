@@ -1,5 +1,4 @@
 import {
-	GetRolledEventDocument,
 	type Landed,
 	RouletteAllLandedsDocument,
 	type RouletteAllLandedsQuery,
@@ -10,14 +9,12 @@ import {
 import logger from '@/src/config/logger';
 import { ROULETTE } from '@/src/global.ts';
 import type { RouletteBet } from '@/src/lib/roulette/types.ts';
-import { ZeroAddress } from '@betfinio/abi';
 import type { ExecutionResult } from 'graphql/execution';
 import type { Address } from 'viem';
 
 export const fetchBetsByPlayer = async (address: Address): Promise<RouletteBet[]> => {
 	logger.start('fetching bets by player', address);
 	const data: ExecutionResult<RouletteMyLandedsQuery> = await execute(RouletteMyLandedsDocument, { address });
-	console.log(data.data?.landeds);
 	logger.success('fetching bets by player', data.data?.landeds.length);
 	if (data.data) {
 		return data.data.landeds.map(populateBet);
@@ -28,23 +25,11 @@ export const fetchBetsByPlayer = async (address: Address): Promise<RouletteBet[]
 export const fetchAllBets = async (count = 10): Promise<RouletteBet[]> => {
 	logger.start('fetching bets all bets');
 	const data: ExecutionResult<RouletteAllLandedsQuery> = await execute(RouletteAllLandedsDocument, {});
-	console.log(data.data?.landeds);
 	logger.success('fetching bets all bets', data.data?.landeds.length);
 	if (data.data) {
 		return data.data.landeds.map(populateBet);
 	}
 	return [];
-};
-
-export const fetchProofTx = async (request: bigint): Promise<Address> => {
-	logger.start('fetching proof tx', request);
-	const result = await execute(GetRolledEventDocument, { requestId: request });
-
-	if (result.data?.landeds.length > 0) {
-		return result.data.landeds[0].transactionHash;
-	}
-
-	return ZeroAddress;
 };
 
 export function populateBet(

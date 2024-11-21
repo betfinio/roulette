@@ -75,7 +75,7 @@
 		"SERIE 5/8": "SERIE 5/8"
 	},
 	"errors": {
-		"invalidMmount": "Invalid amount",
+		"invalidAmount": "Invalid amount",
 		"only5Chips": "You can only place 5 chips"
 	},
 	"placingBet": "Placing a bet",
