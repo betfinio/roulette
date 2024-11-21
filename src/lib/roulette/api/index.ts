@@ -2,7 +2,7 @@ import { PARTNER, ROULETTE } from '@/src/global.ts';
 import { encodeBet } from '@/src/lib/roulette';
 import type { ChiPlaceProps, Limit, LocalBet, SpinParams } from '@/src/lib/roulette/types.ts';
 import { PartnerContract, RouletteContract } from '@betfinio/abi';
-import { multicall, readContract, writeContract } from '@wagmi/core';
+import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import _ from 'lodash';
 import { encodeAbiParameters, parseAbiParameters } from 'viem';
@@ -69,7 +69,7 @@ export const place = async (params: ChiPlaceProps, chip: number, t: TFunction<'r
 		return;
 	}
 	if (chip === 0) {
-		throw new Error(t('invalidMmount'));
+		throw new Error(t('invalidAmount'));
 	}
 	const newBet = {
 		numbers: params.numbers,
@@ -101,6 +101,12 @@ export const spin = async (params: SpinParams, config: Config) => {
 
 	const totalAmount = newBets.reduce((sum, bet) => sum + BigInt(bet.amount) * 10n ** 18n, 0n);
 	const data = encodeAbiParameters(parseAbiParameters('uint256 count, uint256[] bets'), [BigInt(newBets.length), preparedBets]);
+	await simulateContract(config, {
+		abi: PartnerContract.abi,
+		address: PARTNER,
+		functionName: 'placeBet',
+		args: [ROULETTE, totalAmount, data],
+	});
 	return await writeContract(config, {
 		abi: PartnerContract.abi,
 		address: PARTNER,
