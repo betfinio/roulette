@@ -43,7 +43,7 @@ jobs:
         run: bun run build --env-mode ${{ secrets.AWS_ENVIRONMENT }}
       - name: Deploy
         run: |
-          aws s3 cp ./dist s3://${{secrets.AWS_BUCKET}} --cache-control 'public, max-age=31104000' --recursive
+          aws s3 cp ./dist s3://${{secrets.AWS_BUCKET}} --cache-control 'public, max-age=0' --recursive
       - name: Invalidate CloudFront
         run: |
           aws cloudfront create-invalidation --distribution-id ${{env.AWS_DISTRIBUTION_ID}} --paths '/*'
@@ -56,3 +56,4 @@ jobs:
           gh pr create -B prod/io -H dev --title 'Release to prod/io' --body 'Created by Github Action'
           gh pr create -B prod/gg -H dev --title 'Release to prod/gg' --body 'Created by Github Action'
           gh pr create -B prod/games -H dev --title 'Release to prod/games' --body 'Created by Github Action'
+
