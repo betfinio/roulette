@@ -1,8 +1,7 @@
-import { Button } from 'betfinio_app/button';
-import { cn } from 'betfinio_app/lib/utils';
+import { cn } from '@betfinio/components';
+import { Button } from '@betfinio/components/ui';
 import { motion } from 'framer-motion';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
-
 interface PageNavigationProps {
 	currentPage: number;
 	totalPages: number;
@@ -22,7 +21,7 @@ const PageNavigation: React.FC<PageNavigationProps> = ({ currentPage, totalPages
 					<motion.div
 						key={i}
 						className={cn('h-2 w-2 rounded-full', {
-							'bg-accent-secondary-foreground': i + 1 === currentPage,
+							'bg-secondary-foreground': i + 1 === currentPage,
 							'bg-tertiary-foreground': i + 1 !== currentPage,
 						})}
 						initial={{ opacity: 0 }}

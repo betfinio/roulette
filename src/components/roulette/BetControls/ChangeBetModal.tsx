@@ -1,6 +1,6 @@
 import { useChangeChip } from '@/src/lib/roulette/query';
-import { Dialog, DialogClose, DialogContent } from 'betfinio_app/dialog';
-import { toast } from 'betfinio_app/use-toast';
+import { toast } from '@betfinio/components/hooks';
+import { Dialog, DialogClose, DialogContent } from '@betfinio/components/ui';
 import millify from 'millify';
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

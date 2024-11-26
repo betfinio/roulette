@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
 import { getColor } from '@/src/lib/roulette';
 import { usePlace } from '@/src/lib/roulette/query';
+import { cn } from '@betfinio/components';
 import type React from 'react';
 import { useState } from 'react';
 import TableItem from '../TableItem';

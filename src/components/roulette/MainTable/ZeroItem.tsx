@@ -1,5 +1,6 @@
-import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
-import { cn } from 'betfinio_app/lib/utils';
+import { useGetDebugMode, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
+import { cn } from '@betfinio/components';
+import { useMediaQuery } from '@betfinio/components/hooks';
 import type { FC } from 'react';
 import TableItem from '../TableItem';
 
@@ -26,7 +27,7 @@ export const ZeroItem: FC = () => {
 				{
 					'border-bonus': isNumberHovered(0) && !isDebugMode,
 					'border-muted/50 ': !isNumberHovered(0) && isDebugMode,
-					'border-accent-secondary-foreground': isNumberSelected(0),
+					'border-secondary-foreground': isNumberSelected(0),
 				},
 			)}
 			onHoverNumbers={onHoverNumbers}

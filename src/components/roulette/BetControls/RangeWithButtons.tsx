@@ -1,5 +1,5 @@
 import { useChangeChip, useSelectedChip } from '@/src/lib/roulette/query';
-import { Button } from 'betfinio_app/button';
+import { Button } from '@betfinio/components/ui';
 import { Minus, PlusIcon } from 'lucide-react';
 import millify from 'millify';
 import { type FC, useRef, useState } from 'react';

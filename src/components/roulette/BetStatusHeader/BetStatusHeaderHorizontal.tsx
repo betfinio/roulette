@@ -1,17 +1,15 @@
-import { Button } from 'betfinio_app/button';
 import { AlertCircle, CircleAlert, CircleHelp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
 import { useLocalBets, usePaytable, usePotentialWin } from '@/src/lib/roulette/query';
 import { valueToNumber } from '@betfinio/abi';
+import { cn } from '@betfinio/components';
+import { BetValue } from '@betfinio/components/shared';
+import { Button, Dialog, DialogContent, DialogTitle, Separator } from '@betfinio/components/ui';
 import { Bag } from '@betfinio/ui/dist/icons';
-import { BetValue } from 'betfinio_app/BetValue';
 import { useChatbot } from 'betfinio_app/chatbot';
-import { Dialog, DialogContent } from 'betfinio_app/dialog';
 import { useBalance } from 'betfinio_app/lib/query/token';
-import { cn } from 'betfinio_app/lib/utils';
-import { Separator } from 'betfinio_app/separator';
 import { useMemo } from 'react';
 import Paytable from '../Paytable/PayTable';
 import { BET_STATUS_HEADER } from './BetStatusHeader';
@@ -37,7 +35,7 @@ export const BetStatusHeaderHorizontal = () => {
 		<div id={BET_STATUS_HEADER} className=" rounded-lg bg-card items-center border border-border p-3 px-4 flex justify-between min-h-16 gap-2 md:gap-4 ">
 			<div className="flex gap-2 md:gap-9">
 				<div className="flex gap-1 items-center">
-					<Bag className={'w-8 text-accent-secondary-foreground'} />
+					<Bag className={'w-8 text-secondary-foreground'} />
 					<div>
 						<p>{t('winningPool')}</p>
 						<p className="font-bold">
@@ -74,6 +72,7 @@ export const BetStatusHeaderHorizontal = () => {
 			<Separator orientation="vertical" className="h-8 mr-auto" />
 			<div className=" gap-2   flex ">
 				<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
+					<DialogTitle hidden />
 					<DialogContent>
 						<Paytable onClose={closePaytable} />
 					</DialogContent>
@@ -97,7 +96,7 @@ export const BetStatusHeaderHorizontal = () => {
 					onClick={handleReport}
 					variant={'link'}
 					size="freeSize"
-					className={'flex-col text-accent-secondary-foreground  text-xs flex justify-start font-normal items-center  '}
+					className={'flex-col text-secondary-foreground  text-xs flex justify-start font-normal items-center  '}
 				>
 					<CircleAlert className={'w-6 h-6'} />
 					<p>{t('report')}</p>
