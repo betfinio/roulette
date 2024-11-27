@@ -9,7 +9,7 @@ import enJSON from './translations/en/roulette.json';
 import ruJSON from './translations/ru/roulette.json';
 
 export const defaultNS = 'roulette';
-const resources = {
+export const resources = {
 	en: {
 		roulette: enJSON,
 		shared: sharedLang.en,

@@ -18,11 +18,11 @@ import {
 } from '@/src/lib/roulette/api';
 import type { ChiPlaceProps, Limit, LocalBet, RouletteBet, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
 import { RouletteContract, ZeroAddress } from '@betfinio/abi';
+import { toast } from '@betfinio/components/hooks';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useDebounce, useMediaQuery as useMediaQueryLib } from '@uidotdev/usehooks';
 import type { WriteContractReturnType } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
-import { toast } from 'betfinio_app/use-toast';
 import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -33,6 +33,7 @@ export const useLocalBets = () =>
 	useQuery<LocalBet[]>({
 		queryKey: ['roulette', 'local', 'bets'],
 		queryFn: fetchLocalBets,
+		refetchOnWindowFocus: false,
 	});
 
 export const usePaytable = () => {
@@ -40,6 +41,7 @@ export const usePaytable = () => {
 	const { data: isOpen } = useQuery<boolean>({
 		queryKey: ['roulette', 'paytable'],
 		initialData: false,
+		refetchOnWindowFocus: false,
 	});
 
 	return { isOpen, closePaytable: () => closePaytable(queryClient), openPaytable: () => openPaytable(queryClient) };
@@ -60,6 +62,7 @@ export const usePotentialWin = () => {
 	return useQuery<bigint>({
 		queryKey: ['roulette', 'local', 'bets', value],
 		queryFn: async () => calculatePotentialWin(value, config),
+		refetchOnWindowFocus: false,
 	});
 };
 
@@ -68,6 +71,7 @@ export const useLimits = () => {
 	return useQuery<Limit[]>({
 		queryKey: ['roulette', 'limits'],
 		queryFn: () => fetchLimits(config),
+		refetchOnWindowFocus: false,
 	});
 };
 
@@ -127,6 +131,7 @@ export const useSelectedChip = () =>
 	useQuery<number>({
 		queryKey: ['roulette', 'chip'],
 		queryFn: fetchSelectedChip,
+		refetchOnWindowFocus: false,
 	});
 
 export const usePlace = () => {
@@ -170,14 +175,14 @@ export const useSpin = () => {
 			}
 		},
 		onSuccess: async (data) => {
-			const { update } = toast({
+			const { update, id } = toast({
 				title: t('placingBet'),
 				description: t('transactionIsPending'),
 				variant: 'loading',
 				duration: 10000,
 			});
 			await waitForTransactionReceipt(config.getClient(), { hash: data });
-			update({ variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
+			update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
 			//	await queryClient.invalidateQueries({ queryKey: ['roulette'] });
 		},
 	});
@@ -229,20 +234,11 @@ export const useLastRouletteBets = (count: number) => {
 	});
 };
 
-// todo move to app
-export const useMediaQuery = () => {
-	const isMobile = useMediaQueryLib('(max-width: 639px)');
-	const isTablet = useMediaQueryLib('(min-width: 640px) and (max-width: 1023px)');
-
-	const isVertical = isMobile;
-
-	return { isMobile, isTablet, isVertical };
-};
-
 export const useGetChipsForPosition = (position: string) => {
 	return useQuery<LocalBet[]>({
 		queryKey: ['roulette', 'local', 'bets', position],
 		queryFn: () => fetchChipsByPosition(position),
+		refetchOnWindowFocus: false,
 	});
 };
 
@@ -250,6 +246,7 @@ export const useGetDebugMode = () => {
 	return useQuery<boolean>({
 		queryKey: ['roulette', 'local', 'debug'],
 		queryFn: fetchDebugMode,
+		refetchOnWindowFocus: false,
 	});
 };
 export const useSetDebugMode = () => {
@@ -276,6 +273,7 @@ export const useRouletteNumbersState = () => {
 	const state = useQuery<{ hovered: number[]; selected: number[] }>({
 		queryKey: ['roulette', 'numbers'],
 		initialData: { hovered: [], selected: [] },
+		refetchOnWindowFocus: false,
 	});
 
 	const { data: bets = [] } = useLocalBets();
