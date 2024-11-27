@@ -1,6 +1,6 @@
 import { useChangeChip } from '@/src/lib/roulette/query';
 import { toast } from '@betfinio/components/hooks';
-import { Dialog, DialogClose, DialogContent } from '@betfinio/components/ui';
+import { Button, Dialog, DialogClose, DialogContent } from '@betfinio/components/ui';
 import millify from 'millify';
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -62,13 +62,13 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 						<span className={''}>BET</span>
 					</div>
 					<DialogClose>
-						<div className={'flex flex-row justify-between'}>
-							<button className={'bg-red-roulette rounded-lg px-4 p-2 w-2/5'} type={'button'} onClick={handleClose}>
+						<div className={'flex flex-row justify-between gap-2'}>
+							<Button variant="destructive" className="w-full" onClick={handleClose}>
 								{t('cancel')}
-							</button>
-							<button className={'!bg-success rounded-lg px-4 lg-2 w-2/5'} type={'button'} onClick={handleSave}>
+							</Button>
+							<Button variant="success" className="w-full" onClick={handleSave}>
 								{t('save')}
-							</button>
+							</Button>
 						</div>
 					</DialogClose>
 				</div>

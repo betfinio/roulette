@@ -10,14 +10,14 @@ export const ExtraControls = () => {
 	const { mutate: clearAll } = useClearAllBets();
 	return (
 		<>
-			<Button variant="tertiary" onClick={() => double()}>
+			<Button variant="secondary" onClick={() => double()}>
 				x2
 			</Button>
-			<Button variant="tertiary" onClick={() => clearAll()} className="flex gap-2">
+			<Button variant="secondary" onClick={() => clearAll()} className="flex gap-2">
 				<CircleX className={'w-4 h-4'} />
 				{t('clear')}
 			</Button>
-			<Button variant="tertiary" onClick={() => undo()} className="flex gap-2">
+			<Button variant="secondary" onClick={() => undo()} className="flex gap-2">
 				<Undo2 className={'w-4 h-4'} />
 				{t('undo')}
 			</Button>
