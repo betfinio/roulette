@@ -1,4 +1,4 @@
-import { Slider } from 'betfinio_app/slider';
+import { Slider } from '@betfinio/components/ui';
 import type { FC } from 'react';
 
 // Define the type for each mark (value and its position on the slider)

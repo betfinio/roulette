@@ -1,4 +1,3 @@
-import { useRouletteState } from '@/src/lib/roulette/query';
 import BetStatusHeader from './BetStatusHeader/BetStatusHeader';
 import History from './History/HistoryTable';
 import { LastResults } from './LastResults/LastResults';

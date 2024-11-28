@@ -1,12 +1,12 @@
 import { getWheelNumbers } from '@/src/lib/roulette';
 import { useRouletteBets, useRouletteState } from '@/src/lib/roulette/query';
-import { cn } from 'betfinio_app/lib/utils';
 import { motion, useAnimation } from 'framer-motion';
 import { useEffect } from 'react';
 
 import logger from '@/src/config/logger';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
 import { ZeroAddress } from '@betfinio/abi';
+import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
 import { PlayIcon } from 'lucide-react';
 import { useAccount } from 'wagmi';
@@ -128,7 +128,7 @@ export const Wheel = () => {
 						<div className="relative aspect-square w-full max-w-3xl ">
 							<div className="absolute rounded-full top-[-6px] right-[-6px] bottom-[-6px] left-[-6px]]  " />
 							<RouletteWheel />
-							<span className="absolute z-[3] top-[12%] right-[12%] bottom-[12%] left-[12%] bg-center bg-cover bg-[url('./assets/roulette-center.svg')] " />
+							<span className="absolute z-[3] top-[12%] right-[12%] bottom-[12%] left-[12%] bg-center bg-cover bg-roulette-center " />
 						</div>
 					</motion.div>
 					<PlayIcon className={'absolute w-5 h-5 text-foreground z-5 bottom-6 rotate-[270deg] left-1/2 -translate-x-1/2'} />

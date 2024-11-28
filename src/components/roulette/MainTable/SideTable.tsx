@@ -1,6 +1,7 @@
 import { getBlack, getRed, numbersVertical } from '@/src/lib/roulette';
-import { useMediaQuery, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
-import { cn } from 'betfinio_app/lib/utils';
+import { usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
+import { cn } from '@betfinio/components';
+import { useMediaQuery } from '@betfinio/components/hooks';
 import type { FC } from 'react';
 import TableItem from '../TableItem';
 

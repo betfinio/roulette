@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
 import { useRouletteBets } from '@/src/lib/roulette/query';
 import { ZeroAddress } from '@betfinio/abi';
+import { cn } from '@betfinio/components';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
 import { useAccount } from 'wagmi';
