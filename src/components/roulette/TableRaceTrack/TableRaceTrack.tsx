@@ -1,5 +1,5 @@
-import { cn } from '@/lib/utils';
 import miniTableImg from '@/src/assets/images/mini-table.svg';
+import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
 import { motion } from 'framer-motion';
