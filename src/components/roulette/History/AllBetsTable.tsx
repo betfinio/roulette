@@ -1,13 +1,14 @@
 import { getColor } from '@/src/lib/roulette';
-import { useLastRouletteBets, useMediaQuery } from '@/src/lib/roulette/query';
+import { useLastRouletteBets } from '@/src/lib/roulette/query';
 import type { RouletteBet } from '@/src/lib/roulette/types.ts';
 import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import Fox from '@betfinio/ui/dist/icons/Fox';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
-import { BetValue } from 'betfinio_app/BetValue';
-import { DataTable } from 'betfinio_app/DataTable';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from 'betfinio_app/dialog';
-import cx from 'clsx';
+
+import { cn } from '@betfinio/components';
+import { useMediaQuery } from '@betfinio/components/hooks';
+import { BetValue, DataTable } from '@betfinio/components/shared';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
 import { Search } from 'lucide-react';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
@@ -52,7 +53,7 @@ export const AllBetsTable = () => {
 		columnHelper.accessor('result', {
 			header: t('win'),
 			cell: (props) => (
-				<span className={cx('font-semibold text-tertiary-foreground', props.getValue() > 0n && '!text-success')}>
+				<span className={cn('font-semibold text-tertiary-foreground', props.getValue() > 0n && '!text-success')}>
 					<BetValue value={valueToNumber(props.getValue())} />
 				</span>
 			),
@@ -62,7 +63,7 @@ export const AllBetsTable = () => {
 			cell: (props) => {
 				return (
 					<span
-						className={cx(' w-10 h-10 rounded-xl flex justify-center font-semibold items-center p-3', {
+						className={cn(' w-10 h-10 rounded-xl flex justify-center font-semibold items-center p-3', {
 							'bg-red-roulette': getColor(props.getValue()) === 'RED',
 							'bg-black-roulette': getColor(props.getValue()) === 'BLACK',
 							'bg-green-roulette': getColor(props.getValue()) === 'GREEN',
@@ -80,7 +81,7 @@ export const AllBetsTable = () => {
 			header: '',
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
-	] as ColumnDef<RouletteBet, `0x${string}`>[];
+	] as ColumnDef<RouletteBet>[];
 	const columnsMobile = [
 		columnHelper.accessor('address', {
 			header: t('address'),
@@ -98,7 +99,7 @@ export const AllBetsTable = () => {
 		columnHelper.accessor('result', {
 			header: t('win'),
 			cell: (props) => (
-				<span className={cx('font-semibold text-tertiary-foreground', props.getValue() > 0n && '!text-success')}>
+				<span className={cn('font-semibold text-tertiary-foreground', props.getValue() > 0n && '!text-success')}>
 					<BetValue value={valueToNumber(props.getValue())} />
 				</span>
 			),
@@ -108,7 +109,7 @@ export const AllBetsTable = () => {
 			cell: (props) => {
 				return (
 					<span
-						className={cx(' w-10 h-10 rounded-xl flex justify-center font-semibold items-center p-3', {
+						className={cn(' w-10 h-10 rounded-xl flex justify-center font-semibold items-center p-3', {
 							'bg-red-roulette': getColor(props.getValue()) === 'RED',
 							'bg-black-roulette': getColor(props.getValue()) === 'BLACK',
 							'bg-green-roulette': getColor(props.getValue()) === 'GREEN',
@@ -126,14 +127,14 @@ export const AllBetsTable = () => {
 			header: '',
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
-	] as ColumnDef<RouletteBet, `0x${string}`>[];
+	] as ColumnDef<RouletteBet>[];
 
 	if (bets.length === 0 && !isLoading) {
 		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
 	}
 
 	return (
-		<div className={cx('my-4')}>
+		<div className={cn('my-4')}>
 			<Dialog open={!!selected}>
 				<DialogContent className="games">
 					<DialogTitle className={'hidden'} />

@@ -2,11 +2,10 @@ import { ETHSCAN } from '@/src/global.ts';
 import { getColor } from '@/src/lib/roulette';
 import type { RouletteBet } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
+import { cn } from '@betfinio/components';
+import { BetValue } from '@betfinio/components/shared';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
 import { Link } from '@tanstack/react-router';
-import { BetValue } from 'betfinio_app/BetValue';
-import { cn } from 'betfinio_app/lib/utils';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'betfinio_app/tabs';
-import cx from 'clsx';
 import { motion } from 'framer-motion';
 import { ShieldCheckIcon, X } from 'lucide-react';
 import { DateTime } from 'luxon';
@@ -87,7 +86,7 @@ export const RoundModal: FC<{
 						<p className={'text-center text-tertiary-foreground text-sm'}>{t('winNumber')}</p>
 						<div className={'flex mt-1 gap-1 items-center justify-center'}>
 							<div
-								className={cx(' min-w-[30px] min-h-[30px] rounded-lg flex justify-center font-semibold items-center text-xs', {
+								className={cn(' min-w-[30px] min-h-[30px] rounded-lg flex justify-center font-semibold items-center text-xs', {
 									'bg-red-roulette': getColor(selectedBet?.winNumber ?? 0) === 'RED',
 									'bg-black-roulette': getColor(selectedBet?.winNumber ?? 0) === 'BLACK',
 									'bg-green-roulette': getColor(selectedBet?.winNumber ?? 0) === 'GREEN',
@@ -104,14 +103,14 @@ export const RoundModal: FC<{
 				<div className={'text-center'}>{t('betID')}</div>
 				<Link
 					to={`${ETHSCAN}/address/${selectedBet?.address}`}
-					className={'block text-center underline cursor-pointer hover:text-accent-secondary-foreground duration-300 px-4 sm:hidden'}
+					className={'block text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 sm:hidden'}
 					target={'_blank'}
 				>
 					{truncateEthAddress(selectedBet?.address || ZeroAddress, 7)}
 				</Link>
 				<Link
 					to={`${ETHSCAN}/address/${selectedBet?.address}`}
-					className={'text-center underline cursor-pointer hover:text-accent-secondary-foreground duration-300 px-4 hidden sm:inline-block'}
+					className={'text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 hidden sm:inline-block'}
 					target={'_blank'}
 				>
 					{selectedBet?.address}
@@ -127,7 +126,7 @@ export const RoundModal: FC<{
 				<a
 					href={`${ETHSCAN}/tx/${selectedBet?.hash}`}
 					target={'_blank'}
-					className={cx('block text-center underline cursor-pointer hover:text-accent-secondary-foreground duration-300')}
+					className={cn('block text-center underline cursor-pointer hover:text-secondary-foreground duration-300')}
 					rel="noreferrer"
 				>
 					{truncateEthAddress(selectedBet?.hash || ZeroAddress)}

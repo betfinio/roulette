@@ -1,6 +1,7 @@
 import { getGridNumbers } from '@/src/lib/roulette';
-import { useGetDebugMode, useMediaQuery, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
-import { cn } from 'betfinio_app/lib/utils';
+import { useGetDebugMode, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
+import { cn } from '@betfinio/components';
+import { useMediaQuery } from '@betfinio/components/hooks';
 import { type FC, Fragment } from 'react';
 import TableItem from '../TableItem';
 import { tableConfigHorizontal } from './tableConfigHorizontal';
@@ -30,7 +31,7 @@ export const RouletteNumbersGrid: FC = () => {
 					className={cn(`${tableConfig[item]?.className} border-transparent border-4 outline-transparent transition-all duration-200 `, {
 						'border-bonus ': isNumberHovered(+item) && !isDebugMode,
 						'border-muted/50 ': !isNumberHovered(+item) && isDebugMode,
-						'border-accent-secondary-foreground': isNumberSelected(+item),
+						'border-secondary-foreground': isNumberSelected(+item),
 						'aspect-square': !isVertical,
 					})}
 					onClick={(position, relatedNumbers) =>
