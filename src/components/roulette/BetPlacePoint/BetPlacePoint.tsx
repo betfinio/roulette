@@ -1,5 +1,5 @@
 import { useGetDebugMode, useMediaQuery } from '@/src/lib/roulette/query';
-import { cn } from 'betfinio_app/lib/utils';
+import { cn } from '@betfinio/components';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { BetChips } from '../BetChip/BetChips';

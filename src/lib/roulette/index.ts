@@ -1,4 +1,4 @@
-import type { LocalBet, RouletteSubBet } from '@/src/lib/roulette/types.ts';
+import type { LocalBet } from '@/src/lib/roulette/types.ts';
 import type { Address } from 'viem';
 
 export function encodeBet(bet: LocalBet): bigint[] {

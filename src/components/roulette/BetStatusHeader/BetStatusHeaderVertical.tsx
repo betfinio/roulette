@@ -1,7 +1,5 @@
 import { Roulette } from '@betfinio/ui/dist/icons';
-import { BetValue } from 'betfinio_app/BetValue';
-import { Button } from 'betfinio_app/button';
-import { Drawer, DrawerContent, DrawerTrigger } from 'betfinio_app/drawer';
+
 import { AlertCircle, ChartBarIcon, CircleAlert, CircleHelp } from 'lucide-react';
 import { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -9,8 +7,9 @@ import { useTranslation } from 'react-i18next';
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
 import { useLocalBets, usePaytable } from '@/src/lib/roulette/query';
 import { valueToNumber } from '@betfinio/abi';
+import { BetValue } from '@betfinio/components/shared';
+import { Button, Dialog, DialogContent, DialogTitle, Drawer, DrawerContent, DrawerTrigger } from '@betfinio/components/ui';
 import { useChatbot } from 'betfinio_app/chatbot';
-import { Dialog, DialogContent } from 'betfinio_app/dialog';
 import { useBalance } from 'betfinio_app/lib/query/token';
 import Paytable from '../Paytable/PayTable';
 import { BET_STATUS_HEADER } from './BetStatusHeader';
@@ -24,13 +23,13 @@ export const BetStatusHeaderVertical = () => {
 				<Drawer open={showDrawer} onOpenChange={setShowDrawer}>
 					<DrawerTrigger className="flex justify-between w-full gap-4 items-center">
 						<div className="flex gap-2 items-center">
-							<Roulette className={'w-8 md:w-10 h-8 aspect-square text-accent-secondary-foreground'} />
+							<Roulette className={'w-8 md:w-10 h-8 aspect-square text-secondary-foreground'} />
 							<div className="flex flex-col items-start">
 								<span className={'text-lg leading-0'}> {t('roulette')}</span>
 								<span className={'text-sm leading-0'}> {t('singlePlayer')}</span>
 							</div>
 						</div>
-						<ChartBarIcon className={'text-accent-secondary-foreground w-6'} />
+						<ChartBarIcon className={'text-secondary-foreground w-6'} />
 					</DrawerTrigger>
 					<DrawerContent hasLine={false}>
 						<div className="bg-card py-2">
@@ -88,6 +87,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 			<div className=" gap-2 justify-around  flex flex-col">
 				<div className="flex items-center gap-x-2">
 					<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
+						<DialogTitle hidden />
 						<DialogContent>
 							<Paytable onClose={closePaytable} />
 						</DialogContent>
@@ -107,7 +107,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 					<p>{t('howToPlay')}</p>
 				</a>
 
-				<Button onClick={handleReport} variant={'link'} className={' text-accent-secondary-foreground  text-base flex justify-start items-center  gap-x-2'}>
+				<Button onClick={handleReport} variant={'link'} className={' text-secondary-foreground  text-base flex justify-start items-center  gap-x-2'}>
 					<CircleAlert className={'w-6'} />
 					<p>{t('report')}</p>
 				</Button>

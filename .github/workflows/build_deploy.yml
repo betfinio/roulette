@@ -40,6 +40,8 @@ jobs:
       - name: Build
         env:
           PUBLIC_OUTPUT_URL: https://s3.${{secrets.AWS_REGION}}.amazonaws.com/${{secrets.AWS_BUCKET}}
+          PUBLIC_BRANCH: ${{ github.ref_name }}
+          PUBLIC_DEPLOYED: ${{ github.sha }}
         run: bun run build --env-mode ${{ secrets.AWS_ENVIRONMENT }}
       - name: Deploy
         run: |
@@ -56,3 +58,4 @@ jobs:
           gh pr create -B prod/io -H dev --title 'Release to prod/io' --body 'Created by Github Action'
           gh pr create -B prod/gg -H dev --title 'Release to prod/gg' --body 'Created by Github Action'
           gh pr create -B prod/games -H dev --title 'Release to prod/games' --body 'Created by Github Action'
+

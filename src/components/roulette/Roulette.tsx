@@ -1,8 +1,8 @@
-import { useMediaQuery, useRouletteBets, useRouletteState } from '@/src/lib/roulette/query';
+import { useRouletteBets, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
 import { ZeroAddress } from '@betfinio/abi';
-import { useQueryClient } from '@tanstack/react-query';
-import { useToast } from 'betfinio_app/use-toast';
+
+import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { RouletteResultToast } from '../RouletteResultToast';

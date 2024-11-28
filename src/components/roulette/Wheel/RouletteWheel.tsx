@@ -1,6 +1,5 @@
 import { getColor, getWheelNumbers } from '@/src/lib/roulette';
-import { cn } from 'betfinio_app/lib/utils';
-import React from 'react';
+import { cn } from '@betfinio/components';
 
 export const RouletteWheel = () => {
 	const numbers = getWheelNumbers();

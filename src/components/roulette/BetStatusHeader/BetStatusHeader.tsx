@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@/src/lib/roulette/query';
+import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetStatusHeaderHorizontal } from './BetStatusHeaderHorizontal';
 import { BetStatusHeaderVertical } from './BetStatusHeaderVertical';
 //Id for anchor
