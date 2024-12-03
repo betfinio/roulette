@@ -1,7 +1,7 @@
 import type React from 'react';
 
 import type { IRouletteLanguageKeys } from '@/src/i18next';
-import { cn } from 'betfinio_app/lib/utils';
+import { cn } from '@betfinio/components';
 import { isNaN as _isNaN } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { BetPlacePoint, type PositionType } from './BetPlacePoint/BetPlacePoint';

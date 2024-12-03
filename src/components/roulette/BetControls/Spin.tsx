@@ -1,12 +1,12 @@
 import { getRequiredAllowance } from '@/src/lib/roulette/api';
 import { useLocalBets, useRouletteState, useSpin } from '@/src/lib/roulette/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
+import { cn } from '@betfinio/components';
+import { useToast } from '@betfinio/components/hooks';
+import { Button } from '@betfinio/components/ui';
 import { useAllowanceModal } from 'betfinio_app/allowance';
-import { Button } from 'betfinio_app/button';
 import { useIsMember } from 'betfinio_app/lib/query/pass';
 import { useAllowance } from 'betfinio_app/lib/query/token';
-import { cn } from 'betfinio_app/lib/utils';
-import { useToast } from 'betfinio_app/use-toast';
 import { Loader } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';

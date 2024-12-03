@@ -1,5 +1,5 @@
 import { useChangeChip, useSelectedChip } from '@/src/lib/roulette/query';
-import { Button } from 'betfinio_app/button';
+import { Button } from '@betfinio/components/ui';
 import { Minus, PlusIcon } from 'lucide-react';
 import millify from 'millify';
 import { type FC, useRef, useState } from 'react';
@@ -70,7 +70,7 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 
 	return (
 		<>
-			<Button variant="tertiary" onMouseDown={() => startIncrement('decrease')} onMouseUp={stopIncrement} onMouseLeave={stopIncrement} onClick={handleMinus}>
+			<Button variant="secondary" onMouseDown={() => startIncrement('decrease')} onMouseUp={stopIncrement} onMouseLeave={stopIncrement} onClick={handleMinus}>
 				<Minus />
 			</Button>
 			<div className="flex flex-col mb-4 w-full">
@@ -78,7 +78,7 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 					<RouletteSlider minPrice={limits.min} maxPrice={limits.max} marks={marks} value={activeChipValue} setSliderValue={(amount) => change({ amount })} />
 				</div>
 			</div>
-			<Button variant="tertiary" onMouseDown={() => startIncrement('increase')} onMouseUp={stopIncrement} onMouseLeave={stopIncrement} onClick={handlePlus}>
+			<Button variant="secondary" onMouseDown={() => startIncrement('increase')} onMouseUp={stopIncrement} onMouseLeave={stopIncrement} onClick={handlePlus}>
 				<PlusIcon />
 			</Button>
 		</>
