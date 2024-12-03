@@ -17,7 +17,7 @@
 	},
 	"dependencies": {
 		"@aws-sdk/client-secrets-manager": "^3.696.0",
-		"@betfinio/abi": "^1.1.2",
+		"@betfinio/abi": "^2.2.0",
 		"@betfinio/ui": "^1.0.11",
 		"@graphprotocol/client-cli": "^3.0.7",
 		"@module-federation/enhanced": "^0.6.16",
