@@ -26,7 +26,6 @@ export default defineConfig({
 	tools: {
 		rspack: {
 			ignoreWarnings: [/Critical dependency: the request of a dependency is an expression/],
-
 			output: {
 				uniqueName: 'betfinio_roulette-v2',
 			},
@@ -37,6 +36,7 @@ export default defineConfig({
 					remotes: {
 						betfinio_app: getApp(),
 					},
+					manifest: false,
 					shared: {
 						react: {
 							singleton: true,

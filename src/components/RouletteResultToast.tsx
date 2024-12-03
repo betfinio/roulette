@@ -1,8 +1,8 @@
 import { getColor } from '@/src/lib/roulette';
 import type { RouletteBet } from '@/src/lib/roulette/types';
 import { valueToNumber } from '@betfinio/abi';
+import { cn } from '@betfinio/components';
 import { BetLogo } from '@betfinio/ui/dist/icons';
-import { cn } from 'betfinio_app/lib/utils';
 import { useTranslation } from 'react-i18next';
 
 interface IRouletteResultToastProp {

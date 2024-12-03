@@ -1,4 +1,4 @@
-import { useMediaQuery } from '@/src/lib/roulette/query';
+import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetControls } from '../BetControls/BetControls';
 import { ExtraItems } from './ExtraItems';
 import { RouletteNumbersGrid } from './RouletteNumbersGrid';

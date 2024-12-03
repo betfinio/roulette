@@ -1,6 +1,6 @@
-import { cn } from '@/lib/utils';
 import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import { getColor } from '@/src/lib/roulette';
+import { cn } from '@betfinio/components';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 

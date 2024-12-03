@@ -1,6 +1,5 @@
 import logger from '@/src/config/logger';
 import { createFileRoute, redirect } from '@tanstack/react-router';
-import { useTranslation } from 'react-i18next';
 
 export const Route = createFileRoute('/')({
 	component: () => <Index />,
