@@ -58,7 +58,7 @@ export const BetStatusHeaderHorizontal = () => {
 						<BetValue withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
 					</p>
 				</div>
-				<div className=" ">
+				{/* <div className=" ">
 					<p>{t('payTable.potentialWin')}</p>
 					<p
 						className={cn('font-bold', {
@@ -67,7 +67,7 @@ export const BetStatusHeaderHorizontal = () => {
 					>
 						<BetValue withIcon value={valueToNumber(potentialWin)} />
 					</p>
-				</div>
+				</div> */}
 			</div>
 			<Separator orientation="vertical" className="h-8 mr-auto" />
 			<div className=" gap-2   flex ">

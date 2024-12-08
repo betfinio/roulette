@@ -53,7 +53,7 @@ export const Spin: FC = () => {
 			return;
 		}
 
-		spin({ bets });
+		spin({ bets, roundNumber: 0n, tableAddress: ZeroAddress, playerAddress: address });
 	};
 
 	return (

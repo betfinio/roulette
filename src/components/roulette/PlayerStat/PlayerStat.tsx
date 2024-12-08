@@ -1,16 +1,13 @@
 import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import { getColor } from '@/src/lib/roulette';
-import { useRouletteBets } from '@/src/lib/roulette/query';
-import { ZeroAddress } from '@betfinio/abi';
+import { useGetPlayerBets } from '@/src/lib/roulette/query';
 import { motion } from 'framer-motion';
 import _ from 'lodash';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAccount } from 'wagmi';
 export const PlayerStat = () => {
 	const { t } = useTranslation('roulette');
-	const { address = ZeroAddress } = useAccount();
-	const { data: bets = [], isFetched: isBetsFetched } = useRouletteBets(address);
+	const { data: bets = [], isFetched: isBetsFetched } = useGetPlayerBets();
 	const numbers = useMemo(() => (bets.length > 0 ? bets.map((e) => e.winNumber) : [1, 2, 0, 4, 1, 4, 6, 6]), [bets]);
 
 	const counts = useMemo(() => _.countBy(numbers), [numbers]);

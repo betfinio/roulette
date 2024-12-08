@@ -1,10 +1,7 @@
-import { useRouletteBets, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
-import { ZeroAddress } from '@betfinio/abi';
-
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import { RouletteResultToast } from '../RouletteResultToast';
 import { BET_STATUS_HEADER } from './BetStatusHeader/BetStatusHeader';
 import { DesktopRoulette } from './DesktopRoulette';
@@ -13,25 +10,26 @@ import { VerticalRoulette } from './VerticalRoulette';
 
 export const Roulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
-	const { address = ZeroAddress } = useAccount();
 	const { toast } = useToast();
-	const { data: bets = [], isRefetching } = useRouletteBets(address);
+	const { data: bets = [], isRefetching } = useGetPlayerBets();
 
-	const { state: wheelStateData, updateState } = useRouletteState();
+	const { state: wheelStateData } = useRouletteState();
 	const status = wheelStateData.data.state;
 
 	const [lastShownBet, setLastShownBet] = useState<string>('');
 
 	useEffect(() => {
-		if (status === 'landed' && !isRefetching && bets[0].hash !== lastShownBet) {
+		console.log(isRefetching, 'isRefetching');
+		console.log(status, 'status');
+		if (status === 'landed' && !isRefetching && bets[0].transactionHash !== lastShownBet) {
 			toast({
 				component: <RouletteResultToast rouletteBet={bets[0]} />,
 			});
 
-			const hasWon = bets[0].amount < bets[0].result;
+			const hasWon = bets[0].amount < bets[0].winAmount;
 			hasWon && shootConfetti();
 
-			setLastShownBet(bets[0].hash || '');
+			setLastShownBet(bets[0].transactionHash || '');
 		}
 
 		if (status === 'spinning') {

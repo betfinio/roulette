@@ -1,6 +1,6 @@
 import { ETHSCAN } from '@/src/global.ts';
 import { getColor } from '@/src/lib/roulette';
-import type { RouletteBet } from '@/src/lib/roulette/types.ts';
+import type { PlayerBets, RouletteBet } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
@@ -36,7 +36,7 @@ const History = () => {
 export default History;
 
 export const RoundModal: FC<{
-	selectedBet: RouletteBet | null;
+	selectedBet: PlayerBets | null;
 	onClose: () => void;
 }> = ({ selectedBet, onClose }) => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
@@ -60,11 +60,11 @@ export const RoundModal: FC<{
 				<div className={'flex items-center justify-center gap-3'}>
 					<div
 						className={cn('font-semibold text-4xl text-tertiary-foreground flex gap-2', {
-							'!text-green-roulette': valueToNumber(selectedBet?.result) > 0,
+							'!text-green-roulette': valueToNumber(selectedBet?.winAmount) > 0,
 						})}
 					>
-						{valueToNumber(selectedBet?.result ?? 0n) > 0 && '+'}
-						<BetValue withIcon className={'gap-2'} value={valueToNumber(selectedBet?.result)} iconClassName={'w-6 h-6'} />
+						{valueToNumber(selectedBet?.winAmount ?? 0n) > 0 && '+'}
+						<BetValue withIcon className={'gap-2'} value={valueToNumber(selectedBet?.winAmount)} iconClassName={'w-6 h-6'} />
 					</div>
 				</div>
 			</div>
@@ -102,18 +102,18 @@ export const RoundModal: FC<{
 			<div className={'mt-5 flex flex-col items-center'}>
 				<div className={'text-center'}>{t('betID')}</div>
 				<Link
-					to={`${ETHSCAN}/address/${selectedBet?.address}`}
+					to={`${ETHSCAN}/address/${selectedBet?.bet}`}
 					className={'block text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 sm:hidden'}
 					target={'_blank'}
 				>
-					{truncateEthAddress(selectedBet?.address || ZeroAddress, 7)}
+					{truncateEthAddress(selectedBet?.transactionHash || ZeroAddress, 7)}
 				</Link>
 				<Link
-					to={`${ETHSCAN}/address/${selectedBet?.address}`}
+					to={`${ETHSCAN}/address/${selectedBet?.bet}`}
 					className={'text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 hidden sm:inline-block'}
 					target={'_blank'}
 				>
-					{selectedBet?.address}
+					{selectedBet?.bet}
 				</Link>
 				<p className={'text-center font-normal text-tertiary-foreground'}>
 					{DateTime.fromMillis(Number(selectedBet?.created) * 1000).toFormat('yyyy-MM-dd, HH:mm:ss Z')} UTC
@@ -124,12 +124,12 @@ export const RoundModal: FC<{
 				<p className={'text-tertiary-foreground font-semibold'}>{t('proofOfRandom')}</p>
 				<ShieldCheckIcon className={'text-green-roulette w-5 h-5'} />
 				<a
-					href={`${ETHSCAN}/tx/${selectedBet?.hash}`}
+					href={`${ETHSCAN}/tx/${selectedBet?.transactionHash}`}
 					target={'_blank'}
 					className={cn('block text-center underline cursor-pointer hover:text-secondary-foreground duration-300')}
 					rel="noreferrer"
 				>
-					{truncateEthAddress(selectedBet?.hash || ZeroAddress)}
+					{truncateEthAddress(selectedBet?.transactionHash || ZeroAddress)}
 				</a>
 			</div>
 			<div className={'text-xs mt-1 text-center '}>

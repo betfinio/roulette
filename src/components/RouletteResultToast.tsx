@@ -1,12 +1,12 @@
 import { getColor } from '@/src/lib/roulette';
-import type { RouletteBet } from '@/src/lib/roulette/types';
+import type { PlayerBets, RouletteBet } from '@/src/lib/roulette/types';
 import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetLogo } from '@betfinio/ui/dist/icons';
 import { useTranslation } from 'react-i18next';
 
 interface IRouletteResultToastProp {
-	rouletteBet: RouletteBet;
+	rouletteBet: PlayerBets;
 }
 export const RouletteResultToast: React.FC<IRouletteResultToastProp> = ({ rouletteBet }) => {
 	const { t } = useTranslation('roulette');
@@ -18,7 +18,7 @@ export const RouletteResultToast: React.FC<IRouletteResultToastProp> = ({ roulet
 				<span className={'text-sm'}>{t('winning')}</span>
 				<div className={'flex flex-row gap-2 justify-center text-lg items-center font-semibold'}>
 					<BetLogo className={'w-4 h-4'} />
-					<span className={cn(rouletteBet.result > 0n ? 'text-green-roulette' : 'text-red-roulette')}>{valueToNumber(rouletteBet.result)}</span> BET
+					<span className={cn(rouletteBet.winAmount > 0n ? 'text-green-roulette' : 'text-red-roulette')}>{valueToNumber(rouletteBet.winAmount)}</span> BET
 				</div>
 			</div>
 			<div className={'w-full flex flex-row items-center'}>

@@ -1,5 +1,4 @@
 import logger from '@/src/config/logger';
-import { ROULETTE } from '@/src/global.ts';
 import {
 	calculatePotentialWin,
 	changeChip,
@@ -17,17 +16,17 @@ import {
 	unplace,
 } from '@/src/lib/roulette/api';
 import type { ChiPlaceProps, Limit, LocalBet, RouletteBet, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
-import { RouletteContract, ZeroAddress } from '@betfinio/abi';
+import { ZeroAddress } from '@betfinio/abi';
 import { toast } from '@betfinio/components/hooks';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useDebounce, useMediaQuery as useMediaQueryLib } from '@uidotdev/usehooks';
+import { useDebounce } from '@uidotdev/usehooks';
 import type { WriteContractReturnType } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
-import { useAccount, useConfig, useWatchContractEvent } from 'wagmi';
-import { fetchAllBets, fetchBetsByPlayer } from '../gql';
+import { useAccount, useConfig } from 'wagmi';
+import { fetchAllPlayersBets, fetchPlayerBets } from '../gql';
 
 export const useLocalBets = () =>
 	useQuery<LocalBet[]>({
@@ -75,14 +74,6 @@ export const useLimits = () => {
 	});
 };
 
-export const useRouletteBets = (address: Address) => {
-	return useQuery<RouletteBet[]>({
-		queryKey: ['roulette', 'bets', address],
-		queryFn: () => fetchBetsByPlayer(address),
-		refetchOnWindowFocus: false,
-	});
-};
-
 export const useRouletteState = () => {
 	const { address = ZeroAddress } = useAccount();
 	const queryClient = useQueryClient();
@@ -95,34 +86,6 @@ export const useRouletteState = () => {
 		queryClient.setQueryData(['roulette', 'state'], { ...state.data, ...st });
 		queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 	};
-
-	useWatchContractEvent({
-		abi: RouletteContract.abi,
-		address: ROULETTE,
-		eventName: 'Rolled',
-
-		onLogs: async (rolledLogs) => {
-			// @ts-ignore
-			if (rolledLogs[0].args.roller.toString().toLowerCase() === address.toLowerCase()) {
-				updateState({ state: 'spinning' });
-			}
-		},
-	});
-
-	useWatchContractEvent({
-		abi: RouletteContract.abi,
-		address: ROULETTE,
-		eventName: 'Landed',
-
-		onLogs: async (landedLogs) => {
-			// @ts-ignore
-			if (landedLogs[0].args.roller.toString().toLowerCase() === address.toLowerCase()) {
-				// @ts-ignore
-				updateState({ state: 'landing', result: Number(landedLogs[0].args.result), bet: landedLogs[0].args.bet });
-				queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
-			}
-		},
-	});
 
 	return { state, updateState };
 };
@@ -227,18 +190,13 @@ export const useChangeChip = () => {
 	});
 };
 
-export const useLastRouletteBets = (count: number) => {
-	return useQuery<RouletteBet[]>({
-		queryKey: ['roulette', 'bets', 'last', count],
-		queryFn: () => fetchAllBets(count),
-	});
-};
-
 export const useGetChipsForPosition = (position: string) => {
-	return useQuery<LocalBet[]>({
+	console.log(position, 'position');
+	return useQuery({
 		queryKey: ['roulette', 'local', 'bets', position],
 		queryFn: () => fetchChipsByPosition(position),
 		refetchOnWindowFocus: false,
+		staleTime: 0,
 	});
 };
 
@@ -287,9 +245,24 @@ export const useRouletteNumbersState = () => {
 
 	const isNumberHovered = (number: number) => state.data.hovered.includes(number);
 	const isNumberSelected = (number: number) => selected.includes(number);
-
 	const onHoverNumbers = (numbers: number[]) => updateState({ hovered: numbers });
 	const onLeaveHover = () => updateState({ hovered: [] });
 
 	return { state, updateState, isNumberHovered, isNumberSelected, onHoverNumbers, onLeaveHover };
+};
+
+export const useGetPlayerBets = () => {
+	const { address = ZeroAddress } = useAccount();
+	return useQuery({
+		queryKey: ['roulette', 'bets', 'player', address],
+		queryFn: () => fetchPlayerBets(address),
+		refetchOnWindowFocus: false,
+	});
+};
+export const useGetAllPlayersBets = (last: number) => {
+	return useQuery({
+		queryKey: ['roulette', 'bets', 'player'],
+		queryFn: () => fetchAllPlayersBets(last),
+		refetchOnWindowFocus: false,
+	});
 };

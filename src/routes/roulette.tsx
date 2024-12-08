@@ -1,9 +1,10 @@
-import { RouletteContract } from '@betfinio/abi';
+import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
 import { createFileRoute } from '@tanstack/react-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
-import { useWatchContractEvent } from 'wagmi';
+import { useAccount, useWatchContractEvent } from 'wagmi';
 import { Roulette } from '../components/roulette/Roulette';
-import { ROULETTE } from '../global';
+import { PUBLIC_LIRO_ADDRESS } from '../global';
+import { useRouletteState } from '../lib/roulette/query';
 
 const queryClient = new QueryClient();
 
@@ -12,18 +13,35 @@ export const Route = createFileRoute('/roulette')({
 });
 
 function RoulettePage() {
+	const { updateState } = useRouletteState();
+
+	const { address = ZeroAddress } = useAccount();
+
 	useWatchContractEvent({
-		abi: RouletteContract.abi,
-		address: ROULETTE,
-		eventName: 'Rolled',
-		onLogs: () => {},
+		abi: LiveRouletteABI,
+		address: PUBLIC_LIRO_ADDRESS,
+		eventName: 'Requested',
+		onLogs: async (rolledLogs) => {
+			console.log(rolledLogs, 'rolledLogs');
+			const eventOfThePlayer = rolledLogs[0].args.player?.toString().toLowerCase() === address.toLowerCase();
+			if (eventOfThePlayer) {
+				updateState({ state: 'spinning' });
+			}
+		},
 	});
 
 	useWatchContractEvent({
-		abi: RouletteContract.abi,
-		address: ROULETTE,
-		eventName: 'Landed',
-		onLogs: () => {},
+		abi: LiveRouletteABI,
+		address: PUBLIC_LIRO_ADDRESS,
+		eventName: 'RandomGenerated',
+		onLogs: async (landedLogs) => {
+			const eventOfThePlayer = landedLogs[0].args.player?.toString().toLowerCase() === address.toLowerCase();
+
+			if (eventOfThePlayer) {
+				updateState({ state: 'landing', result: Number(landedLogs[0].args.value), bet: ZeroAddress });
+				queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
+			}
+		},
 	});
 
 	return (
