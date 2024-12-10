@@ -10,6 +10,7 @@ import type { Config } from 'wagmi';
 
 export const fetchLocalBets = (): LocalBet[] => {
 	const data = localStorage.getItem('bets');
+
 	if (!data) {
 		return [];
 	}
@@ -63,11 +64,7 @@ export const fetchSelectedChip = async (): Promise<number> => {
 };
 
 export const place = async (params: ChiPlaceProps, chip: number, t: TFunction<'roulette', 'errors'>) => {
-	console.log(params, 'params');
-	console.log(chip, 'chip');
-
 	const old = fetchLocalBets();
-	console.log(old, 'old');
 	if (params.numbers.length === 0) {
 		localStorage.setItem('bets', JSON.stringify([]));
 		return;

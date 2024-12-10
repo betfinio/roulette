@@ -19,8 +19,6 @@ export const Roulette = () => {
 	const [lastShownBet, setLastShownBet] = useState<string>('');
 
 	useEffect(() => {
-		console.log(isRefetching, 'isRefetching');
-		console.log(status, 'status');
 		if (status === 'landed' && !isRefetching && bets[0].transactionHash !== lastShownBet) {
 			toast({
 				component: <RouletteResultToast rouletteBet={bets[0]} />,

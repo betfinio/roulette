@@ -22,7 +22,6 @@ function RoulettePage() {
 		address: PUBLIC_LIRO_ADDRESS,
 		eventName: 'Requested',
 		onLogs: async (rolledLogs) => {
-			console.log(rolledLogs, 'rolledLogs');
 			const eventOfThePlayer = rolledLogs[0].args.player?.toString().toLowerCase() === address.toLowerCase();
 			if (eventOfThePlayer) {
 				updateState({ state: 'spinning' });

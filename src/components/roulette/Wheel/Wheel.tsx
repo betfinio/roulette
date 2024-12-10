@@ -84,9 +84,11 @@ export const Wheel = () => {
 					},
 				})
 				.then(async () => {
-					queryClient.invalidateQueries({ queryKey: ['roulette'] });
-					await queryClient.refetchQueries({ queryKey: ['roulette', 'bets', 'player'] });
-					updateState({ state: 'landed' } as WheelState);
+					setTimeout(async () => {
+						queryClient.invalidateQueries({ queryKey: ['roulette'] });
+						await queryClient.refetchQueries({ queryKey: ['roulette', 'bets', 'player'] });
+						updateState({ state: 'landed' } as WheelState);
+					}, 1);
 				});
 
 			wheelControlsWrapper.start({
