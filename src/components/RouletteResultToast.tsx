@@ -13,7 +13,7 @@ export const RouletteResultToast: React.FC<IRouletteResultToastProp> = ({ roulet
 	const winNumber = rouletteBet.winNumber;
 
 	return (
-		<div className={'roulette flex flex-col'}>
+		<div className={'roulette flex flex-col w-full'}>
 			<div className={'flex flex-col w-full items-center border-b border-border p-2'}>
 				<span className={'text-sm'}>{t('winning')}</span>
 				<div className={'flex flex-row gap-2 justify-center text-lg items-center font-semibold'}>

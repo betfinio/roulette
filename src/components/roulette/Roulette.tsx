@@ -37,6 +37,12 @@ export const Roulette = () => {
 		}
 	}, [status, isRefetching]);
 
+	useEffect(() => {
+		if (!lastShownBet && bets[0]) {
+			setLastShownBet(bets[0].transactionHash);
+		}
+	}, [bets]);
+
 	if (isVertical) {
 		return (
 			<div className="relative w-full flex flex-col items-center justify-center gap-y-2">

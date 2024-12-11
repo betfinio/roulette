@@ -9,6 +9,7 @@ import {
 	fetchLimits,
 	fetchLocalBets,
 	fetchSelectedChip,
+	fetchSinglePlayerAddress,
 	place,
 	setDebugMode,
 	spin,
@@ -24,6 +25,7 @@ import type { WriteContractReturnType } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { useTranslation } from 'react-i18next';
 import type { WriteContractErrorType } from 'viem';
+import type { Address } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useConfig } from 'wagmi';
 import { fetchAllPlayersBets, fetchPlayerBets } from '../gql';
@@ -66,12 +68,13 @@ export const usePotentialWin = () => {
 	});
 };
 
-export const useLimits = () => {
+export const useLimits = (tableAddress?: Address) => {
 	const config = useConfig();
-	return useQuery<Limit[]>({
+	return useQuery({
 		queryKey: ['roulette', 'limits'],
-		queryFn: () => fetchLimits(config),
+		queryFn: () => fetchLimits(config, tableAddress),
 		refetchOnWindowFocus: false,
+		enabled: !!tableAddress,
 	});
 };
 
@@ -128,11 +131,12 @@ export const useSpin = () => {
 			// @ts-ignore
 			if (e.cause?.reason) {
 				// @ts-ignore
-				if (e.cause.reason === 'RO04') {
+				if (e.cause.reason === 'LT02' || e.cause.reason === 'LT03') {
 					openPaytable(queryClient);
 				}
+
 				// @ts-ignore
-				toast({ variant: 'destructive', description: errors(e.cause?.reason) });
+				toast({ variant: 'destructive', description: errors(e.cause?.reason, { defaultValue: t(`errors.${e.cause?.reason}`) }) });
 				// @ts-ignore
 			} else {
 				toast({ variant: 'destructive', description: errors('unknown') });
@@ -268,6 +272,15 @@ export const useGetAllPlayersBets = (last: number) => {
 	return useQuery({
 		queryKey: ['roulette', 'bets', 'player', 'all'],
 		queryFn: () => fetchAllPlayersBets(last),
+		refetchOnWindowFocus: false,
+	});
+};
+
+export const useGetSinglePlayerTableAddress = () => {
+	const config = useConfig();
+	return useQuery({
+		queryKey: ['roulette', 'singlePlayer', 'address'],
+		queryFn: () => fetchSinglePlayerAddress(config),
 		refetchOnWindowFocus: false,
 	});
 };

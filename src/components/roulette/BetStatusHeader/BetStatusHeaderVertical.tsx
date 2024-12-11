@@ -5,8 +5,8 @@ import { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useLocalBets, usePaytable } from '@/src/lib/roulette/query';
-import { valueToNumber } from '@betfinio/abi';
+import { useGetSinglePlayerTableAddress, useLocalBets, usePaytable } from '@/src/lib/roulette/query';
+import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, Drawer, DrawerContent, DrawerTrigger } from '@betfinio/components/ui';
 import { useChatbot } from 'betfinio_app/chatbot';
@@ -46,6 +46,8 @@ interface IBetStatusHeaderVerticalDetailsProps {
 	onCloseDrawer: () => void;
 }
 export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsProps> = ({ onCloseDrawer }) => {
+	const { data: tableAddress } = useGetSinglePlayerTableAddress();
+
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 	const { data: bets = [] } = useLocalBets();
 	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
@@ -89,7 +91,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 					<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
 						<DialogTitle hidden />
 						<DialogContent>
-							<Paytable onClose={closePaytable} />
+							<Paytable tableAddress={tableAddress} onClose={closePaytable} />
 						</DialogContent>
 					</Dialog>
 					<Button onClick={openPaytable} variant={'ghost'} className={'text-foreground text-base flex items-center gap-x-2'}>

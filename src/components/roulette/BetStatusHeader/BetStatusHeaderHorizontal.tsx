@@ -2,9 +2,8 @@ import { AlertCircle, CircleAlert, CircleHelp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useLocalBets, usePaytable, usePotentialWin } from '@/src/lib/roulette/query';
-import { valueToNumber } from '@betfinio/abi';
-import { cn } from '@betfinio/components';
+import { useGetSinglePlayerTableAddress, useLocalBets, usePaytable, usePotentialWin } from '@/src/lib/roulette/query';
+import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, Separator } from '@betfinio/components/ui';
 import { Bag } from '@betfinio/ui/dist/icons';
@@ -16,6 +15,8 @@ import { BET_STATUS_HEADER } from './BetStatusHeader';
 
 export const BetStatusHeaderHorizontal = () => {
 	const { t } = useTranslation('roulette');
+	const { data: tableAddress } = useGetSinglePlayerTableAddress();
+
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 	const { maximize } = useChatbot();
 	const handleReport = () => {
@@ -74,7 +75,7 @@ export const BetStatusHeaderHorizontal = () => {
 				<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
 					<DialogTitle hidden />
 					<DialogContent>
-						<Paytable onClose={closePaytable} />
+						<Paytable tableAddress={tableAddress} onClose={closePaytable} />
 					</DialogContent>
 				</Dialog>
 				<Button onClick={openPaytable} variant={'ghost'} size="freeSize" className={'text-foreground flex-col text-xs flex items-center font-normal'}>

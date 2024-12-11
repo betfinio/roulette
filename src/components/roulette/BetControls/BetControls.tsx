@@ -1,6 +1,6 @@
 import { getChipColor } from '@/src/lib/roulette';
-import { useLimits, useSelectedChip } from '@/src/lib/roulette/query';
-import { valueToNumber } from '@betfinio/abi';
+import { useGetSinglePlayerTableAddress, useLimits, useSelectedChip } from '@/src/lib/roulette/query';
+import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
 import { useMemo, useState } from 'react';
@@ -16,7 +16,9 @@ export const BetControls = () => {
 
 	const { data: activeChipValue = 0 } = useSelectedChip();
 
-	const { data: limitsRaw = [], isFetched: isLimitsFetched } = useLimits();
+	const { data: tableAddress } = useGetSinglePlayerTableAddress();
+
+	const { data: limitsRaw = [], isFetched: isLimitsFetched } = useLimits(tableAddress);
 	const limits = useMemo(() => {
 		if (limitsRaw.length > 0) {
 			return {
