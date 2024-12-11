@@ -1,4 +1,8 @@
 import {
+	GetAllPlayerBetsDocument,
+	type GetAllPlayerBetsQuery,
+	GetPlayerBetsDocument,
+	type GetPlayerBetsQuery,
 	type Landed,
 	RouletteAllLandedsDocument,
 	type RouletteAllLandedsQuery,
@@ -8,42 +12,44 @@ import {
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
 import { ROULETTE } from '@/src/global.ts';
-import type { RouletteBet } from '@/src/lib/roulette/types.ts';
+import type { PlayerBets, RouletteBet } from '@/src/lib/roulette/types.ts';
 import type { ExecutionResult } from 'graphql/execution';
 import type { Address } from 'viem';
 
-export const fetchBetsByPlayer = async (address: Address): Promise<RouletteBet[]> => {
-	logger.start('fetching bets by player', address);
-	const data: ExecutionResult<RouletteMyLandedsQuery> = await execute(RouletteMyLandedsDocument, { address });
-	logger.success('fetching bets by player', data.data?.landeds.length);
+export const fetchPlayerBets = async (player: Address) => {
+	logger.start('fetching bets by player', player);
+	const data: ExecutionResult<GetPlayerBetsQuery> = await execute(GetPlayerBetsDocument, { player });
+	logger.success('fetching bets by player', data.data?.betEndeds.length);
 	if (data.data) {
-		return data.data.landeds.map(populateBet);
+		return data.data.betEndeds.map((bet) => {
+			return {
+				amount: BigInt(bet.amount),
+				bet: bet.bet as Address,
+				created: bet.blockTimestamp,
+				transactionHash: bet.transactionHash,
+				winAmount: BigInt(bet.winAmount),
+				winNumber: Number(bet.winNumber),
+			} as PlayerBets;
+		});
 	}
 	return [];
 };
-
-export const fetchAllBets = async (count = 10): Promise<RouletteBet[]> => {
-	logger.start('fetching bets all bets');
-	const data: ExecutionResult<RouletteAllLandedsQuery> = await execute(RouletteAllLandedsDocument, {});
-	logger.success('fetching bets all bets', data.data?.landeds.length);
+export const fetchAllPlayersBets = async (last: number) => {
+	logger.start('fetching all bets');
+	const data: ExecutionResult<GetAllPlayerBetsQuery> = await execute(GetAllPlayerBetsDocument, { last });
+	logger.success('fetching bets by player', data.data?.betEndeds.length);
 	if (data.data) {
-		return data.data.landeds.map(populateBet);
+		return data.data.betEndeds.map((bet) => {
+			return {
+				amount: BigInt(bet.amount),
+				bet: bet.bet as Address,
+				created: bet.blockTimestamp,
+				transactionHash: bet.transactionHash,
+				winAmount: BigInt(bet.winAmount),
+				winNumber: Number(bet.winNumber),
+				player: bet.player as Address,
+			} as PlayerBets;
+		});
 	}
 	return [];
 };
-
-export function populateBet(
-	landed: Pick<Landed, 'player' | 'bet' | 'result' | 'requestId' | 'winAmount' | 'betAmount' | 'blockTimestamp' | 'transactionHash'>,
-): RouletteBet {
-	return {
-		requestId: BigInt(landed.requestId),
-		winNumber: Number(landed.result),
-		player: landed.player,
-		address: landed.bet,
-		game: ROULETTE,
-		hash: landed.transactionHash,
-		result: BigInt(landed.winAmount),
-		amount: BigInt(landed.betAmount),
-		created: landed.blockTimestamp,
-	} as RouletteBet;
-}

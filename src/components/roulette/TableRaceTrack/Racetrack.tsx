@@ -11,7 +11,7 @@ import { racetrackConfig } from './racetrackConfig';
 const Racetrack: React.FC = () => {
 	const [hoveredNumbers, setHoveredNumbers] = useState<number[]>([]);
 
-	const { mutate: place } = usePlace();
+	const { mutateAsync: place } = usePlace();
 
 	const handleHoverNumbers = (numbers: number[]) => setHoveredNumbers(numbers);
 	const handleLeaveHover = () => setHoveredNumbers([]);
@@ -63,8 +63,8 @@ const Racetrack: React.FC = () => {
 								onHoverNumbers={handleHoverNumbers}
 								onLeaveHover={handleLeaveHover}
 								onClick={(position: string, relatedNumbers: number[], number) => {
-									relatedNumbers.forEach((number) => {
-										place({
+									relatedNumbers.forEach(async (number) => {
+										await place({
 											numbers: [number],
 											item: `${number}-${position}`,
 										});
