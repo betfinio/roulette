@@ -1,7 +1,7 @@
 import { PARTNER, PUBLIC_LIRO_ADDRESS, ROULETTE } from '@/src/global.ts';
 import { encodeBet } from '@/src/lib/roulette';
 import type { ChiPlaceProps, Limit, LocalBet, SpinParams } from '@/src/lib/roulette/types.ts';
-import { LiveRouletteABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
+import { LiveRouletteABI, MultiPlayerTableABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import _ from 'lodash';
@@ -88,7 +88,7 @@ export const place = async (params: ChiPlaceProps, chip: number, t: TFunction<'r
 	localStorage.setItem('bets', JSON.stringify(newBets));
 };
 
-export const spin = async (params: SpinParams, config: Config) => {
+export const submitBet = async (params: SpinParams, config: Config) => {
 	const { bets, playerAddress, roundNumber, tableAddress } = params;
 	const uniquesBets: Record<string, LocalBet> = {};
 	for (const bet of bets) {
@@ -198,4 +198,42 @@ export const fetchSinglePlayerAddress = async (config: Config) => {
 		functionName: 'singlePlayerTable',
 	});
 	return result;
+};
+
+export const fetchTableByAddress = async (config: Config, address: Address) => {
+	const result = await readContract(config, {
+		abi: LiveRouletteABI,
+		address: PUBLIC_LIRO_ADDRESS,
+		functionName: 'tables',
+		args: [address],
+	});
+	return result;
+};
+
+export const fetchCurrentRoundOfTable = async (config: Config, tableAddress: Address) => {
+	const result = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: tableAddress,
+		functionName: 'getCurrentRound',
+	});
+	return result;
+};
+
+export const testSpin = async (config: Config, tableAddress: Address, round: bigint) => {
+	const simulate = await simulateContract(config, {
+		abi: LiveRouletteABI,
+		address: PUBLIC_LIRO_ADDRESS,
+		functionName: 'spin',
+		args: [tableAddress, round],
+	}).catch((e) => {
+		console.log('error', e);
+	});
+	const result = await writeContract(config, {
+		abi: LiveRouletteABI,
+		address: PUBLIC_LIRO_ADDRESS,
+		functionName: 'spin',
+		args: [tableAddress, round],
+	});
+
+	console.log(result, 'result');
 };

@@ -1,14 +1,14 @@
+import { Roulette } from '@/src/components/roulette/Roulette';
+import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
+import { useRouletteState } from '@/src/lib/roulette/query';
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
 import { createFileRoute } from '@tanstack/react-router';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useAccount, useWatchContractEvent } from 'wagmi';
-import { Roulette } from '../components/roulette/Roulette';
-import { PUBLIC_LIRO_ADDRESS } from '../global';
-import { useRouletteState } from '../lib/roulette/query';
 
 const queryClient = new QueryClient();
 
-export const Route = createFileRoute('/roulette')({
+export const Route = createFileRoute('/roulette/single/')({
 	component: RoulettePage,
 });
 
@@ -37,7 +37,11 @@ function RoulettePage() {
 			const eventOfThePlayer = landedLogs[0].args.player?.toString().toLowerCase() === address.toLowerCase();
 
 			if (eventOfThePlayer) {
-				updateState({ state: 'landing', result: Number(landedLogs[0].args.value), bet: ZeroAddress });
+				updateState({
+					state: 'landing',
+					result: Number(landedLogs[0].args.value),
+					bet: ZeroAddress,
+				});
 				queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 			}
 		},
@@ -45,9 +49,7 @@ function RoulettePage() {
 
 	return (
 		<div className="">
-			<QueryClientProvider client={queryClient}>
-				<Roulette />
-			</QueryClientProvider>
+			<Roulette />
 		</div>
 	);
 }

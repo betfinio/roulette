@@ -5,6 +5,7 @@ import {
 	clearAllBets,
 	doublePlace,
 	fetchChipsByPosition,
+	fetchCurrentRoundOfTable,
 	fetchDebugMode,
 	fetchLimits,
 	fetchLocalBets,
@@ -12,7 +13,7 @@ import {
 	fetchSinglePlayerAddress,
 	place,
 	setDebugMode,
-	spin,
+	submitBet,
 	undoPlace,
 	unplace,
 } from '@/src/lib/roulette/api';
@@ -20,6 +21,7 @@ import type { ChiPlaceProps, Limit, SpinParams, WheelState } from '@/src/lib/rou
 import { ZeroAddress } from '@betfinio/abi';
 import { toast } from '@betfinio/components/hooks';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useParams } from '@tanstack/react-router';
 import { useDebounce } from '@uidotdev/usehooks';
 import type { WriteContractReturnType } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
@@ -28,7 +30,15 @@ import type { WriteContractErrorType } from 'viem';
 import type { Address } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useConfig } from 'wagmi';
-import { fetchAllPlayersBets, fetchPlayerBets } from '../gql';
+import {
+	fetchAllPlayersBets,
+	fetchAllTableBets,
+	fetchPlayerBets,
+	fetchPlayerBetsByTable,
+	fetchTableAllRounds,
+	fetchTableBets,
+	fetchTablePlayerRounds,
+} from '../gql';
 
 export const useLocalBets = () => {
 	return useQuery({
@@ -117,7 +127,7 @@ export const usePlace = () => {
 	});
 };
 
-export const useSpin = () => {
+export const useSubmitBet = () => {
 	const { t: errors } = useTranslation('shared', { keyPrefix: 'errors' });
 	const { t } = useTranslation('roulette');
 	const config = useConfig();
@@ -125,7 +135,7 @@ export const useSpin = () => {
 
 	return useMutation<WriteContractReturnType, WriteContractErrorType, SpinParams>({
 		mutationKey: ['roulette', 'spin'],
-		mutationFn: (params) => spin(params, config),
+		mutationFn: (params) => submitBet(params, config),
 		onError: (e) => {
 			logger.error(e);
 			// @ts-ignore
@@ -260,27 +270,72 @@ export const useRouletteNumbersState = () => {
 	return { state, updateState, isNumberHovered, isNumberSelected, onHoverNumbers, onLeaveHover };
 };
 
-export const useGetPlayerBets = () => {
+export const useGetPlayerBets = (table?: Address) => {
 	const { address = ZeroAddress } = useAccount();
 	return useQuery({
 		queryKey: ['roulette', 'bets', 'player', address],
-		queryFn: () => fetchPlayerBets(address),
+		queryFn: () => fetchPlayerBets(address, table),
 		refetchOnWindowFocus: false,
+		enabled: !!table,
 	});
 };
-export const useGetAllPlayersBets = (last: number) => {
+export const useGetTablePlayerRounds = (tableAddress?: Address) => {
+	const { address = ZeroAddress } = useAccount();
+	return useQuery({
+		queryKey: ['roulette', 'bets', 'player', address, tableAddress],
+		queryFn: () => fetchTablePlayerRounds(address, tableAddress),
+		refetchOnWindowFocus: false,
+		enabled: !!tableAddress,
+	});
+};
+export const useGetTableBets = (table?: Address) => {
+	return useQuery({
+		queryKey: ['roulette', 'bets', 'table', table],
+		queryFn: () => fetchTableBets(table),
+		refetchOnWindowFocus: false,
+		enabled: !!table,
+	});
+};
+export const useGetAllPlayersBets = (last: number, table?: Address) => {
 	return useQuery({
 		queryKey: ['roulette', 'bets', 'player', 'all'],
-		queryFn: () => fetchAllPlayersBets(last),
+		queryFn: () => fetchAllPlayersBets(last, table),
 		refetchOnWindowFocus: false,
+		enabled: !!table,
+	});
+};
+export const useGetTableRounds = (last: number, tableAddress?: Address) => {
+	return useQuery({
+		queryKey: ['roulette', 'bets', 'table', 'rounds', tableAddress],
+		queryFn: () => fetchTableAllRounds(last, tableAddress),
+		refetchOnWindowFocus: false,
+		enabled: !!tableAddress,
 	});
 };
 
-export const useGetSinglePlayerTableAddress = () => {
+export const useGetSinglePlayerTableAddress = (enabled = true) => {
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['roulette', 'singlePlayer', 'address'],
 		queryFn: () => fetchSinglePlayerAddress(config),
+		refetchOnWindowFocus: false,
+		enabled,
+	});
+};
+
+export const useGetTableAddress = () => {
+	const multiplayerTableAddress = useParams({ strict: false, select: (params) => params.table as Address | undefined });
+	const { data: siglePlayerTableAddress, isLoading } = useGetSinglePlayerTableAddress(!multiplayerTableAddress);
+
+	return { isSingle: !multiplayerTableAddress, tableAddress: multiplayerTableAddress || siglePlayerTableAddress, isLoading };
+};
+
+export const useGetCurrentRound = (tableAddress: Address) => {
+	const config = useConfig();
+
+	return useQuery({
+		queryKey: ['roulette', 'currentRound', tableAddress],
+		queryFn: () => fetchCurrentRoundOfTable(config, tableAddress),
 		refetchOnWindowFocus: false,
 	});
 };

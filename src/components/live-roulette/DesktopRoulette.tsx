@@ -1,12 +1,13 @@
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
+
+import Wheel from '../roulette/Wheel/Wheel';
 import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { LastResults } from './LastResults/LastResults';
-import { PlayerStat } from './PlayerStat';
-import Wheel from './Wheel/Wheel';
+import { TableStat } from './TableStat';
 
-export const TabletRoulette = () => {
+export const DesktopRoulette = () => {
 	return (
 		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4">
 			{/* Conteúdo Principal no Desktop */}
@@ -20,7 +21,7 @@ export const TabletRoulette = () => {
 						{/* <ResultHistory /> */}
 						<LastResults />
 						<Wheel />
-						<PlayerStat />
+						<TableStat />
 					</div>
 				</div>
 

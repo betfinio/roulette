@@ -1,6 +1,6 @@
 import { getChipColor } from '@/src/lib/roulette';
-import { useGetSinglePlayerTableAddress, useLimits, useSelectedChip } from '@/src/lib/roulette/query';
-import { ZeroAddress, valueToNumber } from '@betfinio/abi';
+import { useGetTableAddress, useLimits, useSelectedChip } from '@/src/lib/roulette/query';
+import { valueToNumber } from '@betfinio/abi';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
 import { useMemo, useState } from 'react';
@@ -8,17 +8,16 @@ import { BetControlChip } from './BetControlChip';
 import { ChangeBetModal } from './ChangeBetModal';
 import { ExtraControls } from './ExtraControls';
 import { RangeWithButtons } from './RangeWithButtons';
-import { Spin } from './Spin';
+import { SubmitBet } from './SubmitBet';
 
 export const BetControls = () => {
+	const { tableAddress, isSingle } = useGetTableAddress();
 	const [openBetChangeModal, setOpenBetChangeModal] = useState(false);
 	const { isVertical } = useMediaQuery();
 
 	const { data: activeChipValue = 0 } = useSelectedChip();
 
-	const { data: tableAddress } = useGetSinglePlayerTableAddress();
-
-	const { data: limitsRaw = [], isFetched: isLimitsFetched } = useLimits(tableAddress);
+	const { data: limitsRaw = [] } = useLimits(tableAddress);
 	const limits = useMemo(() => {
 		if (limitsRaw.length > 0) {
 			return {
@@ -36,7 +35,7 @@ export const BetControls = () => {
 
 				<div className="flex-col gap-y-2 w-full flex items-center bg-card p-4 rounded-lg border border-border">
 					<div className="flex flex-col items-center justify-start w-full">
-						<Spin />
+						<SubmitBet />
 					</div>
 				</div>
 
@@ -73,7 +72,7 @@ export const BetControls = () => {
 			<ChangeBetModal initialValue={activeChipValue} max={limits.max} min={limits.min} open={openBetChangeModal} setOpen={setOpenBetChangeModal} />
 			<div className="md:flex-row md:justify-between gap-2 flex w-full border border-border items-center bg-card px-2 py-4 rounded-xl mt-6 md:px-6 flex-wrap">
 				<div className="flex flex-col items-center justify-start flex-shrink-0">
-					<Spin />
+					<SubmitBet />
 				</div>
 				<div className=" flex items-center justify-center gap-x-2 flex-grow flex-shrink-0 min-w-96">
 					<div className="flex  items-center justify-center w-full">

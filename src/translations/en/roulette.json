@@ -105,5 +105,6 @@
 	"placingBet": "Placing a bet",
 	"transactionIsPending": "Transaction is pending",
 	"transactionIsConfirmed": "Transaction is confirmed",
-	"betPlaced": "Bet placed"
+	"betPlaced": "Bet placed",
+	"submitBet": "Place"
 }

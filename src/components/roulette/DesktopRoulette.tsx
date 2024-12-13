@@ -1,9 +1,10 @@
-import BetStatusHeader from './BetStatusHeader/BetStatusHeader';
-import History from './History/HistoryTable';
+import { useGetTableAddress } from '@/src/lib/roulette/query';
+import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
+import History from '../shared/HistoryTable';
+import { MainTable } from '../shared/MainTable/MainTable';
+import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { LastResults } from './LastResults/LastResults';
-import { MainTable } from './MainTable/MainTable';
-import { PlayerStat } from './PlayerStat/PlayerStat';
-import { TableRaceTrack } from './TableRaceTrack/TableRaceTrack';
+import { PlayerStat } from './PlayerStat';
 import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {

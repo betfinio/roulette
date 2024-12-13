@@ -1,5 +1,5 @@
 import { useLimits } from '@/src/lib/roulette/query';
-import { ZeroAddress, valueToNumber } from '@betfinio/abi';
+import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Link, X } from 'lucide-react';
 import type { FC } from 'react';

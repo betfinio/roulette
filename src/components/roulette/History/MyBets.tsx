@@ -1,7 +1,7 @@
 import { ETHSCAN } from '@/src/global.ts';
-import { useGetPlayerBets } from '@/src/lib/roulette/query';
-import type { PlayerBets, RouletteBet } from '@/src/lib/roulette/types.ts';
-import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
+import { useGetPlayerBets, useGetTableAddress } from '@/src/lib/roulette/query';
+import type { PlayerBets } from '@/src/lib/roulette/types.ts';
+import { truncateEthAddress } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import { cn } from '@betfinio/components';
@@ -10,20 +10,20 @@ import { BetValue, DataTable } from '@betfinio/components/shared';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
 import { Search } from 'lucide-react';
 import { DateTime } from 'luxon';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAccount } from 'wagmi';
 import { BetResultCell } from '../../shared/BetResultCell';
+import { RoundModal } from '../../shared/HistoryTable';
 import { WinAmountCell } from '../../shared/WinAmountCell';
-import { RoundModal } from './HistoryTable';
 
 const columnHelper = createColumnHelper<PlayerBets>();
 
 export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const [selected, setSelected] = useState<null | PlayerBets>(null);
+	const { tableAddress } = useGetTableAddress();
 
-	const { data: bets = [], isLoading } = useGetPlayerBets();
+	const { data: bets = [], isLoading } = useGetPlayerBets(tableAddress);
 	const { isVertical } = useMediaQuery();
 	const columns = [
 		columnHelper.accessor('bet', {

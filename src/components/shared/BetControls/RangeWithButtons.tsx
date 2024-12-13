@@ -3,7 +3,7 @@ import { Button } from '@betfinio/components/ui';
 import { Minus, PlusIcon } from 'lucide-react';
 import millify from 'millify';
 import { type FC, useRef, useState } from 'react';
-import RouletteSlider from '../../RouletteSlider/RouletteSlider';
+import RouletteSlider from '../RouletteSlider/RouletteSlider';
 
 interface IRangeWithButtonsProps {
 	limits: { min: number; max: number };

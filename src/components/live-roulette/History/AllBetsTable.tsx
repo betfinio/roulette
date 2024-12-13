@@ -1,6 +1,6 @@
-import { useGetAllPlayersBets, useGetTableAddress } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useGetTableRounds } from '@/src/lib/roulette/query';
 import type { PlayerBets } from '@/src/lib/roulette/types.ts';
-import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
+import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import Fox from '@betfinio/ui/dist/icons/Fox';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
@@ -23,7 +23,7 @@ export const AllBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const [selected, setSelected] = useState<null | PlayerBets>(null);
 	const { tableAddress } = useGetTableAddress();
-	const { data: bets = [], isLoading } = useGetAllPlayersBets(50, tableAddress);
+	const { data: bets = [], isLoading } = useGetTableRounds(50, tableAddress || ZeroAddress);
 
 	const { isVertical } = useMediaQuery();
 

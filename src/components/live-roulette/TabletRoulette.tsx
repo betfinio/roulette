@@ -1,10 +1,10 @@
+import Wheel from '../roulette/Wheel/Wheel';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { LastResults } from './LastResults/LastResults';
-import { PlayerStat } from './PlayerStat';
-import Wheel from './Wheel/Wheel';
+import { TableStat } from './TableStat';
 
 export const TabletRoulette = () => {
 	return (
@@ -20,7 +20,7 @@ export const TabletRoulette = () => {
 						{/* <ResultHistory /> */}
 						<LastResults />
 						<Wheel />
-						<PlayerStat />
+						<TableStat />
 					</div>
 				</div>
 

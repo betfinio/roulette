@@ -1,13 +1,17 @@
 import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import { getColor } from '@/src/lib/roulette';
 import { useGetPlayerBets } from '@/src/lib/roulette/query';
+import type { PlayerBets } from '@/src/lib/roulette/types';
 import { motion } from 'framer-motion';
 import _ from 'lodash';
-import { useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-export const PlayerStat = () => {
+
+interface IStatProps {
+	bets: PlayerBets[];
+}
+export const Stat: FC<IStatProps> = ({ bets }) => {
 	const { t } = useTranslation('roulette');
-	const { data: bets = [], isFetched: isBetsFetched } = useGetPlayerBets();
 	const numbers = useMemo(() => (bets.length > 0 ? bets.map((e) => e.winNumber) : [1, 2, 0, 4, 1, 4, 6, 6]), [bets]);
 
 	const counts = useMemo(() => _.countBy(numbers), [numbers]);

@@ -1,10 +1,9 @@
-import { useGetAllPlayersBets, useGetTableAddress } from '@/src/lib/roulette/query';
+import { ETHSCAN } from '@/src/global.ts';
+import { useGetPlayerBets, useGetTableAddress, useGetTablePlayerRounds } from '@/src/lib/roulette/query';
 import type { PlayerBets } from '@/src/lib/roulette/types.ts';
-import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
-import Fox from '@betfinio/ui/dist/icons/Fox';
+import { ZeroAddress, truncateEthAddress } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
-import { ETHSCAN } from '@/src/global';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
@@ -19,29 +18,13 @@ import { WinAmountCell } from '../../shared/WinAmountCell';
 
 const columnHelper = createColumnHelper<PlayerBets>();
 
-export const AllBetsTable = () => {
+export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const [selected, setSelected] = useState<null | PlayerBets>(null);
 	const { tableAddress } = useGetTableAddress();
-	const { data: bets = [], isLoading } = useGetAllPlayersBets(50, tableAddress);
-
+	const { data: bets = [], isLoading } = useGetTablePlayerRounds(tableAddress || ZeroAddress);
 	const { isVertical } = useMediaQuery();
-
 	const columns = [
-		columnHelper.accessor('player', {
-			header: t('player'),
-			cell: (props) => (
-				<a
-					target={'_blank'}
-					rel={'noreferrer'}
-					href={`${ETHSCAN}/address/${props.getValue()}`}
-					className={'text-tertiary-foreground whitespace-nowrap flex gap-2'}
-				>
-					<Fox />
-					{truncateEthAddress(props.getValue())}
-				</a>
-			),
-		}),
 		columnHelper.accessor('bet', {
 			header: t('address'),
 			cell: (props) => (
@@ -52,13 +35,13 @@ export const AllBetsTable = () => {
 		}),
 		columnHelper.accessor('created', {
 			header: t('date'),
-			cell: (props) => <span className={''}>{DateTime.fromMillis(Number(props.getValue()) * 1000).toFormat('DD, T')}</span>,
+			cell: (props) => <span className={''}>{DateTime.fromMillis(Number(props.getValue()) * 1000).toFormat('DD, T:ss')}</span>,
 		}),
 		columnHelper.accessor('amount', {
 			header: t('amount'),
 			cell: (props) => (
 				<span className={' font-semibold'}>
-					<BetValue value={valueToNumber(props.getValue())} />
+					<BetValue value={props.getValue()} />
 				</span>
 			),
 		}),
@@ -74,20 +57,28 @@ export const AllBetsTable = () => {
 		columnHelper.display({
 			id: 'action',
 			header: '',
-			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
+			cell: (props) => (
+				<>
+					<Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />
+				</>
+			),
 		}),
 	] as ColumnDef<PlayerBets>[];
 	const columnsMobile = [
-		columnHelper.accessor('player', {
+		columnHelper.accessor('bet', {
 			header: t('address'),
-			cell: (props) => <span className={'text-tertiary-foreground whitespace-nowrap'}>{truncateEthAddress(props.getValue())}</span>,
+			cell: (props) => (
+				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary whitespace-nowrap'}>
+					{truncateEthAddress(props.getValue())}
+				</a>
+			),
 		}),
 
 		columnHelper.accessor('amount', {
 			header: t('amount'),
 			cell: (props) => (
 				<span className={' font-semibold'}>
-					<BetValue value={valueToNumber(props.getValue())} />
+					<BetValue value={props.getValue()} />
 				</span>
 			),
 		}),

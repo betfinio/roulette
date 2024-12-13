@@ -5,8 +5,8 @@ import { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useGetSinglePlayerTableAddress, useLocalBets, usePaytable } from '@/src/lib/roulette/query';
-import { ZeroAddress, valueToNumber } from '@betfinio/abi';
+import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/roulette/query';
+import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, Drawer, DrawerContent, DrawerTrigger } from '@betfinio/components/ui';
 import { useChatbot } from 'betfinio_app/chatbot';
@@ -14,7 +14,7 @@ import { useBalance } from 'betfinio_app/lib/query/token';
 import Paytable from '../Paytable/PayTable';
 import { BET_STATUS_HEADER } from './BetStatusHeader';
 
-export const BetStatusHeaderVertical = () => {
+export const BetStatusHeaderVertical: FC = () => {
 	const { t } = useTranslation('roulette');
 	const [showDrawer, setShowDrawer] = useState(false);
 	return (
@@ -46,7 +46,7 @@ interface IBetStatusHeaderVerticalDetailsProps {
 	onCloseDrawer: () => void;
 }
 export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsProps> = ({ onCloseDrawer }) => {
-	const { data: tableAddress } = useGetSinglePlayerTableAddress();
+	const { tableAddress } = useGetTableAddress();
 
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 	const { data: bets = [] } = useLocalBets();

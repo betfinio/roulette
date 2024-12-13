@@ -8,11 +8,10 @@ import { DesktopRoulette } from './DesktopRoulette';
 import { TabletRoulette } from './TabletRoulette';
 import { VerticalRoulette } from './VerticalRoulette';
 
-export const Roulette = () => {
+export const LiveRoulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
 	const { toast } = useToast();
 	const { tableAddress } = useGetTableAddress();
-
 	const { data: bets = [], isRefetching } = useGetPlayerBets(tableAddress);
 
 	const { state: wheelStateData } = useRouletteState();

@@ -1,13 +1,13 @@
 import logger from '@/src/config/logger';
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion, useAnimation } from 'framer-motion';
 import { PlayIcon } from 'lucide-react';
 import { useEffect } from 'react';
-import RouletteWheel from './RouletteWheel';
+import RouletteWheel from '../../shared/RouletteWheel';
 
 export const Wheel = () => {
 	const queryClient = useQueryClient();
@@ -15,8 +15,9 @@ export const Wheel = () => {
 
 	const { state: wheelStateData, updateState } = useRouletteState();
 	const status = wheelStateData.data.state;
+	const { tableAddress } = useGetTableAddress();
 
-	const { isFetched: isBetsFetched } = useGetPlayerBets();
+	const { isFetched: isBetsFetched } = useGetPlayerBets(tableAddress);
 	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
 
 	// Animation control

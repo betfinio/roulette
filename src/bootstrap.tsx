@@ -5,9 +5,16 @@ import { RouterProvider, createRouter } from '@tanstack/react-router';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
+import { queryClient, wagmiConfig } from 'betfinio_app/config';
 import { routeTree } from './routeTree.gen';
 
-const router = createRouter({ routeTree });
+const router = createRouter({
+	routeTree,
+	context: {
+		wagmiConfig,
+		queryClient,
+	},
+});
 
 // Render the app
 const rootElement = document.getElementById('root');

@@ -1,6 +1,7 @@
 import { ETHSCAN } from '@/src/global.ts';
 import { getColor } from '@/src/lib/roulette';
-import type { PlayerBets, RouletteBet } from '@/src/lib/roulette/types.ts';
+import { useGetTableAddress } from '@/src/lib/roulette/query';
+import type { PlayerBets } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
@@ -11,11 +12,15 @@ import { ShieldCheckIcon, X } from 'lucide-react';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import { AllBetsTable } from './AllBetsTable';
-import { MyBetsTable } from './MyBets';
+import { AllBetsTable as MultiplePlayerAllBetsTable } from '../live-roulette/History/AllBetsTable';
+import { MyBetsTable as MultiplePlayerMyBetsTable } from '../live-roulette/History/MyBets';
+import { AllBetsTable as SinglePlayerAllBetsTable } from '../roulette/History/AllBetsTable';
+import { MyBetsTable as SinglePlayerMyBetsTable } from '../roulette/History/MyBets';
 
 const History = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
+
+	const { isSingle } = useGetTableAddress();
 	return (
 		<Tabs defaultValue={'my'}>
 			<TabsList>
@@ -23,12 +28,8 @@ const History = () => {
 				<TabsTrigger value={'all'}>{t('allBets')}</TabsTrigger>
 			</TabsList>
 
-			<TabsContent value={'my'}>
-				<MyBetsTable />
-			</TabsContent>
-			<TabsContent value={'all'}>
-				<AllBetsTable />
-			</TabsContent>
+			<TabsContent value={'my'}>{isSingle ? <SinglePlayerMyBetsTable /> : <MultiplePlayerMyBetsTable />}</TabsContent>
+			<TabsContent value={'all'}>{isSingle ? <SinglePlayerAllBetsTable /> : <MultiplePlayerAllBetsTable />}</TabsContent>
 		</Tabs>
 	);
 };

@@ -2,20 +2,22 @@ import { AlertCircle, CircleAlert, CircleHelp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useGetSinglePlayerTableAddress, useLocalBets, usePaytable, usePotentialWin } from '@/src/lib/roulette/query';
-import { ZeroAddress, valueToNumber } from '@betfinio/abi';
+import { useGetSinglePlayerTableAddress, useGetTableAddress, useLocalBets, usePaytable, usePotentialWin } from '@/src/lib/roulette/query';
+import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, Separator } from '@betfinio/components/ui';
 import { Bag } from '@betfinio/ui/dist/icons';
 import { useChatbot } from 'betfinio_app/chatbot';
 import { useBalance } from 'betfinio_app/lib/query/token';
-import { useMemo } from 'react';
+import { type FC, useMemo } from 'react';
+import type { Address } from 'viem';
 import Paytable from '../Paytable/PayTable';
 import { BET_STATUS_HEADER } from './BetStatusHeader';
 
-export const BetStatusHeaderHorizontal = () => {
+export const BetStatusHeaderHorizontal: FC = () => {
 	const { t } = useTranslation('roulette');
-	const { data: tableAddress } = useGetSinglePlayerTableAddress();
+
+	const { tableAddress } = useGetTableAddress();
 
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 	const { maximize } = useChatbot();
@@ -25,7 +27,6 @@ export const BetStatusHeaderHorizontal = () => {
 
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 	const { data: bets = [] } = useLocalBets();
-	const { data: potentialWin = 1928234n * 10n ** 18n, isLoading } = usePotentialWin();
 
 	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
 
