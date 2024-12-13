@@ -20,6 +20,9 @@ export interface LocalBet {
 
 export interface SpinParams {
 	bets: LocalBet[];
+	tableAddress: Address; //table address
+	roundNumber: bigint; //round number
+	playerAddress: Address; //player address
 }
 
 export interface ChiPlaceProps {
@@ -60,4 +63,14 @@ export interface Limit {
 	payout: number;
 	min: bigint;
 	max: bigint;
+}
+
+export interface PlayerBets {
+	amount: bigint;
+	bet: Address;
+	created: bigint;
+	winNumber: number;
+	winAmount: bigint;
+	transactionHash: Address;
+	player: Address;
 }

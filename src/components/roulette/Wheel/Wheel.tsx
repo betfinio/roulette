@@ -1,16 +1,13 @@
-import { getWheelNumbers } from '@/src/lib/roulette';
-import { useRouletteBets, useRouletteState } from '@/src/lib/roulette/query';
-import { motion, useAnimation } from 'framer-motion';
-import { useEffect } from 'react';
-
 import logger from '@/src/config/logger';
+import { getWheelNumbers } from '@/src/lib/roulette';
+import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
-import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
+import { motion, useAnimation } from 'framer-motion';
 import { PlayIcon } from 'lucide-react';
-import { useAccount } from 'wagmi';
-import RouletteWheel from './RouletteWheel';
+import { useEffect } from 'react';
+import RouletteWheel from '../../shared/RouletteWheel';
 
 export const Wheel = () => {
 	const queryClient = useQueryClient();
@@ -18,10 +15,9 @@ export const Wheel = () => {
 
 	const { state: wheelStateData, updateState } = useRouletteState();
 	const status = wheelStateData.data.state;
+	const { tableAddress } = useGetTableAddress();
 
-	const { address = ZeroAddress } = useAccount();
-
-	const { data: bets = [], isFetched: isBetsFetched } = useRouletteBets(address);
+	const { isFetched: isBetsFetched } = useGetPlayerBets(tableAddress);
 	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
 
 	// Animation control
@@ -88,9 +84,12 @@ export const Wheel = () => {
 						ease: [0.165, 0.84, 0.44, 1.005],
 					},
 				})
-				.then(() => {
-					queryClient.invalidateQueries({ queryKey: ['roulette'] });
-					updateState({ state: 'landed' } as WheelState);
+				.then(async () => {
+					setTimeout(async () => {
+						queryClient.invalidateQueries({ queryKey: ['roulette'] });
+						await queryClient.refetchQueries({ queryKey: ['roulette', 'bets', 'player'] });
+						updateState({ state: 'landed' } as WheelState);
+					}, 1);
 				});
 
 			wheelControlsWrapper.start({

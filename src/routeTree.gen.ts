@@ -11,17 +11,13 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as RouletteImport } from './routes/roulette'
 import { Route as LiveRouletteImport } from './routes/live-roulette'
 import { Route as IndexImport } from './routes/index'
+import { Route as RouletteIndexImport } from './routes/roulette/index'
+import { Route as RouletteSingleIndexImport } from './routes/roulette/single/index'
+import { Route as RouletteLiveTableImport } from './routes/roulette/live/$table'
 
 // Create/Update Routes
-
-const RouletteRoute = RouletteImport.update({
-  id: '/roulette',
-  path: '/roulette',
-  getParentRoute: () => rootRoute,
-} as any)
 
 const LiveRouletteRoute = LiveRouletteImport.update({
   id: '/live-roulette',
@@ -32,6 +28,24 @@ const LiveRouletteRoute = LiveRouletteImport.update({
 const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RouletteIndexRoute = RouletteIndexImport.update({
+  id: '/roulette/',
+  path: '/roulette/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RouletteSingleIndexRoute = RouletteSingleIndexImport.update({
+  id: '/roulette/single/',
+  path: '/roulette/single/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const RouletteLiveTableRoute = RouletteLiveTableImport.update({
+  id: '/roulette/live/$table',
+  path: '/roulette/live/$table',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,11 +67,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LiveRouletteImport
       parentRoute: typeof rootRoute
     }
-    '/roulette': {
-      id: '/roulette'
+    '/roulette/': {
+      id: '/roulette/'
       path: '/roulette'
       fullPath: '/roulette'
-      preLoaderRoute: typeof RouletteImport
+      preLoaderRoute: typeof RouletteIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/roulette/live/$table': {
+      id: '/roulette/live/$table'
+      path: '/roulette/live/$table'
+      fullPath: '/roulette/live/$table'
+      preLoaderRoute: typeof RouletteLiveTableImport
+      parentRoute: typeof rootRoute
+    }
+    '/roulette/single/': {
+      id: '/roulette/single/'
+      path: '/roulette/single'
+      fullPath: '/roulette/single'
+      preLoaderRoute: typeof RouletteSingleIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -68,41 +96,67 @@ declare module '@tanstack/react-router' {
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/live-roulette': typeof LiveRouletteRoute
-  '/roulette': typeof RouletteRoute
+  '/roulette': typeof RouletteIndexRoute
+  '/roulette/live/$table': typeof RouletteLiveTableRoute
+  '/roulette/single': typeof RouletteSingleIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/live-roulette': typeof LiveRouletteRoute
-  '/roulette': typeof RouletteRoute
+  '/roulette': typeof RouletteIndexRoute
+  '/roulette/live/$table': typeof RouletteLiveTableRoute
+  '/roulette/single': typeof RouletteSingleIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/live-roulette': typeof LiveRouletteRoute
-  '/roulette': typeof RouletteRoute
+  '/roulette/': typeof RouletteIndexRoute
+  '/roulette/live/$table': typeof RouletteLiveTableRoute
+  '/roulette/single/': typeof RouletteSingleIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/live-roulette' | '/roulette'
+  fullPaths:
+    | '/'
+    | '/live-roulette'
+    | '/roulette'
+    | '/roulette/live/$table'
+    | '/roulette/single'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/live-roulette' | '/roulette'
-  id: '__root__' | '/' | '/live-roulette' | '/roulette'
+  to:
+    | '/'
+    | '/live-roulette'
+    | '/roulette'
+    | '/roulette/live/$table'
+    | '/roulette/single'
+  id:
+    | '__root__'
+    | '/'
+    | '/live-roulette'
+    | '/roulette/'
+    | '/roulette/live/$table'
+    | '/roulette/single/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LiveRouletteRoute: typeof LiveRouletteRoute
-  RouletteRoute: typeof RouletteRoute
+  RouletteIndexRoute: typeof RouletteIndexRoute
+  RouletteLiveTableRoute: typeof RouletteLiveTableRoute
+  RouletteSingleIndexRoute: typeof RouletteSingleIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LiveRouletteRoute: LiveRouletteRoute,
-  RouletteRoute: RouletteRoute,
+  RouletteIndexRoute: RouletteIndexRoute,
+  RouletteLiveTableRoute: RouletteLiveTableRoute,
+  RouletteSingleIndexRoute: RouletteSingleIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +171,9 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/live-roulette",
-        "/roulette"
+        "/roulette/",
+        "/roulette/live/$table",
+        "/roulette/single/"
       ]
     },
     "/": {
@@ -126,8 +182,14 @@ export const routeTree = rootRoute
     "/live-roulette": {
       "filePath": "live-roulette.tsx"
     },
-    "/roulette": {
-      "filePath": "roulette.tsx"
+    "/roulette/": {
+      "filePath": "roulette/index.tsx"
+    },
+    "/roulette/live/$table": {
+      "filePath": "roulette/live/$table.tsx"
+    },
+    "/roulette/single/": {
+      "filePath": "roulette/single/index.tsx"
     }
   }
 }

@@ -4,12 +4,14 @@ import { BetValue } from '@betfinio/components/shared';
 import { Link, X } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { Address } from 'viem';
 
 interface IPaytableProps {
 	onClose: () => void;
+	tableAddress?: Address;
 }
-const Paytable: FC<IPaytableProps> = ({ onClose }) => {
-	const { data: limits = [] } = useLimits();
+const Paytable: FC<IPaytableProps> = ({ onClose, tableAddress }) => {
+	const { data: limits = [] } = useLimits(tableAddress);
 	const { t } = useTranslation('roulette');
 	return (
 		<div className={'roulette bg-card games rounded-lg p-4 w-full text-foreground relative'}>
