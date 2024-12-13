@@ -1,5 +1,7 @@
 import instance from '@/src/i18n.ts';
 import { Toaster } from '@betfinio/components/ui';
+import 'betfinio_app/style';
+
 import { createRootRouteWithContext } from '@tanstack/react-router';
 import type { queryClient, wagmiConfig } from 'betfinio_app/config';
 import { Root } from 'betfinio_app/root';

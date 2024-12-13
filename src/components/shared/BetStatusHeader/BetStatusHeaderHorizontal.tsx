@@ -2,7 +2,7 @@ import { AlertCircle, CircleAlert, CircleHelp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useGetSinglePlayerTableAddress, useGetTableAddress, useLocalBets, usePaytable, usePotentialWin } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/roulette/query';
 import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, Separator } from '@betfinio/components/ui';
@@ -10,7 +10,6 @@ import { Bag } from '@betfinio/ui/dist/icons';
 import { useChatbot } from 'betfinio_app/chatbot';
 import { useBalance } from 'betfinio_app/lib/query/token';
 import { type FC, useMemo } from 'react';
-import type { Address } from 'viem';
 import Paytable from '../Paytable/PayTable';
 import { BET_STATUS_HEADER } from './BetStatusHeader';
 
@@ -39,36 +38,36 @@ export const BetStatusHeaderHorizontal: FC = () => {
 				<div className="flex gap-1 items-center">
 					<Bag className={'w-8 text-secondary-foreground'} />
 					<div>
-						<p>{t('winningPool')}</p>
-						<p className="font-bold">
+						<div>{t('winningPool')}</div>
+						<div className="font-bold">
 							<BetValue withIcon value={winningPool} />
-						</p>
+						</div>
 					</div>
 				</div>
 				<div>
-					<p>{t('maxPayout')}</p>
-					<p className="font-bold">
+					<div>{t('maxPayout')}</div>
+					<div className="font-bold">
 						<BetValue withIcon value={valueToNumber(maxPayout)} />
-					</p>
+					</div>
 				</div>
 			</div>
 			<Separator orientation="vertical" className="h-8" />
 			<div className="flex  gap-2 md:gap-9">
 				<div>
-					<p>{t('totalBet')}</p>
-					<p className="font-bold">
+					<div>{t('totalBet')}</div>
+					<div className="font-bold">
 						<BetValue withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
-					</p>
+					</div>
 				</div>
 				{/* <div className=" ">
-					<p>{t('payTable.potentialWin')}</p>
+					<div>{t('payTable.potentialWin')}</div>
 					<p
 						className={cn('font-bold', {
 							'blur-sm': isLoading,
 						})}
 					>
 						<BetValue withIcon value={valueToNumber(potentialWin)} />
-					</p>
+					</div>
 				</div> */}
 			</div>
 			<Separator orientation="vertical" className="h-8 mr-auto" />
@@ -91,7 +90,7 @@ export const BetStatusHeaderHorizontal: FC = () => {
 					rel="noreferrer"
 				>
 					<AlertCircle className={'w-6 h-6'} />
-					<p>{t('howToPlay')}</p>
+					<div>{t('howToPlay')}</div>
 				</a>
 
 				<Button
@@ -101,7 +100,7 @@ export const BetStatusHeaderHorizontal: FC = () => {
 					className={'flex-col text-secondary-foreground  text-xs flex justify-start font-normal items-center  '}
 				>
 					<CircleAlert className={'w-6 h-6'} />
-					<p>{t('report')}</p>
+					<div>{t('report')}</div>
 				</Button>
 			</div>
 		</div>

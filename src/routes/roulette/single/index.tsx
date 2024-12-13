@@ -2,11 +2,9 @@ import { Roulette } from '@/src/components/roulette/Roulette';
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { useRouletteState } from '@/src/lib/roulette/query';
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
+import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { QueryClient, QueryClientProvider } from 'react-query';
 import { useAccount, useWatchContractEvent } from 'wagmi';
-
-const queryClient = new QueryClient();
 
 export const Route = createFileRoute('/roulette/single/')({
 	component: RoulettePage,
@@ -28,6 +26,7 @@ function RoulettePage() {
 			}
 		},
 	});
+	const queryClient = useQueryClient();
 
 	useWatchContractEvent({
 		abi: LiveRouletteABI,

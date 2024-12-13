@@ -49,7 +49,7 @@ export const RoundModal: FC<{
 			}
 		>
 			<div className={'flex items-center justify-between px-4 sm:px-0'}>
-				<p>{t('bettingTicket')}</p>
+				<div>{t('bettingTicket')}</div>
 				<X
 					onClick={onClose}
 					className={'w-4 h-4 border border-current rounded-full cursor-pointer hover:text-red-roulette hover:border-red-roulette duration-200'}
@@ -57,7 +57,7 @@ export const RoundModal: FC<{
 			</div>
 
 			<div className={'mt-8'}>
-				<p className={'text-center'}>{t('winning')}</p>
+				<div className={'text-center'}>{t('winning')}</div>
 				<div className={'flex items-center justify-center gap-3'}>
 					<div
 						className={cn('font-semibold text-4xl text-tertiary-foreground flex gap-2', {
@@ -84,7 +84,7 @@ export const RoundModal: FC<{
 					<div className={'w-[1px] absolute left-[50%] -translate-x-[50%] h-full bg-border bg-opacity-10'} />
 
 					<div>
-						<p className={'text-center text-tertiary-foreground text-sm'}>{t('winNumber')}</p>
+						<div className={'text-center text-tertiary-foreground text-sm'}>{t('winNumber')}</div>
 						<div className={'flex mt-1 gap-1 items-center justify-center'}>
 							<div
 								className={cn(' min-w-[30px] min-h-[30px] rounded-lg flex justify-center font-semibold items-center text-xs', {
@@ -116,13 +116,13 @@ export const RoundModal: FC<{
 				>
 					{selectedBet?.bet}
 				</Link>
-				<p className={'text-center font-normal text-tertiary-foreground'}>
+				<div className={'text-center font-normal text-tertiary-foreground'}>
 					{DateTime.fromMillis(Number(selectedBet?.created) * 1000).toFormat('yyyy-MM-dd, HH:mm:ss Z')} UTC
-				</p>
+				</div>
 			</div>
 
 			<div className={'flex items-end justify-center gap-2 mt-5'}>
-				<p className={'text-tertiary-foreground font-semibold'}>{t('proofOfRandom')}</p>
+				<div className={'text-tertiary-foreground font-semibold'}>{t('proofOfRandom')}</div>
 				<ShieldCheckIcon className={'text-green-roulette w-5 h-5'} />
 				<a
 					href={`${ETHSCAN}/tx/${selectedBet?.transactionHash}`}

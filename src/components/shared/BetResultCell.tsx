@@ -1,9 +1,6 @@
 import { getColor } from '@/src/lib/roulette';
-import { useGetBetResultCell } from '@/src/lib/roulette/query';
 import { cn } from '@betfinio/components';
-import { Loader } from 'lucide-react';
 import type { FC } from 'react';
-import type { Address } from 'viem';
 
 interface BetResultCellProps {
 	winNumber: number;

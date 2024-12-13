@@ -23,7 +23,7 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 	};
 
 	const [incrementSpeed, setIncrementSpeed] = useState(1);
-	const intervalRef = useRef<NodeJS.Timeout | null>(null);
+	const intervalRef = useRef<NodeJS.Timer | null>(null);
 
 	const startIncrement = (direction: 'increase' | 'decrease') => {
 		if (intervalRef.current) return;

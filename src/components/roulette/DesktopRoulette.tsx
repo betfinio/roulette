@@ -1,4 +1,3 @@
-import { useGetTableAddress } from '@/src/lib/roulette/query';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';

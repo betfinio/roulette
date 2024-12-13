@@ -68,22 +68,22 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 		<div id={BET_STATUS_HEADER} className="roulette text-foreground  flex   justify-between h-full  mx-auto rounded-b-md px-4 py-2">
 			<div className="space-y-2">
 				<div>
-					<p>{t('winningPool')}</p>
-					<p className="font-bold">
+					<div>{t('winningPool')}</div>
+					<div className="font-bold">
 						<BetValue withIcon value={winningPool} />
-					</p>
+					</div>
 				</div>
 				<div>
-					<p>{t('maxPayout')}</p>
-					<p className="font-bold">
+					<div>{t('maxPayout')}</div>
+					<div className="font-bold">
 						<BetValue withIcon value={valueToNumber(maxPayout)} />
-					</p>
+					</div>
 				</div>
 				<div>
-					<p>{t('totalBet')}</p>
-					<p className="font-bold">
+					<div>{t('totalBet')}</div>
+					<div className="font-bold">
 						<BetValue withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
-					</p>
+					</div>
 				</div>
 			</div>
 			<div className=" gap-2 justify-around  flex flex-col">
@@ -106,12 +106,12 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 					rel="noreferrer"
 				>
 					<AlertCircle className={'w-6 h-6'} />
-					<p>{t('howToPlay')}</p>
+					<div>{t('howToPlay')}</div>
 				</a>
 
 				<Button onClick={handleReport} variant={'link'} className={' text-secondary-foreground  text-base flex justify-start items-center  gap-x-2'}>
 					<CircleAlert className={'w-6'} />
-					<p>{t('report')}</p>
+					<div>{t('report')}</div>
 				</Button>
 			</div>
 		</div>

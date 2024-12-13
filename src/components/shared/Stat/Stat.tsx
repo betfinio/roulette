@@ -1,6 +1,5 @@
 import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import { getColor } from '@/src/lib/roulette';
-import { useGetPlayerBets } from '@/src/lib/roulette/query';
 import type { PlayerBets } from '@/src/lib/roulette/types';
 import { motion } from 'framer-motion';
 import _ from 'lodash';

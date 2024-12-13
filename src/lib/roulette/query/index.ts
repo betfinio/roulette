@@ -17,7 +17,7 @@ import {
 	undoPlace,
 	unplace,
 } from '@/src/lib/roulette/api';
-import type { ChiPlaceProps, Limit, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
+import type { ChiPlaceProps, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
 import { toast } from '@betfinio/components/hooks';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -26,19 +26,10 @@ import { useDebounce } from '@uidotdev/usehooks';
 import type { WriteContractReturnType } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
 import { useTranslation } from 'react-i18next';
-import type { WriteContractErrorType } from 'viem';
-import type { Address } from 'viem';
+import type { Address, WriteContractErrorType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useConfig } from 'wagmi';
-import {
-	fetchAllPlayersBets,
-	fetchAllTableBets,
-	fetchPlayerBets,
-	fetchPlayerBetsByTable,
-	fetchTableAllRounds,
-	fetchTableBets,
-	fetchTablePlayerRounds,
-} from '../gql';
+import { fetchAllPlayersBets, fetchPlayerBets, fetchTableAllRounds, fetchTableBets, fetchTablePlayerRounds } from '../gql';
 
 export const useLocalBets = () => {
 	return useQuery({

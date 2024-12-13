@@ -2,8 +2,10 @@ import { Roulette } from '@/src/components/roulette/Roulette';
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { useRouletteState } from '@/src/lib/roulette/query';
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
+import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useAccount, useWatchContractEvent } from 'wagmi';
+
 export const Route = createFileRoute('/roulette/')({
 	component: RoulettePage,
 });
@@ -12,6 +14,7 @@ function RoulettePage() {
 	const { updateState } = useRouletteState();
 
 	const { address = ZeroAddress } = useAccount();
+	const queryClient = useQueryClient();
 
 	useWatchContractEvent({
 		abi: LiveRouletteABI,
@@ -38,7 +41,7 @@ function RoulettePage() {
 					result: Number(landedLogs[0].args.value),
 					bet: ZeroAddress,
 				});
-				queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
+				await queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 			}
 		},
 	});

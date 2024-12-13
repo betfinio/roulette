@@ -1,4 +1,4 @@
-import { getRequiredAllowance, testSpin } from '@/src/lib/roulette/api';
+import { getRequiredAllowance } from '@/src/lib/roulette/api';
 import { useGetCurrentRound, useGetTableAddress, useLocalBets, useRouletteState, useSubmitBet } from '@/src/lib/roulette/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';

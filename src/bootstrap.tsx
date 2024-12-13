@@ -1,11 +1,9 @@
 import './globals.css';
-import 'betfinio_app/style';
 import '@betfinio/components';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
+import { queryClient, wagmiConfig } from 'betfinio_app/config';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-
-import { queryClient, wagmiConfig } from 'betfinio_app/config';
 import { routeTree } from './routeTree.gen';
 
 const router = createRouter({

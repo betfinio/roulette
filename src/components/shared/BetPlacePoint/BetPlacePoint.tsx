@@ -2,6 +2,7 @@ import { useGetDebugMode } from '@/src/lib/roulette/query';
 import { cn } from '@betfinio/components';
 import type { FC } from 'react';
 import { BetChips } from '../BetChip/BetChips';
+
 export type PositionType = 'center' | 'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
 interface BetPlacePointProps {

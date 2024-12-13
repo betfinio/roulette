@@ -1,12 +1,12 @@
-import { PARTNER, PUBLIC_LIRO_ADDRESS, ROULETTE } from '@/src/global.ts';
+import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global.ts';
 import { encodeBet } from '@/src/lib/roulette';
-import type { ChiPlaceProps, Limit, LocalBet, SpinParams } from '@/src/lib/roulette/types.ts';
+import type { ChiPlaceProps, LocalBet, SpinParams } from '@/src/lib/roulette/types.ts';
 import { LiveRouletteABI, MultiPlayerTableABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import _ from 'lodash';
-import { encodeAbiParameters, parseAbiParameters } from 'viem';
 import type { Address } from 'viem';
+import { encodeAbiParameters, parseAbiParameters } from 'viem';
 import type { Config } from 'wagmi';
 
 export const fetchLocalBets = (): LocalBet[] => {
