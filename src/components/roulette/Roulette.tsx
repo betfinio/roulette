@@ -1,4 +1,4 @@
-import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetSPPlayerEndedRounds, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useState } from 'react';
@@ -13,7 +13,7 @@ export const Roulette = () => {
 	const { toast } = useToast();
 	const { tableAddress } = useGetTableAddress();
 
-	const { data: bets = [], isRefetching } = useGetPlayerBets(tableAddress);
+	const { data: bets = [], isRefetching } = useGetSPPlayerEndedRounds(tableAddress);
 
 	const { state: wheelStateData } = useRouletteState();
 	const status = wheelStateData.data.state;

@@ -1,5 +1,5 @@
-import { useGetAllPlayersBets, useGetTableAddress } from '@/src/lib/roulette/query';
-import type { PlayerBets } from '@/src/lib/roulette/types.ts';
+import { useGetSPEndedRounds, useGetTableAddress } from '@/src/lib/roulette/query';
+import type { TableBet } from '@/src/lib/roulette/types.ts';
 import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import Fox from '@betfinio/ui/dist/icons/Fox';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
@@ -17,13 +17,13 @@ import { BetResultCell } from '../../shared/BetResultCell';
 import { RoundModal } from '../../shared/HistoryTable';
 import { WinAmountCell } from '../../shared/WinAmountCell';
 
-const columnHelper = createColumnHelper<PlayerBets>();
+const columnHelper = createColumnHelper<TableBet>();
 
 export const AllBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
-	const [selected, setSelected] = useState<null | PlayerBets>(null);
+	const [selected, setSelected] = useState<null | TableBet>(null);
 	const { tableAddress } = useGetTableAddress();
-	const { data: bets = [], isLoading } = useGetAllPlayersBets(50, tableAddress);
+	const { data: bets = [], isLoading } = useGetSPEndedRounds(tableAddress, 50);
 
 	const { isVertical } = useMediaQuery();
 
@@ -76,7 +76,7 @@ export const AllBetsTable = () => {
 			header: '',
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
-	] as ColumnDef<PlayerBets>[];
+	] as ColumnDef<TableBet>[];
 	const columnsMobile = [
 		columnHelper.accessor('player', {
 			header: t('address'),
@@ -105,7 +105,7 @@ export const AllBetsTable = () => {
 			header: '',
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
-	] as ColumnDef<PlayerBets>[];
+	] as ColumnDef<TableBet>[];
 
 	if (bets.length === 0 && !isLoading) {
 		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;

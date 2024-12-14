@@ -1,6 +1,6 @@
 import logger from '@/src/config/logger';
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetSPPlayerEndedRounds, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,7 +17,7 @@ export const Wheel = () => {
 	const status = wheelStateData.data.state;
 	const { tableAddress } = useGetTableAddress();
 
-	const { isFetched: isBetsFetched } = useGetPlayerBets(tableAddress);
+	const { isFetched: isBetsFetched } = useGetSPPlayerEndedRounds(tableAddress);
 	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
 
 	// Animation control

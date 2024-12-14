@@ -1,4 +1,4 @@
-import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetMPEndedRounds, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useState } from 'react';
@@ -12,7 +12,7 @@ export const LiveRoulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
 	const { toast } = useToast();
 	const { tableAddress } = useGetTableAddress();
-	const { data: bets = [], isRefetching } = useGetPlayerBets(tableAddress);
+	const { data: bets = [], isRefetching } = useGetMPEndedRounds(tableAddress);
 
 	const { state: wheelStateData } = useRouletteState();
 	const status = wheelStateData.data.state;
@@ -20,7 +20,7 @@ export const LiveRoulette = () => {
 	const [lastShownBet, setLastShownBet] = useState<string>('');
 
 	useEffect(() => {
-		if (status === 'landed' && !isRefetching && bets[0].transactionHash !== lastShownBet) {
+		if (status === 'landed' && !isRefetching && bets[0]?.transactionHash !== lastShownBet) {
 			toast({
 				component: <RouletteResultToast rouletteBet={bets[0]} />,
 			});

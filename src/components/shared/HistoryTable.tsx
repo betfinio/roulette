@@ -1,7 +1,7 @@
 import { ETHSCAN } from '@/src/global.ts';
 import { getColor } from '@/src/lib/roulette';
 import { useGetTableAddress } from '@/src/lib/roulette/query';
-import type { PlayerBets } from '@/src/lib/roulette/types.ts';
+import type { TableBet } from '@/src/lib/roulette/types';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
@@ -37,7 +37,7 @@ const History = () => {
 export default History;
 
 export const RoundModal: FC<{
-	selectedBet: PlayerBets | null;
+	selectedBet: TableBet | null;
 	onClose: () => void;
 }> = ({ selectedBet, onClose }) => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });

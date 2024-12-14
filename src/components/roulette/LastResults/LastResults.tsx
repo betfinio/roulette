@@ -1,4 +1,4 @@
-import { useGetPlayerBets, useGetTableAddress } from '@/src/lib/roulette/query';
+import { useGetSPPlayerEndedRounds, useGetTableAddress } from '@/src/lib/roulette/query';
 import { cn } from '@betfinio/components';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
@@ -6,7 +6,8 @@ import { LastResultRow } from '../../shared/LastResultRow';
 
 export const LastResults = () => {
 	const { tableAddress } = useGetTableAddress();
-	const { data: playerBets = [], isFetched: isBetsFetched } = useGetPlayerBets(tableAddress);
+
+	const { data: playerBets = [], isFetched: isBetsFetched } = useGetSPPlayerEndedRounds(tableAddress);
 	const numbers = useMemo(() => (playerBets.length > 0 ? playerBets.map((r) => r.winNumber) : [1, 2, 3, 4, 5, 6, 0]), [playerBets]);
 
 	const lastSeven = useMemo(() => numbers.slice(0, 7).reverse(), [numbers]);

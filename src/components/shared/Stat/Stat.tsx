@@ -1,14 +1,13 @@
 import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import { getColor } from '@/src/lib/roulette';
-import { useGetPlayerBets } from '@/src/lib/roulette/query';
-import type { PlayerBets } from '@/src/lib/roulette/types';
+import type { PlayerBet, TableBet } from '@/src/lib/roulette/types';
 import { motion } from 'framer-motion';
 import _ from 'lodash';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface IStatProps {
-	bets: PlayerBets[];
+	bets: Array<PlayerBet | TableBet>;
 }
 export const Stat: FC<IStatProps> = ({ bets }) => {
 	const { t } = useTranslation('roulette');

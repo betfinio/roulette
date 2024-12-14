@@ -30,15 +30,7 @@ import type { WriteContractErrorType } from 'viem';
 import type { Address } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useConfig } from 'wagmi';
-import {
-	fetchAllPlayersBets,
-	fetchAllTableBets,
-	fetchPlayerBets,
-	fetchPlayerBetsByTable,
-	fetchTableAllRounds,
-	fetchTableBets,
-	fetchTablePlayerRounds,
-} from '../gql';
+import { fetchMPEndedRounds, fetchMPPlayerEndedRounds, fetchSPEndedRounds, fetchSPPlayerRounds } from '../gql';
 
 export const useLocalBets = () => {
 	return useQuery({
@@ -270,49 +262,6 @@ export const useRouletteNumbersState = () => {
 	return { state, updateState, isNumberHovered, isNumberSelected, onHoverNumbers, onLeaveHover };
 };
 
-export const useGetPlayerBets = (table?: Address) => {
-	const { address = ZeroAddress } = useAccount();
-	return useQuery({
-		queryKey: ['roulette', 'bets', 'player', address],
-		queryFn: () => fetchPlayerBets(address, table),
-		refetchOnWindowFocus: false,
-		enabled: !!table,
-	});
-};
-export const useGetTablePlayerRounds = (tableAddress?: Address) => {
-	const { address = ZeroAddress } = useAccount();
-	return useQuery({
-		queryKey: ['roulette', 'bets', 'player', address, tableAddress],
-		queryFn: () => fetchTablePlayerRounds(address, tableAddress),
-		refetchOnWindowFocus: false,
-		enabled: !!tableAddress,
-	});
-};
-export const useGetTableBets = (table?: Address) => {
-	return useQuery({
-		queryKey: ['roulette', 'bets', 'table', table],
-		queryFn: () => fetchTableBets(table),
-		refetchOnWindowFocus: false,
-		enabled: !!table,
-	});
-};
-export const useGetAllPlayersBets = (last: number, table?: Address) => {
-	return useQuery({
-		queryKey: ['roulette', 'bets', 'player', 'all'],
-		queryFn: () => fetchAllPlayersBets(last, table),
-		refetchOnWindowFocus: false,
-		enabled: !!table,
-	});
-};
-export const useGetTableRounds = (last: number, tableAddress?: Address) => {
-	return useQuery({
-		queryKey: ['roulette', 'bets', 'table', 'rounds', tableAddress],
-		queryFn: () => fetchTableAllRounds(last, tableAddress),
-		refetchOnWindowFocus: false,
-		enabled: !!tableAddress,
-	});
-};
-
 export const useGetSinglePlayerTableAddress = (enabled = true) => {
 	const config = useConfig();
 	return useQuery({
@@ -337,5 +286,43 @@ export const useGetCurrentRound = (tableAddress: Address) => {
 		queryKey: ['roulette', 'currentRound', tableAddress],
 		queryFn: () => fetchCurrentRoundOfTable(config, tableAddress),
 		refetchOnWindowFocus: false,
+	});
+};
+
+export const useGetSPPlayerEndedRounds = (tableAddress?: Address, last = 50) => {
+	const { address = ZeroAddress } = useAccount();
+	return useQuery({
+		queryKey: ['roulette', 'singlePlayer', 'ended', 'rounds', tableAddress, address, last],
+		queryFn: () => fetchSPPlayerRounds(address, tableAddress),
+		refetchOnWindowFocus: false,
+		enabled: !!tableAddress,
+	});
+};
+
+export const useGetSPEndedRounds = (tableAddress?: Address, last = 50) => {
+	return useQuery({
+		queryKey: ['roulette', 'singlePlayer', 'ended', 'rounds', tableAddress],
+		queryFn: () => fetchSPEndedRounds(tableAddress, last),
+		refetchOnWindowFocus: false,
+		enabled: !!tableAddress,
+	});
+};
+
+export const useGetMPPlayerEndedRounds = (tableAddress?: Address, last = 50) => {
+	const { address = ZeroAddress } = useAccount();
+	return useQuery({
+		queryKey: ['roulette', 'multiplayer', 'ended', 'rounds', tableAddress, address],
+		queryFn: () => fetchMPPlayerEndedRounds(address, tableAddress, last),
+		refetchOnWindowFocus: false,
+		enabled: !!tableAddress,
+	});
+};
+
+export const useGetMPEndedRounds = (tableAddress?: Address, last = 50) => {
+	return useQuery({
+		queryKey: ['roulette', 'multiplayer', 'ended', 'rounds', tableAddress],
+		queryFn: () => fetchMPEndedRounds(tableAddress, last),
+		refetchOnWindowFocus: false,
+		enabled: !!tableAddress,
 	});
 };

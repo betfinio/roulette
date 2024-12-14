@@ -1,7 +1,7 @@
 import { ETHSCAN } from '@/src/global.ts';
-import { useGetPlayerBets, useGetTableAddress, useGetTablePlayerRounds } from '@/src/lib/roulette/query';
-import type { PlayerBets } from '@/src/lib/roulette/types.ts';
-import { ZeroAddress, truncateEthAddress } from '@betfinio/abi';
+import { useGetMPPlayerEndedRounds, useGetTableAddress } from '@/src/lib/roulette/query';
+import type { PlayerBet } from '@/src/lib/roulette/types.ts';
+import { truncateEthAddress } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import { cn } from '@betfinio/components';
@@ -16,13 +16,13 @@ import { BetResultCell } from '../../shared/BetResultCell';
 import { RoundModal } from '../../shared/HistoryTable';
 import { WinAmountCell } from '../../shared/WinAmountCell';
 
-const columnHelper = createColumnHelper<PlayerBets>();
+const columnHelper = createColumnHelper<PlayerBet>();
 
 export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
-	const [selected, setSelected] = useState<null | PlayerBets>(null);
+	const [selected, setSelected] = useState<null | PlayerBet>(null);
 	const { tableAddress } = useGetTableAddress();
-	const { data: bets = [], isLoading } = useGetTablePlayerRounds(tableAddress || ZeroAddress);
+	const { data: bets = [], isLoading } = useGetMPPlayerEndedRounds(tableAddress);
 	const { isVertical } = useMediaQuery();
 	const columns = [
 		columnHelper.accessor('bet', {
@@ -63,7 +63,7 @@ export const MyBetsTable = () => {
 				</>
 			),
 		}),
-	] as ColumnDef<PlayerBets>[];
+	] as ColumnDef<PlayerBet>[];
 	const columnsMobile = [
 		columnHelper.accessor('bet', {
 			header: t('address'),
@@ -96,7 +96,7 @@ export const MyBetsTable = () => {
 			header: '',
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
-	] as ColumnDef<PlayerBets>[];
+	] as ColumnDef<PlayerBet>[];
 
 	if (bets.length === 0 && !isLoading) {
 		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;

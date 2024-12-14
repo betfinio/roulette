@@ -1,25 +1,10 @@
-query GetSinglePlayerLastResults($player: Bytes) {
-  randomGenerateds(where: { player: $player }, orderBy: blockTimestamp, orderDirection: desc, first: 7) {
-    result
-    blockNumber
-    id
-    blockTimestamp
-  }
-}
-
-query GetPlayerBets($player: Bytes, $table: Bytes, $first: Int) {
-  betEndeds(where: { player: $player, table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $first) {
-    amount
-    player
-    blockTimestamp
-    bet
-    winAmount
-    winNumber
-    transactionHash
-  }
-}
-query GetTableBets($table: Bytes, $first: Int) {
-  betEndeds(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $first) {
+query GetTableMpPlayerRounds($table: Bytes, $player: Bytes, $last: Int) {
+  playerRoundEndeds(
+    where: { table: $table, player: $player }
+    orderBy: blockTimestamp
+    orderDirection: desc
+    first: $last
+  ) {
     amount
     player
     blockTimestamp
@@ -30,18 +15,7 @@ query GetTableBets($table: Bytes, $first: Int) {
   }
 }
 
-query GetAllPlayerBets($last: Int,$table: Bytes) {
-  betEndeds(where: { table: $table },orderBy: blockTimestamp, orderDirection: desc, first: $last) {
-    amount
-    player
-    blockTimestamp
-    bet
-    winAmount
-    winNumber
-    transactionHash
-  }
-}
-query GetTableAllRounds($last: Int, $table: Bytes) {
+query GetTableMpEndedRounds($table: Bytes, $last: Int) {
   roundEndeds(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $last) {
     amount
     player
@@ -52,8 +26,20 @@ query GetTableAllRounds($last: Int, $table: Bytes) {
     transactionHash
   }
 }
-query GetTablePlayerRounds($table: Bytes, $player: Bytes) {
-  roundEndeds(where: { table: $table, player: $player }, orderBy: blockTimestamp, orderDirection: desc) {
+
+query GetTableSpPlayerRounds($table: Bytes, $player: Bytes, $last: Int) {
+  betEndeds(where: { table: $table, player: $player }, orderBy: blockTimestamp, orderDirection: desc, first: $last) {
+    amount
+    player
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    transactionHash
+  }
+}
+query GetTableSpEndedRounds($table: Bytes, $last: Int) {
+  betEndeds(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $last) {
     amount
     player
     blockTimestamp

@@ -19,7 +19,6 @@ export const SubmitBet: FC = () => {
 
 	const { isSingle, tableAddress } = useGetTableAddress();
 	const { data: currentRound } = useGetCurrentRound(tableAddress || ZeroAddress);
-	console.log(currentRound, 'currentRound');
 	const { address = ZeroAddress } = useAccount();
 	const { data: isMember = false } = useIsMember(address);
 	const { requestAllowance } = useAllowanceModal();
@@ -68,13 +67,13 @@ export const SubmitBet: FC = () => {
 
 	return (
 		<>
-			{/* {" "}
-      <div>
-        current round: <input className="bg-transparent" value={Number(currentRound)} />
-      </div>
-      <button type="button" onClick={() => testSpin(config, tableAddress, 28900796n)}>
-        test
-      </button> */}
+			{' '}
+			<div>
+				current round: <input className="bg-transparent" value={Number(currentRound)} />
+			</div>
+			<button type="button" onClick={() => testSpin(config, tableAddress, 5780463n)}>
+				test
+			</button>
 			<Button
 				className="w-full uppercase text-xl px-8 relative"
 				onClick={handleSpin}

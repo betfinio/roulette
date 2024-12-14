@@ -65,7 +65,16 @@ export interface Limit {
 	max: bigint;
 }
 
-export interface PlayerBets {
+export interface PlayerBet {
+	amount: bigint;
+	bet: Address;
+	created: bigint;
+	winNumber: number;
+	winAmount: bigint;
+	transactionHash: Address;
+	player: Address;
+}
+export interface TableBet {
 	amount: bigint;
 	bet: Address;
 	created: bigint;
