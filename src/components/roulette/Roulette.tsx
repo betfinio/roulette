@@ -21,7 +21,8 @@ export const Roulette = () => {
 	const [lastShownBet, setLastShownBet] = useState<string>('');
 
 	useEffect(() => {
-		if (status === 'landed' && !isRefetching && bets[0].transactionHash !== lastShownBet) {
+		console.log(wheelStateData.data);
+		if (status === 'landed' && !isRefetching && wheelStateData.data.bet) {
 			toast({
 				component: <RouletteResultToast rouletteBet={bets[0]} />,
 			});
@@ -31,13 +32,12 @@ export const Roulette = () => {
 
 			setLastShownBet(bets[0].transactionHash || '');
 		}
-
 		if (status === 'spinning') {
 			document.getElementById(BET_STATUS_HEADER)?.scrollIntoView({
 				behavior: 'smooth',
 			});
 		}
-	}, [status, isRefetching]);
+	}, [wheelStateData, isRefetching]);
 
 	useEffect(() => {
 		if (!lastShownBet && bets[0]) {

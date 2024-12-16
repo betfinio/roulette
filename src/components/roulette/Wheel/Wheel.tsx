@@ -1,4 +1,3 @@
-import logger from '@/src/config/logger';
 import { getWheelNumbers } from '@/src/lib/roulette';
 import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
@@ -85,11 +84,9 @@ export const Wheel = () => {
 					},
 				})
 				.then(async () => {
-					setTimeout(async () => {
-						queryClient.invalidateQueries({ queryKey: ['roulette'] });
-						await queryClient.refetchQueries({ queryKey: ['roulette', 'bets', 'player'] });
-						updateState({ state: 'landed' } as WheelState);
-					}, 1);
+					queryClient.invalidateQueries({ queryKey: ['roulette'] });
+					await queryClient.refetchQueries({ queryKey: ['roulette', 'bets', 'player'] });
+					updateState({ state: 'landed' } as WheelState);
 				});
 
 			wheelControlsWrapper.start({
@@ -116,8 +113,6 @@ export const Wheel = () => {
 			});
 		}
 	}, [status, wheelControls]);
-
-	logger.log(status, 'status!');
 
 	return (
 		<>

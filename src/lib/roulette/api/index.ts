@@ -1,7 +1,8 @@
 import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global.ts';
 import { encodeBet } from '@/src/lib/roulette';
-import type { ChiPlaceProps, LocalBet, SpinParams } from '@/src/lib/roulette/types.ts';
+import type { ChiPlaceProps, LocalBet, PlayerBets, SpinParams } from '@/src/lib/roulette/types.ts';
 import { LiveRouletteABI, MultiPlayerTableABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
+import { LiroBetABI } from '@betfinio/abi/dist/contracts/LiroBet';
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import _ from 'lodash';
@@ -197,6 +198,23 @@ export const fetchSinglePlayerAddress = async (config: Config) => {
 		address: PUBLIC_LIRO_ADDRESS,
 		functionName: 'singlePlayerTable',
 	});
+	return result;
+};
+
+export const fetchBetByAddress = async (address: Address, config: Config): Promise<PlayerBets> => {
+	const betInfo = await readContract(config, {
+		abi: LiroBetABI,
+		address: address,
+		functionName: 'getBetInfo',
+		args: [],
+	});
+	const winNumber = await readContract(config, {
+		abi: LiroBetABI,
+		address: address,
+		functionName: 'winNumber',
+		args: [],
+	});
+	const result = {} as PlayerBets;
 	return result;
 };
 

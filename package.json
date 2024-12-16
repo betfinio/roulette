@@ -13,7 +13,7 @@
 		"build:schema:dev": "dotenv -e .env.development.local -- graphclient build",
 		"build:schema:prod": "dotenv -e .env.production.local -- graphclient build",
 		"secret:dev": "bun run secret.ts -- development dev",
-		"secret:prod": "bun run secret.ts -- production prod/io"
+		"secret:prod": "bun run secret.ts -- production prod/gg"
 	},
 	"dependencies": {
 		"@betfinio/abi": "^2.3.3",

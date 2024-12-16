@@ -80,7 +80,6 @@ export const useLimits = (tableAddress?: Address) => {
 };
 
 export const useRouletteState = () => {
-	const { address = ZeroAddress } = useAccount();
 	const queryClient = useQueryClient();
 	const state = useQuery<WheelState>({
 		queryKey: ['roulette', 'state'],
