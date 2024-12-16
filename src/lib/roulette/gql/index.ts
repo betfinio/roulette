@@ -9,10 +9,12 @@ import {
 	type GetTableBetsQuery,
 	GetTablePlayerRoundsDocument,
 	type GetTablePlayerRoundsQuery,
+	GetTableSelectedRoundBetsDocument,
+	type GetTableSelectedRoundBetsQuery,
 	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
-import type { PlayerBets } from '@/src/lib/roulette/types.ts';
+import type { PlayerBets, RoundBet } from '@/src/lib/roulette/types.ts';
 import type { ExecutionResult } from 'graphql/execution';
 import type { Address } from 'viem';
 
@@ -113,6 +115,25 @@ export const fetchTableAllRounds = async (last: number, table?: Address) => {
 				winNumber: Number(bet.winNumber),
 				player: bet.player as Address,
 			} as PlayerBets;
+		});
+	}
+	return [];
+};
+
+export const fetchTableSelectedRoundBets = async (table?: Address, round?: number) => {
+	if (table === undefined || round === undefined) return [];
+
+	const data: ExecutionResult<GetTableSelectedRoundBetsQuery> = await execute(GetTableSelectedRoundBetsDocument, { table, round });
+	if (data.data) {
+		return data.data.betPlaceds.map((bet) => {
+			return {
+				amount: BigInt(bet.amount),
+				bet: bet.bet as Address,
+				created: bet.blockTimestamp,
+				transactionHash: bet.transactionHash,
+
+				player: bet.player as Address,
+			} as RoundBet;
 		});
 	}
 	return [];

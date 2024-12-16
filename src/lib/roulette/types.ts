@@ -74,3 +74,12 @@ export interface PlayerBets {
 	transactionHash: Address;
 	player: Address;
 }
+
+export interface RoundBet {
+	amount: bigint;
+	bet: Address;
+	created: bigint;
+
+	transactionHash: Address;
+	player: Address;
+}

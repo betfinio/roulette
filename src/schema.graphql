@@ -30,8 +30,8 @@ query GetTableBets($table: Bytes, $first: Int) {
   }
 }
 
-query GetAllPlayerBets($last: Int,$table: Bytes) {
-  betEndeds(where: { table: $table },orderBy: blockTimestamp, orderDirection: desc, first: $last) {
+query GetAllPlayerBets($last: Int, $table: Bytes) {
+  betEndeds(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $last) {
     amount
     player
     blockTimestamp
@@ -61,5 +61,16 @@ query GetTablePlayerRounds($table: Bytes, $player: Bytes) {
     winAmount
     winNumber
     transactionHash
+  }
+}
+
+query GetTableSelectedRoundBets($table: Bytes, $round: BigInt) {
+  betPlaceds(where: { table: $table, round: $round }, orderBy: blockTimestamp, orderDirection: desc) {
+    amount
+    player
+    blockTimestamp
+    bet
+    transactionHash
+    
   }
 }

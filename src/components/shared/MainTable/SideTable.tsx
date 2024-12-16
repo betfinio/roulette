@@ -5,7 +5,7 @@ import { useMediaQuery } from '@betfinio/components/hooks';
 import type { FC } from 'react';
 import TableItem from '../TableItem';
 
-const sideItemsConfig = {
+export const sideItemsConfig = {
 	'1 to 18': {
 		centerSelection: numbersVertical.slice(0, 18),
 		className: 'bg-card',
@@ -32,7 +32,7 @@ const sideItemsConfig = {
 	},
 };
 
-const dozenItemsConfig = {
+export const dozenItemsConfig = {
 	'1 to 12': {
 		centerSelection: numbersVertical.slice(0, 12),
 		className: 'bg-card',

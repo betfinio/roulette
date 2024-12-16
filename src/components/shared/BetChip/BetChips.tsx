@@ -1,19 +1,27 @@
 import { getChipColor } from '@/src/lib/roulette';
-import { useGetChipsForPosition } from '@/src/lib/roulette/query';
+import { useGetChipsForPosition, useRouletteOtherBetsState } from '@/src/lib/roulette/query';
 import millify from 'millify';
-import type { FC } from 'react';
+import { type FC, useMemo } from 'react';
 
 interface BetChipsProps {
 	positionId: string;
 }
 export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 	const { data: chips } = useGetChipsForPosition(positionId);
-	if (chips === undefined) return null;
-	const totalOffset = chips.length * 2;
+	const { state } = useRouletteOtherBetsState();
+
+	const chipsToShow = useMemo(() => {
+		if (state.data.selectedBetChips) {
+			return state.data.selectedBetChips.filter((chip) => chip.item === positionId);
+		}
+		return chips;
+	}, [chips, state]);
+	if (chipsToShow === undefined) return null;
+	const totalOffset = chipsToShow.length * 2;
 	const startOffset = totalOffset / 2;
 
-	return chips.map((chip, index) => {
-		const zIndex = chips.length + index + 1;
+	return chipsToShow.map((chip, index) => {
+		const zIndex = chipsToShow.length + index + 1;
 		const offset = (index + 1) * 2;
 		const xOffset = offset - startOffset;
 		const yOffset = offset - startOffset;

@@ -4,6 +4,7 @@ import {
 	changeChip,
 	clearAllBets,
 	doublePlace,
+	fetchBetsBitMapAndAmount,
 	fetchChipsByPosition,
 	fetchCurrentRoundOfTable,
 	fetchDebugMode,
@@ -17,11 +18,12 @@ import {
 	undoPlace,
 	unplace,
 } from '@/src/lib/roulette/api';
-import type { ChiPlaceProps, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
+import type { ChiPlaceProps, LocalBet, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
+import { Route } from '@/src/routes/roulette/live/$table';
 import { ZeroAddress } from '@betfinio/abi';
 import { toast } from '@betfinio/components/hooks';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useParams } from '@tanstack/react-router';
+import { useParams, useSearch } from '@tanstack/react-router';
 import { useDebounce } from '@uidotdev/usehooks';
 import type { WriteContractReturnType } from '@wagmi/core';
 import { getTransactionLink } from 'betfinio_app/helpers';
@@ -29,7 +31,7 @@ import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useConfig } from 'wagmi';
-import { fetchAllPlayersBets, fetchPlayerBets, fetchTableAllRounds, fetchTableBets, fetchTablePlayerRounds } from '../gql';
+import { fetchAllPlayersBets, fetchPlayerBets, fetchTableAllRounds, fetchTableBets, fetchTablePlayerRounds, fetchTableSelectedRoundBets } from '../gql';
 
 export const useLocalBets = () => {
 	return useQuery({
@@ -152,7 +154,7 @@ export const useSubmitBet = () => {
 			});
 			await waitForTransactionReceipt(config.getClient(), { hash: data });
 			update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
-			//	await queryClient.invalidateQueries({ queryKey: ['roulette'] });
+			await queryClient.invalidateQueries({ queryKey: ['roulette'] });
 		},
 	});
 };
@@ -329,4 +331,44 @@ export const useGetCurrentRound = (tableAddress: Address) => {
 		queryFn: () => fetchCurrentRoundOfTable(config, tableAddress),
 		refetchOnWindowFocus: false,
 	});
+};
+
+export const useGetTableSelectedRoundBets = (tableAddress?: Address, round?: number) => {
+	return useQuery({
+		queryKey: ['roulette', 'table', 'bets', tableAddress, round],
+		queryFn: () => fetchTableSelectedRoundBets(tableAddress, round),
+		refetchOnWindowFocus: false,
+		enabled: !!tableAddress && !!round,
+	});
+};
+
+export const useGetSelectedRound = () => {
+	const search = useSearch({ strict: false });
+
+	console.log(search, 'search');
+	const round = search?.round ? Number(search.round) : undefined;
+	return round;
+};
+
+export const useGetBetAmountAndBitMap = (bet: Address) => {
+	const config = useConfig();
+	return useMutation<LocalBet[], Error, Address>({
+		mutationKey: ['roulette', 'bet', 'amount', 'bitmap', bet],
+		mutationFn: () => fetchBetsBitMapAndAmount(config, bet),
+	});
+};
+
+export const useRouletteOtherBetsState = () => {
+	const queryClient = useQueryClient();
+	const state = useQuery<{ selectedBetChips: LocalBet[] | null }>({
+		queryKey: ['roulette', 'selectedBetChips'],
+		initialData: { selectedBetChips: null },
+		refetchOnWindowFocus: false,
+	});
+	const updateState = (props: { selectedBetChips: LocalBet[] | null }) => {
+		queryClient.setQueryData(['roulette', 'selectedBetChips'], { ...state.data, ...props });
+		queryClient.refetchQueries({ queryKey: ['roulette', 'local', 'bets'] });
+	};
+
+	return { state, updateState };
 };

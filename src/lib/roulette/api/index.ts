@@ -1,7 +1,7 @@
 import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global.ts';
-import { encodeBet } from '@/src/lib/roulette';
+import { decodeBet, encodeBet } from '@/src/lib/roulette';
 import type { ChiPlaceProps, LocalBet, SpinParams } from '@/src/lib/roulette/types.ts';
-import { LiveRouletteABI, MultiPlayerTableABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
+import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import _ from 'lodash';
@@ -177,6 +177,7 @@ export const changeChip = async ({ amount }: { amount: number }) => {
 
 export const fetchDebugMode = (): boolean => {
 	const data = localStorage.getItem('roulette-debug');
+
 	if (!data) {
 		return false;
 	}
@@ -234,6 +235,25 @@ export const testSpin = async (config: Config, tableAddress: Address, round: big
 		functionName: 'spin',
 		args: [tableAddress, round],
 	});
+};
 
-	console.log(result, 'result');
+export const fetchCurrentRound = async (config: Config, tableAddress: Address) => {
+	const result = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: tableAddress,
+		functionName: 'getCurrentRound',
+	});
+	return result;
+};
+
+export const fetchBetsBitMapAndAmount = async (config: Config, betAddress: Address) => {
+	const result = await readContract(config, {
+		abi: LiroBetABI,
+		address: betAddress,
+		functionName: 'getBets',
+	});
+
+	const formattedResult = result[0].map((res, index) => ({ amount: res, bitmap: result[1][index] })).map(decodeBet);
+	console.log(formattedResult, 'formattedResult');
+	return formattedResult;
 };

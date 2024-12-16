@@ -3,27 +3,7 @@ import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import type { FC } from 'react';
 import TableItem from '../TableItem';
-
-const getCenterSelectionForExtraItem = (index: number, isVertical: boolean): number[] => {
-	const numbersVertical = Array.from({ length: 36 }, (_, index) => index + 1);
-
-	if (isVertical) {
-		if (index === 0) {
-			return numbersVertical.filter((n) => (n - 1) % 3 === 0);
-		}
-		if (index === 1) {
-			return numbersVertical.filter((n) => (n - 2) % 3 === 0);
-		}
-		return numbersVertical.filter((n) => n % 3 === 0);
-	}
-	if (index === 0) {
-		return [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36];
-	}
-	if (index === 1) {
-		return [2, 5, 8, 11, 14, 17, 20, 23, 26, 29, 32, 35];
-	}
-	return [1, 4, 7, 10, 13, 16, 19, 22, 25, 28, 31, 34];
-};
+import { tableExtraConfigHorizontal, tableExtraConfigVertical } from './tableExtraItemsConfig';
 
 export const ExtraItems: FC = () => {
 	const { mutate: place } = usePlace();
@@ -39,7 +19,7 @@ export const ExtraItems: FC = () => {
 					key={item}
 					number={item}
 					isVertical={isVertical}
-					centerSelection={getCenterSelectionForExtraItem(index, isVertical)}
+					{...(isVertical ? tableExtraConfigVertical[item] : tableExtraConfigHorizontal[item])}
 					onHoverNumbers={onHoverNumbers}
 					onLeaveHover={onLeaveHover}
 					onClick={(position, relatedNumbers) =>

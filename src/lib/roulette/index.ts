@@ -1,3 +1,4 @@
+import type { TableConfigHorizontalItem } from '@/src/components/shared/MainTable/tableConfigHorizontal';
 import type { LocalBet } from '@/src/lib/roulette/types.ts';
 import type { Address } from 'viem';
 
@@ -7,6 +8,31 @@ export function encodeBet(bet: LocalBet) {
 	}, 0n);
 
 	return { amount: BigInt(bet.amount) * 10n ** 18n, bitmap: value };
+}
+
+export function decodeBet(encoded: { amount: bigint; bitmap: bigint }): LocalBet {
+	// Decode numbers from the bitmap
+	const numbers: number[] = [];
+	let bitmap = encoded.bitmap;
+	let index = 0;
+
+	while (bitmap > 0n) {
+		if (bitmap & 1n) {
+			numbers.push(index); // Add the current bit position to the numbers array
+		}
+		bitmap >>= 1n; // Shift bitmap to the right
+		index++;
+	}
+
+	// Decode amount (convert from WEI to original amount)
+	const amount = Number(encoded.amount / 10n ** 18n);
+
+	// Reconstruct the LocalBet object
+	return {
+		numbers,
+		amount,
+		item: '', // Placeholder since item isn't encoded in the original representation
+	};
 }
 
 export function getColor(num: number): 'RED' | 'BLACK' | 'GREEN' {
@@ -144,3 +170,29 @@ export const formatTime = (milliseconds: number): string => {
 	const seconds = (totalSeconds % 60).toString().padStart(2, '0');
 	return `${minutes}:${seconds}`;
 };
+
+export function fillItems(bets: LocalBet[], tableConfig: { [key: string]: TableConfigHorizontalItem }): LocalBet[] {
+	return bets.map((bet) => {
+		let item = '';
+
+		for (const [key, config] of Object.entries(tableConfig)) {
+			for (const [selectionKey, selectionArray] of Object.entries(config)) {
+				// Skip non-selection keys (like `className`)
+				if (!selectionKey.endsWith('Selection')) continue;
+
+				// Check if `numbers` matches the current selection array
+				if (bet.numbers.length === selectionArray.length && bet.numbers.every((num, idx) => num === selectionArray[idx])) {
+					// Remove "Selection" and build the item string
+					const cleanedKey = selectionKey.replace('Selection', '');
+					item = `${key}-${cleanedKey}`;
+					break;
+				}
+			}
+
+			if (item) break; // Stop searching if item is already found
+		}
+
+		// Return the bet with the updated item
+		return { ...bet, item };
+	});
+}
