@@ -11,10 +11,14 @@ import {
 	type GetTablePlayerRoundsQuery,
 	GetTableSelectedRoundBetsDocument,
 	type GetTableSelectedRoundBetsQuery,
+	GetTransactionHashByBetDocument,
+	type GetTransactionHashByBetQuery,
 	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
 import type { PlayerBets, RoundBet } from '@/src/lib/roulette/types.ts';
+import { ZeroAddress } from '@betfinio/abi';
+
 import type { ExecutionResult } from 'graphql/execution';
 import type { Address } from 'viem';
 
@@ -32,6 +36,7 @@ export const fetchPlayerBets = async (player: Address, table?: Address) => {
 				transactionHash: bet.transactionHash,
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
+				player: bet.player as Address,
 			} as PlayerBets;
 		});
 	}
@@ -52,6 +57,7 @@ export const fetchTableBets = async (table?: Address) => {
 				transactionHash: bet.transactionHash,
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
+				player: bet.player as Address,
 			} as PlayerBets;
 		});
 	}
@@ -81,7 +87,6 @@ export const fetchAllPlayersBets = async (last: number, table?: Address) => {
 export const fetchTablePlayerRounds = async (player: Address, table?: Address) => {
 	if (table === undefined) return [];
 
-	console.log(fetchTablePlayerRounds, 'fetchTablePlayerRounds');
 	logger.start('fetching bets by player', player);
 	const data: ExecutionResult<GetTablePlayerRoundsQuery> = await execute(GetTablePlayerRoundsDocument, { player, table });
 	logger.success('fetching bets by player', data.data?.roundEndeds.length);
@@ -94,6 +99,7 @@ export const fetchTablePlayerRounds = async (player: Address, table?: Address) =
 				transactionHash: bet.transactionHash,
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
+				player: bet.player as Address,
 			} as PlayerBets;
 		});
 	}
@@ -137,4 +143,13 @@ export const fetchTableSelectedRoundBets = async (table?: Address, round?: numbe
 		});
 	}
 	return [];
+};
+export const fetchTransactionHashByBet = async (bet: Address) => {
+	logger.start('fetching transaction hash by bet', bet);
+	const data: ExecutionResult<GetTransactionHashByBetQuery> = await execute(GetTransactionHashByBetDocument, { bet });
+	logger.success('fetching transaction hash by bet', data.data?.betEndeds.length);
+	if (data.data) {
+		return data.data.betEndeds[0].transactionHash as Address;
+	}
+	return ZeroAddress;
 };

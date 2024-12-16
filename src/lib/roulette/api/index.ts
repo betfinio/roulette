@@ -1,12 +1,14 @@
 import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global.ts';
 import { decodeBet, encodeBet } from '@/src/lib/roulette';
-import type { ChiPlaceProps, LocalBet, SpinParams } from '@/src/lib/roulette/types.ts';
+import type { ChiPlaceProps, LocalBet, PlayerBet, SpinParams } from '@/src/lib/roulette/types.ts';
 import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
+
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import _ from 'lodash';
 import type { Address } from 'viem';
-import { encodeAbiParameters, parseAbiParameters } from 'viem';
+import { encodeAbiParameters, parseAbiItem, parseAbiParameters } from 'viem';
+import { getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
 
 export const fetchLocalBets = (): LocalBet[] => {
@@ -256,4 +258,38 @@ export const fetchBetsBitMapAndAmount = async (config: Config, betAddress: Addre
 	const formattedResult = result[0].map((res, index) => ({ amount: res, bitmap: result[1][index] })).map(decodeBet);
 	console.log(formattedResult, 'formattedResult');
 	return formattedResult;
+};
+export const fetchTableBetByBlockHash = async (config: Config, blockHash: Address, tableAddress?: Address) => {
+	if (!tableAddress) return;
+	const logs = await getLogs(config.getClient(), {
+		address: tableAddress,
+		event: parseAbiItem('event BetEnded(address indexed bet, uint256 indexed round, uint256 value, uint256 winAmount)'),
+		args: {
+			round: BigInt(0),
+		},
+		blockHash: blockHash,
+	});
+
+	const betAddress = logs[0].args.bet as Address;
+	const betInfo = await readContract(config, {
+		abi: LiroBetABI,
+		address: betAddress,
+		functionName: 'getBetInfo',
+		args: [],
+	});
+	const winNumber = await readContract(config, {
+		abi: LiroBetABI,
+		address: betAddress,
+		functionName: 'winNumber',
+		args: [],
+	});
+
+	const [, , amount, winAmount, , created] = betInfo;
+	return {
+		amount,
+		bet: betAddress,
+		created,
+		winNumber: Number(winNumber),
+		winAmount,
+	} as PlayerBet;
 };
