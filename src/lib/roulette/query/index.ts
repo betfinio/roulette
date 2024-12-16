@@ -336,7 +336,7 @@ export const useFetchTableBetByBlockHash = () => {
 
 	const { tableAddress } = useGetTableAddress();
 	return useMutation({
-		mutationKey: ['roulette', 'fetchTableBetByBlockHash'],
+		mutationKey: ['roulette', 'bet', 'blockHash'],
 		mutationFn: (blockHash: Address) => fetchTableBetByBlockHash(config, blockHash, tableAddress),
 	});
 };
