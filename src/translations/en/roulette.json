@@ -76,10 +76,35 @@
 	},
 	"errors": {
 		"invalidAmount": "Invalid amount",
-		"only5Chips": "You can only place 5 chips"
+		"only5Chips": "You can only place 5 chips",
+		"LB01": "Invalid bet",
+		"LR01": "Invalid calles",
+		"LR02": "Invalid amount",
+		"LR03": "Table do not exists",
+		"LR04": "Invalid table id",
+		"LR05": "Invalid interval",
+		"LR06": "Round mismatch",
+		"LR07": "Transfer failed",
+		"LR09": "Invalid bitmap length",
+		"MP01": "Invalid round",
+		"MP02": "Invalid table",
+		"MP03": "Bank is above the maximum limit",
+		"MP04": "Round is not in required status",
+		"MP05": "Insufficient balance to start a round",
+		"MP06": "Round is not refundable",
+		"MP07": "Maximum bets reached",
+		"MP08": "Invalid max bets",
+		"SP01": "Bet is not pending",
+		"SP02": "Possible win is not allowed",
+		"SP03": "Invalid refund period",
+		"LT02": "Bet amount is below the minimum limit",
+		"LT03": "Bet amount is above the maximum limit",
+		"LT04": "Invalid bitmap",
+		"unknown": "Unknown error"
 	},
 	"placingBet": "Placing a bet",
 	"transactionIsPending": "Transaction is pending",
 	"transactionIsConfirmed": "Transaction is confirmed",
-	"betPlaced": "Bet placed"
+	"betPlaced": "Bet placed",
+	"submitBet": "Place"
 }

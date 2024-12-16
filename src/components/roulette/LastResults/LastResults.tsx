@@ -1,15 +1,13 @@
-import { useRouletteBets } from '@/src/lib/roulette/query';
-import { ZeroAddress } from '@betfinio/abi';
+import { useGetPlayerBets, useGetTableAddress } from '@/src/lib/roulette/query';
 import { cn } from '@betfinio/components';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
-import { useAccount } from 'wagmi';
-import { LastResultRow } from './LastResultRow';
+import { LastResultRow } from '../../shared/LastResultRow';
 
 export const LastResults = () => {
-	const { address = ZeroAddress } = useAccount();
-	const { data: bets = [], isFetched: isBetsFetched } = useRouletteBets(address);
-	const numbers = useMemo(() => (bets.length > 0 ? bets.map((e) => e.winNumber) : [1, 2, 3, 4, 5, 6, 0]), [bets]);
+	const { tableAddress } = useGetTableAddress();
+	const { data: playerBets = [], isFetched: isBetsFetched } = useGetPlayerBets(tableAddress);
+	const numbers = useMemo(() => (playerBets.length > 0 ? playerBets.map((r) => r.winNumber) : [1, 2, 3, 4, 5, 6, 0]), [playerBets]);
 
 	const lastSeven = useMemo(() => numbers.slice(0, 7).reverse(), [numbers]);
 

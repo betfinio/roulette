@@ -39,7 +39,7 @@ const TableItem: React.FC<TableItemProps> = ({
 	topRightSelection,
 	bottomLeftSelection,
 	bottomRightSelection,
-	isZero = false,
+
 	isVertical = true,
 	className = '',
 	isRangeButton = false,
@@ -117,13 +117,13 @@ const TableItem: React.FC<TableItemProps> = ({
 
 			{/* Render Selection Balls */}
 
-			{positions.map((position) => {
+			{positions.map((position, index) => {
 				const selection = selectionMap[position];
 				if (!selection?.length) return null;
 
 				return (
 					<BetPlacePoint
-						key={position}
+						key={index}
 						positionId={`${number}-${position}`}
 						position={position}
 						onMouseOver={(e) => handleInteraction(position, 'hover', e)}

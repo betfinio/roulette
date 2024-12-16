@@ -8,8 +8,7 @@ interface BetChipsProps {
 }
 export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 	const { data: chips } = useGetChipsForPosition(positionId);
-
-	if (chips === undefined) return;
+	if (chips === undefined) return null;
 	const totalOffset = chips.length * 2;
 	const startOffset = totalOffset / 2;
 
