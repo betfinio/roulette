@@ -1,22 +1,24 @@
 import { getWheelNumbers } from '@/src/lib/roulette';
 import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
+import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion, useAnimation } from 'framer-motion';
 import { PlayIcon } from 'lucide-react';
 import { useEffect } from 'react';
+import { useAccount } from 'wagmi';
 import RouletteWheel from '../../shared/RouletteWheel';
 
 export const Wheel = () => {
 	const queryClient = useQueryClient();
 	const wheelNumbers = getWheelNumbers();
-
+	const { address = ZeroAddress } = useAccount();
 	const { state: wheelStateData, updateState } = useRouletteState();
 	const status = wheelStateData.data.state;
 	const { tableAddress } = useGetTableAddress();
 
-	const { isFetched: isBetsFetched } = useGetPlayerBets(tableAddress);
+	const { isFetched: isBetsFetched, data: bets = [] } = useGetPlayerBets(tableAddress);
 	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
 
 	// Animation control
@@ -84,8 +86,10 @@ export const Wheel = () => {
 					},
 				})
 				.then(async () => {
-					queryClient.invalidateQueries({ queryKey: ['roulette'] });
-					await queryClient.refetchQueries({ queryKey: ['roulette', 'bets', 'player'] });
+					const { bet } = wheelStateData.data as WheelLanded;
+					queryClient.setQueryData(['roulette', 'bets', 'player', address], [bet, ...bets], {
+						updatedAt: Date.now(),
+					});
 					updateState({ state: 'landed' } as WheelState);
 				});
 

@@ -1,9 +1,10 @@
 import { ETHSCAN } from '@/src/global.ts';
 import { getColor } from '@/src/lib/roulette';
-import { useGetTableAddress } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useGetTransactionHashByBet } from '@/src/lib/roulette/query';
 import type { PlayerBets } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
+import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue } from '@betfinio/components/shared';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
 import { Link } from '@tanstack/react-router';
@@ -40,6 +41,9 @@ export const RoundModal: FC<{
 	selectedBet: PlayerBets | null;
 	onClose: () => void;
 }> = ({ selectedBet, onClose }) => {
+	const { data: transactionHash = ZeroAddress, isLoading } = useGetTransactionHashByBet(selectedBet?.bet || ZeroAddress);
+
+	const { isMobile } = useMediaQuery();
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	return (
 		<motion.div
@@ -104,33 +108,29 @@ export const RoundModal: FC<{
 				<div className={'text-center'}>{t('betID')}</div>
 				<Link
 					to={`${ETHSCAN}/address/${selectedBet?.bet}`}
-					className={'block text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 sm:hidden'}
+					className={'block text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 '}
 					target={'_blank'}
 				>
-					{truncateEthAddress(selectedBet?.transactionHash || ZeroAddress, 7)}
+					{isMobile ? truncateEthAddress(selectedBet?.bet || ZeroAddress, 7) : selectedBet?.bet}
 				</Link>
-				<Link
-					to={`${ETHSCAN}/address/${selectedBet?.bet}`}
-					className={'text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 hidden sm:inline-block'}
-					target={'_blank'}
-				>
-					{selectedBet?.bet}
-				</Link>
+
 				<div className={'text-center font-normal text-tertiary-foreground'}>
 					{DateTime.fromMillis(Number(selectedBet?.created) * 1000).toFormat('yyyy-MM-dd, HH:mm:ss Z')} UTC
 				</div>
 			</div>
 
-			<div className={'flex items-end justify-center gap-2 mt-5'}>
+			<div className={cn('flex items-end justify-center gap-2 mt-5', {})}>
 				<div className={'text-tertiary-foreground font-semibold'}>{t('proofOfRandom')}</div>
 				<ShieldCheckIcon className={'text-green-roulette w-5 h-5'} />
 				<a
-					href={`${ETHSCAN}/tx/${selectedBet?.transactionHash}`}
+					href={`${ETHSCAN}/tx/${transactionHash}`}
 					target={'_blank'}
-					className={cn('block text-center underline cursor-pointer hover:text-secondary-foreground duration-300')}
+					className={cn('block text-center underline cursor-pointer hover:text-secondary-foreground duration-300', {
+						blur: isLoading,
+					})}
 					rel="noreferrer"
 				>
-					{truncateEthAddress(selectedBet?.transactionHash || ZeroAddress)}
+					{truncateEthAddress(transactionHash || ZeroAddress)}
 				</a>
 			</div>
 			<div className={'text-xs mt-1 text-center '}>

@@ -7,7 +7,8 @@ import { multicall, readContract, simulateContract, writeContract } from '@wagmi
 import type { TFunction } from 'i18next';
 import _ from 'lodash';
 import type { Address } from 'viem';
-import { encodeAbiParameters, parseAbiParameters } from 'viem';
+import { encodeAbiParameters, parseAbiItem, parseAbiParameters } from 'viem';
+import { getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
 
 export const fetchLocalBets = (): LocalBet[] => {
@@ -201,23 +202,6 @@ export const fetchSinglePlayerAddress = async (config: Config) => {
 	return result;
 };
 
-export const fetchBetByAddress = async (address: Address, config: Config): Promise<PlayerBets> => {
-	const betInfo = await readContract(config, {
-		abi: LiroBetABI,
-		address: address,
-		functionName: 'getBetInfo',
-		args: [],
-	});
-	const winNumber = await readContract(config, {
-		abi: LiroBetABI,
-		address: address,
-		functionName: 'winNumber',
-		args: [],
-	});
-	const result = {} as PlayerBets;
-	return result;
-};
-
 export const fetchTableByAddress = async (config: Config, address: Address) => {
 	const result = await readContract(config, {
 		abi: LiveRouletteABI,
@@ -252,6 +236,39 @@ export const testSpin = async (config: Config, tableAddress: Address, round: big
 		functionName: 'spin',
 		args: [tableAddress, round],
 	});
+};
 
-	console.log(result, 'result');
+export const fetchTableBetByBlockHash = async (config: Config, blockHash: Address, tableAddress?: Address) => {
+	if (!tableAddress) return;
+	const logs = await getLogs(config.getClient(), {
+		address: tableAddress,
+		event: parseAbiItem('event BetEnded(address indexed bet, uint256 indexed round, uint256 value, uint256 winAmount)'),
+		args: {
+			round: BigInt(0),
+		},
+		blockHash: blockHash,
+	});
+
+	const betAddress = logs[0].args.bet as Address;
+	const betInfo = await readContract(config, {
+		abi: LiroBetABI,
+		address: betAddress,
+		functionName: 'getBetInfo',
+		args: [],
+	});
+	const winNumber = await readContract(config, {
+		abi: LiroBetABI,
+		address: betAddress,
+		functionName: 'winNumber',
+		args: [],
+	});
+
+	const [, , amount, winAmount, , created] = betInfo;
+	return {
+		amount,
+		bet: betAddress,
+		created,
+		winNumber: Number(winNumber),
+		winAmount,
+	} as PlayerBets;
 };
