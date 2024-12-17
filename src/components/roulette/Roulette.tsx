@@ -2,6 +2,7 @@ import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/li
 import { shootConfetti } from '@/src/lib/roulette/utils';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useRef } from 'react';
+import type { Address } from 'viem';
 import { RouletteResultToast } from '../RouletteResultToast';
 import { BET_STATUS_HEADER } from '../shared/BetStatusHeader/BetStatusHeader';
 import { DesktopRoulette } from './DesktopRoulette';
@@ -18,9 +19,9 @@ export const Roulette = () => {
 	const { state: wheelStateData } = useRouletteState();
 	const status = wheelStateData.data.state;
 
-	const lastShownBet = useRef<string>();
+	const lastShownBet = useRef<Address>();
 	useEffect(() => {
-		if (status === 'landed' && bets[0].bet !== lastShownBet.current) {
+		if (status === 'landed' && bets[0].bet.toLowerCase() !== lastShownBet.current?.toLowerCase()) {
 			toast({
 				component: <RouletteResultToast rouletteBet={bets[0]} />,
 			});
