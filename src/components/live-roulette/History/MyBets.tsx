@@ -1,5 +1,5 @@
 import { ETHSCAN } from '@/src/global.ts';
-import { useGetPlayerBets, useGetTableAddress, useGetTablePlayerRounds } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useGetTablePlayerRounds } from '@/src/lib/roulette/query';
 import type { PlayerBets } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress, truncateEthAddress } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';

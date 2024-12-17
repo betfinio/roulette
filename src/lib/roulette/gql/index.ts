@@ -14,7 +14,7 @@ import {
 	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
-import type { PlayerBets } from '@/src/lib/roulette/types.ts';
+import type { PlayerBets, TableBets } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
 import type { ExecutionResult } from 'graphql/execution';
 import type { Address } from 'viem';
@@ -86,9 +86,9 @@ export const fetchTablePlayerRounds = async (player: Address, table?: Address) =
 
 	logger.start('fetching bets by player', player);
 	const data: ExecutionResult<GetTablePlayerRoundsQuery> = await execute(GetTablePlayerRoundsDocument, { player, table });
-	logger.success('fetching bets by player', data.data?.roundEndeds.length);
+	logger.success('fetching bets by player', data.data?.playerRoundEndeds.length);
 	if (data.data) {
-		return data.data.roundEndeds.map((bet) => {
+		return data.data.playerRoundEndeds.map((bet) => {
 			return {
 				amount: BigInt(bet.amount),
 				bet: bet.bet as Address,
@@ -116,8 +116,7 @@ export const fetchTableAllRounds = async (last: number, table?: Address) => {
 				transactionHash: bet.transactionHash,
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
-				player: bet.player as Address,
-			} as PlayerBets;
+			} as TableBets;
 		});
 	}
 	return [];
