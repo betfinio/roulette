@@ -69,3 +69,10 @@ query GetTransactionHashByBet($bet: Bytes) {
 		transactionHash
 	}
 }
+
+
+query GetTransactionHashByBet($bet: Bytes) {
+  betEndeds(where: { bet: $bet }) {
+    transactionHash
+  }
+}
