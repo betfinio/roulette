@@ -11,6 +11,7 @@ import {
 	fetchLocalBets,
 	fetchSelectedChip,
 	fetchSinglePlayerAddress,
+	fetchTableBetByBlockHash,
 	place,
 	setDebugMode,
 	submitBet,
@@ -29,7 +30,7 @@ import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useAccount, useConfig } from 'wagmi';
-import { fetchAllPlayersBets, fetchPlayerBets, fetchTableAllRounds, fetchTableBets, fetchTablePlayerRounds } from '../gql';
+import { fetchAllPlayersBets, fetchPlayerBets, fetchTableAllRounds, fetchTableBets, fetchTablePlayerRounds, fetchTransactionHashByBet } from '../gql';
 
 export const useLocalBets = () => {
 	return useQuery({
@@ -80,7 +81,6 @@ export const useLimits = (tableAddress?: Address) => {
 };
 
 export const useRouletteState = () => {
-	const { address = ZeroAddress } = useAccount();
 	const queryClient = useQueryClient();
 	const state = useQuery<WheelState>({
 		queryKey: ['roulette', 'state'],
@@ -327,6 +327,24 @@ export const useGetCurrentRound = (tableAddress: Address) => {
 	return useQuery({
 		queryKey: ['roulette', 'currentRound', tableAddress],
 		queryFn: () => fetchCurrentRoundOfTable(config, tableAddress),
+		refetchOnWindowFocus: false,
+	});
+};
+
+export const useFetchTableBetByBlockHash = () => {
+	const config = useConfig();
+
+	const { tableAddress } = useGetTableAddress();
+	return useMutation({
+		mutationKey: ['roulette', 'bet', 'blockHash'],
+		mutationFn: (blockHash: Address) => fetchTableBetByBlockHash(config, blockHash, tableAddress),
+	});
+};
+
+export const useGetTransactionHashByBet = (bet: Address) => {
+	return useQuery({
+		queryKey: ['roulette', 'bet', 'transactionHash', bet],
+		queryFn: () => fetchTransactionHashByBet(bet),
 		refetchOnWindowFocus: false,
 	});
 };
