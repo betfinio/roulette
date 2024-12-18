@@ -8,8 +8,7 @@ export const LastResults = () => {
 	const { tableAddress } = useGetTableAddress();
 
 	const { data: tableBets = [], isFetched: isBetsFetched } = useGetTableRounds(10, tableAddress);
-	console.log(tableBets, 'tableBets');
-	console.log(tableAddress, 'tableAddress');
+
 	const numbers = useMemo(() => (tableBets.length > 0 ? tableBets.map((r) => r.winNumber) : [1, 2, 3, 4, 5, 6, 0]), [tableBets]);
 
 	const lastSeven = useMemo(() => numbers.slice(0, 7).reverse(), [numbers]);

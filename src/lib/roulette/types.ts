@@ -42,18 +42,18 @@ export interface WheelSpinning {
 export interface WheelLanded {
 	state: 'landed';
 	result: number;
-	bet: Address;
+	bet: PlayerBets;
 }
 export interface WheelLanding {
 	state: 'landing';
 	result: number;
-	bet: Address;
+	bet: PlayerBets;
 }
 
 export interface WheelStopped {
 	state: 'stopped';
 	result: number;
-	bet: Address;
+	bet: PlayerBets;
 }
 
 export type WheelState = WheelSpinning | WheelLanded | WheelStandBy | WheelStopped | WheelLanding;
@@ -71,6 +71,16 @@ export interface PlayerBets {
 	created: bigint;
 	winNumber: number;
 	winAmount: bigint;
-	transactionHash: Address;
+
 	player: Address;
+}
+
+export interface TableBets {
+	amount: bigint;
+	bet: Address;
+	created: bigint;
+	winNumber: number;
+	winAmount: bigint;
+
+	player?: Address;
 }

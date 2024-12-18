@@ -19,7 +19,6 @@ export const SubmitBet: FC = () => {
 
 	const { isSingle, tableAddress } = useGetTableAddress();
 	const { data: currentRound } = useGetCurrentRound(tableAddress || ZeroAddress);
-	console.log(currentRound, 'currentRound');
 	const { address = ZeroAddress } = useAccount();
 	const { data: isMember = false } = useIsMember(address);
 	const { requestAllowance } = useAllowanceModal();

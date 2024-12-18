@@ -1,5 +1,5 @@
 import { useGetTableAddress, useGetTableRounds } from '@/src/lib/roulette/query';
-import type { PlayerBets } from '@/src/lib/roulette/types.ts';
+import type { PlayerBets, TableBets } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import Fox from '@betfinio/ui/dist/icons/Fox';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
@@ -17,31 +17,17 @@ import { BetResultCell } from '../../shared/BetResultCell';
 import { RoundModal } from '../../shared/HistoryTable';
 import { WinAmountCell } from '../../shared/WinAmountCell';
 
-const columnHelper = createColumnHelper<PlayerBets>();
+const columnHelper = createColumnHelper<TableBets>();
 
 export const AllBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
-	const [selected, setSelected] = useState<null | PlayerBets>(null);
+	const [selected, setSelected] = useState<null | TableBets>(null);
 	const { tableAddress } = useGetTableAddress();
 	const { data: bets = [], isLoading } = useGetTableRounds(50, tableAddress || ZeroAddress);
 
 	const { isVertical } = useMediaQuery();
 
 	const columns = [
-		columnHelper.accessor('player', {
-			header: t('player'),
-			cell: (props) => (
-				<a
-					target={'_blank'}
-					rel={'noreferrer'}
-					href={`${ETHSCAN}/address/${props.getValue()}`}
-					className={'text-tertiary-foreground whitespace-nowrap flex gap-2'}
-				>
-					<Fox />
-					{truncateEthAddress(props.getValue())}
-				</a>
-			),
-		}),
 		columnHelper.accessor('bet', {
 			header: t('address'),
 			cell: (props) => (
@@ -76,13 +62,8 @@ export const AllBetsTable = () => {
 			header: '',
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
-	] as ColumnDef<PlayerBets>[];
+	] as ColumnDef<TableBets>[];
 	const columnsMobile = [
-		columnHelper.accessor('player', {
-			header: t('address'),
-			cell: (props) => <span className={'text-tertiary-foreground whitespace-nowrap'}>{truncateEthAddress(props.getValue())}</span>,
-		}),
-
 		columnHelper.accessor('amount', {
 			header: t('amount'),
 			cell: (props) => (
@@ -105,7 +86,7 @@ export const AllBetsTable = () => {
 			header: '',
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
-	] as ColumnDef<PlayerBets>[];
+	] as ColumnDef<TableBets>[];
 
 	if (bets.length === 0 && !isLoading) {
 		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
@@ -117,7 +98,7 @@ export const AllBetsTable = () => {
 				<DialogContent className="games">
 					<DialogTitle className={'hidden'} />
 					<DialogDescription className={'hidden'} />
-					<RoundModal selectedBet={selected} onClose={() => setSelected(null)} />
+					{/* <RoundModal selectedBet={selected} onClose={() => setSelected(null)} /> */}
 				</DialogContent>
 			</Dialog>
 
