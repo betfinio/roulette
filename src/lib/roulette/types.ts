@@ -74,3 +74,13 @@ export interface PlayerBets {
 
 	player: Address;
 }
+
+export interface TableBets {
+	amount: bigint;
+	bet: Address;
+	created: bigint;
+	winNumber: number;
+	winAmount: bigint;
+
+	player?: Address;
+}
