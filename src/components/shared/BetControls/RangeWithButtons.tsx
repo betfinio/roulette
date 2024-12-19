@@ -3,7 +3,7 @@ import { Button } from '@betfinio/components/ui';
 import { Minus, PlusIcon } from 'lucide-react';
 import millify from 'millify';
 import { type FC, useRef, useState } from 'react';
-import RouletteSlider from '../../RouletteSlider/RouletteSlider';
+import RouletteSlider from '../RouletteSlider/RouletteSlider';
 
 interface IRangeWithButtonsProps {
 	limits: { min: number; max: number };
@@ -23,7 +23,7 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 	};
 
 	const [incrementSpeed, setIncrementSpeed] = useState(1);
-	const intervalRef = useRef<NodeJS.Timeout | null>(null);
+	const intervalRef = useRef<NodeJS.Timer | null>(null);
 
 	const startIncrement = (direction: 'increase' | 'decrease') => {
 		if (intervalRef.current) return;

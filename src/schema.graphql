@@ -1,35 +1,71 @@
-query RouletteMyLandeds($address: Bytes) {
-    landeds(where: { player: $address }, orderBy: blockTimestamp, orderDirection: desc, first: 50) {
-        player
-        bet
-        result
-        requestId
-        winAmount
-        betAmount
-        blockTimestamp
-        transactionHash
-    }
+query GetSinglePlayerLastResults($player: Bytes) {
+  randomGenerateds(where: { player: $player }, orderBy: blockTimestamp, orderDirection: desc, first: 7) {
+    result
+    blockNumber
+    id
+    blockTimestamp
+  }
 }
-query RouletteAllLandeds {
-    landeds(orderBy: blockTimestamp, orderDirection: desc, first: 50) {
-        player
-        bet
-        result
-        requestId
-        winAmount
-        betAmount
-        blockTimestamp
-        transactionHash
-    }
+
+query GetPlayerBets($player: Bytes, $table: Bytes, $first: Int) {
+  betEndeds(where: { player: $player, table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $first) {
+    amount
+    player
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    transactionHash
+  }
+}
+query GetTableBets($table: Bytes, $first: Int) {
+  betEndeds(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $first) {
+    amount
+    player
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    transactionHash
+  }
+}
+
+query GetAllPlayerBets($last: Int,$table: Bytes) {
+  betEndeds(where: { table: $table },orderBy: blockTimestamp, orderDirection: desc, first: $last) {
+    amount
+    player
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    transactionHash
+  }
+}
+query GetTableAllRounds($last: Int, $table: Bytes) {
+  roundEndeds(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $last) {
+    amount
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    transactionHash
+  }
+}
+query GetTablePlayerRounds($table: Bytes, $player: Bytes) {
+  playerRoundEndeds(where: { table: $table, player: $player }, orderBy: blockTimestamp, orderDirection: desc) {
+    amount
+    player
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    transactionHash
+  }
 }
 
 
-query GetRolledEvent($requestId: BigInt!) {
-    rolleds(where: { requestId: $requestId }) {
-        roller
-        bet
-        requestId
-        blockTimestamp
-        transactionHash
-    }
+query GetTransactionHashByBet($bet: Bytes) {
+  betEndeds(where: { bet: $bet }) {
+    transactionHash
+  }
 }

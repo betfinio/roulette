@@ -1,27 +1,24 @@
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useRouletteBets, useRouletteState } from '@/src/lib/roulette/query';
-import { motion, useAnimation } from 'framer-motion';
-import { useEffect } from 'react';
-
-import logger from '@/src/config/logger';
+import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
+import { motion, useAnimation } from 'framer-motion';
 import { PlayIcon } from 'lucide-react';
+import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
-import RouletteWheel from './RouletteWheel';
+import RouletteWheel from '../../shared/RouletteWheel';
 
 export const Wheel = () => {
 	const queryClient = useQueryClient();
 	const wheelNumbers = getWheelNumbers();
-
+	const { address = ZeroAddress } = useAccount();
 	const { state: wheelStateData, updateState } = useRouletteState();
 	const status = wheelStateData.data.state;
+	const { tableAddress } = useGetTableAddress();
 
-	const { address = ZeroAddress } = useAccount();
-
-	const { data: bets = [], isFetched: isBetsFetched } = useRouletteBets(address);
+	const { isFetched: isBetsFetched, data: bets = [] } = useGetPlayerBets(tableAddress);
 	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
 
 	// Animation control
@@ -88,8 +85,11 @@ export const Wheel = () => {
 						ease: [0.165, 0.84, 0.44, 1.005],
 					},
 				})
-				.then(() => {
-					queryClient.invalidateQueries({ queryKey: ['roulette'] });
+				.then(async () => {
+					const { bet } = wheelStateData.data as WheelLanded;
+					queryClient.setQueryData(['roulette', 'bets', 'player', address], [bet, ...bets], {
+						updatedAt: Date.now(),
+					});
 					updateState({ state: 'landed' } as WheelState);
 				});
 
@@ -117,8 +117,6 @@ export const Wheel = () => {
 			});
 		}
 	}, [status, wheelControls]);
-
-	logger.log(status, 'status!');
 
 	return (
 		<>

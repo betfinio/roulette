@@ -20,6 +20,9 @@ export interface LocalBet {
 
 export interface SpinParams {
 	bets: LocalBet[];
+	tableAddress: Address; //table address
+	roundNumber: bigint; //round number
+	playerAddress: Address; //player address
 }
 
 export interface ChiPlaceProps {
@@ -39,18 +42,18 @@ export interface WheelSpinning {
 export interface WheelLanded {
 	state: 'landed';
 	result: number;
-	bet: Address;
+	bet: PlayerBets;
 }
 export interface WheelLanding {
 	state: 'landing';
 	result: number;
-	bet: Address;
+	bet: PlayerBets;
 }
 
 export interface WheelStopped {
 	state: 'stopped';
 	result: number;
-	bet: Address;
+	bet: PlayerBets;
 }
 
 export type WheelState = WheelSpinning | WheelLanded | WheelStandBy | WheelStopped | WheelLanding;
@@ -60,4 +63,24 @@ export interface Limit {
 	payout: number;
 	min: bigint;
 	max: bigint;
+}
+
+export interface PlayerBets {
+	amount: bigint;
+	bet: Address;
+	created: bigint;
+	winNumber: number;
+	winAmount: bigint;
+
+	player: Address;
+}
+
+export interface TableBets {
+	amount: bigint;
+	bet: Address;
+	created: bigint;
+	winNumber: number;
+	winAmount: bigint;
+
+	player?: Address;
 }

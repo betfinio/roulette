@@ -1,8 +1,8 @@
-import { useGetDebugMode, useMediaQuery } from '@/src/lib/roulette/query';
+import { useGetDebugMode } from '@/src/lib/roulette/query';
 import { cn } from '@betfinio/components';
-import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { BetChips } from '../BetChip/BetChips';
+
 export type PositionType = 'center' | 'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';
 
 interface BetPlacePointProps {
@@ -15,7 +15,6 @@ interface BetPlacePointProps {
 }
 export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, ...events }) => {
 	const { data: isDebugMode } = useGetDebugMode();
-
 	const positionClasses: Record<PositionType, string> = {
 		center: 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ',
 		top: 'top-[-50%]  sm:top-[-37%] left-1/2 transform -translate-x-1/2',
@@ -28,7 +27,7 @@ export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, ..
 		bottomRight: 'bottom-[-30%] right-[-30%]',
 	} as const;
 	return (
-		<motion.div
+		<div
 			className={cn(
 				'roulette absolute w-[40%]  sm:w-[60%] max-w-10 aspect-square bg-muted/40  flex items-center justify-center z-10 opacity-100',
 				positionClasses[position],
@@ -40,6 +39,6 @@ export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, ..
 			{...events}
 		>
 			<BetChips positionId={positionId} />
-		</motion.div>
+		</div>
 	);
 };
