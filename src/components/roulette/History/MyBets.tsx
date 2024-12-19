@@ -1,9 +1,7 @@
 import { ETHSCAN } from '@/src/global.ts';
-import { getColor } from '@/src/lib/roulette';
-import { useRouletteBets } from '@/src/lib/roulette/query';
-import type { RouletteBet } from '@/src/lib/roulette/types.ts';
-import { ZeroAddress } from '@betfinio/abi';
-import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
+import { useGetPlayerBets, useGetTableAddress } from '@/src/lib/roulette/query';
+import type { PlayerBets } from '@/src/lib/roulette/types.ts';
+import { truncateEthAddress } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import { cn } from '@betfinio/components';
@@ -12,21 +10,23 @@ import { BetValue, DataTable } from '@betfinio/components/shared';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
 import { Search } from 'lucide-react';
 import { DateTime } from 'luxon';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useAccount } from 'wagmi';
-import { RoundModal } from './HistoryTable';
+import { BetResultCell } from '../../shared/BetResultCell';
+import { RoundModal } from '../../shared/HistoryTable';
+import { WinAmountCell } from '../../shared/WinAmountCell';
 
-const columnHelper = createColumnHelper<RouletteBet>();
+const columnHelper = createColumnHelper<PlayerBets>();
 
 export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
-	const [selected, setSelected] = useState<null | RouletteBet>(null);
-	const { address = ZeroAddress } = useAccount();
-	const { data: bets = [], isLoading } = useRouletteBets(address);
+	const [selected, setSelected] = useState<null | PlayerBets>(null);
+	const { tableAddress } = useGetTableAddress();
+
+	const { data: bets = [], isLoading } = useGetPlayerBets(tableAddress);
 	const { isVertical } = useMediaQuery();
 	const columns = [
-		columnHelper.accessor('address', {
+		columnHelper.accessor('bet', {
 			header: t('address'),
 			cell: (props) => (
 				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary-foreground whitespace-nowrap'}>
@@ -46,39 +46,27 @@ export const MyBetsTable = () => {
 				</span>
 			),
 		}),
-		columnHelper.accessor('result', {
+		columnHelper.accessor('winAmount', {
 			header: t('win'),
-			cell: (props) => (
-				<span className={cn('font-semibold text-tertiary-foreground', props.getValue() > 0n && '!text-success')}>
-					<BetValue value={valueToNumber(props.getValue())} />
-				</span>
-			),
+			cell: (props) => <WinAmountCell amount={props.row.original.winAmount} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => {
-				return (
-					<span
-						className={cn(' w-10 h-10 rounded-xl flex justify-center font-semibold items-center p-3', {
-							'bg-red-roulette': getColor(props.getValue()) === 'RED',
-							'bg-black-roulette': getColor(props.getValue()) === 'BLACK',
-							'bg-green-roulette': getColor(props.getValue()) === 'GREEN',
-						})}
-					>
-						{props.getValue()}
-					</span>
-				);
-			},
+			cell: (props) => <BetResultCell winNumber={props.row.original.winNumber} />,
 		}),
 
 		columnHelper.display({
 			id: 'action',
 			header: '',
-			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
+			cell: (props) => (
+				<>
+					<Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />
+				</>
+			),
 		}),
-	] as ColumnDef<RouletteBet>[];
+	] as ColumnDef<PlayerBets>[];
 	const columnsMobile = [
-		columnHelper.accessor('address', {
+		columnHelper.accessor('bet', {
 			header: t('address'),
 			cell: (props) => (
 				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary whitespace-nowrap'}>
@@ -95,29 +83,13 @@ export const MyBetsTable = () => {
 				</span>
 			),
 		}),
-		columnHelper.accessor('result', {
+		columnHelper.accessor('winAmount', {
 			header: t('win'),
-			cell: (props) => (
-				<span className={cn('font-semibold text-tertiary-foreground', props.getValue() > 0n && '!text-success')}>
-					<BetValue value={valueToNumber(props.getValue())} />
-				</span>
-			),
+			cell: (props) => <WinAmountCell amount={props.row.original.winAmount} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => {
-				return (
-					<span
-						className={cn('e w-10 h-10 rounded-xl flex justify-center font-semibold items-center p-3', {
-							'bg-red-roulette': getColor(props.getValue()) === 'RED',
-							'bg-black-roulette': getColor(props.getValue()) === 'BLACK',
-							'bg-green-roulette': getColor(props.getValue()) === 'GREEN',
-						})}
-					>
-						{props.getValue()}
-					</span>
-				);
-			},
+			cell: (props) => <BetResultCell winNumber={props.row.original.winNumber} />,
 		}),
 
 		columnHelper.display({
@@ -125,7 +97,7 @@ export const MyBetsTable = () => {
 			header: '',
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
-	] as ColumnDef<RouletteBet>[];
+	] as ColumnDef<PlayerBets>[];
 
 	if (bets.length === 0 && !isLoading) {
 		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;

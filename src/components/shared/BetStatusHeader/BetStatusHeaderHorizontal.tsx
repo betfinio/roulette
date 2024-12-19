@@ -2,20 +2,22 @@ import { AlertCircle, CircleAlert, CircleHelp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useLocalBets, usePaytable, usePotentialWin } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/roulette/query';
 import { valueToNumber } from '@betfinio/abi';
-import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, Separator } from '@betfinio/components/ui';
 import { Bag } from '@betfinio/ui/dist/icons';
 import { useChatbot } from 'betfinio_app/chatbot';
 import { useBalance } from 'betfinio_app/lib/query/token';
-import { useMemo } from 'react';
+import { type FC, useMemo } from 'react';
 import Paytable from '../Paytable/PayTable';
 import { BET_STATUS_HEADER } from './BetStatusHeader';
 
-export const BetStatusHeaderHorizontal = () => {
+export const BetStatusHeaderHorizontal: FC = () => {
 	const { t } = useTranslation('roulette');
+
+	const { tableAddress } = useGetTableAddress();
+
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 	const { maximize } = useChatbot();
 	const handleReport = () => {
@@ -24,7 +26,6 @@ export const BetStatusHeaderHorizontal = () => {
 
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 	const { data: bets = [] } = useLocalBets();
-	const { data: potentialWin = 1928234n * 10n ** 18n, isLoading } = usePotentialWin();
 
 	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
 
@@ -37,44 +38,44 @@ export const BetStatusHeaderHorizontal = () => {
 				<div className="flex gap-1 items-center">
 					<Bag className={'w-8 text-secondary-foreground'} />
 					<div>
-						<p>{t('winningPool')}</p>
-						<p className="font-bold">
+						<div>{t('winningPool')}</div>
+						<div className="font-bold">
 							<BetValue withIcon value={winningPool} />
-						</p>
+						</div>
 					</div>
 				</div>
 				<div>
-					<p>{t('maxPayout')}</p>
-					<p className="font-bold">
+					<div>{t('maxPayout')}</div>
+					<div className="font-bold">
 						<BetValue withIcon value={valueToNumber(maxPayout)} />
-					</p>
+					</div>
 				</div>
 			</div>
 			<Separator orientation="vertical" className="h-8" />
 			<div className="flex  gap-2 md:gap-9">
 				<div>
-					<p>{t('totalBet')}</p>
-					<p className="font-bold">
+					<div>{t('totalBet')}</div>
+					<div className="font-bold">
 						<BetValue withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
-					</p>
+					</div>
 				</div>
-				<div className=" ">
-					<p>{t('payTable.potentialWin')}</p>
+				{/* <div className=" ">
+					<div>{t('payTable.potentialWin')}</div>
 					<p
 						className={cn('font-bold', {
 							'blur-sm': isLoading,
 						})}
 					>
 						<BetValue withIcon value={valueToNumber(potentialWin)} />
-					</p>
-				</div>
+					</div>
+				</div> */}
 			</div>
 			<Separator orientation="vertical" className="h-8 mr-auto" />
 			<div className=" gap-2   flex ">
 				<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
 					<DialogTitle hidden />
 					<DialogContent>
-						<Paytable onClose={closePaytable} />
+						<Paytable tableAddress={tableAddress} onClose={closePaytable} />
 					</DialogContent>
 				</Dialog>
 				<Button onClick={openPaytable} variant={'ghost'} size="freeSize" className={'text-foreground flex-col text-xs flex items-center font-normal'}>
@@ -89,7 +90,7 @@ export const BetStatusHeaderHorizontal = () => {
 					rel="noreferrer"
 				>
 					<AlertCircle className={'w-6 h-6'} />
-					<p>{t('howToPlay')}</p>
+					<div>{t('howToPlay')}</div>
 				</a>
 
 				<Button
@@ -99,7 +100,7 @@ export const BetStatusHeaderHorizontal = () => {
 					className={'flex-col text-secondary-foreground  text-xs flex justify-start font-normal items-center  '}
 				>
 					<CircleAlert className={'w-6 h-6'} />
-					<p>{t('report')}</p>
+					<div>{t('report')}</div>
 				</Button>
 			</div>
 		</div>

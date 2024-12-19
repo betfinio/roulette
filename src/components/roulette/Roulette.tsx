@@ -1,45 +1,47 @@
-import { useRouletteBets, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
-import { ZeroAddress } from '@betfinio/abi';
-
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
-import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useEffect, useRef } from 'react';
+import type { Address } from 'viem';
 import { RouletteResultToast } from '../RouletteResultToast';
-import { BET_STATUS_HEADER } from './BetStatusHeader/BetStatusHeader';
+import { BET_STATUS_HEADER } from '../shared/BetStatusHeader/BetStatusHeader';
 import { DesktopRoulette } from './DesktopRoulette';
 import { TabletRoulette } from './TabletRoulette';
 import { VerticalRoulette } from './VerticalRoulette';
 
 export const Roulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
-	const { address = ZeroAddress } = useAccount();
 	const { toast } = useToast();
-	const { data: bets = [], isRefetching } = useRouletteBets(address);
+	const { tableAddress } = useGetTableAddress();
 
-	const { state: wheelStateData, updateState } = useRouletteState();
+	const { data: bets = [] } = useGetPlayerBets(tableAddress);
+
+	const { state: wheelStateData } = useRouletteState();
 	const status = wheelStateData.data.state;
 
-	const [lastShownBet, setLastShownBet] = useState<string>('');
-
+	const lastShownBet = useRef<Address>();
 	useEffect(() => {
-		if (status === 'landed' && !isRefetching && bets[0].hash !== lastShownBet) {
+		if (status === 'landed' && bets[0].bet.toLowerCase() !== lastShownBet.current?.toLowerCase()) {
 			toast({
 				component: <RouletteResultToast rouletteBet={bets[0]} />,
 			});
 
-			const hasWon = bets[0].amount < bets[0].result;
+			const hasWon = bets[0].amount < bets[0].winAmount;
 			hasWon && shootConfetti();
-
-			setLastShownBet(bets[0].hash || '');
+			lastShownBet.current = bets[0].bet;
 		}
-
 		if (status === 'spinning') {
 			document.getElementById(BET_STATUS_HEADER)?.scrollIntoView({
 				behavior: 'smooth',
 			});
 		}
-	}, [status, isRefetching]);
+	}, [wheelStateData]);
+
+	useEffect(() => {
+		if (!lastShownBet.current && bets[0]) {
+			lastShownBet.current = bets[0].bet;
+		}
+	}, [bets]);
 
 	if (isVertical) {
 		return (
