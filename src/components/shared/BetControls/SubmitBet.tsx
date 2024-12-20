@@ -10,6 +10,7 @@ import { useAllowance } from 'betfinio_app/lib/query/token';
 import { Loader } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
 
 export const SubmitBet: FC = () => {
@@ -60,7 +61,7 @@ export const SubmitBet: FC = () => {
 
 		submitBet({
 			bets,
-			roundNumber: currentRound || 0n,
+			roundNumber: currentRound?.round || 0n,
 			tableAddress: isSingle ? ZeroAddress : tableAddress || ZeroAddress,
 			playerAddress: address,
 		});
@@ -72,7 +73,7 @@ export const SubmitBet: FC = () => {
 			<div>
 				current round: <input className="bg-transparent" value={Number(currentRound)} />
 			</div>
-			<button type="button" onClick={() => testSpin(config, tableAddress, 1445244n)}>
+			<button type="button" onClick={() => testSpin(config, tableAddress as Address, 1445244n)}>
 				test
 			</button>
 			<Button

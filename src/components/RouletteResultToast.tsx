@@ -1,12 +1,12 @@
 import { getColor } from '@/src/lib/roulette';
-import type { PlayerBets, RouletteBet } from '@/src/lib/roulette/types';
+import type { PlayerBet } from '@/src/lib/roulette/types';
 import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetLogo } from '@betfinio/ui/dist/icons';
 import { useTranslation } from 'react-i18next';
 
 interface IRouletteResultToastProp {
-	rouletteBet: PlayerBets;
+	rouletteBet: PlayerBet;
 }
 export const RouletteResultToast: React.FC<IRouletteResultToastProp> = ({ rouletteBet }) => {
 	const { t } = useTranslation('roulette');

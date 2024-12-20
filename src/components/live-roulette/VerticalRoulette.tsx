@@ -1,8 +1,8 @@
-import Wheel from '../roulette/Wheel/Wheel';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
+import Wheel from './Wheel/Wheel';
 
 export const VerticalRoulette = () => {
 	return (

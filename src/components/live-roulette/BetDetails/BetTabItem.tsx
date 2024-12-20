@@ -1,7 +1,7 @@
 import { ETHSCAN } from '@/src/global';
 import { fillItems } from '@/src/lib/roulette';
 import { useGetBetAmountAndBitMap, useRouletteOtherBetsState } from '@/src/lib/roulette/query';
-import type { RoundBet } from '@/src/lib/roulette/types';
+import type { PlayerInProgressBet, RoundBet } from '@/src/lib/roulette/types';
 import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
@@ -16,7 +16,7 @@ import { tableConfigVertical } from '../../shared/MainTable/tableConfigVertical'
 import { tableExtraConfigHorizontal, tableExtraConfigVertical } from '../../shared/MainTable/tableExtraItemsConfig';
 
 interface IBetTabItemProps {
-	bet: RoundBet;
+	bet: PlayerInProgressBet;
 	round: number;
 }
 export const BetItem: FC<IBetTabItemProps> = ({ bet, round }) => {
@@ -37,17 +37,17 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet, round }) => {
 			transition={{ type: 'spring', stiffness: 500, damping: 30 }}
 			exit={{ opacity: 0, y: 10 }}
 			className={cn('rounded-lg flex bg-background justify-between')}
-			onMouseEnter={() => {
-				mutateAsync(null, {
-					onSuccess: (data) => {
-						const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
-						const etraItems = isVertical ? tableExtraConfigVertical : tableExtraConfigHorizontal;
-						const test = fillItems(data, { ...dozenItemsConfig, ...sideItemsConfig, ...tableConfig, ...etraItems });
+			//   onMouseEnter={() => {
+			//     mutateAsync(null, {
+			//       onSuccess: (data) => {
+			//         const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
+			//         const etraItems = isVertical ? tableExtraConfigVertical : tableExtraConfigHorizontal;
+			//         const test = fillItems(data, { ...dozenItemsConfig, ...sideItemsConfig, ...tableConfig, ...etraItems });
 
-						updateState({ selectedBetChips: test });
-					},
-				});
-			}}
+			//         updateState({ selectedBetChips: test });
+			//       },
+			//     });
+			//   }}
 			onMouseLeave={() => updateState({ selectedBetChips: null })}
 		>
 			<div className={'py-3 px-2 flex justify-between items-center grow gap-2'}>

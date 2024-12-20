@@ -110,5 +110,6 @@
 	"betDetails": {
 		"bets": "Bets",
 		"players": "Players"
-	}
+	},
+	"timeLeft": "Time left"
 }

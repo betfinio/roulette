@@ -36,11 +36,11 @@ function RoulettePage() {
 			const eventOfThePlayer = landedLogs[0].args.player?.toString().toLowerCase() === address.toLowerCase();
 
 			if (eventOfThePlayer) {
-				updateState({
-					state: 'landing',
-					result: Number(landedLogs[0].args.value),
-					bet: ZeroAddress,
-				});
+				// updateState({
+				// 	state: 'landing',
+				// 	result: Number(landedLogs[0].args.value),
+				// 	bet: ZeroAddress,
+				// });
 				queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 			}
 		},

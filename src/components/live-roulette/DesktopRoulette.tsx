@@ -1,12 +1,12 @@
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 
-import Wheel from '../roulette/Wheel/Wheel';
 import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { BetDetails } from './BetDetails/BetDetails';
 import { LastResults } from './LastResults/LastResults';
 import { TableStat } from './TableStat';
+import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
 	return (
@@ -22,9 +22,9 @@ export const DesktopRoulette = () => {
 							<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 							<div className="relative w-full h-full mx-auto flex items-start gap-4">
 								{/* <ResultHistory /> */}
-								<LastResults />
+								{/* <LastResults /> */}
 								<Wheel />
-								<TableStat />
+								{/* <TableStat /> */}
 							</div>
 						</div>
 					</div>

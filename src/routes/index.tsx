@@ -4,7 +4,7 @@ import { createFileRoute, redirect } from '@tanstack/react-router';
 export const Route = createFileRoute('/')({
 	component: () => <Index />,
 	beforeLoad: async () => {
-		throw redirect({ to: './roulette' });
+		throw redirect({ to: '/roulette' });
 	},
 });
 

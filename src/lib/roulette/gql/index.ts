@@ -16,7 +16,7 @@ import {
 	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
-import type { PlayerBets, RoundBet } from '@/src/lib/roulette/types.ts';
+import type { PlayerBet, PlayerInProgressBet, RoundBet } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
 
 import type { ExecutionResult } from 'graphql/execution';
@@ -37,7 +37,7 @@ export const fetchPlayerBets = async (player: Address, table?: Address) => {
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
 				player: bet.player as Address,
-			} as PlayerBets;
+			} as PlayerBet;
 		});
 	}
 	return [];
@@ -58,7 +58,7 @@ export const fetchTableBets = async (table?: Address) => {
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
 				player: bet.player as Address,
-			} as PlayerBets;
+			} as PlayerBet;
 		});
 	}
 	return [];
@@ -78,7 +78,7 @@ export const fetchAllPlayersBets = async (last: number, table?: Address) => {
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
 				player: bet.player as Address,
-			} as PlayerBets;
+			} as PlayerBet;
 		});
 	}
 	return [];
@@ -89,9 +89,9 @@ export const fetchTablePlayerRounds = async (player: Address, table?: Address) =
 
 	logger.start('fetching bets by player', player);
 	const data: ExecutionResult<GetTablePlayerRoundsQuery> = await execute(GetTablePlayerRoundsDocument, { player, table });
-	logger.success('fetching bets by player', data.data?.roundEndeds.length);
+	logger.success('fetching bets by player', data.data?.playerRoundEndeds.length);
 	if (data.data) {
-		return data.data.roundEndeds.map((bet) => {
+		return data.data.playerRoundEndeds.map((bet) => {
 			return {
 				amount: BigInt(bet.amount),
 				bet: bet.bet as Address,
@@ -100,7 +100,7 @@ export const fetchTablePlayerRounds = async (player: Address, table?: Address) =
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
 				player: bet.player as Address,
-			} as PlayerBets;
+			} as PlayerBet;
 		});
 	}
 	return [];
@@ -119,8 +119,7 @@ export const fetchTableAllRounds = async (last: number, table?: Address) => {
 				transactionHash: bet.transactionHash,
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
-				player: bet.player as Address,
-			} as PlayerBets;
+			} as RoundBet;
 		});
 	}
 	return [];
@@ -136,10 +135,9 @@ export const fetchTableSelectedRoundBets = async (table?: Address, round?: numbe
 				amount: BigInt(bet.amount),
 				bet: bet.bet as Address,
 				created: bet.blockTimestamp,
-				transactionHash: bet.transactionHash,
 
 				player: bet.player as Address,
-			} as RoundBet;
+			} as PlayerInProgressBet;
 		});
 	}
 	return [];

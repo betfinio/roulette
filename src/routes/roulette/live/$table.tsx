@@ -4,13 +4,13 @@ import { fetchCurrentRoundOfTable, fetchTableByAddress } from '@/src/lib/roulett
 import { useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
 import { useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, redirect } from '@tanstack/react-router';
-import { zodValidator } from '@tanstack/zod-adapter';
+import { createFileRoute, redirect, useSearch } from '@tanstack/react-router';
+import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { type Address, isAddress } from 'viem';
 import { useWatchContractEvent } from 'wagmi';
 import { z } from 'zod';
 const liveRouletteSchema = z.object({
-	round: z.number().nullish(),
+	round: fallback(z.number().optional(), undefined),
 });
 
 export const Route = createFileRoute('/roulette/live/$table')({
@@ -34,8 +34,10 @@ export const Route = createFileRoute('/roulette/live/$table')({
 		}
 		console.log(deps, 'deps');
 		if (!deps.round) {
+			console.log(!deps.round, '!deps.round)');
 			const round = await fetchCurrentRoundOfTable(context.wagmiConfig, params.table as Address);
-			throw redirect({ to: `/roulette/live/${params.table}`, search: { round } });
+			console.log(round, 'round');
+			throw redirect({ to: `/roulette/live/${params.table}`, search: { round: Number(round?.round) } });
 		}
 	},
 	onError: (e) => {
@@ -47,7 +49,6 @@ export const Route = createFileRoute('/roulette/live/$table')({
 function RouletteLiveTable() {
 	const queryClient = useQueryClient();
 	const { updateState } = useRouletteState();
-
 	const { tableAddress } = useGetTableAddress();
 
 	useWatchContractEvent({
@@ -70,11 +71,11 @@ function RouletteLiveTable() {
 			const eventOfTheTable = landedLogs[0].args.table?.toString().toLowerCase() === tableAddress?.toLowerCase();
 
 			if (eventOfTheTable) {
-				updateState({
-					state: 'landing',
-					result: Number(landedLogs[0].args.value),
-					bet: ZeroAddress,
-				});
+				// updateState({
+				//   state: "landing",
+				//   result: Number(landedLogs[0].args.value),
+				//   bet: ZeroAddress,
+				// });
 				queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 			}
 		},

@@ -20,7 +20,6 @@ import {
 	unplace,
 } from '@/src/lib/roulette/api';
 import type { ChiPlaceProps, LocalBet, SpinParams, WheelState } from '@/src/lib/roulette/types.ts';
-import { Route } from '@/src/routes/roulette/live/$table';
 import { ZeroAddress } from '@betfinio/abi';
 import { toast } from '@betfinio/components/hooks';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -330,13 +329,14 @@ export const useGetTableAddress = () => {
 	return { isSingle: !multiplayerTableAddress, tableAddress: multiplayerTableAddress || siglePlayerTableAddress, isLoading };
 };
 
-export const useGetCurrentRound = (tableAddress: Address) => {
+export const useGetCurrentRound = (tableAddress?: Address) => {
 	const config = useConfig();
 
 	return useQuery({
 		queryKey: ['roulette', 'currentRound', tableAddress],
 		queryFn: () => fetchCurrentRoundOfTable(config, tableAddress),
 		refetchOnWindowFocus: false,
+		enabled: !!tableAddress,
 	});
 };
 

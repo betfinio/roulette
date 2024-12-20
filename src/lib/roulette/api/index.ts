@@ -213,13 +213,19 @@ export const fetchTableByAddress = async (config: Config, address: Address) => {
 	return result;
 };
 
-export const fetchCurrentRoundOfTable = async (config: Config, tableAddress: Address) => {
-	const result = await readContract(config, {
+export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Address) => {
+	if (!tableAddress) return;
+	const round = await readContract(config, {
 		abi: MultiPlayerTableABI,
 		address: tableAddress,
 		functionName: 'getCurrentRound',
 	});
-	return result;
+	const interval = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: tableAddress,
+		functionName: 'interval',
+	});
+	return { round, interval };
 };
 
 export const testSpin = async (config: Config, tableAddress: Address, round: bigint) => {

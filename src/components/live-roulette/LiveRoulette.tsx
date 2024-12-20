@@ -20,7 +20,7 @@ export const LiveRoulette = () => {
 	const [lastShownBet, setLastShownBet] = useState<string>('');
 
 	useEffect(() => {
-		if (status === 'landed' && !isRefetching && bets[0].transactionHash !== lastShownBet) {
+		if (status === 'landed' && !isRefetching && bets[0].bet !== lastShownBet) {
 			toast({
 				component: <RouletteResultToast rouletteBet={bets[0]} />,
 			});
@@ -28,7 +28,7 @@ export const LiveRoulette = () => {
 			const hasWon = bets[0].amount < bets[0].winAmount;
 			hasWon && shootConfetti();
 
-			setLastShownBet(bets[0].transactionHash || '');
+			setLastShownBet(bets[0].bet || '');
 		}
 
 		if (status === 'spinning') {
@@ -40,7 +40,7 @@ export const LiveRoulette = () => {
 
 	useEffect(() => {
 		if (!lastShownBet && bets[0]) {
-			setLastShownBet(bets[0].transactionHash);
+			setLastShownBet(bets[0].bet);
 		}
 	}, [bets]);
 

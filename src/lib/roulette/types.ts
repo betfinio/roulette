@@ -74,10 +74,18 @@ export interface PlayerBet {
 	player: Address;
 }
 
+export interface PlayerInProgressBet {
+	amount: bigint;
+	bet: Address;
+	created: bigint;
+	player: Address;
+}
+
 export interface RoundBet {
 	amount: bigint;
 	bet: Address;
 	created: bigint;
-	transactionHash: Address;
-	player: Address;
+
+	winNumber: number;
+	winAmount: bigint;
 }
