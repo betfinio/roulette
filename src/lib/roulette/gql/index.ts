@@ -17,6 +17,7 @@ import {
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
 import type { PlayerBet, PlayerInProgressBet, RoundBet } from '@/src/lib/roulette/types.ts';
+
 import { ZeroAddress } from '@betfinio/abi';
 
 import type { ExecutionResult } from 'graphql/execution';

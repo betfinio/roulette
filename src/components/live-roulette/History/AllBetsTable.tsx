@@ -1,5 +1,6 @@
 import { useGetTableAddress, useGetTableRounds } from '@/src/lib/roulette/query';
-import type { PlayerBet, RoundBet } from '@/src/lib/roulette/types.ts';
+import type { RoundBet } from '@/src/lib/roulette/types.ts';
+
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import Fox from '@betfinio/ui/dist/icons/Fox';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
@@ -22,6 +23,7 @@ const columnHelper = createColumnHelper<RoundBet>();
 export const AllBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const [selected, setSelected] = useState<null | RoundBet>(null);
+
 	const { tableAddress } = useGetTableAddress();
 	const { data: bets = [], isLoading } = useGetTableRounds(50, tableAddress || ZeroAddress);
 
@@ -63,6 +65,7 @@ export const AllBetsTable = () => {
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
 	] as ColumnDef<RoundBet>[];
+
 	const columnsMobile = [
 		columnHelper.accessor('amount', {
 			header: t('amount'),
@@ -98,7 +101,7 @@ export const AllBetsTable = () => {
 				<DialogContent className="games">
 					<DialogTitle className={'hidden'} />
 					<DialogDescription className={'hidden'} />
-					<RoundModal selectedBet={selected} onClose={() => setSelected(null)} />
+					{/* <RoundModal selectedBet={selected} onClose={() => setSelected(null)} /> */}
 				</DialogContent>
 			</Dialog>
 
