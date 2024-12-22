@@ -13,6 +13,7 @@ import { ShieldCheckIcon, X } from 'lucide-react';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { Address } from 'viem';
 import { AllBetsTable as MultiplePlayerAllBetsTable } from '../live-roulette/History/AllBetsTable';
 import { MyBetsTable as MultiplePlayerMyBetsTable } from '../live-roulette/History/MyBets';
 import { AllBetsTable as SinglePlayerAllBetsTable } from '../roulette/History/AllBetsTable';
@@ -37,10 +38,17 @@ const History = () => {
 
 export default History;
 
-export const RoundModal: FC<{
-	selectedBet: RoundBet | null;
+interface IRoundModalProps {
+	selectedBet: {
+		bet: Address;
+		winAmount: bigint;
+		winNumber: number;
+		created: bigint;
+		amount: bigint;
+	} | null;
 	onClose: () => void;
-}> = ({ selectedBet, onClose }) => {
+}
+export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 	const { data: transactionHash = ZeroAddress, isLoading } = useGetTransactionHashByBet(selectedBet?.bet || ZeroAddress);
 
 	const { isMobile } = useMediaQuery();

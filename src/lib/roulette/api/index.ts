@@ -225,7 +225,11 @@ export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Ad
 		address: tableAddress,
 		functionName: 'interval',
 	});
-	return { round, interval };
+
+	return {
+		round,
+		interval,
+	};
 };
 
 export const testSpin = async (config: Config, tableAddress: Address, round: bigint) => {
@@ -262,7 +266,7 @@ export const fetchBetsBitMapAndAmount = async (config: Config, betAddress: Addre
 	});
 
 	const formattedResult = result[0].map((res, index) => ({ amount: res, bitmap: result[1][index] })).map(decodeBet);
-	console.log(formattedResult, 'formattedResult');
+
 	return formattedResult;
 };
 export const fetchTableBetByBlockHash = async (config: Config, blockHash: Address, tableAddress?: Address) => {

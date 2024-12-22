@@ -85,7 +85,14 @@ export interface RoundBet {
 	amount: bigint;
 	bet: Address;
 	created: bigint;
-
+	round: number;
 	winNumber: number;
 	winAmount: bigint;
+}
+export interface PlayerRoundBets {
+	amount: bigint;
+	bet: Address;
+	betCounts: number;
+	created: bigint;
+	player: Address;
 }

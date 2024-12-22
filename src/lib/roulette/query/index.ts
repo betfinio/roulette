@@ -1,3 +1,4 @@
+import { BET_STATUS_HEADER } from '@/src/components/shared/BetStatusHeader/BetStatusHeader';
 import logger from '@/src/config/logger';
 import {
 	calculatePotentialWin,
@@ -34,6 +35,7 @@ import { useAccount, useConfig } from 'wagmi';
 import {
 	fetchAllPlayersBets,
 	fetchPlayerBets,
+	fetchSelectedTableRoundPlayers,
 	fetchTableAllRounds,
 	fetchTableBets,
 	fetchTablePlayerRounds,
@@ -339,6 +341,17 @@ export const useGetCurrentRound = (tableAddress?: Address) => {
 		enabled: !!tableAddress,
 	});
 };
+export const useMutateCurrentRound = () => {
+	const config = useConfig();
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationKey: ['roulette', 'currentRound'],
+		mutationFn: (tableAddress: Address) => fetchCurrentRoundOfTable(config, tableAddress),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ['roulette', 'currentRound'] });
+		},
+	});
+};
 
 export const useGetTableSelectedRoundBets = (tableAddress?: Address, round?: number) => {
 	return useQuery({
@@ -351,10 +364,13 @@ export const useGetTableSelectedRoundBets = (tableAddress?: Address, round?: num
 
 export const useGetSelectedRound = () => {
 	const search = useSearch({ strict: false });
+	const { tableAddress } = useGetTableAddress();
+	const { data: currentRound } = useGetCurrentRound(tableAddress);
 
-	console.log(search, 'search');
 	const round = search?.round ? Number(search.round) : undefined;
-	return round;
+	const isRoundFinished = Number(currentRound?.round) > Number(round);
+
+	return { round, isRoundFinished };
 };
 
 export const useGetBetAmountAndBitMap = (bet: Address) => {
@@ -395,4 +411,22 @@ export const useGetTransactionHashByBet = (bet: Address) => {
 		queryFn: () => fetchTransactionHashByBet(bet),
 		refetchOnWindowFocus: false,
 	});
+};
+
+export const useGetTableRoundPlayers = (tableAddress?: Address, round?: number) => {
+	return useQuery({
+		queryKey: ['roulette', 'table', 'round', 'players', tableAddress, round],
+		queryFn: () => fetchSelectedTableRoundPlayers(tableAddress, round),
+		refetchOnWindowFocus: false,
+		enabled: !!tableAddress && !!round,
+	});
+};
+
+export const useScrollToHeader = () => {
+	const scrollToHeader = () => {
+		document.getElementById(BET_STATUS_HEADER)?.scrollIntoView({
+			behavior: 'smooth',
+		});
+	};
+	return { scrollToHeader };
 };

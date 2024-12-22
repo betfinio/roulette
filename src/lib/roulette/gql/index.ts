@@ -11,12 +11,14 @@ import {
 	type GetTablePlayerRoundsQuery,
 	GetTableSelectedRoundBetsDocument,
 	type GetTableSelectedRoundBetsQuery,
+	GetTableSelectedRoundPlayersDocument,
+	type GetTableSelectedRoundPlayersQuery,
 	GetTransactionHashByBetDocument,
 	type GetTransactionHashByBetQuery,
 	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
-import type { PlayerBet, PlayerInProgressBet, RoundBet } from '@/src/lib/roulette/types.ts';
+import type { PlayerBet, PlayerInProgressBet, PlayerRoundBets, RoundBet } from '@/src/lib/roulette/types.ts';
 
 import { ZeroAddress } from '@betfinio/abi';
 
@@ -97,11 +99,11 @@ export const fetchTablePlayerRounds = async (player: Address, table?: Address) =
 				amount: BigInt(bet.amount),
 				bet: bet.bet as Address,
 				created: bet.blockTimestamp,
-				transactionHash: bet.transactionHash,
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
 				player: bet.player as Address,
-			} as PlayerBet;
+				round: Number(bet.round),
+			} as RoundBet;
 		});
 	}
 	return [];
@@ -120,6 +122,7 @@ export const fetchTableAllRounds = async (last: number, table?: Address) => {
 				transactionHash: bet.transactionHash,
 				winAmount: BigInt(bet.winAmount),
 				winNumber: Number(bet.winNumber),
+				round: Number(bet.round),
 			} as RoundBet;
 		});
 	}
@@ -151,4 +154,21 @@ export const fetchTransactionHashByBet = async (bet: Address) => {
 		return data.data.betEndeds[0].transactionHash as Address;
 	}
 	return ZeroAddress;
+};
+
+export const fetchSelectedTableRoundPlayers = async (table?: Address, round?: number) => {
+	if (table === undefined || round === undefined) return [];
+
+	const data: ExecutionResult<GetTableSelectedRoundPlayersQuery> = await execute(GetTableSelectedRoundPlayersDocument, { table, round });
+	if (data.data) {
+		return data.data.playerBetPlaceds_collection.map((players) => {
+			return {
+				amount: BigInt(players.amount),
+				bet: players.bet as Address,
+				betCounts: Number(players.betsCount),
+				created: players.blockTimestamp,
+				player: players.player as Address,
+			} as PlayerRoundBets;
+		});
+	}
 };

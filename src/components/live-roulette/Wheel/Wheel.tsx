@@ -1,5 +1,5 @@
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetCurrentRound, useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
@@ -9,7 +9,7 @@ import { PlayIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useAccount } from 'wagmi';
 import RouletteWheel from '../../shared/RouletteWheel';
-import { WheelTime } from '../WheelTime/WheelTime';
+import { WheelDetails } from '../WheelDetails/WheelDetails';
 
 export const Wheel = () => {
 	const queryClient = useQueryClient();
@@ -18,10 +18,9 @@ export const Wheel = () => {
 	const { state: wheelStateData, updateState } = useRouletteState();
 	const status = wheelStateData.data.state;
 	const { tableAddress } = useGetTableAddress();
-	const { data: currentRound } = useGetCurrentRound(tableAddress);
+
 	const { isFetched: isBetsFetched, data: bets = [] } = useGetPlayerBets(tableAddress);
 	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
-	console.log(currentRound, 'currentRound');
 	// Animation control
 	const wheelControlsWrapper = useAnimation();
 	const wheelControls = useAnimation();
@@ -126,7 +125,7 @@ export const Wheel = () => {
 	return (
 		<>
 			<div className="w-full flex flex-col relative max-w-2xl mx-8 lg:mx-auto drop-shadow-[0_0_18px_rgba(0,172,231,0.45)] rounded-full">
-				{currentRound && initialAnimationFinished && <WheelTime round={Number(currentRound?.round)} interval={Number(currentRound?.interval)} />}
+				{initialAnimationFinished && <WheelDetails />}
 				<motion.div className=" relative  mt-0   max-w-3xl	aspect-square pb-10" animate={wheelControlsWrapper}>
 					<motion.div style={{}} className={cn({ 'blur-md animate-pulse': !isBetsFetched })} animate={wheelControls}>
 						<div className="relative aspect-square w-full max-w-3xl ">

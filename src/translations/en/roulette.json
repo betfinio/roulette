@@ -56,7 +56,8 @@
 		"waiting": "Waiting",
 		"betID": "Bet ID:",
 		"proofOfRandom": "Proof of random:",
-		"howItWorks": "How it works?"
+		"howItWorks": "How it works?",
+		"round": "Round"
 	},
 	"betTable": {
 		"Odd": "Odd",
@@ -111,5 +112,7 @@
 		"bets": "Bets",
 		"players": "Players"
 	},
-	"timeLeft": "Time left"
+	"timeLeft": "Time left",
+	"round": "Round",
+	"betCount": "{count, plural, =0 {No bets} =1 {# bet} other {# bets}}"
 }

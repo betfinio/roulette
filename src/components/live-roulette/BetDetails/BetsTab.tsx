@@ -3,8 +3,10 @@ import { BetItem } from './BetTabItem';
 
 export const BetsTab = () => {
 	const { tableAddress } = useGetTableAddress();
-	const round = useGetSelectedRound() || 0;
+	const { round = 0 } = useGetSelectedRound();
 	const { data = [] } = useGetTableSelectedRoundBets(tableAddress, round);
+
+	console.log(round, 'round');
 	return (
 		<div className="flex flex-col gap-2">
 			{data.map((bet) => {

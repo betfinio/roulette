@@ -1,7 +1,6 @@
 import { ETHSCAN } from '@/src/global';
-import { fillItems } from '@/src/lib/roulette';
 import { useGetBetAmountAndBitMap, useRouletteOtherBetsState } from '@/src/lib/roulette/query';
-import type { PlayerInProgressBet, RoundBet } from '@/src/lib/roulette/types';
+import type { PlayerInProgressBet } from '@/src/lib/roulette/types';
 import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
@@ -10,23 +9,17 @@ import { useCustomUsername, useUsername } from 'betfinio_app/lib/query/username'
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useAccount } from 'wagmi';
-import { dozenItemsConfig, sideItemsConfig } from '../../shared/MainTable/SideTable';
-import { tableConfigHorizontal } from '../../shared/MainTable/tableConfigHorizontal';
-import { tableConfigVertical } from '../../shared/MainTable/tableConfigVertical';
-import { tableExtraConfigHorizontal, tableExtraConfigVertical } from '../../shared/MainTable/tableExtraItemsConfig';
 
 interface IBetTabItemProps {
 	bet: PlayerInProgressBet;
 	round: number;
 }
-export const BetItem: FC<IBetTabItemProps> = ({ bet, round }) => {
+export const BetItem: FC<IBetTabItemProps> = ({ bet }) => {
 	const { address } = useAccount();
 
 	const { data: username } = useUsername(bet.player);
 	const { data: customUsername } = useCustomUsername(address, bet.player);
 
-	const { mutateAsync } = useGetBetAmountAndBitMap(bet.bet);
-	const { isVertical } = useMediaQuery();
 	const { updateState } = useRouletteOtherBetsState();
 	return (
 		<motion.div

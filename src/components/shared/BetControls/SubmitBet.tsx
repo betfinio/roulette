@@ -69,11 +69,7 @@ export const SubmitBet: FC = () => {
 
 	return (
 		<>
-			{' '}
-			<div>
-				current round: <input className="bg-transparent" value={Number(currentRound)} />
-			</div>
-			<button type="button" onClick={() => testSpin(config, tableAddress as Address, 1445244n)}>
+			<button type="button" onClick={() => testSpin(config, tableAddress as Address, 1445585n)}>
 				test
 			</button>
 			<Button

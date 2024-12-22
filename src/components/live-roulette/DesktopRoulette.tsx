@@ -4,8 +4,7 @@ import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { BetDetails } from './BetDetails/BetDetails';
-import { LastResults } from './LastResults/LastResults';
-import { TableStat } from './TableStat';
+
 import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
@@ -20,24 +19,26 @@ export const DesktopRoulette = () => {
 						</div>
 						<div className="relative overflow-hidden ">
 							<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
-							<div className="relative w-full h-full mx-auto flex items-start gap-4">
+							<div className="relative w-full h-full mx-auto flex items-start gap-4 px-10">
 								{/* <ResultHistory /> */}
 								{/* <LastResults /> */}
 								<Wheel />
+
 								{/* <TableStat /> */}
 							</div>
 						</div>
-					</div>
+						{/* <TableRaceTrack/> */}
 
-					{/* <TableRaceTrack/> */}
-					<TableRaceTrack />
-					<div className="mx-auto max-w-5xl flex w-full">
-						<MainTable />
+						<TableRaceTrack />
 					</div>
 				</div>
-
-				<div className="relative lg:h-[650px] ">
+				<div className="relative lg:h-[450px] ">
 					<BetDetails />
+				</div>
+			</div>
+			<div>
+				<div className="mx-auto max-w-5xl flex w-full">
+					<MainTable />
 				</div>
 			</div>
 

@@ -1,21 +1,19 @@
-import { useGetTableAddress, useGetTableRounds } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useGetTableRounds, useScrollToHeader } from '@/src/lib/roulette/query';
 import type { RoundBet } from '@/src/lib/roulette/types.ts';
 
-import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
-import Fox from '@betfinio/ui/dist/icons/Fox';
+import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
-import { ETHSCAN } from '@/src/global';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
+import { Link } from '@tanstack/react-router';
 import { Search } from 'lucide-react';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BetResultCell } from '../../shared/BetResultCell';
-import { RoundModal } from '../../shared/HistoryTable';
 import { WinAmountCell } from '../../shared/WinAmountCell';
 
 const columnHelper = createColumnHelper<RoundBet>();
@@ -24,18 +22,20 @@ export const AllBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const [selected, setSelected] = useState<null | RoundBet>(null);
 
-	const { tableAddress } = useGetTableAddress();
+	const { tableAddress = ZeroAddress } = useGetTableAddress();
 	const { data: bets = [], isLoading } = useGetTableRounds(50, tableAddress || ZeroAddress);
 
 	const { isVertical } = useMediaQuery();
 
+	const { scrollToHeader } = useScrollToHeader();
+
 	const columns = [
-		columnHelper.accessor('bet', {
-			header: t('address'),
+		columnHelper.accessor('round', {
+			header: t('round'),
 			cell: (props) => (
-				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary-foreground whitespace-nowrap'}>
-					{truncateEthAddress(props.getValue())}
-				</a>
+				<Link to="/roulette/live/$table" onClick={scrollToHeader} resetScroll search={{ round: props.getValue() }} params={{ table: tableAddress }}>
+					#{props.getValue()}
+				</Link>
 			),
 		}),
 		columnHelper.accessor('created', {

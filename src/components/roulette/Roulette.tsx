@@ -1,4 +1,4 @@
-import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetPlayerBets, useGetTableAddress, useRouletteState, useScrollToHeader } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useRef } from 'react';
@@ -13,6 +13,7 @@ export const Roulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
 	const { toast } = useToast();
 	const { tableAddress } = useGetTableAddress();
+	const { scrollToHeader } = useScrollToHeader();
 
 	const { data: bets = [] } = useGetPlayerBets(tableAddress);
 
@@ -31,9 +32,7 @@ export const Roulette = () => {
 			lastShownBet.current = bets[0].bet;
 		}
 		if (status === 'spinning') {
-			document.getElementById(BET_STATUS_HEADER)?.scrollIntoView({
-				behavior: 'smooth',
-			});
+			scrollToHeader();
 		}
 	}, [wheelStateData]);
 
