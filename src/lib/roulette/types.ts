@@ -42,12 +42,16 @@ export interface WheelSpinning {
 export interface WheelLanded {
 	state: 'landed';
 	result: number;
-	bet: PlayerBet;
+	bet?: PlayerBet;
+	tableRound?: RoundBet;
+	tablePlayerRound?: RoundPlayerBet;
 }
 export interface WheelLanding {
 	state: 'landing';
 	result: number;
-	bet: PlayerBet;
+	bet?: PlayerBet;
+	tableRound?: RoundBet;
+	tablePlayerRound?: RoundPlayerBet;
 }
 
 export interface WheelStopped {
@@ -83,7 +87,15 @@ export interface PlayerInProgressBet {
 
 export interface RoundBet {
 	amount: bigint;
-	bet: Address;
+
+	created: bigint;
+	round: number;
+	winNumber: number;
+	winAmount: bigint;
+}
+export interface RoundPlayerBet {
+	amount: bigint;
+	player: Address;
 	created: bigint;
 	round: number;
 	winNumber: number;

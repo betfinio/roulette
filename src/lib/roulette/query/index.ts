@@ -14,6 +14,7 @@ import {
 	fetchSelectedChip,
 	fetchSinglePlayerAddress,
 	fetchTableBetByBlockHash,
+	fetchTableBetsByBlockHash,
 	place,
 	setDebugMode,
 	submitBet,
@@ -162,7 +163,7 @@ export const useSubmitBet = () => {
 			});
 			await waitForTransactionReceipt(config.getClient(), { hash: data });
 			update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
-			await queryClient.invalidateQueries({ queryKey: ['roulette'] });
+			queryClient.invalidateQueries({ queryKey: ['roulette'] });
 		},
 	});
 };
@@ -402,6 +403,16 @@ export const useFetchTableBetByBlockHash = () => {
 	return useMutation({
 		mutationKey: ['roulette', 'bet', 'blockHash'],
 		mutationFn: (blockHash: Address) => fetchTableBetByBlockHash(config, blockHash, tableAddress),
+	});
+};
+export const useFetchTableBetsByBlockHash = () => {
+	const config = useConfig();
+	const { address = ZeroAddress } = useAccount();
+
+	const { tableAddress } = useGetTableAddress();
+	return useMutation({
+		mutationKey: ['roulette', 'bets', 'blockHash'],
+		mutationFn: ({ blockHash, round }: { blockHash: Address; round: bigint }) => fetchTableBetsByBlockHash(config, blockHash, tableAddress, round, address),
 	});
 };
 

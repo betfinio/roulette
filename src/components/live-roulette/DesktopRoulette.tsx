@@ -4,12 +4,14 @@ import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { BetDetails } from './BetDetails/BetDetails';
+import { LastResults } from './LastResults/LastResults';
+import { TableStat } from './TableStat';
 
 import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
 	return (
-		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4">
+		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4 gap-y-4">
 			{/* Conteúdo Principal no Desktop */}
 			<div className="flex gap-4">
 				<div className="relative flex-1 flex flex-col w-full ">
@@ -19,12 +21,12 @@ export const DesktopRoulette = () => {
 						</div>
 						<div className="relative overflow-hidden ">
 							<div className="absolute inset-0 bg-gradient-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
-							<div className="relative w-full h-full mx-auto flex items-start gap-4 px-10">
+							<div className="relative w-full h-full mx-auto flex items-start gap-4 ">
 								{/* <ResultHistory /> */}
-								{/* <LastResults /> */}
-								<Wheel />
 
-								{/* <TableStat /> */}
+								<LastResults />
+								<Wheel />
+								<TableStat />
 							</div>
 						</div>
 						{/* <TableRaceTrack/> */}
@@ -32,7 +34,7 @@ export const DesktopRoulette = () => {
 						<TableRaceTrack />
 					</div>
 				</div>
-				<div className="relative lg:h-[450px] ">
+				<div className="relative  ">
 					<BetDetails />
 				</div>
 			</div>

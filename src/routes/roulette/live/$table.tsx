@@ -1,10 +1,10 @@
 import { LiveRoulette } from '@/src/components/live-roulette/LiveRoulette';
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { fetchCurrentRoundOfTable, fetchTableByAddress } from '@/src/lib/roulette/api';
-import { useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
-import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
+import { useFetchTableBetsByBlockHash, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { LiveRouletteABI } from '@betfinio/abi';
 import { useQueryClient } from '@tanstack/react-query';
-import { createFileRoute, redirect, useSearch } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
 import { type Address, isAddress } from 'viem';
 import { useWatchContractEvent } from 'wagmi';
@@ -50,6 +50,7 @@ function RouletteLiveTable() {
 	const queryClient = useQueryClient();
 	const { updateState } = useRouletteState();
 	const { tableAddress } = useGetTableAddress();
+	const { mutateAsync: fetchTableBetsByBlockHash } = useFetchTableBetsByBlockHash();
 
 	useWatchContractEvent({
 		abi: LiveRouletteABI,
@@ -69,13 +70,20 @@ function RouletteLiveTable() {
 		eventName: 'RandomGenerated',
 		onLogs: async (landedLogs) => {
 			const eventOfTheTable = landedLogs[0].args.table?.toString().toLowerCase() === tableAddress?.toLowerCase();
+			const tableRound = landedLogs[0].args.round;
 
 			if (eventOfTheTable) {
-				// updateState({
-				//   state: "landing",
-				//   result: Number(landedLogs[0].args.value),
-				//   bet: ZeroAddress,
-				// });
+				const round = await fetchTableBetsByBlockHash({
+					blockHash: landedLogs[0].blockHash,
+					round: tableRound || BigInt(0),
+				});
+				round &&
+					updateState({
+						state: 'landing',
+						result: Number(landedLogs[0].args.value),
+						tableRound: round.roundAllBets,
+						tablePlayerRound: round.roundPlayerBets || undefined,
+					});
 				queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 			}
 		},

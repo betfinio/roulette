@@ -31,8 +31,8 @@ export const WheelDetails: FC = () => {
 
 	const rouletteIsNotSpinning = state.data.state !== 'spinning' && state.data.state !== 'landing';
 
-	const showTimer = !isRoundFinished && isReady && !isExpired;
-	const showBackToGame = isRoundFinished;
+	const showTimer = !isRoundFinished && isReady && !isExpired && rouletteIsNotSpinning;
+	const showBackToGame = isRoundFinished && rouletteIsNotSpinning;
 	const showRoundNumber = rouletteIsNotSpinning;
 
 	return (

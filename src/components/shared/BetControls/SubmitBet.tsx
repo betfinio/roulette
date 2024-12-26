@@ -1,5 +1,5 @@
 import { getRequiredAllowance, testSpin } from '@/src/lib/roulette/api';
-import { useGetCurrentRound, useGetTableAddress, useLocalBets, useRouletteState, useSubmitBet } from '@/src/lib/roulette/query';
+import { useGetCurrentRound, useGetSelectedRound, useGetTableAddress, useLocalBets, useRouletteState, useSubmitBet } from '@/src/lib/roulette/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useToast } from '@betfinio/components/hooks';
@@ -20,6 +20,7 @@ export const SubmitBet: FC = () => {
 
 	const { isSingle, tableAddress } = useGetTableAddress();
 	const { data: currentRound } = useGetCurrentRound(tableAddress || ZeroAddress);
+	const { round } = useGetSelectedRound();
 
 	const { address = ZeroAddress } = useAccount();
 	const { data: isMember = false } = useIsMember(address);
@@ -69,7 +70,7 @@ export const SubmitBet: FC = () => {
 
 	return (
 		<>
-			<button type="button" onClick={() => testSpin(config, tableAddress as Address, 1445585n)}>
+			<button type="button" onClick={() => testSpin(config, tableAddress as Address, BigInt(round || 0))}>
 				test
 			</button>
 			<Button

@@ -1,7 +1,7 @@
 import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global.ts';
 import { decodeBet, encodeBet } from '@/src/lib/roulette';
-import type { ChiPlaceProps, LocalBet, PlayerBet, SpinParams } from '@/src/lib/roulette/types.ts';
-import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
+import type { ChiPlaceProps, LocalBet, PlayerBet, PlayerRoundBets, RoundBet, RoundPlayerBet, SpinParams } from '@/src/lib/roulette/types.ts';
+import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, PartnerABI, SinglePlayerTableABI, ZeroAddress } from '@betfinio/abi';
 
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
@@ -302,4 +302,72 @@ export const fetchTableBetByBlockHash = async (config: Config, blockHash: Addres
 		winNumber: Number(winNumber),
 		winAmount,
 	} as PlayerBet;
+};
+export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Address, tableAddress?: Address, round?: bigint, playerAddress?: Address) => {
+	if (!tableAddress) return;
+	const logs = await getLogs(config.getClient(), {
+		address: tableAddress,
+		event: parseAbiItem('event BetEnded(address indexed bet, uint256 indexed round, uint256 value, uint256 winAmount)'),
+		args: {
+			round: round,
+		},
+		blockHash: blockHash,
+	});
+
+	const roundAllBets: RoundBet = {
+		amount: BigInt(0),
+		winAmount: BigInt(0),
+		created: BigInt(0),
+		round: Number(round),
+		winNumber: -1,
+	};
+
+	let roundPlayerBets: RoundPlayerBet | null = null;
+
+	// Iterate over each log entry
+	for (const log of logs) {
+		const betAddress = log.args.bet as Address;
+
+		// Fetch bet info
+		const betInfo = await readContract(config, {
+			abi: LiroBetABI,
+			address: betAddress,
+			functionName: 'getBetInfo',
+			args: [],
+		});
+
+		const winNumber = await readContract(config, {
+			abi: LiroBetABI,
+			address: betAddress,
+			functionName: 'winNumber',
+			args: [],
+		});
+
+		// Extract values from bet info
+		const [player, , amount, winAmount, , created] = betInfo;
+
+		// Update totals
+		roundAllBets.amount += amount;
+		roundAllBets.winAmount += winAmount;
+		roundAllBets.created = created;
+		roundAllBets.winNumber = Number(winNumber);
+		if (player === playerAddress) {
+			if (roundPlayerBets) {
+				roundPlayerBets.amount += amount;
+				roundPlayerBets.winAmount += winAmount;
+				roundPlayerBets.created = created;
+				roundPlayerBets.winNumber = Number(winNumber);
+			} else {
+				roundPlayerBets = {
+					amount,
+					round: Number(round),
+					created,
+					winNumber: Number(winNumber),
+					winAmount,
+					player,
+				};
+			}
+		}
+	}
+	return { roundAllBets, roundPlayerBets };
 };

@@ -1,5 +1,5 @@
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetPlayerBets, useGetTableAddress, useGetTablePlayerRounds, useGetTableRounds, useRouletteState } from '@/src/lib/roulette/query';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
@@ -14,12 +14,13 @@ import { WheelDetails } from '../WheelDetails/WheelDetails';
 export const Wheel = () => {
 	const queryClient = useQueryClient();
 	const wheelNumbers = getWheelNumbers();
-	const { address = ZeroAddress } = useAccount();
 	const { state: wheelStateData, updateState } = useRouletteState();
 	const status = wheelStateData.data.state;
 	const { tableAddress } = useGetTableAddress();
+	const { address = ZeroAddress } = useAccount();
+	const { isFetched: isBetsFetched, data: rounds = [] } = useGetTableRounds(50, tableAddress);
+	const { data: playerRounds = [], isLoading } = useGetTablePlayerRounds(tableAddress);
 
-	const { isFetched: isBetsFetched, data: bets = [] } = useGetPlayerBets(tableAddress);
 	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
 	// Animation control
 	const wheelControlsWrapper = useAnimation();
@@ -90,10 +91,19 @@ export const Wheel = () => {
 					},
 				})
 				.then(async () => {
-					const { bet } = wheelStateData.data as WheelLanded;
-					queryClient.setQueryData(['roulette', 'bets', 'player', address], [bet, ...bets], {
-						updatedAt: Date.now(),
-					});
+					const { tableRound, tablePlayerRound } = wheelStateData.data as WheelLanded;
+
+					//Populate all bets for the current round
+					tableRound &&
+						queryClient.setQueryData(['roulette', 'bets', 'table', 'rounds', tableAddress], [tableRound, ...rounds], {
+							updatedAt: Date.now(),
+						});
+
+					//Populate all bets for the current round for the player
+					tablePlayerRound &&
+						queryClient.setQueryData(['roulette', 'bets', 'player', address, tableAddress], [tablePlayerRound, ...playerRounds], {
+							updatedAt: Date.now(),
+						});
 					updateState({ state: 'landed' } as WheelState);
 				});
 

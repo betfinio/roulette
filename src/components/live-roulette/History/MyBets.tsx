@@ -105,13 +105,13 @@ export const MyBetsTable = () => {
 
 	return (
 		<div className={cn('my-4')}>
-			<Dialog open={!!selected}>
+			{/* <Dialog open={!!selected}>
 				<DialogContent className="games">
 					<DialogTitle className={'hidden'} />
 					<DialogDescription className={'hidden'} />
 					<RoundModal selectedBet={selected} onClose={() => setSelected(null)} />
 				</DialogContent>
-			</Dialog>
+			</Dialog> */}
 
 			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="h-[285px]" />
 		</div>
