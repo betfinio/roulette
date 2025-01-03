@@ -1,7 +1,9 @@
 import { LiveRoulette } from '@/src/components/live-roulette/LiveRoulette';
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
-import { fetchCurrentRoundOfTable, fetchTableByAddress } from '@/src/lib/roulette/api';
-import { useFetchTableBetsByBlockHash, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
+import { useFetchTableBetsByBlockHash } from '@/src/lib/live-roulette/query';
+import { fetchTableByAddress } from '@/src/lib/shared/api';
+import { useGetTableAddress, useRouletteState } from '@/src/lib/shared/query';
 import { LiveRouletteABI } from '@betfinio/abi';
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, redirect } from '@tanstack/react-router';
@@ -34,7 +36,6 @@ export const Route = createFileRoute('/roulette/live/$table')({
 		}
 		console.log(deps, 'deps');
 		if (!deps.round) {
-			console.log(!deps.round, '!deps.round)');
 			const round = await fetchCurrentRoundOfTable(context.wagmiConfig, params.table as Address);
 			console.log(round, 'round');
 			throw redirect({ to: `/roulette/live/${params.table}`, search: { round: Number(round?.round) } });

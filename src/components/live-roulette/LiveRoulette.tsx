@@ -1,9 +1,10 @@
-import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetTableRounds } from '@/src/lib/live-roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
+import { useGetTableAddress, useRouletteState, useScrollToHeader } from '@/src/lib/shared/query';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef } from 'react';
+import type { Address } from 'viem';
 import { RouletteResultToast } from '../RouletteResultToast';
-import { BET_STATUS_HEADER } from '../shared/BetStatusHeader/BetStatusHeader';
 import { DesktopRoulette } from './DesktopRoulette';
 import { TabletRoulette } from './TabletRoulette';
 import { VerticalRoulette } from './VerticalRoulette';
@@ -12,15 +13,18 @@ export const LiveRoulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
 	const { toast } = useToast();
 	const { tableAddress } = useGetTableAddress();
-	const { data: bets = [], isRefetching } = useGetPlayerBets(tableAddress);
+	const { scrollToHeader } = useScrollToHeader();
+
+	const { data: bets = [], isRefetching } = useGetTableRounds(50, tableAddress);
 
 	const { state: wheelStateData } = useRouletteState();
 	const status = wheelStateData.data.state;
 
-	const [lastShownBet, setLastShownBet] = useState<string>('');
+	const lastShownRound = useRef<number>(-1);
+	const lastStatus = useRef<typeof status>();
 
 	useEffect(() => {
-		if (status === 'landed' && !isRefetching && bets[0].bet !== lastShownBet) {
+		if (status === 'landed' && !isRefetching && bets[0]?.round !== lastShownRound.current) {
 			toast({
 				component: <RouletteResultToast rouletteBet={bets[0]} />,
 			});
@@ -28,19 +32,19 @@ export const LiveRoulette = () => {
 			const hasWon = bets[0].amount < bets[0].winAmount;
 			hasWon && shootConfetti();
 
-			setLastShownBet(bets[0].bet || '');
+			lastShownRound.current = bets[0].round;
+			lastStatus.current = status;
 		}
 
-		if (status === 'spinning') {
-			document.getElementById(BET_STATUS_HEADER)?.scrollIntoView({
-				behavior: 'smooth',
-			});
+		if (status === 'spinning' && lastStatus.current === 'spinning') {
+			scrollToHeader();
+			lastStatus.current = status;
 		}
 	}, [status, isRefetching]);
 
 	useEffect(() => {
-		if (!lastShownBet && bets[0]) {
-			setLastShownBet(bets[0].bet);
+		if (!lastShownRound.current && bets[0]) {
+			lastShownRound.current = bets[0].round;
 		}
 	}, [bets]);
 

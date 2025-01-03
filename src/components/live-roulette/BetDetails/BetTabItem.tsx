@@ -1,9 +1,8 @@
 import { ETHSCAN } from '@/src/global';
-import { useGetBetAmountAndBitMap, useRouletteOtherBetsState } from '@/src/lib/roulette/query';
-import type { PlayerInProgressBet } from '@/src/lib/roulette/types';
+import type { PlayerInProgressBet } from '@/src/lib/live-roulette/types';
+import { useRouletteOthersBetsState } from '@/src/lib/shared/query';
 import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
-import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue } from '@betfinio/components/shared';
 import { useCustomUsername, useUsername } from 'betfinio_app/lib/query/username';
 import { motion } from 'framer-motion';
@@ -20,7 +19,7 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet }) => {
 	const { data: username } = useUsername(bet.player);
 	const { data: customUsername } = useCustomUsername(address, bet.player);
 
-	const { updateState } = useRouletteOtherBetsState();
+	const { updateState } = useRouletteOthersBetsState();
 	return (
 		<motion.div
 			key={bet.bet}

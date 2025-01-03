@@ -1,6 +1,7 @@
+import { useGetTablePlayerRounds, useGetTableRounds } from '@/src/lib/live-roulette/query';
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetPlayerBets, useGetTableAddress, useGetTablePlayerRounds, useGetTableRounds, useRouletteState } from '@/src/lib/roulette/query';
-import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
+import { useGetTableAddress, useRouletteState } from '@/src/lib/shared/query';
+import type { WheelLanded, WheelState } from '@/src/lib/shared/types';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';

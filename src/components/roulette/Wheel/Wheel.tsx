@@ -1,6 +1,7 @@
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
-import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
+import { useGetPlayerBets } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useRouletteState } from '@/src/lib/shared/query';
+import type { WheelLanded, WheelState } from '@/src/lib/shared/types';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
@@ -87,7 +88,10 @@ export const Wheel = () => {
 				})
 				.then(async () => {
 					const { bet } = wheelStateData.data as WheelLanded;
-					queryClient.setQueryData(['roulette', 'bets', 'player', address], [bet, ...bets], {
+					console.log(bet, 'bet!!');
+					const updatedBets = bets.filter((b) => b.bet.toLowerCase() !== bet?.bet.toLowerCase());
+
+					queryClient.setQueryData(['roulette', 'bets', 'player', address], [bet, ...updatedBets], {
 						updatedAt: Date.now(),
 					});
 					updateState({ state: 'landed' } as WheelState);

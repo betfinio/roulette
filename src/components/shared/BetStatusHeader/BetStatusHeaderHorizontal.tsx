@@ -2,7 +2,7 @@ import { AlertCircle, CircleAlert, CircleHelp } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, Separator } from '@betfinio/components/ui';

@@ -1,4 +1,4 @@
-import { useGetSelectedRound } from '@/src/lib/roulette/query';
+import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { useTranslation } from 'react-i18next';
 
 export const RoundNumber = () => {

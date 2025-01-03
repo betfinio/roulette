@@ -1,3 +1,4 @@
+import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 
 import History from '../shared/HistoryTable';
@@ -10,6 +11,7 @@ import { TableStat } from './TableStat';
 import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
+	const { isRoundFinished } = useGetSelectedRound();
 	return (
 		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4 gap-y-4">
 			{/* Conteúdo Principal no Desktop */}
@@ -31,7 +33,7 @@ export const DesktopRoulette = () => {
 						</div>
 						{/* <TableRaceTrack/> */}
 
-						<TableRaceTrack />
+						{!isRoundFinished && <TableRaceTrack />}
 					</div>
 				</div>
 				<div className="relative  ">
@@ -40,7 +42,7 @@ export const DesktopRoulette = () => {
 			</div>
 			<div>
 				<div className="mx-auto max-w-5xl flex w-full">
-					<MainTable />
+					<MainTable hideBetControls={isRoundFinished} />
 				</div>
 			</div>
 

@@ -1,5 +1,6 @@
 import type { BetInterface } from 'betfinio_app/lib/types';
 import type { Address } from 'viem';
+import type { RoundStatus } from '../shared/types';
 
 export interface RouletteBet extends BetInterface {
 	requestId: bigint;
@@ -12,63 +13,6 @@ export interface RouletteSubBet {
 	amount: bigint;
 }
 
-export interface LocalBet {
-	numbers: number[];
-	amount: number;
-	item: string;
-}
-
-export interface SpinParams {
-	bets: LocalBet[];
-	tableAddress: Address; //table address
-	roundNumber: bigint; //round number
-	playerAddress: Address; //player address
-}
-
-export interface ChiPlaceProps {
-	item: string;
-
-	numbers: number[];
-}
-
-export interface WheelStandBy {
-	state: 'standby';
-}
-
-export interface WheelSpinning {
-	state: 'spinning';
-}
-
-export interface WheelLanded {
-	state: 'landed';
-	result: number;
-	bet?: PlayerBet;
-	tableRound?: RoundBet;
-	tablePlayerRound?: RoundPlayerBet;
-}
-export interface WheelLanding {
-	state: 'landing';
-	result: number;
-	bet?: PlayerBet;
-	tableRound?: RoundBet;
-	tablePlayerRound?: RoundPlayerBet;
-}
-
-export interface WheelStopped {
-	state: 'stopped';
-	result: number;
-	bet: PlayerBet;
-}
-
-export type WheelState = WheelSpinning | WheelLanded | WheelStandBy | WheelStopped | WheelLanding;
-
-export interface Limit {
-	title: string;
-	payout: number;
-	min: bigint;
-	max: bigint;
-}
-
 export interface PlayerBet {
 	amount: bigint;
 	bet: Address;
@@ -76,35 +20,5 @@ export interface PlayerBet {
 	winNumber: number;
 	winAmount: bigint;
 	player: Address;
-}
-
-export interface PlayerInProgressBet {
-	amount: bigint;
-	bet: Address;
-	created: bigint;
-	player: Address;
-}
-
-export interface RoundBet {
-	amount: bigint;
-
-	created: bigint;
-	round: number;
-	winNumber: number;
-	winAmount: bigint;
-}
-export interface RoundPlayerBet {
-	amount: bigint;
-	player: Address;
-	created: bigint;
-	round: number;
-	winNumber: number;
-	winAmount: bigint;
-}
-export interface PlayerRoundBets {
-	amount: bigint;
-	bet: Address;
-	betCounts: number;
-	created: bigint;
-	player: Address;
+	status: RoundStatus;
 }

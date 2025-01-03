@@ -1,7 +1,7 @@
 import { ETHSCAN } from '@/src/global.ts';
 import { getColor } from '@/src/lib/roulette';
-import { useGetTableAddress, useGetTransactionHashByBet } from '@/src/lib/roulette/query';
-import type { PlayerBet, RoundBet } from '@/src/lib/roulette/types';
+import { useGetTransactionHashByBet } from '@/src/lib/roulette/query';
+import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';

@@ -1,6 +1,7 @@
 import { ETHSCAN } from '@/src/global';
-import { useGetSelectedRound, useGetTableAddress, useGetTableRoundPlayers } from '@/src/lib/roulette/query';
-import type { PlayerRoundBets } from '@/src/lib/roulette/types';
+import { useGetSelectedRound, useGetTableRoundPlayers } from '@/src/lib/live-roulette/query';
+import type { PlayerRoundBets } from '@/src/lib/live-roulette/types';
+import { useGetTableAddress } from '@/src/lib/shared/query';
 import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
@@ -18,7 +19,7 @@ export const PlayersTab = () => {
 	return (
 		<div className="flex flex-col gap-2">
 			{players.map((playerRoundBets) => {
-				return <PlayersTabItem key={playerRoundBets.bet} playerRoundBets={playerRoundBets} />;
+				return <PlayersTabItem key={playerRoundBets.created} playerRoundBets={playerRoundBets} />;
 			})}
 		</div>
 	);
@@ -35,7 +36,7 @@ export const PlayersTabItem: FC<IPlayersTabItemProps> = ({ playerRoundBets }) =>
 	const { data: customUsername } = useCustomUsername(address, playerRoundBets.player);
 	return (
 		<motion.div
-			key={playerRoundBets.bet}
+			key={playerRoundBets.created}
 			layout
 			initial={{ scale: 0 }}
 			animate={{ scale: 1 }}

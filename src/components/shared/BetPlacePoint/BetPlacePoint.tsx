@@ -1,4 +1,4 @@
-import { useGetDebugMode } from '@/src/lib/roulette/query';
+import { useGetDebugMode } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import type { FC } from 'react';
 import { BetChips } from '../BetChip/BetChips';

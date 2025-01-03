@@ -1,4 +1,5 @@
-import { useGetTableAddress, useMutateCurrentRound } from '@/src/lib/roulette/query';
+import { useMutateCurrentRound } from '@/src/lib/live-roulette/query';
+import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { useNavigate } from '@tanstack/react-router';
 

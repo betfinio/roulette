@@ -1,25 +1,21 @@
-import { useGetTableAddress, useGetTablePlayerRounds, useScrollToHeader } from '@/src/lib/roulette/query';
-import type { RoundBet } from '@/src/lib/roulette/types';
+import { useGetTablePlayerRounds } from '@/src/lib/live-roulette/query';
+import type { RoundBet, RoundPlayerBet } from '@/src/lib/live-roulette/types';
+import { useGetTableAddress, useScrollToHeader } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
 import { Link } from '@tanstack/react-router';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
-import { Search } from 'lucide-react';
 import { DateTime } from 'luxon';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BetResultCell } from '../../shared/BetResultCell';
-import { RoundModal } from '../../shared/HistoryTable';
 import { WinAmountCell } from '../../shared/WinAmountCell';
 
-const columnHelper = createColumnHelper<RoundBet>();
+const columnHelper = createColumnHelper<RoundPlayerBet>();
 
 export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
-	const [selected, setSelected] = useState<null | RoundBet>(null);
 	const { tableAddress = ZeroAddress } = useGetTableAddress();
 	const { data: bets = [], isLoading } = useGetTablePlayerRounds(tableAddress);
 	const { isVertical } = useMediaQuery();
@@ -48,23 +44,13 @@ export const MyBetsTable = () => {
 		}),
 		columnHelper.accessor('winAmount', {
 			header: t('win'),
-			cell: (props) => <WinAmountCell amount={props.row.original.winAmount} />,
+			cell: (props) => <WinAmountCell inProgress={props.row.original.status === 1} amount={props.row.original.winAmount} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => <BetResultCell winNumber={props.row.original.winNumber} />,
+			cell: (props) => <BetResultCell inProgress={props.row.original.status === 1} winNumber={props.row.original.winNumber} />,
 		}),
-
-		columnHelper.display({
-			id: 'action',
-			header: '',
-			cell: (props) => (
-				<>
-					<Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />
-				</>
-			),
-		}),
-	] as ColumnDef<RoundBet>[];
+	] as ColumnDef<RoundPlayerBet>[];
 	const columnsMobile = [
 		columnHelper.accessor('round', {
 			header: t('round'),
@@ -85,19 +71,13 @@ export const MyBetsTable = () => {
 		}),
 		columnHelper.accessor('winAmount', {
 			header: t('win'),
-			cell: (props) => <WinAmountCell amount={props.row.original.winAmount} />,
+			cell: (props) => <WinAmountCell inProgress={props.row.original.status === 1} amount={props.row.original.winAmount} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => <BetResultCell winNumber={props.row.original.winNumber} />,
+			cell: (props) => <BetResultCell inProgress={props.row.original.status === 1} winNumber={props.row.original.winNumber} />,
 		}),
-
-		columnHelper.display({
-			id: 'action',
-			header: '',
-			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
-		}),
-	] as ColumnDef<RoundBet>[];
+	] as ColumnDef<RoundPlayerBet>[];
 
 	if (bets.length === 0 && !isLoading) {
 		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
@@ -105,14 +85,6 @@ export const MyBetsTable = () => {
 
 	return (
 		<div className={cn('my-4')}>
-			{/* <Dialog open={!!selected}>
-				<DialogContent className="games">
-					<DialogTitle className={'hidden'} />
-					<DialogDescription className={'hidden'} />
-					<RoundModal selectedBet={selected} onClose={() => setSelected(null)} />
-				</DialogContent>
-			</Dialog> */}
-
 			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="h-[285px]" />
 		</div>
 	);

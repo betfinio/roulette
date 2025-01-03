@@ -1,9 +1,11 @@
 import { ETHSCAN } from '@/src/global.ts';
-import { useGetPlayerBets, useGetTableAddress } from '@/src/lib/roulette/query';
+import { useGetPlayerBets } from '@/src/lib/roulette/query';
 import type { PlayerBet } from '@/src/lib/roulette/types.ts';
 import { truncateEthAddress } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
+import { useGetTableAddress } from '@/src/lib/shared/query';
+import { RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
@@ -48,11 +50,11 @@ export const MyBetsTable = () => {
 		}),
 		columnHelper.accessor('winAmount', {
 			header: t('win'),
-			cell: (props) => <WinAmountCell amount={props.row.original.winAmount} />,
+			cell: (props) => <WinAmountCell inProgress={props.row.original.status === RoundStatus.CREATED} amount={props.row.original.winAmount} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => <BetResultCell winNumber={props.row.original.winNumber} />,
+			cell: (props) => <BetResultCell inProgress={props.row.original.status === RoundStatus.CREATED} winNumber={props.row.original.winNumber} />,
 		}),
 
 		columnHelper.display({
@@ -85,11 +87,11 @@ export const MyBetsTable = () => {
 		}),
 		columnHelper.accessor('winAmount', {
 			header: t('win'),
-			cell: (props) => <WinAmountCell amount={props.row.original.winAmount} />,
+			cell: (props) => <WinAmountCell inProgress={props.row.original.status === RoundStatus.CREATED} amount={props.row.original.winAmount} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => <BetResultCell winNumber={props.row.original.winNumber} />,
+			cell: (props) => <BetResultCell inProgress={props.row.original.status === RoundStatus.CREATED} winNumber={props.row.original.winNumber} />,
 		}),
 
 		columnHelper.display({

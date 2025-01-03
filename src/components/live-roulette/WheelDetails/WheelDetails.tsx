@@ -1,4 +1,5 @@
-import { useGetCurrentRound, useGetSelectedRound, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetCurrentRound, useGetSelectedRound } from '@/src/lib/live-roulette/query';
+import { useGetTableAddress, useRouletteState } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';

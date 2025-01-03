@@ -1,4 +1,4 @@
-import { usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
+import { usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import type { FC } from 'react';

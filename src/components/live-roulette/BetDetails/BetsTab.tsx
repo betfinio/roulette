@@ -1,4 +1,5 @@
-import { useGetSelectedRound, useGetTableAddress, useGetTableSelectedRoundBets } from '@/src/lib/roulette/query';
+import { useGetSelectedRound, useGetTableSelectedRoundBets } from '@/src/lib/live-roulette/query';
+import { useGetTableAddress } from '@/src/lib/shared/query';
 import { BetItem } from './BetTabItem';
 
 export const BetsTab = () => {

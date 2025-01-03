@@ -6,7 +6,11 @@ import { BetLogo } from '@betfinio/ui/dist/icons';
 import { useTranslation } from 'react-i18next';
 
 interface IRouletteResultToastProp {
-	rouletteBet: PlayerBet;
+	rouletteBet: {
+		amount: bigint;
+		winAmount: bigint;
+		winNumber: number;
+	};
 }
 export const RouletteResultToast: React.FC<IRouletteResultToastProp> = ({ rouletteBet }) => {
 	const { t } = useTranslation('roulette');

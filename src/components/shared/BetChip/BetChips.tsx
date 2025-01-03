@@ -1,5 +1,5 @@
 import { getChipColor } from '@/src/lib/roulette';
-import { useGetChipsForPosition, useRouletteOtherBetsState } from '@/src/lib/roulette/query';
+import { useGetChipsForPosition, useRouletteOthersBetsState } from '@/src/lib/shared/query';
 import millify from 'millify';
 import { type FC, useMemo } from 'react';
 
@@ -8,7 +8,7 @@ interface BetChipsProps {
 }
 export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 	const { data: chips } = useGetChipsForPosition(positionId);
-	const { state } = useRouletteOtherBetsState();
+	const { state } = useRouletteOthersBetsState();
 
 	const chipsToShow = useMemo(() => {
 		if (state.data.selectedBetChips) {

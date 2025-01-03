@@ -1,5 +1,6 @@
-import { getRequiredAllowance, testSpin } from '@/src/lib/roulette/api';
-import { useGetCurrentRound, useGetSelectedRound, useGetTableAddress, useLocalBets, useRouletteState, useSubmitBet } from '@/src/lib/roulette/query';
+import { useGetCurrentRound, useGetSelectedRound } from '@/src/lib/live-roulette/query';
+import { getRequiredAllowance } from '@/src/lib/shared/api';
+import { useGetTableAddress, useLocalBets, useRouletteState, useSubmitBet } from '@/src/lib/shared/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useToast } from '@betfinio/components/hooks';
@@ -14,13 +15,11 @@ import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
 
 export const SubmitBet: FC = () => {
-	const config = useConfig();
 	const { t } = useTranslation('roulette');
 	const { toast } = useToast();
 
 	const { isSingle, tableAddress } = useGetTableAddress();
 	const { data: currentRound } = useGetCurrentRound(tableAddress || ZeroAddress);
-	const { round } = useGetSelectedRound();
 
 	const { address = ZeroAddress } = useAccount();
 	const { data: isMember = false } = useIsMember(address);
@@ -70,9 +69,6 @@ export const SubmitBet: FC = () => {
 
 	return (
 		<>
-			<button type="button" onClick={() => testSpin(config, tableAddress as Address, BigInt(round || 0))}>
-				test
-			</button>
 			<Button
 				className="w-full uppercase text-xl px-8 relative"
 				onClick={handleSpin}

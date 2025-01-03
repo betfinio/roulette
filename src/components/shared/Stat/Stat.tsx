@@ -7,11 +7,11 @@ import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface IStatProps {
-	bets: PlayerBet[];
+	winNumbers: number[];
 }
-export const Stat: FC<IStatProps> = ({ bets }) => {
+export const Stat: FC<IStatProps> = ({ winNumbers }) => {
 	const { t } = useTranslation('roulette');
-	const numbers = useMemo(() => (bets.length > 0 ? bets.map((e) => e.winNumber) : [1, 2, 0, 4, 1, 4, 6, 6]), [bets]);
+	const numbers = useMemo(() => (winNumbers.length > 0 ? winNumbers.map((winNumber) => winNumber) : [1, 2, 0, 4, 1, 4, 6, 6]), [winNumbers]);
 
 	const counts = useMemo(() => _.countBy(numbers), [numbers]);
 	const hot = useMemo(() => _.sortBy(numbers, (num) => -counts[num]).slice(0, 3), [numbers]);
