@@ -1,12 +1,12 @@
 import './globals.css';
 import '@betfinio/components';
 import { RouterProvider, createRouter } from '@tanstack/react-router';
-import { queryClient, wagmiConfig } from 'betfinio_app/config';
+import { queryClient, wagmiConfig } from 'betfinio_context/config';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { routeTree } from './routeTree.gen';
 
-const router = createRouter({
+export const router = createRouter({
 	routeTree,
 	context: {
 		wagmiConfig,
@@ -16,7 +16,7 @@ const router = createRouter({
 
 // Render the app
 const rootElement = document.getElementById('root');
-if (rootElement && !rootElement.innerHTML) {
+if (rootElement) {
 	const root = ReactDOM.createRoot(rootElement);
-	root.render(<RouterProvider router={router} basepath={'/games'} />);
+	root.render(<RouterProvider router={router} />);
 }

@@ -1,4 +1,4 @@
-import { useChangeChip, useSelectedChip } from '@/src/lib/roulette/query';
+import { useChangeChip, useSelectedChip } from '@/src/lib/shared/query';
 import { Button } from '@betfinio/components/ui';
 import { Minus, PlusIcon } from 'lucide-react';
 import millify from 'millify';

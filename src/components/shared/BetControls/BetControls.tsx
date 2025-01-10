@@ -1,5 +1,6 @@
+import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { getChipColor } from '@/src/lib/roulette';
-import { useGetTableAddress, useLimits, useSelectedChip } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useLimits, useSelectedChip } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';

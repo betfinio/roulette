@@ -1,7 +1,7 @@
 import { ETHSCAN } from '@/src/global.ts';
 import { getColor } from '@/src/lib/roulette';
-import { useGetTableAddress, useGetTransactionHashByBet } from '@/src/lib/roulette/query';
-import type { PlayerBets } from '@/src/lib/roulette/types.ts';
+import { useGetTransactionHashByBet } from '@/src/lib/roulette/query';
+import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
@@ -13,6 +13,7 @@ import { ShieldCheckIcon, X } from 'lucide-react';
 import { DateTime } from 'luxon';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
+import type { Address } from 'viem';
 import { AllBetsTable as MultiplePlayerAllBetsTable } from '../live-roulette/History/AllBetsTable';
 import { MyBetsTable as MultiplePlayerMyBetsTable } from '../live-roulette/History/MyBets';
 import { AllBetsTable as SinglePlayerAllBetsTable } from '../roulette/History/AllBetsTable';
@@ -37,10 +38,17 @@ const History = () => {
 
 export default History;
 
-export const RoundModal: FC<{
-	selectedBet: PlayerBets | null;
+interface IRoundModalProps {
+	selectedBet: {
+		bet: Address;
+		winAmount: bigint;
+		winNumber: number;
+		created: bigint;
+		amount: bigint;
+	} | null;
 	onClose: () => void;
-}> = ({ selectedBet, onClose }) => {
+}
+export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 	const { data: transactionHash = ZeroAddress, isLoading } = useGetTransactionHashByBet(selectedBet?.bet || ZeroAddress);
 
 	const { isMobile } = useMediaQuery();
@@ -106,13 +114,14 @@ export const RoundModal: FC<{
 
 			<div className={'mt-5 flex flex-col items-center'}>
 				<div className={'text-center'}>{t('betID')}</div>
-				<Link
-					to={`${ETHSCAN}/address/${selectedBet?.bet}`}
+				<a
+					href={`${ETHSCAN}/address/${selectedBet?.bet}`}
 					className={'block text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 '}
 					target={'_blank'}
+					rel="noreferrer"
 				>
 					{isMobile ? truncateEthAddress(selectedBet?.bet || ZeroAddress, 7) : selectedBet?.bet}
-				</Link>
+				</a>
 
 				<div className={'text-center font-normal text-tertiary-foreground'}>
 					{DateTime.fromMillis(Number(selectedBet?.created) * 1000).toFormat('yyyy-MM-dd, HH:mm:ss Z')} UTC
