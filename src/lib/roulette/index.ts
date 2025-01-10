@@ -1,13 +1,5 @@
-import type { LocalBet } from '@/src/lib/roulette/types.ts';
+import type { TableConfigHorizontalItem } from '@/src/components/shared/MainTable/tableConfigHorizontal';
 import type { Address } from 'viem';
-
-export function encodeBet(bet: LocalBet) {
-	const value: bigint = bet.numbers.reduce((sum, num) => {
-		return sum + 2n ** BigInt(num);
-	}, 0n);
-
-	return { amount: BigInt(bet.amount) * 10n ** 18n, bitmap: value };
-}
 
 export function getColor(num: number): 'RED' | 'BLACK' | 'GREEN' {
 	if (num === 0) return 'GREEN';

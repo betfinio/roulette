@@ -1,9 +1,10 @@
-import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetSelectedRound, useGetTablePlayerRounds, useGetTableRounds, useLiveRouletteState } from '@/src/lib/live-roulette/query';
+import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { shootConfetti } from '@/src/lib/roulette/utils';
+import { useGetTableAddress, useScrollToHeader } from '@/src/lib/shared/query';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { RouletteResultToast } from '../RouletteResultToast';
-import { BET_STATUS_HEADER } from '../shared/BetStatusHeader/BetStatusHeader';
 import { DesktopRoulette } from './DesktopRoulette';
 import { TabletRoulette } from './TabletRoulette';
 import { VerticalRoulette } from './VerticalRoulette';
@@ -12,37 +13,45 @@ export const LiveRoulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
 	const { toast } = useToast();
 	const { tableAddress } = useGetTableAddress();
-	const { data: bets = [], isRefetching } = useGetPlayerBets(tableAddress);
+	const { scrollToHeader } = useScrollToHeader();
+	const { round } = useGetSelectedRound();
 
-	const { state: wheelStateData } = useRouletteState();
+	const { data: playerRounds, isRefetching } = useGetTablePlayerRounds(tableAddress);
+
+	const { state: wheelStateData } = useLiveRouletteState();
 	const status = wheelStateData.data.state;
 
-	const [lastShownBet, setLastShownBet] = useState<string>('');
+	const lastShownRound = useRef<number>(-1);
+	const lastStatus = useRef<typeof status>();
+
+	const selectedRound = useMemo(() => {
+		return playerRounds?.find((playerRound) => playerRound.round === round);
+	}, [playerRounds, round]);
 
 	useEffect(() => {
-		if (status === 'landed' && !isRefetching && bets[0].transactionHash !== lastShownBet) {
+		if (status === WheelStatus.Finished && !isRefetching && selectedRound && selectedRound.round !== lastShownRound.current && lastShownRound.current !== -1) {
 			toast({
-				component: <RouletteResultToast rouletteBet={bets[0]} />,
+				component: <RouletteResultToast rouletteBet={selectedRound} />,
 			});
 
-			const hasWon = bets[0].amount < bets[0].winAmount;
+			const hasWon = selectedRound.winAmount > 0n;
 			hasWon && shootConfetti();
 
-			setLastShownBet(bets[0].transactionHash || '');
+			lastShownRound.current = selectedRound.round;
+			lastStatus.current = status;
 		}
 
-		if (status === 'spinning') {
-			document.getElementById(BET_STATUS_HEADER)?.scrollIntoView({
-				behavior: 'smooth',
-			});
+		if (status === WheelStatus.Requested && lastStatus.current === WheelStatus.Requested) {
+			scrollToHeader();
+			lastStatus.current = status;
 		}
-	}, [status, isRefetching]);
+	}, [status, isRefetching, selectedRound]);
 
 	useEffect(() => {
-		if (!lastShownBet && bets[0]) {
-			setLastShownBet(bets[0].transactionHash);
+		if (lastShownRound.current === -1 && selectedRound) {
+			lastShownRound.current = selectedRound.round;
 		}
-	}, [bets]);
+	}, [playerRounds, selectedRound]);
 
 	if (isVertical) {
 		return (

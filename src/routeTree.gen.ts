@@ -11,41 +11,41 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as LiveRouletteImport } from './routes/live-roulette'
-import { Route as IndexImport } from './routes/index'
-import { Route as RouletteIndexImport } from './routes/roulette/index'
-import { Route as RouletteSingleIndexImport } from './routes/roulette/single/index'
-import { Route as RouletteLiveTableImport } from './routes/roulette/live/$table'
+import { Route as GamesIndexImport } from './routes/games/index'
+import { Route as GamesLiveRouletteImport } from './routes/games/live-roulette'
+import { Route as GamesRouletteIndexImport } from './routes/games/roulette/index'
+import { Route as GamesRouletteSingleIndexImport } from './routes/games/roulette/single/index'
+import { Route as GamesRouletteLiveTableImport } from './routes/games/roulette/live/$table'
 
 // Create/Update Routes
 
-const LiveRouletteRoute = LiveRouletteImport.update({
-  id: '/live-roulette',
-  path: '/live-roulette',
+const GamesIndexRoute = GamesIndexImport.update({
+  id: '/games/',
+  path: '/games/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const IndexRoute = IndexImport.update({
-  id: '/',
-  path: '/',
+const GamesLiveRouletteRoute = GamesLiveRouletteImport.update({
+  id: '/games/live-roulette',
+  path: '/games/live-roulette',
   getParentRoute: () => rootRoute,
 } as any)
 
-const RouletteIndexRoute = RouletteIndexImport.update({
-  id: '/roulette/',
-  path: '/roulette/',
+const GamesRouletteIndexRoute = GamesRouletteIndexImport.update({
+  id: '/games/roulette/',
+  path: '/games/roulette/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const RouletteSingleIndexRoute = RouletteSingleIndexImport.update({
-  id: '/roulette/single/',
-  path: '/roulette/single/',
+const GamesRouletteSingleIndexRoute = GamesRouletteSingleIndexImport.update({
+  id: '/games/roulette/single/',
+  path: '/games/roulette/single/',
   getParentRoute: () => rootRoute,
 } as any)
 
-const RouletteLiveTableRoute = RouletteLiveTableImport.update({
-  id: '/roulette/live/$table',
-  path: '/roulette/live/$table',
+const GamesRouletteLiveTableRoute = GamesRouletteLiveTableImport.update({
+  id: '/games/roulette/live/$table',
+  path: '/games/roulette/live/$table',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -53,39 +53,39 @@ const RouletteLiveTableRoute = RouletteLiveTableImport.update({
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexImport
+    '/games/live-roulette': {
+      id: '/games/live-roulette'
+      path: '/games/live-roulette'
+      fullPath: '/games/live-roulette'
+      preLoaderRoute: typeof GamesLiveRouletteImport
       parentRoute: typeof rootRoute
     }
-    '/live-roulette': {
-      id: '/live-roulette'
-      path: '/live-roulette'
-      fullPath: '/live-roulette'
-      preLoaderRoute: typeof LiveRouletteImport
+    '/games/': {
+      id: '/games/'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof GamesIndexImport
       parentRoute: typeof rootRoute
     }
-    '/roulette/': {
-      id: '/roulette/'
-      path: '/roulette'
-      fullPath: '/roulette'
-      preLoaderRoute: typeof RouletteIndexImport
+    '/games/roulette/': {
+      id: '/games/roulette/'
+      path: '/games/roulette'
+      fullPath: '/games/roulette'
+      preLoaderRoute: typeof GamesRouletteIndexImport
       parentRoute: typeof rootRoute
     }
-    '/roulette/live/$table': {
-      id: '/roulette/live/$table'
-      path: '/roulette/live/$table'
-      fullPath: '/roulette/live/$table'
-      preLoaderRoute: typeof RouletteLiveTableImport
+    '/games/roulette/live/$table': {
+      id: '/games/roulette/live/$table'
+      path: '/games/roulette/live/$table'
+      fullPath: '/games/roulette/live/$table'
+      preLoaderRoute: typeof GamesRouletteLiveTableImport
       parentRoute: typeof rootRoute
     }
-    '/roulette/single/': {
-      id: '/roulette/single/'
-      path: '/roulette/single'
-      fullPath: '/roulette/single'
-      preLoaderRoute: typeof RouletteSingleIndexImport
+    '/games/roulette/single/': {
+      id: '/games/roulette/single/'
+      path: '/games/roulette/single'
+      fullPath: '/games/roulette/single'
+      preLoaderRoute: typeof GamesRouletteSingleIndexImport
       parentRoute: typeof rootRoute
     }
   }
@@ -94,69 +94,69 @@ declare module '@tanstack/react-router' {
 // Create and export the route tree
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/live-roulette': typeof LiveRouletteRoute
-  '/roulette': typeof RouletteIndexRoute
-  '/roulette/live/$table': typeof RouletteLiveTableRoute
-  '/roulette/single': typeof RouletteSingleIndexRoute
+  '/games/live-roulette': typeof GamesLiveRouletteRoute
+  '/games': typeof GamesIndexRoute
+  '/games/roulette': typeof GamesRouletteIndexRoute
+  '/games/roulette/live/$table': typeof GamesRouletteLiveTableRoute
+  '/games/roulette/single': typeof GamesRouletteSingleIndexRoute
 }
 
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/live-roulette': typeof LiveRouletteRoute
-  '/roulette': typeof RouletteIndexRoute
-  '/roulette/live/$table': typeof RouletteLiveTableRoute
-  '/roulette/single': typeof RouletteSingleIndexRoute
+  '/games/live-roulette': typeof GamesLiveRouletteRoute
+  '/games': typeof GamesIndexRoute
+  '/games/roulette': typeof GamesRouletteIndexRoute
+  '/games/roulette/live/$table': typeof GamesRouletteLiveTableRoute
+  '/games/roulette/single': typeof GamesRouletteSingleIndexRoute
 }
 
 export interface FileRoutesById {
   __root__: typeof rootRoute
-  '/': typeof IndexRoute
-  '/live-roulette': typeof LiveRouletteRoute
-  '/roulette/': typeof RouletteIndexRoute
-  '/roulette/live/$table': typeof RouletteLiveTableRoute
-  '/roulette/single/': typeof RouletteSingleIndexRoute
+  '/games/live-roulette': typeof GamesLiveRouletteRoute
+  '/games/': typeof GamesIndexRoute
+  '/games/roulette/': typeof GamesRouletteIndexRoute
+  '/games/roulette/live/$table': typeof GamesRouletteLiveTableRoute
+  '/games/roulette/single/': typeof GamesRouletteSingleIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/live-roulette'
-    | '/roulette'
-    | '/roulette/live/$table'
-    | '/roulette/single'
+    | '/games/live-roulette'
+    | '/games'
+    | '/games/roulette'
+    | '/games/roulette/live/$table'
+    | '/games/roulette/single'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/live-roulette'
-    | '/roulette'
-    | '/roulette/live/$table'
-    | '/roulette/single'
+    | '/games/live-roulette'
+    | '/games'
+    | '/games/roulette'
+    | '/games/roulette/live/$table'
+    | '/games/roulette/single'
   id:
     | '__root__'
-    | '/'
-    | '/live-roulette'
-    | '/roulette/'
-    | '/roulette/live/$table'
-    | '/roulette/single/'
+    | '/games/live-roulette'
+    | '/games/'
+    | '/games/roulette/'
+    | '/games/roulette/live/$table'
+    | '/games/roulette/single/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  LiveRouletteRoute: typeof LiveRouletteRoute
-  RouletteIndexRoute: typeof RouletteIndexRoute
-  RouletteLiveTableRoute: typeof RouletteLiveTableRoute
-  RouletteSingleIndexRoute: typeof RouletteSingleIndexRoute
+  GamesLiveRouletteRoute: typeof GamesLiveRouletteRoute
+  GamesIndexRoute: typeof GamesIndexRoute
+  GamesRouletteIndexRoute: typeof GamesRouletteIndexRoute
+  GamesRouletteLiveTableRoute: typeof GamesRouletteLiveTableRoute
+  GamesRouletteSingleIndexRoute: typeof GamesRouletteSingleIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  LiveRouletteRoute: LiveRouletteRoute,
-  RouletteIndexRoute: RouletteIndexRoute,
-  RouletteLiveTableRoute: RouletteLiveTableRoute,
-  RouletteSingleIndexRoute: RouletteSingleIndexRoute,
+  GamesLiveRouletteRoute: GamesLiveRouletteRoute,
+  GamesIndexRoute: GamesIndexRoute,
+  GamesRouletteIndexRoute: GamesRouletteIndexRoute,
+  GamesRouletteLiveTableRoute: GamesRouletteLiveTableRoute,
+  GamesRouletteSingleIndexRoute: GamesRouletteSingleIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -169,27 +169,27 @@ export const routeTree = rootRoute
     "__root__": {
       "filePath": "__root.tsx",
       "children": [
-        "/",
-        "/live-roulette",
-        "/roulette/",
-        "/roulette/live/$table",
-        "/roulette/single/"
+        "/games/live-roulette",
+        "/games/",
+        "/games/roulette/",
+        "/games/roulette/live/$table",
+        "/games/roulette/single/"
       ]
     },
-    "/": {
-      "filePath": "index.tsx"
+    "/games/live-roulette": {
+      "filePath": "games/live-roulette.tsx"
     },
-    "/live-roulette": {
-      "filePath": "live-roulette.tsx"
+    "/games/": {
+      "filePath": "games/index.tsx"
     },
-    "/roulette/": {
-      "filePath": "roulette/index.tsx"
+    "/games/roulette/": {
+      "filePath": "games/roulette/index.tsx"
     },
-    "/roulette/live/$table": {
-      "filePath": "roulette/live/$table.tsx"
+    "/games/roulette/live/$table": {
+      "filePath": "games/roulette/live/$table.tsx"
     },
-    "/roulette/single/": {
-      "filePath": "roulette/single/index.tsx"
+    "/games/roulette/single/": {
+      "filePath": "games/roulette/single/index.tsx"
     }
   }
 }
