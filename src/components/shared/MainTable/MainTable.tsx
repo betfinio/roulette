@@ -1,11 +1,15 @@
 import { useMediaQuery } from '@betfinio/components/hooks';
+import type { FC } from 'react';
 import { BetControls } from '../BetControls/BetControls';
 import { ExtraItems } from './ExtraItems';
 import { RouletteNumbersGrid } from './RouletteNumbersGrid';
 import { SideTable } from './SideTable';
 import { ZeroItem } from './ZeroItem';
 
-export const MainTable = () => {
+interface MainTableProps {
+	hideBetControls?: boolean;
+}
+export const MainTable: FC<MainTableProps> = ({ hideBetControls }) => {
 	const { isVertical } = useMediaQuery();
 
 	if (isVertical) {
@@ -27,7 +31,7 @@ export const MainTable = () => {
 						</div>
 					</div>
 				</div>
-				<BetControls />
+				{!hideBetControls && <BetControls />}
 			</div>
 		);
 	}
@@ -53,7 +57,7 @@ export const MainTable = () => {
 				</div>
 			</div>
 
-			<BetControls />
+			{!hideBetControls && <BetControls />}
 		</div>
 	);
 };

@@ -1,6 +1,9 @@
+import preset from '@betfinio/components/tailwind-config';
+import animate from 'tailwindcss-animate';
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-	presets: [require('@betfinio/components/tailwind-config')],
+	presets: [preset],
 	darkMode: ['class'],
 	important: '.roulette',
 	content: ['./src/**/*.{ts,tsx}'],
@@ -33,5 +36,5 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [require('tailwindcss-animate')],
+	plugins: [animate],
 };

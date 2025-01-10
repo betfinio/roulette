@@ -1,5 +1,5 @@
 import { getGridNumbers } from '@/src/lib/roulette';
-import { useGetDebugMode, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/roulette/query';
+import { useGetDebugMode, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { type FC, Fragment } from 'react';

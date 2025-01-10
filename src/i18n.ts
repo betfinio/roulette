@@ -1,4 +1,4 @@
-import { sharedLang } from 'betfinio_app/locales/index';
+import { sharedLang } from 'betfinio_context/translations';
 import type { i18n } from 'i18next';
 import * as i18 from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
@@ -20,7 +20,7 @@ export const resources = {
 	},
 	cs: {
 		roulette: czJSON,
-		shared: sharedLang.cz,
+		shared: sharedLang.cs,
 	},
 } as const;
 

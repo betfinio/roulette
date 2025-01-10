@@ -49,6 +49,8 @@
 		"noBetsYet": "No bets yet",
 		"myBets": "My bets",
 		"allBets": "All bets",
+		"myRounds": "My rounds",
+		"allRounds": "All rounds",
 		"bettingTicket": "Betting ticket",
 		"winning": "Winning",
 		"totalBet": "Total bet",
@@ -56,7 +58,8 @@
 		"waiting": "Waiting",
 		"betID": "Bet ID:",
 		"proofOfRandom": "Proof of random:",
-		"howItWorks": "How it works?"
+		"howItWorks": "How it works?",
+		"round": "Round"
 	},
 	"betTable": {
 		"Odd": "Odd",
@@ -105,6 +108,15 @@
 	"placingBet": "Placing a bet",
 	"transactionIsPending": "Transaction is pending",
 	"transactionIsConfirmed": "Transaction is confirmed",
+	"transactionIsReverted": "Transaction is reverted",
 	"betPlaced": "Bet placed",
-	"submitBet": "Place"
+	"betNotPlaced": "Bet not placed",
+	"submitBet": "Place",
+	"betDetails": {
+		"bets": "Bets",
+		"players": "Players"
+	},
+	"timeLeft": "Time left",
+	"round": "Round",
+	"betCount": "{count, plural, =0 {No bets} =1 {# bet} other {# bets}}"
 }

@@ -1,5 +1,5 @@
 import { getChipColor } from '@/src/lib/roulette';
-import { useSelectedChip } from '@/src/lib/roulette/query';
+import { useSelectedChip } from '@/src/lib/shared/query';
 import millify from 'millify';
 
 export const BetControlChip = () => {

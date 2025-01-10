@@ -1,9 +1,11 @@
 import { ETHSCAN } from '@/src/global.ts';
-import { useGetPlayerBets, useGetTableAddress } from '@/src/lib/roulette/query';
-import type { PlayerBets } from '@/src/lib/roulette/types.ts';
+import { useGetPlayerBets } from '@/src/lib/roulette/query';
+import type { PlayerBet } from '@/src/lib/roulette/types.ts';
 import { truncateEthAddress } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
+import { useGetTableAddress } from '@/src/lib/shared/query';
+import { RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
@@ -16,11 +18,11 @@ import { BetResultCell } from '../../shared/BetResultCell';
 import { RoundModal } from '../../shared/HistoryTable';
 import { WinAmountCell } from '../../shared/WinAmountCell';
 
-const columnHelper = createColumnHelper<PlayerBets>();
+const columnHelper = createColumnHelper<PlayerBet>();
 
 export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
-	const [selected, setSelected] = useState<null | PlayerBets>(null);
+	const [selected, setSelected] = useState<null | PlayerBet>(null);
 	const { tableAddress } = useGetTableAddress();
 
 	const { data: bets = [], isLoading } = useGetPlayerBets(tableAddress);
@@ -48,11 +50,11 @@ export const MyBetsTable = () => {
 		}),
 		columnHelper.accessor('winAmount', {
 			header: t('win'),
-			cell: (props) => <WinAmountCell amount={props.row.original.winAmount} />,
+			cell: (props) => <WinAmountCell inProgress={props.row.original.status === RoundStatus.CREATED} amount={props.row.original.winAmount} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => <BetResultCell winNumber={props.row.original.winNumber} />,
+			cell: (props) => <BetResultCell inProgress={props.row.original.status === RoundStatus.CREATED} winNumber={props.row.original.winNumber} />,
 		}),
 
 		columnHelper.display({
@@ -64,7 +66,7 @@ export const MyBetsTable = () => {
 				</>
 			),
 		}),
-	] as ColumnDef<PlayerBets>[];
+	] as ColumnDef<PlayerBet>[];
 	const columnsMobile = [
 		columnHelper.accessor('bet', {
 			header: t('address'),
@@ -85,11 +87,11 @@ export const MyBetsTable = () => {
 		}),
 		columnHelper.accessor('winAmount', {
 			header: t('win'),
-			cell: (props) => <WinAmountCell amount={props.row.original.winAmount} />,
+			cell: (props) => <WinAmountCell inProgress={props.row.original.status === RoundStatus.CREATED} amount={props.row.original.winAmount} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => <BetResultCell winNumber={props.row.original.winNumber} />,
+			cell: (props) => <BetResultCell inProgress={props.row.original.status === RoundStatus.CREATED} winNumber={props.row.original.winNumber} />,
 		}),
 
 		columnHelper.display({
@@ -97,7 +99,7 @@ export const MyBetsTable = () => {
 			header: '',
 			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
-	] as ColumnDef<PlayerBets>[];
+	] as ColumnDef<PlayerBet>[];
 
 	if (bets.length === 0 && !isLoading) {
 		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
