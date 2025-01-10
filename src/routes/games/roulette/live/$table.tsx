@@ -210,7 +210,7 @@ export function RouletteLiveTable() {
 		onLogs: async (rolledLogs) => {
 			const betPlacedInCurrentRound = rolledLogs[0].args.round === BigInt(selectedRound ?? 0n);
 			const betAddress = rolledLogs[0].args.bet || ZeroAddress;
-			console.log('Bet Placed');
+
 			if (!betPlacedInCurrentRound || selectedRound === undefined) {
 				return;
 			}
