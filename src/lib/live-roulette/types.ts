@@ -48,6 +48,7 @@ export enum WheelStatus {
 	Created = 1,
 	Requested = 2,
 	Landing = 2.5, //operational status, just to extend smart contract status
+	JustFinished = 2.75, //operational status, just to extend smart contract status
 	Finished = 3,
 	Refunded = 4,
 }

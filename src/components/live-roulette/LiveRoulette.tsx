@@ -18,7 +18,7 @@ export const LiveRoulette = () => {
 
 	const { data: playerRounds, isRefetching } = useGetTablePlayerRounds(tableAddress);
 
-	const { state: wheelStateData } = useLiveRouletteState();
+	const { state: wheelStateData, updateState } = useLiveRouletteState();
 	const status = wheelStateData.data.state;
 
 	const lastShownRound = useRef<number>(-1);
@@ -29,7 +29,7 @@ export const LiveRoulette = () => {
 	}, [playerRounds, round]);
 
 	useEffect(() => {
-		if (status === WheelStatus.Finished && !isRefetching && selectedRound && selectedRound.round !== lastShownRound.current && lastShownRound.current !== -1) {
+		if (status === WheelStatus.JustFinished && selectedRound) {
 			toast({
 				component: <RouletteResultToast rouletteBet={selectedRound} />,
 			});
@@ -39,6 +39,10 @@ export const LiveRoulette = () => {
 
 			lastShownRound.current = selectedRound.round;
 			lastStatus.current = status;
+
+			updateState({
+				state: WheelStatus.Finished,
+			});
 		}
 
 		if (status === WheelStatus.Requested && lastStatus.current === WheelStatus.Requested) {
