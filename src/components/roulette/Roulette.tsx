@@ -1,6 +1,6 @@
-import { useGetPlayerBets } from '@/src/lib/roulette/query';
+import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
-import { useGetTableAddress, useRouletteState, useScrollToHeader } from '@/src/lib/shared/query';
+import { useGetTableAddress, useScrollToHeader } from '@/src/lib/shared/query';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useRef } from 'react';
 import type { Address } from 'viem';

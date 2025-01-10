@@ -1,4 +1,4 @@
-import { useGetCurrentRound, useGetTableRounds } from '@/src/lib/live-roulette/query';
+import { useGetCurrentRound, useGetSelectedRound, useGetTableRounds } from '@/src/lib/live-roulette/query';
 import type { RoundBet } from '@/src/lib/live-roulette/types';
 import { useGetTableAddress, useManualSpin, useScrollToHeader } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
@@ -23,8 +23,8 @@ export const AllBetsTable = () => {
 	const { data } = useGetCurrentRound(tableAddress);
 	const { mutateAsync: spinManually } = useManualSpin();
 	const { isVertical } = useMediaQuery();
-	console.log(data, 'data');
 	const { scrollToHeader } = useScrollToHeader();
+	const { round = 0 } = useGetSelectedRound();
 
 	const isRoundCreated = (status: number) => status === RoundStatus.CREATED;
 	const isPassedRound = (round: number) => round < Number(data?.round ?? Number.NEGATIVE_INFINITY);
@@ -39,7 +39,16 @@ export const AllBetsTable = () => {
 		columnHelper.accessor('round', {
 			header: t('round'),
 			cell: (props) => (
-				<Link to="/roulette/live/$table" onClick={scrollToHeader} resetScroll search={{ round: props.getValue() }} params={{ table: tableAddress }}>
+				<Link
+					to="/roulette/live/$table"
+					onClick={scrollToHeader}
+					resetScroll
+					search={{ round: props.getValue() }}
+					params={{ table: tableAddress }}
+					className={cn({
+						'text-secondary-foreground': props.row.original.round === round,
+					})}
+				>
 					#{props.getValue()}
 				</Link>
 			),

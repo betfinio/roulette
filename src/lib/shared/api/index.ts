@@ -224,3 +224,12 @@ export const fetchSinglePlayerAddress = async (config: Config) => {
 	});
 	return result;
 };
+
+export const fetchBetInfo = async (config: Config, betAddress: Address) => {
+	return readContract(config, {
+		abi: LiroBetABI,
+		address: betAddress,
+		functionName: 'getBetInfo',
+		args: [],
+	});
+};

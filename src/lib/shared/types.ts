@@ -1,6 +1,4 @@
 import type { Address } from 'viem';
-import type { RoundBet, RoundPlayerBet } from '../live-roulette/types';
-import type { PlayerBet } from '../roulette/types';
 
 export interface ChiPlaceProps {
 	item: string;
@@ -26,37 +24,6 @@ export interface Limit {
 	min: bigint;
 	max: bigint;
 }
-
-export interface WheelStandBy {
-	state: 'standby';
-}
-
-export interface WheelSpinning {
-	state: 'spinning';
-}
-
-export interface WheelLanded {
-	state: 'landed';
-	result: number;
-	bet?: PlayerBet;
-	tableRound?: RoundBet;
-	tablePlayerRound?: RoundPlayerBet;
-}
-export interface WheelLanding {
-	state: 'landing';
-	result: number;
-	bet?: PlayerBet;
-	tableRound?: RoundBet;
-	tablePlayerRound?: RoundPlayerBet;
-}
-
-export interface WheelStopped {
-	state: 'stopped';
-	result: number;
-	bet: PlayerBet;
-}
-
-export type WheelState = WheelSpinning | WheelLanded | WheelStandBy | WheelStopped | WheelLanding;
 
 export enum RoundStatus {
 	CREATED = 1,

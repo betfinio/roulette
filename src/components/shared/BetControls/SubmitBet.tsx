@@ -1,6 +1,8 @@
-import { useGetCurrentRound, useGetSelectedRound } from '@/src/lib/live-roulette/query';
+import { useGetCurrentRound, useLiveRouletteState } from '@/src/lib/live-roulette/query';
+import { WheelStatus } from '@/src/lib/live-roulette/types';
+import { useRouletteState } from '@/src/lib/roulette/query';
 import { getRequiredAllowance } from '@/src/lib/shared/api';
-import { useGetTableAddress, useLocalBets, useRouletteState, useSubmitBet } from '@/src/lib/shared/query';
+import { useGetTableAddress, useLocalBets, useSubmitBet } from '@/src/lib/shared/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useToast } from '@betfinio/components/hooks';
@@ -11,8 +13,7 @@ import { useAllowance } from 'betfinio_app/lib/query/token';
 import { Loader } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Address } from 'viem';
-import { useAccount, useConfig } from 'wagmi';
+import { useAccount } from 'wagmi';
 
 export const SubmitBet: FC = () => {
 	const { t } = useTranslation('roulette');
@@ -26,11 +27,14 @@ export const SubmitBet: FC = () => {
 	const { requestAllowance } = useAllowanceModal();
 	const { mutate: submitBet, isPending } = useSubmitBet();
 	const { data: allowance = 0n, isFetching: loading } = useAllowance(address);
-	const { state: wheelStateData } = useRouletteState();
-	const wheelState = wheelStateData.data;
+	const { state: rouletteWheelStateData } = useRouletteState();
+	const { state: liveRouletteWheelStateData } = useLiveRouletteState();
+	const rouletteWheelState = rouletteWheelStateData.data;
+	const liveRouletteWheelState = liveRouletteWheelStateData.data;
 	const { data: bets = [] } = useLocalBets();
 
-	const isSpinning = loading || isPending;
+	const isSpinning =
+		loading || isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested);
 
 	const handleSpin = () => {
 		if (address === ZeroAddress) {
@@ -48,7 +52,8 @@ export const SubmitBet: FC = () => {
 			return;
 		}
 
-		if (wheelState.state === 'spinning') return;
+		if (isSingle && rouletteWheelState.state === 'spinning') return;
+		if (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested) return;
 
 		if (valueToNumber(allowance) < Number(getRequiredAllowance())) {
 			toast({
@@ -69,11 +74,7 @@ export const SubmitBet: FC = () => {
 
 	return (
 		<>
-			<Button
-				className="w-full uppercase text-xl px-8 relative"
-				onClick={handleSpin}
-				disabled={wheelState.state === 'spinning' || isSpinning || address === undefined || isPending}
-			>
+			<Button className="w-full uppercase text-xl px-8 relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>
 				{isSpinning && <Loader color={'black'} className={'animate-spin absolute'} />}
 				<span className={cn('uppercase', { invisible: isSpinning })}>{isSingle ? t('spin') : t('submitBet')}</span>
 			</Button>

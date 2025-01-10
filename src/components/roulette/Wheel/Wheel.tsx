@@ -1,7 +1,7 @@
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetPlayerBets } from '@/src/lib/roulette/query';
-import { useGetTableAddress, useRouletteState } from '@/src/lib/shared/query';
-import type { WheelLanded, WheelState } from '@/src/lib/shared/types';
+import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
+import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
+import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';

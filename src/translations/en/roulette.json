@@ -108,7 +108,9 @@
 	"placingBet": "Placing a bet",
 	"transactionIsPending": "Transaction is pending",
 	"transactionIsConfirmed": "Transaction is confirmed",
+	"transactionIsReverted": "Transaction is reverted",
 	"betPlaced": "Bet placed",
+	"betNotPlaced": "Bet not placed",
 	"submitBet": "Place",
 	"betDetails": {
 		"bets": "Bets",

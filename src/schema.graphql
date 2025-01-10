@@ -61,15 +61,28 @@ query GetLiveRouletteTableAllBets($table: Bytes, $first: Int) {
   }
 }
 query GetLiveRouletteTableSelectedRoundBets($table: Bytes, $round: BigInt) {
-  playerRoundSingleBetPlaceds_collection(where: { table: $table, round: $round }, orderBy: blockTimestamp, orderDirection: desc) {
+  playerRoundSingleBetPlaceds_collection(
+    where: { table: $table, round: $round }
+    orderBy: blockTimestamp
+    orderDirection: desc
+  ) {
     amount
+    winAmount
     player
     blockTimestamp
     bet
+    chips {
+      id
+      bitMap
+    }
   }
 }
 query GetLiveRouletteTableSelectedRoundPlayers($table: Bytes, $round: BigInt) {
-  playerRoundBetPlaceds_collection(where: { table: $table, round: $round }, orderBy: blockTimestamp, orderDirection: desc) {
+  playerRoundBetPlaceds_collection(
+    where: { table: $table, round: $round }
+    orderBy: blockTimestamp
+    orderDirection: desc
+  ) {
     amount
     player
     blockTimestamp

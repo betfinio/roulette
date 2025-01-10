@@ -16,10 +16,9 @@ export const LastResultRow: FC<ILastResultRowProps> = ({ result, index }) => {
 				'aspect-square text-foreground rounded-lg flex justify-center items-center ',
 
 				{
-					'col-start-1 bg-red-roulette w-8': getColor(result.winNumber) === 'RED' && result.status === RoundStatus.FINISHED,
-					'col-start-2 bg-green-roulette w-8': getColor(result.winNumber) === 'GREEN' && result.status === RoundStatus.FINISHED,
-					'col-start-3 bg-black-roulette w-8': getColor(result.winNumber) === 'BLACK' && result.status === RoundStatus.FINISHED,
-					'blur-sm animate-pulse w-full': result.status === RoundStatus.CREATED,
+					'col-start-1 bg-red-roulette w-8': getColor(result.winNumber) === 'RED',
+					'col-start-2 bg-green-roulette w-8': getColor(result.winNumber) === 'GREEN',
+					'col-start-3 bg-black-roulette w-8': getColor(result.winNumber) === 'BLACK',
 				},
 				{
 					'row-start-1': index === 0,

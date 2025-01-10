@@ -1,11 +1,15 @@
-import { useGetCurrentRound, useGetSelectedRound } from '@/src/lib/live-roulette/query';
-import { useGetTableAddress, useRouletteState } from '@/src/lib/shared/query';
+import { useGetCurrentRound, useGetSelectedRound, useGetTableSelectedRoundBets, useLiveRouletteState } from '@/src/lib/live-roulette/query';
+import { WheelStatus } from '@/src/lib/live-roulette/types';
+import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
-import { type FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useMemo, useRef, useState } from 'react';
+import { useAccount } from 'wagmi';
 import { BackToGame } from './BackToGame';
+import { DynamicTextSVG } from './DynamicTextSVG';
+import { RoundIsOver } from './RoundIsOver';
 import { RoundNumber } from './RoundNumber';
 import { Timer } from './Timer';
 
@@ -13,28 +17,46 @@ export const WheelDetails: FC = () => {
 	const queryClient = useQueryClient();
 	const { tableAddress = ZeroAddress } = useGetTableAddress();
 
-	const { state } = useRouletteState();
+	const { state } = useLiveRouletteState();
+	const { address } = useAccount();
+	const { data: currentRound, isLoading, refetch } = useGetCurrentRound(tableAddress);
+	const { round: selectedRound, isRoundFinished, roundHasBets: selectedRoundHasBets, winNumber, bankByRoundProps } = useGetSelectedRound();
+	const { data: tableroundBets, isLoading: isSelectedRoundBetsLoading } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
 
-	const { data: currentRound } = useGetCurrentRound(tableAddress);
-	const { round: selectedRound, isRoundFinished } = useGetSelectedRound();
+	const playerStat = useMemo(() => {
+		if (!tableroundBets || winNumber === 42n) return;
+		const playerBets = tableroundBets.filter((bet) => bet.player.toLowerCase() === address?.toLowerCase());
+		const hasWon = playerBets.some((bet) => bet.chips.some((chip) => (BigInt(chip.bitMap) & (2n ** winNumber)) > 0n));
+		return { playerHasWon: hasWon, playerHasBets: playerBets.length };
+	}, [tableroundBets, address, winNumber]);
 
-	const handleExpiration = (round: number) => {
-		if (lastExpired !== round) {
-			setLastExpired(round);
+	useEffect(() => {
+		return () => console.log('Wheel details unmount');
+	}, []);
+	const [lastExpired, setLastExpired] = useState<number>();
 
-			queryClient.refetchQueries({ queryKey: ['roulette', 'currentRound'] });
-		}
+	const handleExpiration = async (round: number) => {
+		console.log(handleExpiration, 'handleExpiration');
+		bankByRoundProps.refetch();
+		setTimeout(refetch, 1000);
 	};
 
 	const { timeLeft, isReady, isExpired } = useRoundCountdown(selectedRound, Number(currentRound?.interval), handleExpiration);
 
-	const [lastExpired, setLastExpired] = useState<number>();
-
-	const rouletteIsNotSpinning = state.data.state !== 'spinning' && state.data.state !== 'landing';
-
+	const rouletteIsNotSpinning = state.data.state !== WheelStatus.Requested && state.data.state !== WheelStatus.Landing;
+	const rouletteStatusStandBy = state.data.state === WheelStatus.NotExist || state.data.state === WheelStatus.Created;
+	const roundHasBets = selectedRoundHasBets;
 	const showTimer = !isRoundFinished && isReady && !isExpired && rouletteIsNotSpinning;
 	const showBackToGame = isRoundFinished && rouletteIsNotSpinning;
 	const showRoundNumber = rouletteIsNotSpinning;
+	const showWaitingForSpin = roundHasBets && isRoundFinished && winNumber === 42n;
+	const showRoundIsOver = isRoundFinished && rouletteIsNotSpinning && !roundHasBets;
+
+	const showYouDidntWin = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && !playerStat.playerHasWon;
+
+	const showYouWon = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && playerStat.playerHasWon;
+	console.log(isRoundFinished, 'isRoundFinished');
+	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning) return null;
 
 	return (
 		<div className="absolute inset-0 flex items-center justify-center">
@@ -52,13 +74,38 @@ export const WheelDetails: FC = () => {
 						<RoundNumber />
 					</div>
 				)}
+				{/*  Waiting For Spin */}
+				{showWaitingForSpin && (
+					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
+						<DynamicTextSVG text="Waiting: Stand by" />
+					</div>
+				)}
+				{/*  You didn't win */}
+				{showYouDidntWin && (
+					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
+						<DynamicTextSVG text="You Didn't win" />
+					</div>
+				)}
+				{/*  You won */}
+				{showYouWon && (
+					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
+						<DynamicTextSVG text="You Won !" />
+					</div>
+				)}
 				{/*  Timer */}
 				{showTimer && (
 					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
 						<Timer timeLeft={timeLeft} />
 					</div>
 				)}
+				{/* Round Is Over */}
+				{showRoundIsOver && (
+					<div className={cn('w-1/3  mx-auto inline-flex', {})}>
+						<RoundIsOver />
+					</div>
+				)}
 				{/*  Back to Game */}
+
 				{showBackToGame && (
 					<div className={cn('w-1/3  mx-auto inline-flex', {})}>
 						<BackToGame />
@@ -75,11 +122,11 @@ type CountdownResult = {
 	isReady: boolean;
 };
 
-export function useRoundCountdown(round?: number, interval?: number, onExpire?: (round: number) => void): CountdownResult {
+export function useRoundCountdown(round?: number, interval?: number, onExpire?: (round: number) => Promise<void>): CountdownResult {
 	const [timeLeft, setTimeLeft] = useState<string>('--:--');
 	const [isExpired, setIsExpired] = useState<boolean>(false);
 	const [isReady, setIsReady] = useState<boolean>(false);
-
+	const refInterval = useRef<ReturnType<typeof setInterval>>();
 	useEffect(() => {
 		if (round === undefined || interval === undefined) {
 			setIsReady(false);
@@ -95,7 +142,7 @@ export function useRoundCountdown(round?: number, interval?: number, onExpire?: 
 		if (currentRound > round) {
 			setTimeLeft('00:00');
 			setIsExpired(true);
-			onExpire?.(round);
+			// onExpire?.(round);
 			setIsReady(false);
 			return;
 		}
@@ -104,13 +151,14 @@ export function useRoundCountdown(round?: number, interval?: number, onExpire?: 
 		const roundEnd = (round + 1) * interval; // End time of the round in seconds
 
 		// Timer logic
-		const calculateTimeLeft = () => {
+		const calculateTimeLeft = async () => {
 			const remainingTime = roundEnd - Math.floor(Date.now() / 1000); // Remaining time in seconds
 
 			if (remainingTime <= 0) {
 				setTimeLeft('00:00');
 				setIsExpired(true);
-				onExpire?.(round);
+				await onExpire?.(round);
+				refInterval.current && clearInterval(refInterval.current);
 			} else {
 				const minutes = Math.floor(remainingTime / 60)
 					.toString()
@@ -124,9 +172,9 @@ export function useRoundCountdown(round?: number, interval?: number, onExpire?: 
 		// Round is valid and not finished
 		setIsReady(true);
 		calculateTimeLeft(); // Initial calculation
-		const intervalId = setInterval(calculateTimeLeft, 1000); // Update every second
+		refInterval.current = setInterval(calculateTimeLeft, 1000); // Update every second
 
-		return () => clearInterval(intervalId); // Cleanup on unmount
+		return () => clearInterval(refInterval.current); // Cleanup on unmount
 	}, [round, interval]); // Re-run if round or interval changes
 
 	return { timeLeft, isExpired, isReady };

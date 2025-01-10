@@ -5,6 +5,7 @@ import type { Address } from 'viem';
 import { parseAbiItem } from 'viem';
 import { getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
+import { fetchBetInfo } from '../../shared/api';
 
 export const fetchTableBetByBlockHash = async (config: Config, blockHash: Address, tableAddress?: Address) => {
 	if (!tableAddress) return;
@@ -18,12 +19,7 @@ export const fetchTableBetByBlockHash = async (config: Config, blockHash: Addres
 	});
 
 	const betAddress = logs[0].args.bet as Address;
-	const betInfo = await readContract(config, {
-		abi: LiroBetABI,
-		address: betAddress,
-		functionName: 'getBetInfo',
-		args: [],
-	});
+	const betInfo = await fetchBetInfo(config, betAddress);
 	const winNumber = await readContract(config, {
 		abi: LiroBetABI,
 		address: betAddress,

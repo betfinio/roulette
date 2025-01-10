@@ -1,7 +1,13 @@
-import { useGetTablePlayerRounds, useGetTableRounds } from '@/src/lib/live-roulette/query';
+import {
+	useGetSelectedRound,
+	useGetTablePlayerRounds,
+	useGetTableRounds,
+	useGetTableSelectedRoundBets,
+	useLiveRouletteState,
+} from '@/src/lib/live-roulette/query';
+import { type WheelState, WheelStatus } from '@/src/lib/live-roulette/types';
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetTableAddress, useRouletteState } from '@/src/lib/shared/query';
-import type { WheelLanded, WheelState } from '@/src/lib/shared/types';
+import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
@@ -15,14 +21,16 @@ import { WheelDetails } from '../WheelDetails/WheelDetails';
 export const Wheel = () => {
 	const queryClient = useQueryClient();
 	const wheelNumbers = getWheelNumbers();
-	const { state: wheelStateData, updateState } = useRouletteState();
+	const { state: wheelStateData, updateState } = useLiveRouletteState();
 	const status = wheelStateData.data.state;
 	const { tableAddress } = useGetTableAddress();
 	const { address = ZeroAddress } = useAccount();
-	const { isFetched: isBetsFetched, data: rounds = [] } = useGetTableRounds(50, tableAddress);
-	const { data: playerRounds = [], isLoading } = useGetTablePlayerRounds(tableAddress);
+	const { roundStatusProps, winNumberProps, round: selectedRound } = useGetSelectedRound();
+	const { isFetched: isBetsFetched, data: rounds = [], queryKey: tableRoundsQueryKey } = useGetTableRounds(50, tableAddress);
+	const { data: playerRounds = [], queryKey: playerRoundQueryKey } = useGetTablePlayerRounds(tableAddress);
+	const { data: tableSelectedRoundBets, refetch } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
+	const lastNumber = rounds.find((tableRound) => tableRound.round === selectedRound)?.winNumber || 0;
 
-	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
 	// Animation control
 	const wheelControlsWrapper = useAnimation();
 	const wheelControls = useAnimation();
@@ -38,7 +46,7 @@ export const Wheel = () => {
 	const [initialAnimationFinished, setInitialAnimationFinished] = useState(false);
 
 	useEffect(() => {
-		if (status === 'standby') {
+		if (status === WheelStatus.Created || status === WheelStatus.NotExist) {
 			const currentAngle = getAngleForNumber(lastNumber);
 			wheelControls.start({
 				rotate: [
@@ -62,7 +70,7 @@ export const Wheel = () => {
 					},
 				})
 				.then(() => setInitialAnimationFinished(true));
-		} else if (status === 'spinning') {
+		} else if (status === WheelStatus.Requested) {
 			wheelControls.start({
 				rotate: [0, -360], // Single rotation, but will loop infinitely
 				transition: {
@@ -80,7 +88,7 @@ export const Wheel = () => {
 					ease: 'linear',
 				},
 			});
-		} else if (status === 'landing') {
+		} else if (status === WheelStatus.Landing) {
 			const stopAngle = getAngleForNumber(lastNumber) || 0;
 
 			wheelControls
@@ -92,20 +100,43 @@ export const Wheel = () => {
 					},
 				})
 				.then(async () => {
-					const { tableRound, tablePlayerRound } = wheelStateData.data as WheelLanded;
+					const { tableRound, tablePlayerRound } = wheelStateData.data;
 
 					//Populate all bets for the current round
-					tableRound &&
-						queryClient.setQueryData(['roulette', 'bets', 'table', 'rounds', tableAddress], [tableRound, ...rounds], {
+					if (tableRound) {
+						const updatedRounds = rounds.map((round) => {
+							if (round.round === tableRound.round) {
+								return tableRound;
+							}
+							return round;
+						});
+						queryClient.setQueryData(tableRoundsQueryKey, updatedRounds, {
 							updatedAt: Date.now(),
 						});
+					}
 
 					//Populate all bets for the current round for the player
-					tablePlayerRound &&
-						queryClient.setQueryData(['roulette', 'bets', 'player', address, tableAddress], [tablePlayerRound, ...playerRounds], {
+
+					if (tablePlayerRound) {
+						const updatedPlayerRounds = playerRounds.map((round) => {
+							if (round.round === tablePlayerRound.round) {
+								return tablePlayerRound;
+							}
+							return round;
+						});
+
+						queryClient.setQueryData(playerRoundQueryKey, updatedPlayerRounds, {
 							updatedAt: Date.now(),
 						});
-					updateState({ state: 'landed' } as WheelState);
+					}
+
+					updateState({ state: WheelStatus.Finished } as WheelState);
+					setTimeout(async () => {
+						// await queryClient.invalidateQueries({ queryKey: playerRoundQueryKey });
+						refetch();
+						roundStatusProps.refetch();
+						winNumberProps.refetch();
+					}, 2000);
 				});
 
 			wheelControlsWrapper.start({
@@ -116,16 +147,18 @@ export const Wheel = () => {
 					ease: 'linear',
 				},
 			});
-		} else if (status === 'landed') {
+		} else if (status === WheelStatus.Finished) {
 			const stopAngle = getAngleForNumber(lastNumber) || 0;
-			wheelControlsWrapper.start({
-				marginTop: '-30%',
+			wheelControlsWrapper
+				.start({
+					marginTop: '-30%',
 
-				transition: {
-					duration: 1, // Slow rotation duration
-					ease: 'linear',
-				},
-			});
+					transition: {
+						duration: 1, // Slow rotation duration
+						ease: 'linear',
+					},
+				})
+				.then(() => setInitialAnimationFinished(true));
 
 			wheelControls.set({
 				rotate: [-stopAngle + 180],

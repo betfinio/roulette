@@ -12,6 +12,8 @@ import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
 	const { isRoundFinished } = useGetSelectedRound();
+
+	console.log('DesktopRoulette');
 	return (
 		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4 gap-y-4">
 			{/* Conteúdo Principal no Desktop */}

@@ -1,6 +1,7 @@
-import { useGetTablePlayerRounds } from '@/src/lib/live-roulette/query';
+import { useGetCurrentRound, useGetSelectedRound, useGetTablePlayerRounds } from '@/src/lib/live-roulette/query';
 import type { RoundBet, RoundPlayerBet } from '@/src/lib/live-roulette/types';
-import { useGetTableAddress, useScrollToHeader } from '@/src/lib/shared/query';
+import { useGetTableAddress, useManualSpin, useScrollToHeader } from '@/src/lib/shared/query';
+import { RoundStatus } from '@/src/lib/shared/types';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
@@ -20,12 +21,32 @@ export const MyBetsTable = () => {
 	const { data: bets = [], isLoading } = useGetTablePlayerRounds(tableAddress);
 	const { isVertical } = useMediaQuery();
 	const { scrollToHeader } = useScrollToHeader();
+	const { round = 0 } = useGetSelectedRound();
+	const { mutateAsync: spinManually } = useManualSpin();
+	const { data } = useGetCurrentRound(tableAddress);
+
+	const isRoundCreated = (status: number) => status === RoundStatus.CREATED;
+	const isPassedRound = (round: number) => round < Number(data?.round ?? Number.NEGATIVE_INFINITY);
+	const handleManualSpin = (round: number) => {
+		spinManually({
+			tableAddress,
+			round: BigInt(round),
+		});
+	};
 
 	const columns = [
 		columnHelper.accessor('round', {
 			header: t('round'),
 			cell: (props) => (
-				<Link to="/roulette/live/$table" onClick={scrollToHeader} search={{ round: props.getValue() }} params={{ table: tableAddress }}>
+				<Link
+					className={cn({
+						'text-secondary-foreground': props.row.original.round === round,
+					})}
+					to="/roulette/live/$table"
+					onClick={scrollToHeader}
+					search={{ round: props.getValue() }}
+					params={{ table: tableAddress }}
+				>
 					#{props.getValue()}
 				</Link>
 			),
@@ -48,7 +69,20 @@ export const MyBetsTable = () => {
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => <BetResultCell inProgress={props.row.original.status === 1} winNumber={props.row.original.winNumber} />,
+			cell: (props) => {
+				const roundCreated = isRoundCreated(props.row.original.status);
+				const roundHasPassed = isPassedRound(props.row.original.round);
+				return (
+					<div
+						onClick={() => roundHasPassed && handleManualSpin(props.row.original.round)}
+						className={cn({
+							'cursor-pointer': roundHasPassed,
+						})}
+					>
+						<BetResultCell inProgress={roundCreated} winNumber={props.row.original.winNumber} />
+					</div>
+				);
+			},
 		}),
 	] as ColumnDef<RoundPlayerBet>[];
 	const columnsMobile = [

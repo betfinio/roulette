@@ -1,7 +1,6 @@
 import { Roulette } from '@/src/components/roulette/Roulette';
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
-import { useFetchTableBetByBlockHash } from '@/src/lib/roulette/query';
-import { useRouletteState } from '@/src/lib/shared/query';
+import { useFetchTableBetByBlockHash, useRouletteState } from '@/src/lib/roulette/query';
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
 import { createFileRoute } from '@tanstack/react-router';
 import { useAccount, useWatchContractEvent } from 'wagmi';

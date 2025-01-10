@@ -12,6 +12,7 @@ import {
 	changeChip,
 	clearAllBets,
 	doublePlace,
+	fetchBetInfo,
 	fetchBetsBitMapAndAmount,
 	fetchChipsByPosition,
 	fetchDebugMode,
@@ -26,7 +27,7 @@ import {
 	undoPlace,
 	unplace,
 } from '../api';
-import type { ChiPlaceProps, LocalBet, SpinParams, WheelState } from '../types';
+import type { ChiPlaceProps, LocalBet, SpinParams } from '../types';
 
 export const closePaytable = (queryClient: QueryClient) => {
 	queryClient.setQueryData(['roulette', 'paytable'], false);
@@ -62,21 +63,6 @@ export const useLimits = (tableAddress?: Address) => {
 		refetchOnWindowFocus: false,
 		enabled: !!tableAddress,
 	});
-};
-
-export const useRouletteState = () => {
-	const queryClient = useQueryClient();
-	const state = useQuery<WheelState>({
-		queryKey: ['roulette', 'state'],
-		initialData: { state: 'standby' },
-	});
-
-	const updateState = (st: WheelState) => {
-		queryClient.setQueryData(['roulette', 'state'], { ...state.data, ...st });
-		queryClient.refetchQueries({ queryKey: ['roulette', 'state'] });
-	};
-
-	return { state, updateState };
 };
 
 export const useSelectedChip = () =>
@@ -234,9 +220,20 @@ export const useSubmitBet = () => {
 				variant: 'loading',
 				duration: 10000,
 			});
-			await waitForTransactionReceipt(config.getClient(), { hash: data });
-			update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
-			queryClient.invalidateQueries({ queryKey: ['roulette'] });
+			const reciept = await waitForTransactionReceipt(config.getClient(), { hash: data });
+			if (reciept.status === 'success') {
+				update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
+			}
+			if (reciept.status === 'reverted') {
+				update({
+					id,
+					variant: 'destructive',
+					description: t('transactionIsReverted'),
+					title: t('betNotPlaced'),
+					action: getTransactionLink(data),
+					duration: 3000,
+				});
+			}
 		},
 	});
 };
@@ -296,5 +293,13 @@ export const useManualSpin = () => {
 	return useMutation({
 		mutationKey: ['roulette', 'manualSpin'],
 		mutationFn: (e: { tableAddress: Address; round: bigint }) => manualSpin(config, e.tableAddress, e.round),
+	});
+};
+
+export const useGetBetInfo = () => {
+	const config = useConfig();
+	return useMutation({
+		mutationKey: ['roulette', 'bet', 'info'],
+		mutationFn: (bet: Address) => fetchBetInfo(config, bet),
 	});
 };

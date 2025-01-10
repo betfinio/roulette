@@ -1,9 +1,10 @@
-import { useMutateCurrentRound } from '@/src/lib/live-roulette/query';
+import { useGetCurrentRound, useMutateCurrentRound } from '@/src/lib/live-roulette/query';
 import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { useNavigate } from '@tanstack/react-router';
 
 export const BackToGame = () => {
+	const { refetch } = useGetCurrentRound();
 	const { tableAddress = ZeroAddress } = useGetTableAddress();
 
 	const { mutateAsync: fetchCurrentRound } = useMutateCurrentRound();
@@ -20,19 +21,17 @@ export const BackToGame = () => {
 					},
 					search: { round: Number(data?.round) },
 				});
+				refetch();
 			},
 		});
 	};
 
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60" fill="none">
-			<text id="timerText" x="50%" y="15%" textAnchor="middle" className="fill-foreground text-xl" dy=".3em">
-				Round Over
-			</text>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 30" fill="none">
 			<text
 				id="timerText"
 				x="40%"
-				y="70%"
+				y="50%"
 				textAnchor="middle"
 				className="fill-foreground hover:fill-secondary-foreground text-xs cursor-pointer"
 				dy=".3em"
@@ -41,7 +40,7 @@ export const BackToGame = () => {
 				Back To Game
 			</text>
 
-			<g clipPath="url(#clip0_1_308723)" transform="translate(10, 32)">
+			<g clipPath="url(#clip0_1_308723)" transform="translate(10, 5)">
 				<path
 					className="text-secondary-foreground"
 					d="M93.75 0.0978718C93.1875 0.172091 92.7344 0.261934 92.2188 0.410372C88.4023 1.51193 85.5859 4.80881 85.0977 8.75022C85.0195 9.38693 85.0195 10.6135 85.0977 11.2502C85.5859 15.219 88.4258 18.5158 92.2891 19.6096C93.1133 19.844 93.75 19.9299 94.7695 19.9494C95.4922 19.9651 95.8086 19.9572 96.2148 19.9026C98.4727 19.6213 100.453 18.6526 102.055 17.0549C103.641 15.4651 104.629 13.4533 104.902 11.2502C104.98 10.6135 104.98 9.38693 104.902 8.75022C104.348 4.2385 100.762 0.652559 96.25 0.0978718C95.6641 0.0275593 94.293 0.0275593 93.75 0.0978718ZM96.0156 0.902559C99.7852 1.31272 102.949 4.08615 103.883 7.79318C104.059 8.4924 104.109 8.89084 104.129 9.76975C104.145 10.426 104.137 10.7268 104.082 11.1369C103.668 14.4299 101.477 17.258 98.3867 18.5002C97.2891 18.9416 96.2227 19.1447 95 19.1447C93.5117 19.1447 92.168 18.8244 90.8438 18.1565C89.9453 17.7033 88.8711 16.8791 88.2227 16.1408C87 14.758 86.2617 13.2268 85.9531 11.4455C85.8672 10.9494 85.8359 9.551 85.8945 9.01975C86.1875 6.46506 87.4961 4.1799 89.5508 2.65647C91.4258 1.26584 93.6953 0.648653 96.0156 0.902559Z"

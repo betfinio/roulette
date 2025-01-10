@@ -16,6 +16,8 @@ export const PlayersTab = () => {
 	const { tableAddress } = useGetTableAddress();
 	const { round } = useGetSelectedRound();
 	const { data: players = [] } = useGetTableRoundPlayers(tableAddress, round);
+
+	console.log(players, 'players');
 	return (
 		<div className="flex flex-col gap-2">
 			{players.map((playerRoundBets) => {

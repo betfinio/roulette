@@ -1,12 +1,15 @@
-import { LiroBetABI, MultiPlayerTableABI } from '@betfinio/abi';
+import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
+import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
 import { readContract } from '@wagmi/core';
 import { type Address, parseAbiItem } from 'viem';
-import { getLogs } from 'viem/actions';
+import { getContractEvents, getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
+import { fetchBetInfo } from '../../shared/api';
 import { RoundStatus } from '../../shared/types';
-import type { RoundBet, RoundPlayerBet } from '../types';
+import type { RoundBet, RoundPlayerBet, WheelStatus } from '../types';
 
 export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Address) => {
+	console.log('fetchCurrentRoundOfTable');
 	if (!tableAddress) return;
 	const round = await readContract(config, {
 		abi: MultiPlayerTableABI,
@@ -18,10 +21,19 @@ export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Ad
 		address: tableAddress,
 		functionName: 'interval',
 	});
+	const roundBank = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: tableAddress,
+		functionName: 'getRoundBank',
+		args: [round],
+	});
+
+	console.log(round, 'round FROM FETCH');
 
 	return {
 		round,
 		interval,
+		roundHasBets: roundBank > 0n,
 	};
 };
 
@@ -51,7 +63,7 @@ export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Addre
 		created: BigInt(0),
 		round: Number(round),
 		winNumber: -1,
-		status: RoundStatus.CREATED,
+		status: RoundStatus.FINISHED,
 	};
 
 	let roundPlayerBets: RoundPlayerBet | null = null;
@@ -61,12 +73,7 @@ export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Addre
 		const betAddress = log.args.bet as Address;
 
 		// Fetch bet info
-		const betInfo = await readContract(config, {
-			abi: LiroBetABI,
-			address: betAddress,
-			functionName: 'getBetInfo',
-			args: [],
-		});
+		const betInfo = await fetchBetInfo(config, betAddress);
 
 		const winNumber = await readContract(config, {
 			abi: LiroBetABI,
@@ -97,10 +104,55 @@ export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Addre
 					winNumber: Number(winNumber),
 					winAmount,
 					player,
-					status: RoundStatus.CREATED,
+					status: RoundStatus.FINISHED,
 				};
 			}
 		}
 	}
 	return { roundAllBets, roundPlayerBets };
+};
+
+export const fetchBankByRound = async (config: Config, tableAddress?: Address, round?: number) => {
+	if (!tableAddress || !round) return;
+	const roundBank = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: tableAddress,
+		functionName: 'getRoundBank',
+		args: [BigInt(round)],
+	});
+
+	return Number(roundBank);
+};
+
+export const fetchRoundStatus = async (config: Config, tableAddress?: Address, round?: number) => {
+	if (!tableAddress || !round) return;
+	const roundStatus = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: tableAddress,
+		functionName: 'roundStatus',
+		args: [BigInt(round)],
+	});
+
+	return Number(roundStatus) as WheelStatus;
+};
+
+export const fetchWinNumber = async (config: Config, tableAddress?: Address, round?: number) => {
+	if (!tableAddress || !round) return;
+
+	const randomGeneratedData = await getContractEvents(config.getClient(), {
+		abi: LiveRouletteABI,
+		address: PUBLIC_LIRO_ADDRESS,
+		eventName: 'RandomGenerated',
+		args: {
+			table: tableAddress,
+			round: BigInt(round),
+			player: ZeroAddress,
+		},
+		fromBlock: 'earliest',
+		toBlock: 'latest',
+	});
+
+	console.log(randomGeneratedData, 'randomGeneratedData');
+
+	return randomGeneratedData[0].args.value;
 };

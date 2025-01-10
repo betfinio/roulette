@@ -22,3 +22,24 @@ export interface PlayerBet {
 	player: Address;
 	status: RoundStatus;
 }
+
+export interface WheelStandBy {
+	state: 'standby';
+}
+
+export interface WheelSpinning {
+	state: 'spinning';
+}
+
+export interface WheelLanded {
+	state: 'landed';
+	result: number;
+	bet: PlayerBet;
+}
+export interface WheelLanding {
+	state: 'landing';
+	result: number;
+	bet: PlayerBet;
+}
+
+export type WheelState = WheelSpinning | WheelLanded | WheelStandBy | WheelLanding;

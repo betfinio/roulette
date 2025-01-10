@@ -1,10 +1,26 @@
 import { fetchTableBetByBlockHash } from '@/src/lib/roulette/api';
 import { ZeroAddress } from '@betfinio/abi';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
 import { useGetTableAddress } from '../../shared/query';
 import { fetchAllPlayersBets, fetchPlayerBets, fetchTransactionHashByBet } from '../gql';
+import type { WheelState } from '../types';
+
+export const useRouletteState = () => {
+	const queryClient = useQueryClient();
+	const state = useQuery<WheelState>({
+		queryKey: ['roulette', 'state'],
+		initialData: { state: 'standby' },
+	});
+
+	const updateState = (st: WheelState) => {
+		queryClient.setQueryData(['roulette', 'state'], { ...state.data, ...st });
+		queryClient.refetchQueries({ queryKey: ['roulette', 'state'] });
+	};
+
+	return { state, updateState };
+};
 
 export const useGetPlayerBets = (table?: Address) => {
 	const { address = ZeroAddress } = useAccount();

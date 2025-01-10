@@ -1,6 +1,7 @@
 import { useGetTableRounds } from '@/src/lib/live-roulette/query';
 import { lastResultPlaceholder } from '@/src/lib/shared';
 import { useGetTableAddress } from '@/src/lib/shared/query';
+import { RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
@@ -14,10 +15,12 @@ export const LastResults = () => {
 	const numbers = useMemo(
 		() =>
 			tableBets.length > 0
-				? tableBets.map((r) => ({
-						winNumber: r.winNumber,
-						status: r.status,
-					}))
+				? tableBets
+						.map((r) => ({
+							winNumber: r.winNumber,
+							status: r.status,
+						}))
+						.filter((r) => r.status === RoundStatus.FINISHED)
 				: lastResultPlaceholder,
 		[tableBets],
 	);

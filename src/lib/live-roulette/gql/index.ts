@@ -86,6 +86,8 @@ export const fetchTableSelectedRoundBets = async (table?: Address, round?: numbe
 				bet: bet.bet as Address,
 				created: bet.blockTimestamp,
 				player: bet.player as Address,
+				chips: bet.chips.map((chip) => ({ bitMap: Number(chip.bitMap) })),
+				winAmount: BigInt(bet.winAmount),
 			} as PlayerInProgressBet;
 		});
 	}
