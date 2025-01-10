@@ -30,6 +30,7 @@ export default defineConfig({
 			},
 			exposes: {
 				'./route/index': './src/routes/games/roulette/index',
+				'./route/live': './src/routes/games/roulette/live/$table',
 				'./i18n': './src/i18n',
 				'./style': './src/style',
 			},

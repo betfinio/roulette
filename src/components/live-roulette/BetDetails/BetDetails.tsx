@@ -7,8 +7,8 @@ export const BetDetails = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'betDetails' });
 	return (
 		<div className="w-full h-full p-2 md:p-3 border border-border rounded-lg bg-card">
-			<Tabs defaultValue={'bets'} className={'md:max-w-[350px] flex flex-col h-full'}>
-				<TabsList className={'w-full bg-transparent justify-between gap-2 grid grid-cols-3'}>
+			<Tabs defaultValue={'bets'} className={' min-w-72 flex flex-col h-96 lg:h-full'}>
+				<TabsList className={'w-full bg-transparent justify-between gap-2 grid grid-cols-2'}>
 					<TabsTrigger value={'bets'}>{t('bets')}</TabsTrigger>
 					<TabsTrigger value={'players'}>{t('players')}</TabsTrigger>
 				</TabsList>

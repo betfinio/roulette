@@ -63,3 +63,23 @@ export const lastResultPlaceholder: LastResult[] = [
 		winNumber: 0,
 	},
 ];
+
+export function mergeAndSummarize(objects: LocalBet[]): LocalBet[] {
+	const mergedMap: Map<string, LocalBet> = new Map();
+
+	objects.forEach((obj) => {
+		const existing = mergedMap.get(obj.item);
+
+		if (existing) {
+			// Merge the amounts and retain unique numbers
+			existing.amount += obj.amount;
+			existing.numbers = Array.from(new Set([...existing.numbers, ...obj.numbers]));
+		} else {
+			// Add new entry
+			mergedMap.set(obj.item, { ...obj });
+		}
+	});
+
+	// Convert Map back to an array
+	return Array.from(mergedMap.values());
+}

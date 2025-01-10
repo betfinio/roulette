@@ -19,7 +19,7 @@ export const VerticalRoulette = () => {
 				</div>
 			</div>
 			<TableRaceTrack />
-			<div className={' w-[var(--min-width-sm)] flex flex-col gap-y-6 mb-8'}>
+			<div className={' w-full flex flex-col gap-y-6 mb-8'}>
 				<MainTable />
 
 				<History />

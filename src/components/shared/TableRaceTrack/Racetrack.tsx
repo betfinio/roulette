@@ -7,8 +7,10 @@ import TableItem from '../TableItem';
 import { LeftCorner } from './LeftCorner';
 import { RightCorner } from './RightCorner';
 import { racetrackConfig } from './racetrackConfig';
-
-const Racetrack: React.FC = () => {
+interface RacetrackProps {
+	onPlace?: () => void;
+}
+const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 	const [hoveredNumbers, setHoveredNumbers] = useState<number[]>([]);
 
 	const { mutateAsync: place } = usePlace();
@@ -69,6 +71,7 @@ const Racetrack: React.FC = () => {
 											item: `${number}-${position}`,
 										});
 									});
+									onPlace?.();
 								}}
 								className={'!border-none w-fit relative   h-4 cursor-pointer'}
 							/>

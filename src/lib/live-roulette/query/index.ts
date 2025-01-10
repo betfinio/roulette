@@ -91,7 +91,6 @@ export const useGetSelectedRound = () => {
 	const { tableAddress } = useGetTableAddress();
 	const { data: currentRound, ...currentRoundProps } = useGetCurrentRound(tableAddress);
 	const round = search?.round ? Number(search.round) : undefined;
-
 	const isRoundFinished = Number(currentRound?.round) > Number(round);
 	const { data: currentRoundBank, ...bankByRoundProps } = useGetBankByRound(tableAddress, round);
 	const { data: status, ...roundStatusProps } = useGetRoundStatus(tableAddress, round);
