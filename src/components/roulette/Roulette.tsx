@@ -1,10 +1,10 @@
-import { useGetPlayerBets, useGetTableAddress, useRouletteState } from '@/src/lib/roulette/query';
+import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
+import { useGetTableAddress, useScrollToHeader } from '@/src/lib/shared/query';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useRef } from 'react';
 import type { Address } from 'viem';
 import { RouletteResultToast } from '../RouletteResultToast';
-import { BET_STATUS_HEADER } from '../shared/BetStatusHeader/BetStatusHeader';
 import { DesktopRoulette } from './DesktopRoulette';
 import { TabletRoulette } from './TabletRoulette';
 import { VerticalRoulette } from './VerticalRoulette';
@@ -13,6 +13,7 @@ export const Roulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
 	const { toast } = useToast();
 	const { tableAddress } = useGetTableAddress();
+	const { scrollToHeader } = useScrollToHeader();
 
 	const { data: bets = [] } = useGetPlayerBets(tableAddress);
 
@@ -20,6 +21,7 @@ export const Roulette = () => {
 	const status = wheelStateData.data.state;
 
 	const lastShownBet = useRef<Address>();
+	const lastStatus = useRef<typeof status>();
 	useEffect(() => {
 		if (status === 'landed' && bets[0].bet.toLowerCase() !== lastShownBet.current?.toLowerCase()) {
 			toast({
@@ -29,11 +31,11 @@ export const Roulette = () => {
 			const hasWon = bets[0].amount < bets[0].winAmount;
 			hasWon && shootConfetti();
 			lastShownBet.current = bets[0].bet;
+			lastStatus.current = status;
 		}
-		if (status === 'spinning') {
-			document.getElementById(BET_STATUS_HEADER)?.scrollIntoView({
-				behavior: 'smooth',
-			});
+		if (status === 'spinning' && lastStatus.current === 'spinning') {
+			scrollToHeader();
+			lastStatus.current = status;
 		}
 	}, [wheelStateData]);
 

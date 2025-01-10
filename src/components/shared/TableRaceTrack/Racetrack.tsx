@@ -1,5 +1,5 @@
 import { getColor } from '@/src/lib/roulette';
-import { usePlace } from '@/src/lib/roulette/query';
+import { usePlace } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import type React from 'react';
 import { useState } from 'react';

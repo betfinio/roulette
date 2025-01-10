@@ -1,4 +1,4 @@
-import { useClearAllBets, useDoublePlace, useUndoPlace } from '@/src/lib/roulette/query';
+import { useClearAllBets, useDoublePlace, useUndoPlace } from '@/src/lib/shared/query';
 import { Button } from '@betfinio/components/ui';
 import { CircleX, Undo2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';

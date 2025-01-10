@@ -1,4 +1,4 @@
-import { useLimits } from '@/src/lib/roulette/query';
+import { useLimits } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Link, X } from 'lucide-react';

@@ -1,23 +1,24 @@
 import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import { getColor } from '@/src/lib/roulette';
+import { type LastResult, RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 
 interface ILastResultRowProps {
-	result: number;
+	result: LastResult;
 	index: number;
 }
 export const LastResultRow: FC<ILastResultRowProps> = ({ result, index }) => {
 	return (
 		<motion.div
 			className={cn(
-				'aspect-square text-foreground rounded-lg flex justify-center items-center w-8',
+				'aspect-square text-foreground rounded-lg flex justify-center items-center ',
 
 				{
-					'col-start-1 bg-red-roulette': getColor(result) === 'RED',
-					'col-start-2 bg-green-roulette': getColor(result) === 'GREEN',
-					'col-start-3 bg-black-roulette': getColor(result) === 'BLACK',
+					'col-start-1 bg-red-roulette w-8': getColor(result.winNumber) === 'RED',
+					'col-start-2 bg-green-roulette w-8': getColor(result.winNumber) === 'GREEN',
+					'col-start-3 bg-black-roulette w-8': getColor(result.winNumber) === 'BLACK',
 				},
 				{
 					'row-start-1': index === 0,
@@ -31,7 +32,7 @@ export const LastResultRow: FC<ILastResultRowProps> = ({ result, index }) => {
 			)}
 			{...SLIDE_DOWN_ANIMATION}
 		>
-			{result}
+			{result.winNumber}
 		</motion.div>
 	);
 };

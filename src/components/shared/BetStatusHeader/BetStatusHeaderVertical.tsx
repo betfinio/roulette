@@ -5,12 +5,13 @@ import { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/roulette/query';
+import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, Drawer, DrawerContent, DrawerTrigger } from '@betfinio/components/ui';
-import { useChatbot } from 'betfinio_app/chatbot';
-import { useBalance } from 'betfinio_app/lib/query/token';
+
+import { useChatbot } from 'betfinio_context/lib/context';
+import { useBalance } from 'betfinio_context/lib/query';
 import Paytable from '../Paytable/PayTable';
 import { BET_STATUS_HEADER } from './BetStatusHeader';
 

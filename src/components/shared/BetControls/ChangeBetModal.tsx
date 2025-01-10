@@ -1,4 +1,4 @@
-import { useChangeChip } from '@/src/lib/roulette/query';
+import { useChangeChip } from '@/src/lib/shared/query';
 import { toast } from '@betfinio/components/hooks';
 import { Button, Dialog, DialogClose, DialogContent } from '@betfinio/components/ui';
 import millify from 'millify';

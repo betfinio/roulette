@@ -1,5 +1,6 @@
-import type { BetInterface } from 'betfinio_app/lib/types';
+import type { BetInterface } from 'betfinio_context/lib/types';
 import type { Address } from 'viem';
+import type { RoundStatus } from '../shared/types';
 
 export interface RouletteBet extends BetInterface {
 	requestId: bigint;
@@ -12,23 +13,14 @@ export interface RouletteSubBet {
 	amount: bigint;
 }
 
-export interface LocalBet {
-	numbers: number[];
-	amount: number;
-	item: string;
-}
-
-export interface SpinParams {
-	bets: LocalBet[];
-	tableAddress: Address; //table address
-	roundNumber: bigint; //round number
-	playerAddress: Address; //player address
-}
-
-export interface ChiPlaceProps {
-	item: string;
-
-	numbers: number[];
+export interface PlayerBet {
+	amount: bigint;
+	bet: Address;
+	created: bigint;
+	winNumber: number;
+	winAmount: bigint;
+	player: Address;
+	status: RoundStatus;
 }
 
 export interface WheelStandBy {
@@ -42,45 +34,12 @@ export interface WheelSpinning {
 export interface WheelLanded {
 	state: 'landed';
 	result: number;
-	bet: PlayerBets;
+	bet: PlayerBet;
 }
 export interface WheelLanding {
 	state: 'landing';
 	result: number;
-	bet: PlayerBets;
+	bet: PlayerBet;
 }
 
-export interface WheelStopped {
-	state: 'stopped';
-	result: number;
-	bet: PlayerBets;
-}
-
-export type WheelState = WheelSpinning | WheelLanded | WheelStandBy | WheelStopped | WheelLanding;
-
-export interface Limit {
-	title: string;
-	payout: number;
-	min: bigint;
-	max: bigint;
-}
-
-export interface PlayerBets {
-	amount: bigint;
-	bet: Address;
-	created: bigint;
-	winNumber: number;
-	winAmount: bigint;
-
-	player: Address;
-}
-
-export interface TableBets {
-	amount: bigint;
-	bet: Address;
-	created: bigint;
-	winNumber: number;
-	winAmount: bigint;
-
-	player?: Address;
-}
+export type WheelState = WheelSpinning | WheelLanded | WheelStandBy | WheelLanding;
