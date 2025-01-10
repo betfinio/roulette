@@ -1,21 +1,20 @@
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 
-import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { BetDetails } from './BetDetails/BetDetails';
 import { LastResults } from './LastResults/LastResults';
 import { TableStat } from './TableStat';
 
+import History from './History/HistoryTable';
 import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
 	const { isRoundFinished } = useGetSelectedRound();
 
-	console.log('DesktopRoulette');
 	return (
-		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4 gap-y-4">
+		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4 2xl:pr-0  gap-y-4">
 			{/* Conteúdo Principal no Desktop */}
 			<div className="flex gap-4">
 				<div className="relative flex-1 flex flex-col w-full ">
