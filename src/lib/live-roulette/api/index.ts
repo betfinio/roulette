@@ -9,7 +9,6 @@ import { RoundStatus } from '../../shared/types';
 import type { RoundBet, RoundPlayerBet, WheelStatus } from '../types';
 
 export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Address) => {
-	console.log('fetchCurrentRoundOfTable');
 	if (!tableAddress) return;
 	const round = await readContract(config, {
 		abi: MultiPlayerTableABI,
@@ -27,8 +26,6 @@ export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Ad
 		functionName: 'getRoundBank',
 		args: [round],
 	});
-
-	console.log(round, 'round FROM FETCH');
 
 	return {
 		round,

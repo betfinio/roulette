@@ -1,6 +1,11 @@
 import { VersionValidation } from '@/src/components/VersionValidation';
 import { LiveRoulette } from '@/src/components/live-roulette/LiveRoulette';
+import { dozenItemsConfig, sideItemsConfig } from '@/src/components/shared/MainTable/SideTable';
+import { tableConfigHorizontal } from '@/src/components/shared/MainTable/tableConfigHorizontal';
+import { tableConfigVertical } from '@/src/components/shared/MainTable/tableConfigVertical';
+import { tableExtraConfigHorizontal, tableExtraConfigVertical } from '@/src/components/shared/MainTable/tableExtraItemsConfig';
 import { PUBLIC_BRANCH, PUBLIC_DEPLOYED, PUBLIC_LIRO_ADDRESS } from '@/src/global';
+import { fillItems } from '@/src/lib/live-roulette';
 import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
 import {
 	useFetchTableBetsByBlockHash,
@@ -12,14 +17,17 @@ import {
 	useLiveRouletteState,
 } from '@/src/lib/live-roulette/query';
 import { type PlayerInProgressBet, type PlayerRoundBets, type RoundBet, type RoundPlayerBet, WheelStatus } from '@/src/lib/live-roulette/types';
+import { mergeAndSummarize } from '@/src/lib/shared';
 import { fetchTableByAddress } from '@/src/lib/shared/api';
-import { useGetBetInfo, useGetTableAddress } from '@/src/lib/shared/query';
+import { useGetBetInfo, useGetBetsAmountAndBitMapByRound, useGetTableAddress, useRouletteOthersBetsState } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
 import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
+import { useMediaQuery } from '@betfinio/components/hooks';
 import { Toaster } from '@betfinio/components/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
+import { useEffect } from 'react';
 import { type Address, isAddress } from 'viem';
 import { useAccount, useWatchContractEvent } from 'wagmi';
 import { z } from 'zod';
@@ -49,13 +57,15 @@ export const Route = createFileRoute('/games/roulette/live/$table')({
 
 		if (!deps.round) {
 			const round = await fetchCurrentRoundOfTable(context.wagmiConfig, params.table as Address);
-			console.log(round, 'round');
+
 			throw redirect({
 				to: '/games/roulette/live/$table',
 				params: { table: params.table },
 				search: { round: Number(round?.round) },
 			});
 		}
+
+		context.queryClient.refetchQueries({ queryKey: ['roulette', 'currentRound'] });
 	},
 	onError: (e) => {
 		console.error(e, 'my error');
@@ -68,7 +78,7 @@ export function RouletteLiveTable() {
 	const { updateState } = useLiveRouletteState();
 	const { tableAddress } = useGetTableAddress();
 	const { mutateAsync: fetchTableBetsByBlockHash } = useFetchTableBetsByBlockHash();
-	const { round: selectedRound } = useGetSelectedRound();
+	const { round: selectedRound, isRoundFinished } = useGetSelectedRound();
 	const { address = ZeroAddress } = useAccount();
 
 	const { isFetched: isBetsFetched, data: rounds = [], queryKey } = useGetTableRounds(50, tableAddress);
@@ -78,6 +88,31 @@ export function RouletteLiveTable() {
 	const { data: tableSelectedRoundBets } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
 	const { data: tableRoundPlayers = [], queryKey: tableRoundPlayersQueryKey } = useGetTableRoundPlayers(tableAddress, selectedRound);
 
+	const { updateState: updateOthersBetsState } = useRouletteOthersBetsState();
+
+	const { mutateAsync } = useGetBetsAmountAndBitMapByRound();
+	const { isVertical } = useMediaQuery();
+
+	useEffect(() => {
+		if (isRoundFinished) {
+			if (selectedRound && tableAddress) {
+				mutateAsync(
+					{ round: selectedRound, table: tableAddress },
+					{
+						onSuccess: (selectedBetChips) => {
+							const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
+							const extraItems = isVertical ? tableExtraConfigVertical : tableExtraConfigHorizontal;
+							const mapedBets = fillItems(selectedBetChips, { ...dozenItemsConfig, ...sideItemsConfig, ...tableConfig, ...extraItems });
+							const summarizedBets = mergeAndSummarize(mapedBets);
+							updateOthersBetsState({ selectedBetChips: summarizedBets });
+						},
+					},
+				);
+			}
+		} else {
+			updateOthersBetsState({ selectedBetChips: null });
+		}
+	}, [isRoundFinished, selectedRound]);
 	useWatchContractEvent({
 		abi: LiveRouletteABI,
 		address: PUBLIC_LIRO_ADDRESS,

@@ -109,7 +109,7 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 						fill="currentColor"
 					/>
 					<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="#000" className="text-[37px] font-semibold">
-						{millify(chip.amount)}
+						{millify(chip.amount, { precision: 0 })}
 					</text>
 				</svg>
 			</div>
