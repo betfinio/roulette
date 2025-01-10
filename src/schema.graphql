@@ -89,3 +89,19 @@ query GetLiveRouletteTableSelectedRoundPlayers($table: Bytes, $round: BigInt) {
     betsCount
   }
 }
+query GetLiveRouletteBitMapByRound($table: Bytes, $round: BigInt) {
+  chips:roundBetPlaceds_collection(
+    where: { table: $table, round: $round }
+    orderBy: blockTimestamp
+    orderDirection: desc
+  ) {
+    chips{
+      id
+      bitMap
+      amount
+    }
+  }
+}
+
+
+
