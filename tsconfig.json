@@ -10,6 +10,7 @@
 		"isolatedModules": true,
 		"resolveJsonModule": true,
 		"moduleResolution": "bundler",
+		"rootDir": "./",
 		"declaration": false,
 		"useDefineForClassFields": true,
 		"allowImportingTsExtensions": true,
@@ -18,5 +19,5 @@
 			"@/*": ["./*"]
 		}
 	},
-	"include": ["src", "lib", "@mf-types"]
+	"include": ["src"]
 }

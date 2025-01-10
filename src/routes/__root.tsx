@@ -7,7 +7,7 @@ import i18n from '../i18n';
 import 'betfinio_context/style';
 import type { queryClient, wagmiConfig } from 'betfinio_context/config';
 
-interface IRootRouteContext {
+export interface IRootRouteContext {
 	queryClient: typeof queryClient;
 	wagmiConfig: typeof wagmiConfig;
 }
