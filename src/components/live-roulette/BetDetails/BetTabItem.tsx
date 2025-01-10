@@ -6,7 +6,7 @@ import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue } from '@betfinio/components/shared';
-import { useCustomUsername, useUsername } from 'betfinio_app/lib/query/username';
+import { useCustomUsername, useRegistrationDate, useUsername } from 'betfinio_context/lib/query';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useAccount } from 'wagmi';

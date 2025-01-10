@@ -42,7 +42,7 @@ export const MyBetsTable = () => {
 					className={cn({
 						'text-secondary-foreground': props.row.original.round === round,
 					})}
-					to="/roulette/live/$table"
+					to="/games/roulette/live/$table"
 					onClick={scrollToHeader}
 					search={{ round: props.getValue() }}
 					params={{ table: tableAddress }}
@@ -89,7 +89,7 @@ export const MyBetsTable = () => {
 		columnHelper.accessor('round', {
 			header: t('round'),
 			cell: (props) => (
-				<Link to="/roulette/live/$table" onClick={scrollToHeader} search={{ round: props.getValue() }} params={{ table: tableAddress }}>
+				<Link to="/games/roulette/live/$table" onClick={scrollToHeader} search={{ round: props.getValue() }} params={{ table: tableAddress }}>
 					#{props.getValue()}
 				</Link>
 			),

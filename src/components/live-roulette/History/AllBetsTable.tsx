@@ -40,7 +40,7 @@ export const AllBetsTable = () => {
 			header: t('round'),
 			cell: (props) => (
 				<Link
-					to="/roulette/live/$table"
+					to="/games/roulette/live/$table"
 					onClick={scrollToHeader}
 					resetScroll
 					search={{ round: props.getValue() }}

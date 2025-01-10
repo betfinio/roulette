@@ -1,5 +1,6 @@
+import { VersionValidation } from '@/src/components/VersionValidation';
 import { LiveRoulette } from '@/src/components/live-roulette/LiveRoulette';
-import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
+import { PUBLIC_BRANCH, PUBLIC_DEPLOYED, PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
 import {
 	useFetchTableBetsByBlockHash,
@@ -15,6 +16,7 @@ import { fetchTableByAddress } from '@/src/lib/shared/api';
 import { useGetBetInfo, useGetTableAddress } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
 import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
+import { Toaster } from '@betfinio/components/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
@@ -25,7 +27,7 @@ const liveRouletteSchema = z.object({
 	round: fallback(z.number().optional(), undefined),
 });
 
-export const Route = createFileRoute('/roulette/live/$table')({
+export const Route = createFileRoute('/games/roulette/live/$table')({
 	component: RouletteLiveTable,
 	validateSearch: zodValidator(liveRouletteSchema),
 	loaderDeps: ({ search }) => {
@@ -37,29 +39,31 @@ export const Route = createFileRoute('/roulette/live/$table')({
 	loader: async ({ params, context, deps }) => {
 		const isValidAddress = isAddress(params.table);
 		if (!isValidAddress) {
-			throw redirect({ to: '/roulette' });
+			throw redirect({ to: '/games/roulette' });
 		}
 
 		const isTableExist = await fetchTableByAddress(context.wagmiConfig, params.table as Address);
 		if (!isTableExist) {
-			throw redirect({ to: '/roulette' });
+			throw redirect({ to: '/games/roulette' });
 		}
 
 		if (!deps.round) {
 			const round = await fetchCurrentRoundOfTable(context.wagmiConfig, params.table as Address);
 			console.log(round, 'round');
-			throw redirect({ to: `/roulette/live/${params.table}`, search: { round: Number(round?.round) } });
+			throw redirect({
+				to: '/games/roulette/live/$table',
+				params: { table: params.table },
+				search: { round: Number(round?.round) },
+			});
 		}
 	},
 	onError: (e) => {
 		console.error(e, 'my error');
-		throw redirect({ to: '/roulette' });
+		throw redirect({ to: '/games/roulette' });
 	},
 });
 
-function RouletteLiveTable() {
-	console.log('RouletteLiveTable');
-
+export function RouletteLiveTable() {
 	const queryClient = useQueryClient();
 	const { updateState } = useLiveRouletteState();
 	const { tableAddress } = useGetTableAddress();
@@ -296,8 +300,10 @@ function RouletteLiveTable() {
 		},
 	});
 	return (
-		<div className="">
+		<div className="roulette">
 			<LiveRoulette />
+			<Toaster />
+			<VersionValidation repository={'roulette'} branch={PUBLIC_BRANCH} current={PUBLIC_DEPLOYED} />
 		</div>
 	);
 }

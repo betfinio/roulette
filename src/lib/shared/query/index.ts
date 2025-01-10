@@ -3,7 +3,7 @@ import logger from '@/src/config/logger';
 import { toast } from '@betfinio/components/hooks';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from '@tanstack/react-router';
-import { getTransactionLink } from 'betfinio_app/helpers';
+import { getTransactionLink } from 'betfinio_context/lib/helpers';
 import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType, WriteContractReturnType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';

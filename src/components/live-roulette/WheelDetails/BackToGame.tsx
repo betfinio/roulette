@@ -15,7 +15,7 @@ export const BackToGame = () => {
 		await fetchCurrentRound(tableAddress, {
 			onSuccess: (data) => {
 				navigate({
-					to: '/roulette/live/$table',
+					to: '/games/roulette/live/$table',
 					params: {
 						table: tableAddress || ZeroAddress,
 					},

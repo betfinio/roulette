@@ -1,15 +1,17 @@
+import { VersionValidation } from '@/src/components/VersionValidation';
 import { Roulette } from '@/src/components/roulette/Roulette';
-import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
+import { PUBLIC_BRANCH, PUBLIC_DEPLOYED, PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { useFetchTableBetByBlockHash, useRouletteState } from '@/src/lib/roulette/query';
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
+import { Toaster } from '@betfinio/components/ui';
 import { createFileRoute } from '@tanstack/react-router';
 import { useAccount, useWatchContractEvent } from 'wagmi';
 
-export const Route = createFileRoute('/roulette/')({
+export const Route = createFileRoute('/games/roulette/')({
 	component: RoulettePage,
 });
 
-function RoulettePage() {
+export function RoulettePage() {
 	const { updateState } = useRouletteState();
 
 	const { address = ZeroAddress } = useAccount();
@@ -46,8 +48,10 @@ function RoulettePage() {
 	});
 
 	return (
-		<div className="">
+		<div className="roulette">
 			<Roulette />
+			<Toaster />
+			<VersionValidation repository={'roulette'} branch={PUBLIC_BRANCH} current={PUBLIC_DEPLOYED} />
 		</div>
 	);
 }

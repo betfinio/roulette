@@ -1,10 +1,10 @@
 import logger from '@/src/config/logger';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 
-export const Route = createFileRoute('/')({
+export const Route = createFileRoute('/games/')({
 	component: () => <Index />,
 	beforeLoad: async () => {
-		throw redirect({ to: '/roulette' });
+		throw redirect({ to: '/games/roulette' });
 	},
 });
 

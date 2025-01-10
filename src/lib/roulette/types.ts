@@ -1,4 +1,4 @@
-import type { BetInterface } from 'betfinio_app/lib/types';
+import type { BetInterface } from 'betfinio_context/lib/types';
 import type { Address } from 'viem';
 import type { RoundStatus } from '../shared/types';
 

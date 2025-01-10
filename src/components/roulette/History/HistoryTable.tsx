@@ -1,13 +1,11 @@
 import { ETHSCAN } from '@/src/global.ts';
 import { getColor } from '@/src/lib/roulette';
 import { useGetTransactionHashByBet } from '@/src/lib/roulette/query';
-import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue } from '@betfinio/components/shared';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
-import { Link } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 import { ShieldCheckIcon, X } from 'lucide-react';
 import { DateTime } from 'luxon';
@@ -114,13 +112,14 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 
 			<div className={'mt-5 flex flex-col items-center'}>
 				<div className={'text-center'}>{t('betID')}</div>
-				<Link
-					to={`${ETHSCAN}/address/${selectedBet?.bet}`}
+				<a
+					href={`${ETHSCAN}/address/${selectedBet?.bet}`}
 					className={'block text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 '}
 					target={'_blank'}
+					rel="noreferrer"
 				>
 					{isMobile ? truncateEthAddress(selectedBet?.bet || ZeroAddress, 7) : selectedBet?.bet}
-				</Link>
+				</a>
 
 				<div className={'text-center font-normal text-tertiary-foreground'}>
 					{DateTime.fromMillis(Number(selectedBet?.created) * 1000).toFormat('yyyy-MM-dd, HH:mm:ss Z')} UTC
