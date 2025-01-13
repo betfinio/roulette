@@ -134,8 +134,16 @@ export const fetchRoundStatus = async (config: Config, tableAddress?: Address, r
 };
 
 export const fetchWinNumber = async (config: Config, tableAddress?: Address, round?: number) => {
-	if (!tableAddress || !round) return;
-
+	if (!tableAddress || !round) return 42n;
+	console.log('fetching logs');
+	console.time('logs');
+	const interval = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: tableAddress,
+		functionName: 'interval',
+	});
+	const startBlock = interval * BigInt(round);
+	console.log('startBlock', startBlock);
 	const randomGeneratedData = await getContractEvents(config.getClient(), {
 		abi: LiveRouletteABI,
 		address: PUBLIC_LIRO_ADDRESS,
@@ -145,11 +153,13 @@ export const fetchWinNumber = async (config: Config, tableAddress?: Address, rou
 			round: BigInt(round),
 			player: ZeroAddress,
 		},
-		fromBlock: 'earliest',
+		fromBlock: startBlock,
 		toBlock: 'latest',
 	});
-
+	console.timeEnd('logs');
 	console.log(randomGeneratedData, 'randomGeneratedData');
-
+	if (randomGeneratedData.length === 0) {
+		return 42n;
+	}
 	return randomGeneratedData[0].args.value;
 };
