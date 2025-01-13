@@ -52,3 +52,9 @@ export enum WheelStatus {
 	Finished = 3,
 	Refunded = 4,
 }
+
+export interface RouletteTable {
+	address: Address;
+	interval: bigint;
+	id: string;
+}

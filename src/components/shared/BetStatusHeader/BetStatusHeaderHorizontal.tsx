@@ -1,23 +1,27 @@
-import { AlertCircle, CircleAlert, CircleHelp } from 'lucide-react';
-import { useTranslation } from 'react-i18next';
-
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
+import { useGetLiveRouletteTables } from '@/src/lib/live-roulette/query';
 import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
-import { Button, Dialog, DialogContent, DialogTitle, Separator } from '@betfinio/components/ui';
+import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger, Separator } from '@betfinio/components/ui';
 import { Bag } from '@betfinio/ui/dist/icons';
+import { useNavigate } from '@tanstack/react-router';
 import { useChatbot } from 'betfinio_context/lib/context';
 import { useBalance } from 'betfinio_context/lib/query';
+import { AlertCircle, CircleAlert, CircleHelp, Menu } from 'lucide-react';
 import { type FC, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
+import { type Address, zeroAddress } from 'viem';
 import Paytable from '../Paytable/PayTable';
+import SwitchModal from '../SwitchModal';
 import { BET_STATUS_HEADER } from './BetStatusHeader';
 
 export const BetStatusHeaderHorizontal: FC = () => {
+	const navigate = useNavigate();
 	const { t } = useTranslation('roulette');
 
-	const { tableAddress } = useGetTableAddress();
-
+	const { tableAddress, isSingle } = useGetTableAddress();
+	const { data: liveRouletteTables } = useGetLiveRouletteTables();
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 	const { maximize } = useChatbot();
 	const handleReport = () => {
@@ -32,10 +36,42 @@ export const BetStatusHeaderHorizontal: FC = () => {
 	const maxPayout = useMemo(() => {
 		return winningPool / 20n;
 	}, [winningPool]);
+
+	const handleTableSwitch = (address: Address) => {
+		navigate({
+			to: '/games/roulette/live/$table',
+			params: { table: address },
+		});
+	};
+
+	const tablesToSwitchList = useMemo(() => {
+		if (!liveRouletteTables) return [];
+
+		return liveRouletteTables.map((table) => {
+			return {
+				address: table.address,
+				interval: `${Number(table.interval) / 60}min`,
+			};
+		});
+	}, [liveRouletteTables]);
+
 	return (
 		<div id={BET_STATUS_HEADER} className=" rounded-lg bg-card items-center border border-border p-3 px-4 flex justify-between min-h-16 gap-2 md:gap-4 ">
 			<div className="flex gap-2 md:gap-9">
 				<div className="flex gap-1 items-center">
+					{!isSingle && (
+						<Dialog>
+							<DialogTrigger asChild>
+								<div className={'flex gap-2 md:gap-4 items-center cursor-pointer'}>
+									<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
+								</div>
+							</DialogTrigger>
+							<DialogContent className={'w-fit roulette'} aria-describedby={undefined}>
+								<DialogTitle className={'hidden'} />
+								<SwitchModal onClick={handleTableSwitch} selected={tableAddress || zeroAddress} tables={tablesToSwitchList} />
+							</DialogContent>
+						</Dialog>
+					)}
 					<Bag className={'w-8 text-secondary-foreground'} />
 					<div>
 						<div>{t('winningPool')}</div>
