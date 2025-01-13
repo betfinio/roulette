@@ -1,6 +1,7 @@
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
 import { readContract } from '@wagmi/core';
+import { getBlockByTimestamp } from 'betfinio_context/lib/gql';
 import { type Address, parseAbiItem } from 'viem';
 import { getContractEvents, getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
@@ -134,22 +135,40 @@ export const fetchRoundStatus = async (config: Config, tableAddress?: Address, r
 };
 
 export const fetchWinNumber = async (config: Config, tableAddress?: Address, round?: number) => {
-	if (!tableAddress || !round) return;
-
-	const randomGeneratedData = await getContractEvents(config.getClient(), {
-		abi: LiveRouletteABI,
-		address: PUBLIC_LIRO_ADDRESS,
-		eventName: 'RandomGenerated',
-		args: {
-			table: tableAddress,
-			round: BigInt(round),
-			player: ZeroAddress,
-		},
-		fromBlock: 'earliest',
-		toBlock: 'latest',
+	if (!tableAddress || !round) return 42n;
+	console.log('fetching logs');
+	console.time('logs');
+	const interval = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: tableAddress,
+		functionName: 'interval',
 	});
-
-	console.log(randomGeneratedData, 'randomGeneratedData');
-
-	return randomGeneratedData[0].args.value;
+	const startTime = Number(interval * BigInt(round));
+	const startBlock = await getBlockByTimestamp(startTime);
+	const endBlock = startBlock + 9999n;
+	console.log('startBlock', startBlock);
+	console.log('endBlock', endBlock);
+	try {
+		const randomGeneratedData = await getContractEvents(config.getClient(), {
+			abi: LiveRouletteABI,
+			address: PUBLIC_LIRO_ADDRESS,
+			eventName: 'RandomGenerated',
+			args: {
+				table: tableAddress,
+				round: BigInt(round),
+				player: ZeroAddress,
+			},
+			fromBlock: startBlock,
+			toBlock: endBlock,
+		});
+		console.timeEnd('logs');
+		console.log(randomGeneratedData, 'randomGeneratedData');
+		if (randomGeneratedData.length === 0) {
+			return 42n;
+		}
+		return randomGeneratedData[0].args.value;
+	} catch (e) {
+		console.log(e);
+		return 42n;
+	}
 };

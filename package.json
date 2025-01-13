@@ -5,7 +5,7 @@
 	"scripts": {
 		"prebuild": "graphclient build",
 		"build": "rsbuild build",
-		"check": "biome check && bunx tsc",
+		"check": "biome check --write && bunx tsc",
 		"dev": "bun run build:schema:dev && rsbuild dev --open",
 		"prod": "bun run build:schema:prod && rsbuild dev --env-mode production --open",
 		"format": "biome format --write",

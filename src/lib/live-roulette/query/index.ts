@@ -169,6 +169,7 @@ export const useGetRoundStatus = (tableAddress?: Address, round?: number) => {
 
 export const useGetWinNumber = (tableAddress?: Address, round?: number) => {
 	const config = useConfig();
+
 	return useQuery({
 		queryKey: ['roulette', 'round', 'winNumber', tableAddress, Number(round)],
 		queryFn: () => fetchWinNumber(config, tableAddress, round),

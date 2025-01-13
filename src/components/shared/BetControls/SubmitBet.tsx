@@ -31,9 +31,8 @@ export const SubmitBet: FC = () => {
 	const rouletteWheelState = rouletteWheelStateData.data;
 	const liveRouletteWheelState = liveRouletteWheelStateData.data;
 	const { data: bets = [] } = useLocalBets();
-
 	const isSpinning =
-		loading || isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested);
+		isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested);
 
 	const handleSpin = () => {
 		if (address === ZeroAddress) {
