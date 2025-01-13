@@ -7,6 +7,7 @@ import { BetDetails } from './BetDetails/BetDetails';
 import { LastResults } from './LastResults/LastResults';
 import { TableStat } from './TableStat';
 
+import { Totals } from './BetDetails/Totals';
 import History from './History/HistoryTable';
 import Wheel from './Wheel/Wheel';
 
@@ -32,13 +33,14 @@ export const DesktopRoulette = () => {
 								<TableStat />
 							</div>
 						</div>
-						{/* <TableRaceTrack/> */}
 
 						{!isRoundFinished && <TableRaceTrack />}
 					</div>
 				</div>
-				<div className="relative  ">
+				<div className="relative flex flex-col gap-4">
 					<BetDetails />
+
+					<Totals />
 				</div>
 			</div>
 			<div>

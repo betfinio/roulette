@@ -3,6 +3,7 @@ import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { BetDetails } from './BetDetails/BetDetails';
+import { Totals } from './BetDetails/Totals';
 import History from './History/HistoryTable';
 import Wheel from './Wheel/Wheel';
 
@@ -27,7 +28,11 @@ export const VerticalRoulette = () => {
 				<MainTable hideBetControls={isRoundFinished} />
 				<div className="relative  ">
 					<BetDetails />
+					<div className="  mt-2">
+						<Totals />
+					</div>
 				</div>
+
 				<History />
 			</div>
 		</div>

@@ -111,7 +111,7 @@
 	"transactionIsReverted": "Transaction is reverted",
 	"betPlaced": "Bet placed",
 	"betNotPlaced": "Bet not placed",
-	"submitBet": "Place",
+	"submitBet": "Bet",
 	"betDetails": {
 		"bets": "Bets",
 		"players": "Players"

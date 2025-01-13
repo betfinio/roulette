@@ -82,7 +82,7 @@ query GetLiveRouletteBitMapByRound($table: Bytes, $round: BigInt) {
 }
 
 query GetLiveRouletteTables {
-	tables(where: { interval_not: "0" }) {
+	tables(where:{interval_not:"0"} orderBy:interval orderDirection:desc) {
 		id
 		interval
 		address

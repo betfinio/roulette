@@ -6,6 +6,7 @@ import { useGetTableAddress, useLocalBets, useSubmitBet } from '@/src/lib/shared
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useToast } from '@betfinio/components/hooks';
+import { BetValue } from '@betfinio/components/shared';
 import { Button } from '@betfinio/components/ui';
 import { useAllowanceModal } from 'betfinio_context/lib/context';
 import { useAllowance, useIsMember } from 'betfinio_context/lib/query';
@@ -33,6 +34,8 @@ export const SubmitBet: FC = () => {
 	const { data: bets = [] } = useLocalBets();
 	const isSpinning =
 		isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested);
+
+	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
 
 	const handleSpin = () => {
 		if (address === ZeroAddress) {
@@ -72,9 +75,14 @@ export const SubmitBet: FC = () => {
 
 	return (
 		<>
-			<Button className="w-full uppercase text-xl px-8 relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>
+			<Button className="w-full uppercase text-xl px-4 relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>
 				{isSpinning && <Loader color={'black'} className={'animate-spin absolute'} />}
-				<span className={cn('uppercase', { invisible: isSpinning })}>{isSingle ? t('spin') : t('submitBet')}</span>
+				<div className={cn('uppercase', { invisible: isSpinning })}>
+					<div className="flex gap-2 w-32 justify-center text-base">
+						{t('submitBet')}
+						<BetValue iconClassName="rounded-full border border-border" withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
+					</div>
+				</div>
 			</Button>
 		</>
 	);

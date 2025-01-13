@@ -15,7 +15,7 @@ interface ISwitchModalProsp {
 }
 const SwitchModal: FC<ISwitchModalProsp> = ({ selected, onClick, tables }) => {
 	return (
-		<div className={'rounded-lg border-border border bg-background p-2 w-[300px]  mx-auto text-foreground'}>
+		<div className={' p-2 w-[300px]  mx-auto text-foreground'}>
 			{tables.map((table, index) => (
 				<DialogClose asChild key={index}>
 					<div

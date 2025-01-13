@@ -3,6 +3,7 @@ import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { BetDetails } from './BetDetails/BetDetails';
+import { Totals } from './BetDetails/Totals';
 import History from './History/HistoryTable';
 import { LastResults } from './LastResults/LastResults';
 import { TableStat } from './TableStat';
@@ -36,6 +37,9 @@ export const TabletRoulette = () => {
 			</div>
 			<div className="relative  mt-4">
 				<BetDetails />
+			</div>
+			<div className="  mt-4">
+				<Totals />
 			</div>
 
 			{/* BetHistory ao lado direito do conteúdo principal */}

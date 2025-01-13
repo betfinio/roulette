@@ -45,7 +45,7 @@ export const BetStatusHeaderVertical: FC = () => {
 	};
 	return (
 		<div className="roulette">
-			<div id={BET_STATUS_HEADER} className="bg-card rounded-lg border-border  p-4  mb-0 border flex items-center  h-20">
+			<div id={BET_STATUS_HEADER} className="  p-4  mb-0 border flex items-center  h-20">
 				{!isSingle && (
 					<Dialog>
 						<DialogTrigger asChild>
@@ -53,7 +53,7 @@ export const BetStatusHeaderVertical: FC = () => {
 								<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
 							</div>
 						</DialogTrigger>
-						<DialogContent className={'w-fit roulette'} aria-describedby={undefined}>
+						<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette'} aria-describedby={undefined}>
 							<DialogTitle className={'hidden'} />
 							<SwitchModal onClick={handleTableSwitch} selected={tableAddress || ZeroAddress} tables={tablesToSwitchList} />
 						</DialogContent>
@@ -116,12 +116,6 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 					<div>{t('maxPayout')}</div>
 					<div className="font-bold">
 						<BetValue withIcon value={valueToNumber(maxPayout)} />
-					</div>
-				</div>
-				<div>
-					<div>{t('totalBet')}</div>
-					<div className="font-bold">
-						<BetValue withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
 					</div>
 				</div>
 			</div>

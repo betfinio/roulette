@@ -66,7 +66,7 @@ export const BetStatusHeaderHorizontal: FC = () => {
 									<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
 								</div>
 							</DialogTrigger>
-							<DialogContent className={'w-fit roulette'} aria-describedby={undefined}>
+							<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette '} aria-describedby={undefined}>
 								<DialogTitle className={'hidden'} />
 								<SwitchModal onClick={handleTableSwitch} selected={tableAddress || zeroAddress} tables={tablesToSwitchList} />
 							</DialogContent>
@@ -87,25 +87,7 @@ export const BetStatusHeaderHorizontal: FC = () => {
 					</div>
 				</div>
 			</div>
-			<Separator orientation="vertical" className="h-8" />
-			<div className="flex  gap-2 md:gap-9">
-				<div>
-					<div>{t('totalBet')}</div>
-					<div className="font-bold">
-						<BetValue withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
-					</div>
-				</div>
-				{/* <div className=" ">
-					<div>{t('payTable.potentialWin')}</div>
-					<p
-						className={cn('font-bold', {
-							'blur-sm': isLoading,
-						})}
-					>
-						<BetValue withIcon value={valueToNumber(potentialWin)} />
-					</div>
-				</div> */}
-			</div>
+
 			<Separator orientation="vertical" className="h-8 mr-auto" />
 			<div className=" gap-2   flex ">
 				<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
