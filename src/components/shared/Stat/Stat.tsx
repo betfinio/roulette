@@ -38,7 +38,7 @@ export const Stat: FC<IStatProps> = ({ winNumbers }) => {
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
-			className="bg-card mt-4 p-2 rounded-lg border w-[122px] h-[266px] flex flex-col items-center justify-center border-border tabular-nums flex-shrink-0"
+			className="bg-card mt-4 p-2 rounded-lg border w-[122px] h-[286px] flex flex-col items-center  border-border tabular-nums flex-shrink-0 gap-2"
 		>
 			<motion.div {...SLIDE_DOWN_ANIMATION} className="text-center mb-2">
 				<h3 className="text-foreground text-xs font-medium">{t('playerStat.hotAndCold')}</h3>
