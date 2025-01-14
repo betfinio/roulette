@@ -118,5 +118,6 @@
 	},
 	"timeLeft": "Time left",
 	"round": "Round",
-	"betCount": "{count, plural, =0 {No bets} =1 {# bet} other {# bets}}"
+	"betCount": "{count, plural, =0 {No bets} =1 {# bet} other {# bets}}",
+	"lastResults": "Last Results"
 }
