@@ -45,7 +45,7 @@ export const BetStatusHeaderVertical: FC = () => {
 	};
 	return (
 		<div className="roulette">
-			<div id={BET_STATUS_HEADER} className="  p-4  mb-0 border flex items-center  h-20">
+			<div id={BET_STATUS_HEADER} className="p-4 mb-0 border border-border rounded-md flex bg-background-lighter items-center  h-20">
 				{!isSingle && (
 					<Dialog>
 						<DialogTrigger asChild>
