@@ -158,7 +158,7 @@ export const Wheel = () => {
 					},
 				})
 				.then(() => setInitialAnimationFinished(true));
-
+			wheelControls.stop();
 			wheelControls.set({
 				rotate: [-stopAngle + 180],
 			});
