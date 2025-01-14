@@ -103,10 +103,6 @@ export const fetchLiveRoulletteTables = async () => {
 
 		return data.data.tables
 			.map((table) => {
-				if (!uniqueIntervals.has(table.interval)) {
-					uniqueIntervals.add(table.interval);
-				}
-
 				return {
 					address: table.address,
 					interval: table.interval,
@@ -114,7 +110,11 @@ export const fetchLiveRoulletteTables = async () => {
 				} as RouletteTable;
 			})
 			.filter((table) => {
-				return uniqueIntervals.has(table.interval);
+				if (!uniqueIntervals.has(table.interval)) {
+					uniqueIntervals.add(table.interval);
+					return true;
+				}
+				return false;
 			});
 	}
 	return [];
