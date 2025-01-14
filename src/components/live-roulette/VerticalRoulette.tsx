@@ -1,16 +1,18 @@
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
-import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
+import { BetDetails } from './BetDetails/BetDetails';
+import { Totals } from './BetDetails/Totals';
+import History from './History/HistoryTable';
 import Wheel from './Wheel/Wheel';
 
 export const VerticalRoulette = () => {
 	const { isRoundFinished } = useGetSelectedRound();
 
 	return (
-		<div className="flex flex-col items-center justify-center w-full gap-y-2">
-			<div className={'relative w-full mt-2'}>
+		<div className="flex flex-col items-center justify-center w-full p-2 gap-y-2">
+			<div className={'relative w-full '}>
 				<div className="relative">
 					<BetStatusHeader />
 				</div>
@@ -21,9 +23,15 @@ export const VerticalRoulette = () => {
 					</div>
 				</div>
 			</div>
-			<TableRaceTrack />
-			<div className={' w-[var(--min-width-sm)] flex flex-col gap-y-6 mb-8'}>
+
+			<div className={'w-full flex flex-col gap-y-6 mb-8'}>
 				<MainTable hideBetControls={isRoundFinished} />
+				<div className="relative  ">
+					<BetDetails />
+					<div className="  mt-2">
+						<Totals />
+					</div>
+				</div>
 
 				<History />
 			</div>

@@ -2,6 +2,7 @@ import miniTableImg from '@/src/assets/images/mini-table.svg';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
 import { motion } from 'framer-motion';
 import { useState } from 'react';
 import Racetrack from './Racetrack';
@@ -28,17 +29,16 @@ export const TableRaceTrack = () => {
 						</Button>
 					</div>
 					<div className="col-span-10 flex justify-center">
-						{/* Animate the Racetrack component */}
-						<motion.div
-							initial={{ height: 0, opacity: 0 }}
-							animate={{
-								height: isRacetrackOpen ? 'auto' : 0,
-								opacity: isRacetrackOpen ? 1 : 0,
-							}}
-							style={{ overflow: 'hidden' }} // Ensure smooth transition
-						>
-							<Racetrack />
-						</motion.div>
+						<Dialog open={isRacetrackOpen} onOpenChange={setIsRacetrackOpen}>
+							<DialogContent className="roulette">
+								<DialogTitle className={'hidden'} />
+								<DialogDescription className={'hidden'} />
+								<div className="p-4">
+									{' '}
+									<Racetrack onPlace={() => setIsRacetrackOpen(false)} />{' '}
+								</div>{' '}
+							</DialogContent>
+						</Dialog>
 					</div>
 				</>
 			)}

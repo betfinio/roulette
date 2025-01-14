@@ -1,6 +1,7 @@
 import type React from 'react';
 
 import type { IRouletteLanguageKeys } from '@/src/i18next';
+import { useRouletteOthersBetsState } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { isNaN as _isNaN } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +49,7 @@ const TableItem: React.FC<TableItemProps> = ({
 	onContextMenu,
 	onClick,
 }) => {
+	const { state } = useRouletteOthersBetsState();
 	const { t } = useTranslation('roulette', { keyPrefix: 'betTable' });
 	const positions: PositionType[] = ['center', 'top', 'left', 'right', 'bottom', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
 
@@ -72,6 +74,10 @@ const TableItem: React.FC<TableItemProps> = ({
 
 	const handleInteraction = (position: PositionType, action: 'hover' | 'leave' | 'click' | 'contextMenu', event?: React.MouseEvent) => {
 		event?.stopPropagation();
+
+		if (state.data.selectedBetChips) {
+			return;
+		}
 		const relatedNumbers = selectionMap[position];
 		switch (action) {
 			case 'hover':

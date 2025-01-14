@@ -27,6 +27,7 @@ import {
 	undoPlace,
 	unplace,
 } from '../api';
+import { fetchBetsBitMapAndAmountByRound } from '../gql';
 import type { ChiPlaceProps, LocalBet, SpinParams } from '../types';
 
 export const closePaytable = (queryClient: QueryClient) => {
@@ -166,8 +167,11 @@ export const useRouletteNumbersState = () => {
 	});
 
 	const { data: bets = [] } = useLocalBets();
+	const { state: othersState } = useRouletteOthersBetsState();
 
-	const selected = bets.flatMap((e) => e.numbers);
+	const hasOtherState = othersState.data.selectedBetChips && othersState.data.selectedBetChips.length > 0;
+
+	const selected = othersState.data.selectedBetChips ? othersState.data.selectedBetChips.flatMap((e) => e.numbers) : bets.flatMap((e) => e.numbers);
 
 	const updateState = (props: { hovered?: number[]; selected?: number[] }) => {
 		queryClient.setQueryData(['roulette', 'numbers'], { ...state.data, ...props });
@@ -175,6 +179,7 @@ export const useRouletteNumbersState = () => {
 	};
 
 	const isNumberHovered = (number: number) => {
+		if (hasOtherState) return false;
 		return state.data.hovered.includes(number);
 	};
 	const isNumberSelected = (number: number) => selected.includes(number);
@@ -260,6 +265,12 @@ export const useGetBetAmountAndBitMap = (bet: Address) => {
 	return useMutation<LocalBet[], Error, Address>({
 		mutationKey: ['roulette', 'bet', 'amount', 'bitmap', bet],
 		mutationFn: () => fetchBetsBitMapAndAmount(config, bet),
+	});
+};
+export const useGetBetsAmountAndBitMapByRound = () => {
+	return useMutation<LocalBet[], Error, { round: number; table: Address }>({
+		mutationKey: ['roulette', 'bets', 'amount', 'bitmaps'],
+		mutationFn: ({ round, table }: { round: number; table: Address }) => fetchBetsBitMapAndAmountByRound(table, round),
 	});
 };
 

@@ -1,8 +1,10 @@
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
-import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
+import { BetDetails } from './BetDetails/BetDetails';
+import { Totals } from './BetDetails/Totals';
+import History from './History/HistoryTable';
 import { LastResults } from './LastResults/LastResults';
 import { TableStat } from './TableStat';
 import Wheel from './Wheel/Wheel';
@@ -11,7 +13,7 @@ export const TabletRoulette = () => {
 	const { isRoundFinished } = useGetSelectedRound();
 
 	return (
-		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4">
+		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-3">
 			{/* Conteúdo Principal no Desktop */}
 			<div className="relative flex-1 flex flex-col w-full ">
 				<div className="relative">
@@ -32,6 +34,12 @@ export const TabletRoulette = () => {
 				<div className="mx-auto max-w-5xl flex w-full">
 					<MainTable hideBetControls={isRoundFinished} />
 				</div>
+			</div>
+			<div className="relative  mt-4">
+				<BetDetails />
+			</div>
+			<div className="  mt-4">
+				<Totals />
 			</div>
 
 			{/* BetHistory ao lado direito do conteúdo principal */}

@@ -8,7 +8,7 @@ export const BetsTab = () => {
 	const { tableAddress } = useGetTableAddress();
 	const { round = 0, isRoundFinished, roundStatus, roundStatusProps, currentRoundProps } = useGetSelectedRound();
 	const { data = [] } = useGetTableSelectedRoundBets(tableAddress, round);
-	console.log(data, 'data123');
+
 	const computedRoundBets = useMemo(() => {
 		if (isRoundFinished && roundStatus !== undefined && [WheelStatus.Refunded, WheelStatus.Finished].includes(roundStatus)) {
 			return data.sort((a, b) => {

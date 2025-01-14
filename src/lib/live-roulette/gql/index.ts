@@ -7,12 +7,14 @@ import {
 	type GetLiveRouletteTableSelectedRoundBetsQuery,
 	GetLiveRouletteTableSelectedRoundPlayersDocument,
 	type GetLiveRouletteTableSelectedRoundPlayersQuery,
+	GetLiveRouletteTablesDocument,
+	type GetLiveRouletteTablesQuery,
 	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
 import type { ExecutionResult } from 'graphql';
 import type { Address } from 'viem';
-import type { PlayerInProgressBet, PlayerRoundBets, RoundBet, RoundPlayerBet } from '../types';
+import type { PlayerInProgressBet, PlayerRoundBets, RouletteTable, RoundBet, RoundPlayerBet } from '../types';
 
 export const fetchTablePlayerRounds = async (player: Address, table?: Address) => {
 	if (table === undefined) return [];
@@ -90,6 +92,30 @@ export const fetchTableSelectedRoundBets = async (table?: Address, round?: numbe
 				winAmount: BigInt(bet.winAmount),
 			} as PlayerInProgressBet;
 		});
+	}
+	return [];
+};
+
+export const fetchLiveRoulletteTables = async () => {
+	const data: ExecutionResult<GetLiveRouletteTablesQuery> = await execute(GetLiveRouletteTablesDocument, {});
+	if (data.data) {
+		const uniqueIntervals = new Set<bigint>(); // To track unique intervals
+
+		return data.data.tables
+			.map((table) => {
+				return {
+					address: table.address,
+					interval: table.interval,
+					id: table.id,
+				} as RouletteTable;
+			})
+			.filter((table) => {
+				if (!uniqueIntervals.has(table.interval)) {
+					uniqueIntervals.add(table.interval);
+					return true;
+				}
+				return false;
+			});
 	}
 	return [];
 };

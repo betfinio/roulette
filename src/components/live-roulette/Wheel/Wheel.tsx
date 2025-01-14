@@ -89,7 +89,7 @@ export const Wheel = () => {
 				},
 			});
 		} else if (status === WheelStatus.Landing) {
-			const stopAngle = getAngleForNumber(lastNumber) || 0;
+			const stopAngle = getAngleForNumber(wheelStateData.data.result || 0) || 0;
 
 			wheelControls
 				.start({
@@ -130,9 +130,8 @@ export const Wheel = () => {
 						});
 					}
 
-					updateState({ state: WheelStatus.Finished } as WheelState);
+					updateState({ state: WheelStatus.JustFinished } as WheelState);
 					setTimeout(async () => {
-						// await queryClient.invalidateQueries({ queryKey: playerRoundQueryKey });
 						refetch();
 						roundStatusProps.refetch();
 						winNumberProps.refetch();
@@ -164,7 +163,7 @@ export const Wheel = () => {
 				rotate: [-stopAngle + 180],
 			});
 		}
-	}, [status, wheelControls]);
+	}, [status, wheelControls, lastNumber]);
 
 	return (
 		<>
