@@ -70,6 +70,7 @@ export const useGetCurrentRound = (tableAddress?: Address) => {
 		queryFn: () => fetchCurrentRoundOfTable(config, tableAddress),
 		refetchOnWindowFocus: false,
 		enabled: !!tableAddress,
+
 		//staleTime:Number.POSITIVE_INFINITY
 	});
 };
@@ -90,6 +91,7 @@ export const useGetSelectedRound = () => {
 	const search = useSearch({ strict: false });
 	const { tableAddress } = useGetTableAddress();
 	const { data: currentRound, ...currentRoundProps } = useGetCurrentRound(tableAddress);
+
 	const round = search?.round ? Number(search.round) : undefined;
 	const isRoundFinished = Number(currentRound?.round) > Number(round);
 	const { data: currentRoundBank, ...bankByRoundProps } = useGetBankByRound(tableAddress, round);
