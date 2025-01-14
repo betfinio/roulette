@@ -11,16 +11,17 @@ import type { RoundBet, RoundPlayerBet, WheelStatus } from '../types';
 
 export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Address) => {
 	if (!tableAddress) return;
-	const round = await readContract(config, {
-		abi: MultiPlayerTableABI,
-		address: tableAddress,
-		functionName: 'getCurrentRound',
-	});
+
 	const interval = await readContract(config, {
 		abi: MultiPlayerTableABI,
 		address: tableAddress,
 		functionName: 'interval',
 	});
+
+	// Calculate the current round based on the current timestamp
+	const now = Math.floor(Date.now() / 1000); // Current time in seconds
+	const round = BigInt(Math.floor(now / Number(interval ?? 1n))); // Calculate the current round
+
 	const roundBank = await readContract(config, {
 		abi: MultiPlayerTableABI,
 		address: tableAddress,

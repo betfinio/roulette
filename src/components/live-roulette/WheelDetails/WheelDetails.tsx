@@ -19,8 +19,14 @@ export const WheelDetails: FC = () => {
 
 	const { state } = useLiveRouletteState();
 	const { address } = useAccount();
-	const { data: currentRound, isLoading, refetch } = useGetCurrentRound(tableAddress);
-	const { round: selectedRound, isRoundFinished, roundHasBets: selectedRoundHasBets, winNumber, bankByRoundProps } = useGetSelectedRound();
+	const { data: currentRound, isLoading, refetch: refetchCurrentRound } = useGetCurrentRound(tableAddress);
+	const {
+		round: selectedRound,
+		isRoundFinished,
+		roundHasBets: selectedRoundHasBets,
+		winNumber,
+		bankByRoundProps: { refetch: refetchBankByRound },
+	} = useGetSelectedRound();
 	const { data: tableroundBets, isLoading: isSelectedRoundBetsLoading } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
 
 	const playerStat = useMemo(() => {
@@ -30,15 +36,11 @@ export const WheelDetails: FC = () => {
 		return { playerHasWon: hasWon, playerHasBets: playerBets.length };
 	}, [tableroundBets, address, winNumber]);
 
-	useEffect(() => {
-		return () => console.log('Wheel details unmount');
-	}, []);
-	const [lastExpired, setLastExpired] = useState<number>();
-
 	const handleExpiration = async (round: number) => {
 		console.log(handleExpiration, 'handleExpiration');
-		bankByRoundProps.refetch();
-		setTimeout(refetch, 1000);
+		refetchBankByRound();
+
+		refetchCurrentRound();
 	};
 
 	const { timeLeft, isReady, isExpired } = useRoundCountdown(selectedRound, Number(currentRound?.interval), handleExpiration);
@@ -76,7 +78,7 @@ export const WheelDetails: FC = () => {
 				{/*  Waiting For Spin */}
 				{!!showWaitingForSpin && (
 					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
-						<DynamicTextSVG text="Waiting: Stand by" />
+						<DynamicTextSVG text="Waiting For Spin" />
 					</div>
 				)}
 				{/*  You didn't win */}
