@@ -8,6 +8,7 @@ import RouletteSlider from '../RouletteSlider/RouletteSlider';
 interface IRangeWithButtonsProps {
 	limits: { min: number; max: number };
 }
+
 export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 	const { mutate: change } = useChangeChip();
 	const { data: activeChipValue = 0 } = useSelectedChip();
@@ -63,7 +64,6 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 
 		{
 			value: limits.max,
-
 			label: millify(limits.max),
 		},
 	];
