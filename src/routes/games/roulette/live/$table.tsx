@@ -31,6 +31,7 @@ import { useEffect } from 'react';
 import { type Address, isAddress } from 'viem';
 import { useAccount, useWatchContractEvent } from 'wagmi';
 import { z } from 'zod';
+
 const liveRouletteSchema = z.object({
 	round: fallback(z.number().optional(), undefined),
 });
@@ -81,7 +82,7 @@ export function RouletteLiveTable() {
 	const { round: selectedRound, isRoundFinished } = useGetSelectedRound();
 	const { address = ZeroAddress } = useAccount();
 
-	const { isFetched: isBetsFetched, data: rounds = [], queryKey } = useGetTableRounds(50, tableAddress);
+	const { data: rounds = [], queryKey } = useGetTableRounds(50, tableAddress);
 	const { data: playerRounds = [], queryKey: playerRoundsQueryKey } = useGetTablePlayerRounds(tableAddress);
 	const { mutateAsync: fetchBetInfo } = useGetBetInfo();
 
