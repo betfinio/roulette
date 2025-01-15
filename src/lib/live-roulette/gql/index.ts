@@ -96,7 +96,7 @@ export const fetchTableSelectedRoundBets = async (table?: Address, round?: numbe
 	return [];
 };
 
-export const fetchLiveRoulletteTables = async () => {
+export const fetchLiveRouletteTables = async (): Promise<RouletteTable[]> => {
 	const data: ExecutionResult<GetLiveRouletteTablesQuery> = await execute(GetLiveRouletteTablesDocument, {});
 	if (data.data) {
 		const uniqueIntervals = new Set<bigint>(); // To track unique intervals
