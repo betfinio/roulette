@@ -4,7 +4,6 @@ import { PUBLIC_BRANCH, PUBLIC_DEPLOYED, PUBLIC_LIRO_ADDRESS } from '@/src/globa
 import { useFetchTableBetByBlockHash, useRouletteState } from '@/src/lib/roulette/query';
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
 import { Toaster } from '@betfinio/components/ui';
-import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useAccount, useWatchContractEvent } from 'wagmi';
 
