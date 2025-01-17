@@ -6,7 +6,14 @@ import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
 import { useGetTableAddress } from '../../shared/query';
 import { fetchBankByRound, fetchCurrentRoundOfTable, fetchRoundStatus, fetchTableBetsByBlockHash, fetchWinNumber } from '../api';
-import { fetchLiveRoulletteTables, fetchSelectedTableRoundPlayers, fetchTableBets, fetchTablePlayerRounds, fetchTableSelectedRoundBets } from '../gql';
+import {
+	fetchLiveRoulletteTableStats,
+	fetchLiveRoulletteTables,
+	fetchSelectedTableRoundPlayers,
+	fetchTableBets,
+	fetchTablePlayerRounds,
+	fetchTableSelectedRoundBets,
+} from '../gql';
 import { type WheelState, WheelStatus } from '../types';
 
 export const useLiveRouletteState = () => {
@@ -187,4 +194,17 @@ export const useGetLiveRouletteTables = () => {
 		refetchOnWindowFocus: false,
 		staleTime: Number.POSITIVE_INFINITY,
 	});
+};
+
+export const useGetLiveRouletteTableStats = (table?: Address) => {
+	const queryKey = ['roulette', 'table', 'stat', table];
+	return {
+		queryKey,
+		...useQuery({
+			queryKey,
+			queryFn: () => fetchLiveRoulletteTableStats(table),
+			refetchOnWindowFocus: false,
+			staleTime: Number.POSITIVE_INFINITY,
+		}),
+	};
 };

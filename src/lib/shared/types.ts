@@ -35,3 +35,13 @@ export interface LastResult {
 	winNumber: number;
 	status: RoundStatus;
 }
+
+export interface IRouletteStat {
+	hot: number[];
+	cold: number[];
+	odd: number;
+	even: number;
+	red: number;
+	black: number;
+	totalRolls: number;
+}

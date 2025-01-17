@@ -9,6 +9,7 @@ import { fillItems } from '@/src/lib/live-roulette';
 import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
 import {
 	useFetchTableBetsByBlockHash,
+	useGetLiveRouletteTableStats,
 	useGetSelectedRound,
 	useGetTablePlayerRounds,
 	useGetTableRoundPlayers,
@@ -27,7 +28,7 @@ import { Toaster } from '@betfinio/components/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { type Address, isAddress } from 'viem';
 import { useAccount, useWatchContractEvent } from 'wagmi';
 import { z } from 'zod';
@@ -81,7 +82,7 @@ export function RouletteLiveTable() {
 	const { round: selectedRound, isRoundFinished } = useGetSelectedRound();
 	const { address = ZeroAddress } = useAccount();
 
-	const { isFetched: isBetsFetched, data: rounds = [], queryKey } = useGetTableRounds(50, tableAddress);
+	const { data: rounds = [], queryKey } = useGetTableRounds(50, tableAddress);
 	const { data: playerRounds = [], queryKey: playerRoundsQueryKey } = useGetTablePlayerRounds(tableAddress);
 	const { mutateAsync: fetchBetInfo } = useGetBetInfo();
 
@@ -92,6 +93,9 @@ export function RouletteLiveTable() {
 
 	const { mutateAsync } = useGetBetsAmountAndBitMapByRound();
 	const { isVertical } = useMediaQuery();
+	const { queryKey: tableStatQueryKey } = useGetLiveRouletteTableStats(tableAddress);
+
+	const tableStatTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
 	useEffect(() => {
 		if (isRoundFinished) {
@@ -102,7 +106,12 @@ export function RouletteLiveTable() {
 						onSuccess: (selectedBetChips) => {
 							const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
 							const extraItems = isVertical ? tableExtraConfigVertical : tableExtraConfigHorizontal;
-							const mapedBets = fillItems(selectedBetChips, { ...dozenItemsConfig, ...sideItemsConfig, ...tableConfig, ...extraItems });
+							const mapedBets = fillItems(selectedBetChips, {
+								...dozenItemsConfig,
+								...sideItemsConfig,
+								...tableConfig,
+								...extraItems,
+							});
 							const summarizedBets = mergeAndSummarize(mapedBets);
 							updateOthersBetsState({ selectedBetChips: summarizedBets });
 						},
@@ -118,8 +127,6 @@ export function RouletteLiveTable() {
 		address: PUBLIC_LIRO_ADDRESS,
 		eventName: 'Requested',
 		onLogs: async (rolledLogs) => {
-			console.log('Requested');
-
 			const eventOfTheTable = rolledLogs[0].args.table?.toString().toLowerCase() === tableAddress?.toLowerCase();
 			const requestedRound = rolledLogs[0].args.round;
 
@@ -138,7 +145,6 @@ export function RouletteLiveTable() {
 		address: PUBLIC_LIRO_ADDRESS,
 		eventName: 'RandomGenerated',
 		onLogs: async (landedLogs) => {
-			console.log('RandomGenerated');
 			const eventOfTheTable = landedLogs[0].args.table?.toString().toLowerCase() === tableAddress?.toLowerCase();
 			const randomGeneratedRound = landedLogs[0].args.round;
 
@@ -147,7 +153,6 @@ export function RouletteLiveTable() {
 			const randomGeneratedOnCurrentTableAndRound = eventOfTheTable && eventOfCurrentlySelectedRound;
 
 			if (randomGeneratedOnCurrentTableAndRound) {
-				console.log(randomGeneratedOnCurrentTableAndRound, 'randomGeneratedOnCurrentTableAndRound');
 				const round = await fetchTableBetsByBlockHash({
 					blockHash: landedLogs[0].blockHash,
 					round: randomGeneratedRound || BigInt(0),
@@ -200,6 +205,13 @@ export function RouletteLiveTable() {
 					}
 				}
 			}
+			//Update Stat
+			if (tableStatTimeoutRef.current) {
+				clearTimeout(tableStatTimeoutRef.current);
+			}
+			tableStatTimeoutRef.current = setTimeout(() => {
+				queryClient.refetchQueries({ queryKey: tableStatQueryKey });
+			}, 5000);
 		},
 	});
 
