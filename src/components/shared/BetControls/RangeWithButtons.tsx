@@ -14,7 +14,7 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 	const { data: activeChipValue = 0 } = useSelectedChip();
 
 	const handlePlus = () => {
-		if (activeChipValue > limits.max - limits.max / 100) return;
+		if (activeChipValue > limits.max - limits.min / 100) return;
 		let amount: number;
 		if (activeChipValue < 100_000) {
 			amount = limits.min;
