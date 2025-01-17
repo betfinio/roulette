@@ -1,7 +1,9 @@
 import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import type { IRouletteStat } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
 import { motion } from 'framer-motion';
+import { CircleHelp } from 'lucide-react';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -55,7 +57,17 @@ export const Stat: FC<IStatProps> = ({ tableOrPlayerStat, isLoading }) => {
 			})}
 		>
 			<motion.div {...SLIDE_DOWN_ANIMATION} className="text-center mb-2">
-				<h3 className="text-foreground text-xs font-medium">{t('playerStat.hotAndCold')}</h3>
+				<div className="text-foreground text-xs font-medium flex items-center gap-1 justify-center">
+					{t('playerStat.hotAndCold')}
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger>
+								<CircleHelp className={'w-3 h-3'} />
+							</TooltipTrigger>
+							<TooltipContent>{t('playerStat.hotAndColdTooltip')}</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+				</div>
 				<div className="flex justify-center items-center rounded-md p-1 gap-4">
 					<div className="flex flex-col items-center bg-red-roulette rounded-md w-8   py-1">
 						{hot.map((num, index) => (
