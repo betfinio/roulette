@@ -97,7 +97,7 @@ export const doublePlace = async () => {
 	}, {});
 	const newBets = Object.values(betsMap).reduce((acc, bets) => {
 		// biome-ignore lint/performance/noAccumulatingSpread: <explanation>
-		return [...acc, ...bets.slice(0, 5)];
+		return [...acc, ...bets];
 	}, []);
 	localStorage.setItem('bets', JSON.stringify(newBets));
 };
