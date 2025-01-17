@@ -1,14 +1,14 @@
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
 import { useGetLiveRouletteTables } from '@/src/lib/live-roulette/query';
-import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/shared/query';
+import { useGetTableAddress, usePaytable } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
+import { Roulette } from '@betfinio/components/icons';
 import { BetValue } from '@betfinio/components/shared';
-import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger, Separator } from '@betfinio/components/ui';
-import { Bag } from '@betfinio/ui/dist/icons';
+import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger } from '@betfinio/components/ui';
 import { useNavigate } from '@tanstack/react-router';
 import { useChatbot } from 'betfinio_context/lib/context';
 import { useBalance } from 'betfinio_context/lib/query';
-import { AlertCircle, CircleAlert, CircleHelp, Menu } from 'lucide-react';
+import { AlertCircle, ArrowLeftRightIcon, CircleAlert, CircleHelp, Menu } from 'lucide-react';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { type Address, zeroAddress } from 'viem';
@@ -21,17 +21,16 @@ export const BetStatusHeaderHorizontal: FC = () => {
 	const { t } = useTranslation('roulette');
 
 	const { tableAddress, isSingle } = useGetTableAddress();
-	const { data: liveRouletteTables } = useGetLiveRouletteTables();
+	const { data: liveRouletteTables = [] } = useGetLiveRouletteTables();
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 	const { maximize } = useChatbot();
 	const handleReport = () => {
 		maximize();
 	};
 
-	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
-	const { data: bets = [] } = useLocalBets();
+	const currentInterval = liveRouletteTables.find((table) => table.address === tableAddress)?.interval;
 
-	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
+	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 
 	const maxPayout = useMemo(() => {
 		return winningPool / 20n;
@@ -58,38 +57,47 @@ export const BetStatusHeaderHorizontal: FC = () => {
 	return (
 		<div id={BET_STATUS_HEADER} className=" rounded-lg bg-card items-center border border-border p-3 px-4 flex justify-between min-h-16 gap-2 md:gap-4 ">
 			<div className="flex gap-2 md:gap-9">
-				<div className="flex gap-1 items-center">
-					{!isSingle && (
-						<Dialog>
-							<DialogTrigger asChild>
-								<div className={'flex gap-2 md:gap-4 items-center cursor-pointer'}>
-									<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
-								</div>
-							</DialogTrigger>
-							<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette '} aria-describedby={undefined}>
-								<DialogTitle className={'hidden'} />
-								<SwitchModal onClick={handleTableSwitch} selected={tableAddress || zeroAddress} tables={tablesToSwitchList} />
-							</DialogContent>
-						</Dialog>
-					)}
-					<Bag className={'w-8 text-secondary-foreground'} />
-					<div>
-						<div>{t('winningPool')}</div>
-						<div className="font-bold">
-							<BetValue withIcon value={winningPool} />
+				<div className="flex gap-2 items-center">
+					<Dialog>
+						{!isSingle && (
+							<>
+								<DialogTrigger asChild>
+									<div className={'flex gap-2 md:gap-4 items-center cursor-pointer'}>
+										<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
+									</div>
+								</DialogTrigger>
+								<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette '} aria-describedby={undefined}>
+									<DialogTitle className={'hidden'} />
+									<SwitchModal onClick={handleTableSwitch} selected={tableAddress || zeroAddress} tables={tablesToSwitchList} />
+								</DialogContent>
+							</>
+						)}
+						<Roulette className={'w-8 h-8 text-secondary-foreground'} />
+						<div className={'leading-1'}>
+							<div>{isSingle ? t('roulette') : t('liveRoulette')}</div>
+							<div>
+								<DialogTrigger className={'text-sm flex items-center gap-1'}>
+									{isSingle ? (
+										t('singlePlayer')
+									) : (
+										<>
+											{Number(currentInterval) / 60}min
+											<ArrowLeftRightIcon className={'w-3 h-3'} />
+										</>
+									)}
+								</DialogTrigger>
+							</div>
 						</div>
-					</div>
+					</Dialog>
 				</div>
 				<div>
 					<div>{t('maxPayout')}</div>
-					<div className="font-bold">
+					<div className="text-sm">
 						<BetValue withIcon value={valueToNumber(maxPayout)} />
 					</div>
 				</div>
 			</div>
-
-			<Separator orientation="vertical" className="h-8 mr-auto" />
-			<div className=" gap-2   flex ">
+			<div className=" gap-2 flex ">
 				<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
 					<DialogTitle hidden />
 					<DialogContent>

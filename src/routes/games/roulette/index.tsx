@@ -5,12 +5,14 @@ import { useFetchTableBetByBlockHash, useGetRouletteTableStats, useRouletteState
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
 import { Toaster } from '@betfinio/components/ui';
 import { useQueryClient } from '@tanstack/react-query';
-import { createFileRoute } from '@tanstack/react-router';
+import { createFileRoute, redirect } from '@tanstack/react-router';
 import { useRef } from 'react';
 import { useAccount, useWatchContractEvent } from 'wagmi';
 
 export const Route = createFileRoute('/games/roulette/')({
-	component: RoulettePage,
+	beforeLoad: () => {
+		throw redirect({ to: '/games/roulette/single' });
+	},
 });
 
 export function RoulettePage() {

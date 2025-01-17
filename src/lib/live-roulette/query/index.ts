@@ -7,14 +7,14 @@ import { useAccount, useConfig } from 'wagmi';
 import { useGetTableAddress } from '../../shared/query';
 import { fetchBankByRound, fetchCurrentRoundOfTable, fetchRoundStatus, fetchTableBetsByBlockHash, fetchWinNumber } from '../api';
 import {
+	fetchLiveRouletteTables,
 	fetchLiveRoulletteTableStats,
-	fetchLiveRoulletteTables,
 	fetchSelectedTableRoundPlayers,
 	fetchTableBets,
 	fetchTablePlayerRounds,
 	fetchTableSelectedRoundBets,
 } from '../gql';
-import { type WheelState, WheelStatus } from '../types';
+import { type RouletteTable, type WheelState, WheelStatus } from '../types';
 
 export const useLiveRouletteState = () => {
 	const { tableAddress } = useGetTableAddress();
@@ -188,9 +188,9 @@ export const useGetWinNumber = (tableAddress?: Address, round?: number) => {
 };
 
 export const useGetLiveRouletteTables = () => {
-	return useQuery({
+	return useQuery<RouletteTable[]>({
 		queryKey: ['roulette', 'tables'],
-		queryFn: fetchLiveRoulletteTables,
+		queryFn: fetchLiveRouletteTables,
 		refetchOnWindowFocus: false,
 		staleTime: Number.POSITIVE_INFINITY,
 	});

@@ -47,7 +47,7 @@ export const Roulette = () => {
 
 	if (isVertical) {
 		return (
-			<div className="relative w-full flex flex-col items-center justify-center gap-y-2">
+			<div className="relative w-full flex flex-col items-center justify-center p-2 gap-y-2">
 				<VerticalRoulette />
 			</div>
 		);

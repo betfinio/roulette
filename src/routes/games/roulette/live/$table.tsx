@@ -32,6 +32,7 @@ import { useEffect, useRef } from 'react';
 import { type Address, isAddress } from 'viem';
 import { useAccount, useWatchContractEvent } from 'wagmi';
 import { z } from 'zod';
+
 const liveRouletteSchema = z.object({
 	round: fallback(z.number().optional(), undefined),
 });

@@ -7,7 +7,7 @@ import Wheel from './Wheel/Wheel';
 export const VerticalRoulette = () => {
 	return (
 		<div className="flex flex-col items-center justify-center w-full gap-y-2">
-			<div className={'relative w-full mt-2'}>
+			<div className={'relative w-full'}>
 				<div className="relative">
 					<BetStatusHeader />
 				</div>
