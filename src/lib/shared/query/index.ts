@@ -28,7 +28,7 @@ import {
 	unplace,
 } from '../api';
 import { fetchBetsBitMapAndAmountByRound } from '../gql';
-import type { ChiPlaceProps, LocalBet, SpinParams } from '../types';
+import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
 
 export const closePaytable = (queryClient: QueryClient) => {
 	queryClient.setQueryData(['roulette', 'paytable'], false);
@@ -77,7 +77,7 @@ export const usePlace = () => {
 	const queryClient = useQueryClient();
 	const { t } = useTranslation('roulette', { keyPrefix: 'errors' });
 	const { data: chip = 0 } = useSelectedChip();
-	return useMutation<void, Error, ChiPlaceProps>({
+	return useMutation<void, Error, ChipPlaceProps>({
 		mutationKey: ['roulette', 'place'],
 		mutationFn: (e) => place(e, chip, t),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
@@ -90,7 +90,7 @@ export const usePlace = () => {
 };
 export const useUnplace = () => {
 	const queryClient = useQueryClient();
-	return useMutation<void, Error, ChiPlaceProps>({
+	return useMutation<void, Error, ChipPlaceProps>({
 		mutationKey: ['roulette', 'unplace'],
 		mutationFn: (e) => unplace(e),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),

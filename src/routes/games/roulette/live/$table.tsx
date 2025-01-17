@@ -18,7 +18,6 @@ import {
 	useLiveRouletteState,
 } from '@/src/lib/live-roulette/query';
 import { type PlayerInProgressBet, type PlayerRoundBets, type RoundBet, type RoundPlayerBet, WheelStatus } from '@/src/lib/live-roulette/types';
-import { mergeAndSummarize } from '@/src/lib/shared';
 import { fetchTableByAddress } from '@/src/lib/shared/api';
 import { useGetBetInfo, useGetBetsAmountAndBitMapByRound, useGetTableAddress, useRouletteOthersBetsState } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
@@ -113,8 +112,7 @@ export function RouletteLiveTable() {
 								...tableConfig,
 								...extraItems,
 							});
-							const summarizedBets = mergeAndSummarize(mapedBets);
-							updateOthersBetsState({ selectedBetChips: summarizedBets });
+							updateOthersBetsState({ selectedBetChips: mapedBets });
 						},
 					},
 				);

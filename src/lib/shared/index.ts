@@ -1,3 +1,4 @@
+import type { Address } from 'viem';
 import { type LastResult, type LocalBet, RoundStatus } from './types';
 
 export function encodeBet(bet: LocalBet) {
@@ -8,7 +9,7 @@ export function encodeBet(bet: LocalBet) {
 	return { amount: BigInt(bet.amount) * 10n ** 18n, bitmap: value };
 }
 
-export function decodeBet(encoded: { amount: bigint; bitmap: bigint }): LocalBet {
+export function decodeBet(encoded: { amount: bigint; bitmap: bigint; player?: Address }): LocalBet {
 	// Decode numbers from the bitmap
 	const numbers: number[] = [];
 	let bitmap = encoded.bitmap;
@@ -29,6 +30,7 @@ export function decodeBet(encoded: { amount: bigint; bitmap: bigint }): LocalBet
 	return {
 		numbers,
 		amount,
+		player: encoded.player,
 		item: '', // Placeholder since item isn't encoded in the original representation
 	};
 }
@@ -74,6 +76,7 @@ export function mergeAndSummarize(objects: LocalBet[]): LocalBet[] {
 			// Merge the amounts and retain unique numbers
 			existing.amount += obj.amount;
 			existing.numbers = Array.from(new Set([...existing.numbers, ...obj.numbers]));
+			existing.player = obj.player;
 		} else {
 			// Add new entry
 			mergedMap.set(obj.item, { ...obj });

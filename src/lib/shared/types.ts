@@ -1,6 +1,6 @@
 import type { Address } from 'viem';
 
-export interface ChiPlaceProps {
+export interface ChipPlaceProps {
 	item: string;
 	numbers: number[];
 }
@@ -9,6 +9,7 @@ export interface LocalBet {
 	numbers: number[];
 	amount: number;
 	item: string;
+	player?: Address;
 }
 
 export interface SpinParams {
