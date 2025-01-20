@@ -75,9 +75,9 @@ const TableItem: React.FC<TableItemProps> = ({
 	const handleInteraction = (position: PositionType, action: 'hover' | 'leave' | 'click' | 'contextMenu', event?: React.MouseEvent) => {
 		event?.stopPropagation();
 
-		if (state.data.selectedBetChips) {
-			return;
-		}
+		// if (state.data.selectedBetChips) {
+		// 	return;
+		// }
 		const relatedNumbers = selectionMap[position];
 		switch (action) {
 			case 'hover':

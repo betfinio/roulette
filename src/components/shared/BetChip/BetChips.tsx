@@ -14,20 +14,21 @@ interface BetChipsProps {
 	positionId: string;
 }
 export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
-	const { data: chips } = useGetChipsForPosition(positionId);
+	const { data: chips = [] } = useGetChipsForPosition(positionId);
 	const { state } = useRouletteOthersBetsState();
 	const { address = ZeroAddress } = useAccount();
 
 	const chipsToShow = useMemo(() => {
 		if (state.data.selectedBetChips) {
-			return state.data.selectedBetChips.filter((chip) => chip.item === positionId);
+			return [...state.data.selectedBetChips.filter((chip) => chip.item === positionId), ...chips];
 		}
 		return chips;
 	}, [chips, state]);
 	if (chipsToShow === undefined || chipsToShow.length === 0) return null;
 
 	const myBets = mergeAndSummarize(chipsToShow.filter((chip) => chip.player?.toLowerCase() === address.toLowerCase() || chip.player === undefined));
-	const otherBets = mergeAndSummarize(chipsToShow.filter((chip) => chip.player?.toLowerCase() !== address.toLowerCase() && chip.player !== undefined));
+	const otherBets = mergeAndSummarize(chipsToShow.filter((chip) => chip.player !== undefined && chip.player.toLowerCase() !== address.toLowerCase()));
+
 	const allChips = [...otherBets, ...myBets];
 	const totalOffset = allChips.length * 2;
 	const startOffset = totalOffset / 2;
@@ -50,6 +51,7 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 	return (
 		<>
 			<TooltipContent side={'top'} className={'border border-border'}>
+				<div>{positionId.split('-')[0]}</div>
 				<div className={'flex flex-row items-center justify-between gap-1'}>
 					My bets: <BetValue value={myBetsAmount} withIcon />
 				</div>
@@ -63,7 +65,7 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 			</TooltipContent>
 			{allChips.map((chip, index) => {
 				const zIndex = allChips.length + index + 1;
-				const offset = (index + 1) * 4;
+				const offset = (index + 1) * 5;
 				const xOffset = offset - startOffset;
 				const yOffset = offset - startOffset;
 				const isGhost = chip.player?.toLowerCase() !== address.toLowerCase() && chip.player !== undefined;

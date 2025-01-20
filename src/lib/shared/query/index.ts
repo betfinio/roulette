@@ -171,7 +171,7 @@ export const useRouletteNumbersState = () => {
 
 	const hasOtherState = othersState.data.selectedBetChips && othersState.data.selectedBetChips.length > 0;
 
-	const selected = othersState.data.selectedBetChips ? othersState.data.selectedBetChips.flatMap((e) => e.numbers) : bets.flatMap((e) => e.numbers);
+	const selected = bets.flatMap((e) => e.numbers);
 
 	const updateState = (props: { hovered?: number[]; selected?: number[] }) => {
 		queryClient.setQueryData(['roulette', 'numbers'], { ...state.data, ...props });
@@ -179,7 +179,7 @@ export const useRouletteNumbersState = () => {
 	};
 
 	const isNumberHovered = (number: number) => {
-		if (hasOtherState) return false;
+		// if (hasOtherState) return false;
 		return state.data.hovered.includes(number);
 	};
 	const isNumberSelected = (number: number) => selected.includes(number);

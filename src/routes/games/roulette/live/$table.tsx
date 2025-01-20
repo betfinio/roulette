@@ -98,28 +98,28 @@ export function RouletteLiveTable() {
 	const tableStatTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
 
 	useEffect(() => {
-		if (isRoundFinished) {
-			if (selectedRound && tableAddress) {
-				mutateAsync(
-					{ round: selectedRound, table: tableAddress },
-					{
-						onSuccess: (selectedBetChips) => {
-							const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
-							const extraItems = isVertical ? tableExtraConfigVertical : tableExtraConfigHorizontal;
-							const mapedBets = fillItems(selectedBetChips, {
-								...dozenItemsConfig,
-								...sideItemsConfig,
-								...tableConfig,
-								...extraItems,
-							});
-							updateOthersBetsState({ selectedBetChips: mapedBets });
-						},
+		// if (isRoundFinished) {
+		if (selectedRound && tableAddress) {
+			mutateAsync(
+				{ round: selectedRound, table: tableAddress },
+				{
+					onSuccess: (selectedBetChips) => {
+						const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
+						const extraItems = isVertical ? tableExtraConfigVertical : tableExtraConfigHorizontal;
+						const mapedBets = fillItems(selectedBetChips, {
+							...dozenItemsConfig,
+							...sideItemsConfig,
+							...tableConfig,
+							...extraItems,
+						});
+						updateOthersBetsState({ selectedBetChips: mapedBets });
 					},
-				);
-			}
-		} else {
-			updateOthersBetsState({ selectedBetChips: null });
+				},
+			);
 		}
+		// } else {
+		// 	updateOthersBetsState({ selectedBetChips: null });
+		// }
 	}, [isRoundFinished, selectedRound]);
 	useWatchContractEvent({
 		abi: LiveRouletteABI,
