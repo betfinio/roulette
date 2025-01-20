@@ -1,9 +1,15 @@
 import { VersionValidation } from '@/src/components/VersionValidation';
 import { LiveRoulette } from '@/src/components/live-roulette/LiveRoulette';
+import { dozenItemsConfig, sideItemsConfig } from '@/src/components/shared/MainTable/SideTable';
+import { tableConfigHorizontal } from '@/src/components/shared/MainTable/tableConfigHorizontal';
+import { tableConfigVertical } from '@/src/components/shared/MainTable/tableConfigVertical';
+import { tableExtraConfigHorizontal, tableExtraConfigVertical } from '@/src/components/shared/MainTable/tableExtraItemsConfig';
 import { PUBLIC_BRANCH, PUBLIC_DEPLOYED, PUBLIC_LIRO_ADDRESS } from '@/src/global';
+import { fillItems } from '@/src/lib/live-roulette';
 import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
 import {
 	useFetchTableBetsByBlockHash,
+	useGetLiveRouletteTableStats,
 	useGetSelectedRound,
 	useGetTablePlayerRounds,
 	useGetTableRoundPlayers,
@@ -13,16 +19,19 @@ import {
 } from '@/src/lib/live-roulette/query';
 import { type PlayerInProgressBet, type PlayerRoundBets, type RoundBet, type RoundPlayerBet, WheelStatus } from '@/src/lib/live-roulette/types';
 import { fetchTableByAddress } from '@/src/lib/shared/api';
-import { useGetBetInfo, useGetTableAddress } from '@/src/lib/shared/query';
+import { useGetBetInfo, useGetBetsAmountAndBitMapByRound, useGetTableAddress, useRouletteOthersBetsState } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
 import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
+import { useMediaQuery } from '@betfinio/components/hooks';
 import { Toaster } from '@betfinio/components/ui';
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, redirect } from '@tanstack/react-router';
 import { fallback, zodValidator } from '@tanstack/zod-adapter';
+import { useEffect, useRef } from 'react';
 import { type Address, isAddress } from 'viem';
 import { useAccount, useWatchContractEvent } from 'wagmi';
 import { z } from 'zod';
+
 const liveRouletteSchema = z.object({
 	round: fallback(z.number().optional(), undefined),
 });
@@ -49,13 +58,15 @@ export const Route = createFileRoute('/games/roulette/live/$table')({
 
 		if (!deps.round) {
 			const round = await fetchCurrentRoundOfTable(context.wagmiConfig, params.table as Address);
-			console.log(round, 'round');
+
 			throw redirect({
 				to: '/games/roulette/live/$table',
 				params: { table: params.table },
 				search: { round: Number(round?.round) },
 			});
 		}
+
+		context.queryClient.refetchQueries({ queryKey: ['roulette', 'currentRound'] });
 	},
 	onError: (e) => {
 		console.error(e, 'my error');
@@ -68,23 +79,53 @@ export function RouletteLiveTable() {
 	const { updateState } = useLiveRouletteState();
 	const { tableAddress } = useGetTableAddress();
 	const { mutateAsync: fetchTableBetsByBlockHash } = useFetchTableBetsByBlockHash();
-	const { round: selectedRound } = useGetSelectedRound();
+	const { round: selectedRound, isRoundFinished } = useGetSelectedRound();
 	const { address = ZeroAddress } = useAccount();
 
-	const { isFetched: isBetsFetched, data: rounds = [], queryKey } = useGetTableRounds(50, tableAddress);
+	const { data: rounds = [], queryKey } = useGetTableRounds(50, tableAddress);
 	const { data: playerRounds = [], queryKey: playerRoundsQueryKey } = useGetTablePlayerRounds(tableAddress);
 	const { mutateAsync: fetchBetInfo } = useGetBetInfo();
 
 	const { data: tableSelectedRoundBets } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
 	const { data: tableRoundPlayers = [], queryKey: tableRoundPlayersQueryKey } = useGetTableRoundPlayers(tableAddress, selectedRound);
 
+	const { updateState: updateOthersBetsState } = useRouletteOthersBetsState();
+
+	const { mutateAsync } = useGetBetsAmountAndBitMapByRound();
+	const { isVertical } = useMediaQuery();
+	const { queryKey: tableStatQueryKey } = useGetLiveRouletteTableStats(tableAddress);
+
+	const tableStatTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+
+	useEffect(() => {
+		// if (isRoundFinished) {
+		if (selectedRound && tableAddress) {
+			mutateAsync(
+				{ round: selectedRound, table: tableAddress },
+				{
+					onSuccess: (selectedBetChips) => {
+						const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
+						const extraItems = isVertical ? tableExtraConfigVertical : tableExtraConfigHorizontal;
+						const mapedBets = fillItems(selectedBetChips, {
+							...dozenItemsConfig,
+							...sideItemsConfig,
+							...tableConfig,
+							...extraItems,
+						});
+						updateOthersBetsState({ selectedBetChips: mapedBets });
+					},
+				},
+			);
+		}
+		// } else {
+		// 	updateOthersBetsState({ selectedBetChips: null });
+		// }
+	}, [isRoundFinished, selectedRound]);
 	useWatchContractEvent({
 		abi: LiveRouletteABI,
 		address: PUBLIC_LIRO_ADDRESS,
 		eventName: 'Requested',
 		onLogs: async (rolledLogs) => {
-			console.log('Requested');
-
 			const eventOfTheTable = rolledLogs[0].args.table?.toString().toLowerCase() === tableAddress?.toLowerCase();
 			const requestedRound = rolledLogs[0].args.round;
 
@@ -103,7 +144,6 @@ export function RouletteLiveTable() {
 		address: PUBLIC_LIRO_ADDRESS,
 		eventName: 'RandomGenerated',
 		onLogs: async (landedLogs) => {
-			console.log('RandomGenerated');
 			const eventOfTheTable = landedLogs[0].args.table?.toString().toLowerCase() === tableAddress?.toLowerCase();
 			const randomGeneratedRound = landedLogs[0].args.round;
 
@@ -112,7 +152,6 @@ export function RouletteLiveTable() {
 			const randomGeneratedOnCurrentTableAndRound = eventOfTheTable && eventOfCurrentlySelectedRound;
 
 			if (randomGeneratedOnCurrentTableAndRound) {
-				console.log(randomGeneratedOnCurrentTableAndRound, 'randomGeneratedOnCurrentTableAndRound');
 				const round = await fetchTableBetsByBlockHash({
 					blockHash: landedLogs[0].blockHash,
 					round: randomGeneratedRound || BigInt(0),
@@ -165,6 +204,13 @@ export function RouletteLiveTable() {
 					}
 				}
 			}
+			//Update Stat
+			if (tableStatTimeoutRef.current) {
+				clearTimeout(tableStatTimeoutRef.current);
+			}
+			tableStatTimeoutRef.current = setTimeout(() => {
+				queryClient.refetchQueries({ queryKey: tableStatQueryKey });
+			}, 5000);
 		},
 	});
 
@@ -175,7 +221,7 @@ export function RouletteLiveTable() {
 		onLogs: async (rolledLogs) => {
 			const betPlacedInCurrentRound = rolledLogs[0].args.round === BigInt(selectedRound ?? 0n);
 			const betAddress = rolledLogs[0].args.bet || ZeroAddress;
-			console.log('Bet Placed');
+
 			if (!betPlacedInCurrentRound || selectedRound === undefined) {
 				return;
 			}

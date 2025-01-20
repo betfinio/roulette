@@ -1,26 +1,27 @@
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
 import { readContract } from '@wagmi/core';
+import { getBlockByTimestamp } from 'betfinio_context/lib/gql';
 import { type Address, parseAbiItem } from 'viem';
-import { getContractEvents, getLogs } from 'viem/actions';
+import { getBlockNumber, getContractEvents, getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
 import { fetchBetInfo } from '../../shared/api';
 import { RoundStatus } from '../../shared/types';
 import type { RoundBet, RoundPlayerBet, WheelStatus } from '../types';
 
 export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Address) => {
-	console.log('fetchCurrentRoundOfTable');
 	if (!tableAddress) return;
-	const round = await readContract(config, {
-		abi: MultiPlayerTableABI,
-		address: tableAddress,
-		functionName: 'getCurrentRound',
-	});
+
 	const interval = await readContract(config, {
 		abi: MultiPlayerTableABI,
 		address: tableAddress,
 		functionName: 'interval',
 	});
+
+	// Calculate the current round based on the current timestamp
+	const now = Math.floor(Date.now() / 1000); // Current time in seconds
+	const round = BigInt(Math.floor(now / Number(interval ?? 1n))); // Calculate the current round
+
 	const roundBank = await readContract(config, {
 		abi: MultiPlayerTableABI,
 		address: tableAddress,
@@ -28,22 +29,11 @@ export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Ad
 		args: [round],
 	});
 
-	console.log(round, 'round FROM FETCH');
-
 	return {
 		round,
 		interval,
 		roundHasBets: roundBank > 0n,
 	};
-};
-
-export const fetchCurrentRound = async (config: Config, tableAddress: Address) => {
-	const result = await readContract(config, {
-		abi: MultiPlayerTableABI,
-		address: tableAddress,
-		functionName: 'getCurrentRound',
-	});
-	return result;
 };
 
 export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Address, tableAddress?: Address, round?: bigint, playerAddress?: Address) => {
@@ -137,22 +127,41 @@ export const fetchRoundStatus = async (config: Config, tableAddress?: Address, r
 };
 
 export const fetchWinNumber = async (config: Config, tableAddress?: Address, round?: number) => {
-	if (!tableAddress || !round) return;
+	if (!tableAddress || !round) return 42n;
 
-	const randomGeneratedData = await getContractEvents(config.getClient(), {
-		abi: LiveRouletteABI,
-		address: PUBLIC_LIRO_ADDRESS,
-		eventName: 'RandomGenerated',
-		args: {
-			table: tableAddress,
-			round: BigInt(round),
-			player: ZeroAddress,
-		},
-		fromBlock: 'earliest',
-		toBlock: 'latest',
+	const interval = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: tableAddress,
+		functionName: 'interval',
 	});
+	const startTime = Number(interval * BigInt(round));
+	const startBlock = await getBlockByTimestamp(startTime);
+	const endBlock = startBlock + 9999n;
 
-	console.log(randomGeneratedData, 'randomGeneratedData');
+	// const currentBlock = await getBlockNumber(config.getClient());
+	// console.log(currentBlock,"currentBlock")
+	// console.log(endBlock,"endBlock")
 
-	return randomGeneratedData[0].args.value;
+	try {
+		const randomGeneratedData = await getContractEvents(config.getClient(), {
+			abi: LiveRouletteABI,
+			address: PUBLIC_LIRO_ADDRESS,
+			eventName: 'RandomGenerated',
+			args: {
+				table: tableAddress,
+				round: BigInt(round),
+				player: ZeroAddress,
+			},
+			fromBlock: startBlock,
+			toBlock: endBlock,
+		});
+
+		if (randomGeneratedData.length === 0) {
+			return 42n;
+		}
+		return randomGeneratedData[0].args.value;
+	} catch (e) {
+		console.log(e);
+		return 42n;
+	}
 };

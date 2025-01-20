@@ -1,19 +1,12 @@
 import { ETHSCAN } from '@/src/global';
-import { fillItems } from '@/src/lib/live-roulette';
 import type { PlayerInProgressBet } from '@/src/lib/live-roulette/types';
-import { useGetBetAmountAndBitMap, useRouletteOthersBetsState } from '@/src/lib/shared/query';
 import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
-import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue } from '@betfinio/components/shared';
-import { useCustomUsername, useRegistrationDate, useUsername } from 'betfinio_context/lib/query';
+import { useCustomUsername, useUsername } from 'betfinio_context/lib/query';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useAccount } from 'wagmi';
-import { dozenItemsConfig, sideItemsConfig } from '../../shared/MainTable/SideTable';
-import { tableConfigHorizontal } from '../../shared/MainTable/tableConfigHorizontal';
-import { tableConfigVertical } from '../../shared/MainTable/tableConfigVertical';
-import { tableExtraConfigHorizontal, tableExtraConfigVertical } from '../../shared/MainTable/tableExtraItemsConfig';
 
 interface IBetTabItemProps {
 	bet: PlayerInProgressBet;
@@ -26,10 +19,6 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet, showWinnders, index }) => {
 
 	const { data: username } = useUsername(bet.player);
 	const { data: customUsername } = useCustomUsername(address, bet.player);
-
-	const { mutateAsync } = useGetBetAmountAndBitMap(bet.bet);
-	const { isVertical } = useMediaQuery();
-	const { updateState } = useRouletteOthersBetsState();
 
 	const hasWon = bet.winAmount && bet.winAmount > 0n;
 	const isWinnerCard = showWinnders && hasWon && index < 3;
@@ -47,17 +36,6 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet, showWinnders, index }) => {
 				'bg-gradient-to-r from-tertiary-foreground/20 via-primaryLight to-transparent border-tertiary-foreground border': index === 1 && isWinnerCard,
 				'bg-gradient-to-r from-orange-600/50 via-primaryLight to-transparent border-orange-600 border ': index === 2 && isWinnerCard,
 			})}
-			onMouseEnter={() => {
-				// mutateAsync(null, {
-				// 	onSuccess: (data) => {
-				// 		const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
-				// 		const extraItems = isVertical ? tableExtraConfigVertical : tableExtraConfigHorizontal;
-				// 		const test = fillItems(data, { ...dozenItemsConfig, ...sideItemsConfig, ...tableConfig, ...extraItems });
-				// 		//updateState({ selectedBetChips: test });
-				// 	},
-				// });
-			}}
-			onMouseLeave={() => updateState({ selectedBetChips: null })}
 		>
 			<div className={'py-3 px-2 flex justify-between items-center grow gap-2'}>
 				<div className={'flex items-start gap-2.5'}>

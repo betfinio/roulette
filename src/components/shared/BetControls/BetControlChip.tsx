@@ -62,8 +62,8 @@ export const BetControlChip = () => {
 					<stop offset="1" stopColor="#7B4285" />
 				</linearGradient>
 			</defs>
-			<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="black" className="text-[10px] font-bold tabular-nums" color="black">
-				{millify(activeChipValue)}
+			<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="black" className="text-[8px] font-semibold tabular-nums" color="black">
+				{millify(activeChipValue, { precision: 2 })}
 			</text>
 		</svg>
 	);

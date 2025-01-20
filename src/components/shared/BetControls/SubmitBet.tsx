@@ -6,11 +6,12 @@ import { useGetTableAddress, useLocalBets, useSubmitBet } from '@/src/lib/shared
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useToast } from '@betfinio/components/hooks';
+import { BetValue } from '@betfinio/components/shared';
 import { Button } from '@betfinio/components/ui';
 import { useAllowanceModal } from 'betfinio_context/lib/context';
 import { useAllowance, useIsMember } from 'betfinio_context/lib/query';
 import { Loader } from 'lucide-react';
-import type { FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
 
@@ -23,17 +24,18 @@ export const SubmitBet: FC = () => {
 
 	const { address = ZeroAddress } = useAccount();
 	const { data: isMember = false } = useIsMember(address);
-	const { requestAllowance } = useAllowanceModal();
-	const { mutate: submitBet, isPending } = useSubmitBet();
+	const { requestAllowance, setResult, requested } = useAllowanceModal();
+	const { mutate: submitBet, isPending, isSuccess, data } = useSubmitBet();
 	const { data: allowance = 0n, isFetching: loading } = useAllowance(address);
 	const { state: rouletteWheelStateData } = useRouletteState();
 	const { state: liveRouletteWheelStateData } = useLiveRouletteState();
 	const rouletteWheelState = rouletteWheelStateData.data;
 	const liveRouletteWheelState = liveRouletteWheelStateData.data;
 	const { data: bets = [] } = useLocalBets();
-
 	const isSpinning =
-		loading || isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested);
+		isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested);
+
+	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
 
 	const handleSpin = () => {
 		if (address === ZeroAddress) {
@@ -70,12 +72,27 @@ export const SubmitBet: FC = () => {
 			playerAddress: address,
 		});
 	};
+	useEffect(() => {
+		if (data && isSuccess) {
+			setResult?.(data);
+		}
+	}, [isSuccess, data]);
+	useEffect(() => {
+		if (requested) {
+			handleSpin();
+		}
+	}, [requested]);
 
 	return (
 		<>
-			<Button className="w-full uppercase text-xl px-8 relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>
+			<Button className="w-full uppercase text-xl px-4 relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>
 				{isSpinning && <Loader color={'black'} className={'animate-spin absolute'} />}
-				<span className={cn('uppercase', { invisible: isSpinning })}>{isSingle ? t('spin') : t('submitBet')}</span>
+				<div className={cn('uppercase', { invisible: isSpinning })}>
+					<div className="flex gap-2 w-32 justify-center text-base">
+						{t('submitBet')}
+						<BetValue iconClassName="rounded-full border border-border" withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
+					</div>
+				</div>
 			</Button>
 		</>
 	);

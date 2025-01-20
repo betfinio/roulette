@@ -1,18 +1,23 @@
 import {
 	GetLiveRoulettePlayerTableBetsDocument,
 	type GetLiveRoulettePlayerTableBetsQuery,
+	GetLiveRouletteStatsByTableDocument,
+	type GetLiveRouletteStatsByTableQuery,
 	GetLiveRouletteTableAllBetsDocument,
 	type GetLiveRouletteTableAllBetsQuery,
 	GetLiveRouletteTableSelectedRoundBetsDocument,
 	type GetLiveRouletteTableSelectedRoundBetsQuery,
 	GetLiveRouletteTableSelectedRoundPlayersDocument,
 	type GetLiveRouletteTableSelectedRoundPlayersQuery,
+	GetLiveRouletteTablesDocument,
+	type GetLiveRouletteTablesQuery,
 	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
 import type { ExecutionResult } from 'graphql';
 import type { Address } from 'viem';
-import type { PlayerInProgressBet, PlayerRoundBets, RoundBet, RoundPlayerBet } from '../types';
+import type { IRouletteStat } from '../../shared/types';
+import type { PlayerInProgressBet, PlayerRoundBets, RouletteTable, RoundBet, RoundPlayerBet } from '../types';
 
 export const fetchTablePlayerRounds = async (player: Address, table?: Address) => {
 	if (table === undefined) return [];
@@ -92,4 +97,52 @@ export const fetchTableSelectedRoundBets = async (table?: Address, round?: numbe
 		});
 	}
 	return [];
+};
+
+export const fetchLiveRouletteTables = async (): Promise<RouletteTable[]> => {
+	const data: ExecutionResult<GetLiveRouletteTablesQuery> = await execute(GetLiveRouletteTablesDocument, {});
+	if (data.data) {
+		const uniqueIntervals = new Set<bigint>(); // To track unique intervals
+
+		return data.data.tables
+			.map((table) => {
+				return {
+					address: table.address,
+					interval: table.interval,
+					id: table.id,
+				} as RouletteTable;
+			})
+			.filter((table) => {
+				if (!uniqueIntervals.has(table.interval)) {
+					uniqueIntervals.add(table.interval);
+					return true;
+				}
+				return false;
+			});
+	}
+	return [];
+};
+export const fetchLiveRoulletteTableStats = async (table?: Address) => {
+	if (!table) return;
+	const data: ExecutionResult<GetLiveRouletteStatsByTableQuery> = await execute(GetLiveRouletteStatsByTableDocument, { table });
+	if (data.data) {
+		const hot = data.data.hotNumbers.map((num) => num.number);
+		const cold = data.data.coldNumbers.map((num) => num.number);
+		const odd = Number(data.data.rouletteStat[0].oddCount);
+		const even = Number(data.data.rouletteStat[0].evenCount);
+		const red = Number(data.data.rouletteStat[0].redCount);
+		const black = Number(data.data.rouletteStat[0].blackCount);
+		const totalRolls = Number(data.data.rouletteStat[0].totalRolls);
+		const rouletteStat: IRouletteStat = {
+			hot,
+			cold,
+			odd: Math.floor((odd / totalRolls) * 100),
+			even: Math.floor((even / totalRolls) * 100),
+			red: Math.floor((red / totalRolls) * 100),
+			black: Math.floor((black / totalRolls) * 100),
+			totalRolls,
+		};
+
+		return rouletteStat;
+	}
 };

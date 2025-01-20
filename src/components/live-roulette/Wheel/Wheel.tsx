@@ -8,13 +8,11 @@ import {
 import { type WheelState, WheelStatus } from '@/src/lib/live-roulette/types';
 import { getWheelNumbers } from '@/src/lib/roulette';
 import { useGetTableAddress } from '@/src/lib/shared/query';
-import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion, useAnimation } from 'framer-motion';
 import { PlayIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useAccount } from 'wagmi';
 import RouletteWheel from '../../shared/RouletteWheel';
 import { WheelDetails } from '../WheelDetails/WheelDetails';
 
@@ -24,11 +22,10 @@ export const Wheel = () => {
 	const { state: wheelStateData, updateState } = useLiveRouletteState();
 	const status = wheelStateData.data.state;
 	const { tableAddress } = useGetTableAddress();
-	const { address = ZeroAddress } = useAccount();
 	const { roundStatusProps, winNumberProps, round: selectedRound } = useGetSelectedRound();
 	const { isFetched: isBetsFetched, data: rounds = [], queryKey: tableRoundsQueryKey } = useGetTableRounds(50, tableAddress);
 	const { data: playerRounds = [], queryKey: playerRoundQueryKey } = useGetTablePlayerRounds(tableAddress);
-	const { data: tableSelectedRoundBets, refetch } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
+	const { refetch } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
 	const lastNumber = rounds.find((tableRound) => tableRound.round === selectedRound)?.winNumber || 0;
 
 	// Animation control
@@ -89,7 +86,7 @@ export const Wheel = () => {
 				},
 			});
 		} else if (status === WheelStatus.Landing) {
-			const stopAngle = getAngleForNumber(lastNumber) || 0;
+			const stopAngle = getAngleForNumber(wheelStateData.data.result || 0) || 0;
 
 			wheelControls
 				.start({
@@ -130,9 +127,8 @@ export const Wheel = () => {
 						});
 					}
 
-					updateState({ state: WheelStatus.Finished } as WheelState);
+					updateState({ state: WheelStatus.JustFinished } as WheelState);
 					setTimeout(async () => {
-						// await queryClient.invalidateQueries({ queryKey: playerRoundQueryKey });
 						refetch();
 						roundStatusProps.refetch();
 						winNumberProps.refetch();
@@ -159,12 +155,12 @@ export const Wheel = () => {
 					},
 				})
 				.then(() => setInitialAnimationFinished(true));
-
+			wheelControls.stop();
 			wheelControls.set({
 				rotate: [-stopAngle + 180],
 			});
 		}
-	}, [status, wheelControls]);
+	}, [status, wheelControls, lastNumber]);
 
 	return (
 		<>

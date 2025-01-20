@@ -3,7 +3,6 @@ import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
-import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount } from 'wagmi';
@@ -14,13 +13,18 @@ import { RoundNumber } from './RoundNumber';
 import { Timer } from './Timer';
 
 export const WheelDetails: FC = () => {
-	const queryClient = useQueryClient();
 	const { tableAddress = ZeroAddress } = useGetTableAddress();
 
 	const { state } = useLiveRouletteState();
 	const { address } = useAccount();
-	const { data: currentRound, isLoading, refetch } = useGetCurrentRound(tableAddress);
-	const { round: selectedRound, isRoundFinished, roundHasBets: selectedRoundHasBets, winNumber, bankByRoundProps } = useGetSelectedRound();
+	const { data: currentRound, isLoading, refetch: refetchCurrentRound } = useGetCurrentRound(tableAddress);
+	const {
+		round: selectedRound,
+		isRoundFinished,
+		roundHasBets: selectedRoundHasBets,
+		winNumber,
+		bankByRoundProps: { refetch: refetchBankByRound },
+	} = useGetSelectedRound();
 	const { data: tableroundBets, isLoading: isSelectedRoundBetsLoading } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
 
 	const playerStat = useMemo(() => {
@@ -30,15 +34,9 @@ export const WheelDetails: FC = () => {
 		return { playerHasWon: hasWon, playerHasBets: playerBets.length };
 	}, [tableroundBets, address, winNumber]);
 
-	useEffect(() => {
-		return () => console.log('Wheel details unmount');
-	}, []);
-	const [lastExpired, setLastExpired] = useState<number>();
-
-	const handleExpiration = async (round: number) => {
-		console.log(handleExpiration, 'handleExpiration');
-		bankByRoundProps.refetch();
-		setTimeout(refetch, 1000);
+	const handleExpiration = async () => {
+		refetchBankByRound();
+		refetchCurrentRound();
 	};
 
 	const { timeLeft, isReady, isExpired } = useRoundCountdown(selectedRound, Number(currentRound?.interval), handleExpiration);
@@ -50,12 +48,10 @@ export const WheelDetails: FC = () => {
 	const showBackToGame = isRoundFinished && rouletteIsNotSpinning;
 	const showRoundNumber = rouletteIsNotSpinning;
 	const showWaitingForSpin = roundHasBets && isRoundFinished && winNumber === 42n;
+
 	const showRoundIsOver = isRoundFinished && rouletteIsNotSpinning && !roundHasBets;
 
-	const showYouDidntWin = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && !playerStat.playerHasWon;
-
 	const showYouWon = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && playerStat.playerHasWon;
-	console.log(isRoundFinished, 'isRoundFinished');
 	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning) return null;
 
 	return (
@@ -70,24 +66,24 @@ export const WheelDetails: FC = () => {
 			>
 				{/* Round Number */}
 				{showRoundNumber && (
-					<div className="w-1/3 mb-[5%] flex justify-center mx-auto">
+					<div className="w-1/3 mb-[5%] flex justify-center items-center mx-auto">
 						<RoundNumber />
 					</div>
 				)}
 				{/*  Waiting For Spin */}
 				{showWaitingForSpin && (
 					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
-						<DynamicTextSVG text="Waiting: Stand by" />
+						<DynamicTextSVG text="Waiting For Spin" />
 					</div>
 				)}
-				{/*  You didn't win */}
-				{showYouDidntWin && (
-					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
-						<DynamicTextSVG text="You Didn't win" />
-					</div>
-				)}
+
+				{/* {!!showYouDidntWin && (
+          <div className={cn("w-1/4   inline-flex mx-auto ", {})}>
+            <DynamicTextSVG text="You Didn't win" />
+          </div>
+        )} */}
 				{/*  You won */}
-				{showYouWon && (
+				{!!showYouWon && (
 					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
 						<DynamicTextSVG text="You Won !" />
 					</div>

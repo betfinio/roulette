@@ -1,4 +1,3 @@
-import type { TableConfigHorizontalItem } from '@/src/components/shared/MainTable/tableConfigHorizontal';
 import type { Address } from 'viem';
 
 export function getColor(num: number): 'RED' | 'BLACK' | 'GREEN' {
@@ -12,32 +11,16 @@ export const getBlack = () => {
 };
 
 export const getRed = () => {
-	return [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 36, 34];
-};
-
-export const addressToColor = (walletAddress: Address) => {
-	if (!walletAddress) return '#ffffff';
-	const walletHash = walletAddress.substring(2);
-	const chunkLength = Math.floor(walletHash.length / 3);
-	const [firstChunk, secondChunk, thirdChunk] = [
-		walletHash.substring(0, chunkLength),
-		walletHash.substring(chunkLength, chunkLength * 2),
-		walletHash.substring(chunkLength * 2, walletHash.length),
-	];
-
-	const red = Number.parseInt(firstChunk, 16) % 256;
-	const green = Number.parseInt(secondChunk, 16) % 256;
-	const blue = Number.parseInt(thirdChunk, 16) % 256;
-	const result = [red, green, blue].map((color) => `${color < 16 ? '0' : ''}${color.toString(16)}`).join('');
-	return `#${result}`;
+	return [1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 34, 36];
 };
 
 export const getChipColor = (value: number) => {
-	if (value <= 1000) return 'var(--blue)';
-	if (value <= 5000) return 'var(--blue-purple)';
-	if (value <= 10000) return 'var(--purple-lighter)';
-	if (value <= 50000) return 'var(--orange)';
-	return 'var(--yellow)';
+	if (value <= 10000) return 'var(--blue-purple)';
+	if (value <= 25000) return 'var(--purple-lighter)';
+	if (value <= 100_000) return 'var(--green)';
+	if (value <= 500_000) return 'var(--orange)';
+	if (value <= 2000000) return 'var(--yellow)';
+	return 'var(--blue)';
 };
 
 export const getGridNumbers = (isVertical: boolean): string[] => {

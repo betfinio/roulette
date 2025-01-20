@@ -7,10 +7,10 @@ const History = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 
 	return (
-		<Tabs defaultValue={'my'}>
+		<Tabs defaultValue={'all'}>
 			<TabsList>
-				<TabsTrigger value={'my'}>{t('myRounds')}</TabsTrigger>
 				<TabsTrigger value={'all'}>{t('allRounds')}</TabsTrigger>
+				<TabsTrigger value={'my'}>{t('myRounds')}</TabsTrigger>
 			</TabsList>
 
 			<TabsContent value={'my'}>

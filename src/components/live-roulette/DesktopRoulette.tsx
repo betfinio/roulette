@@ -1,21 +1,21 @@
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 
-import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { BetDetails } from './BetDetails/BetDetails';
 import { LastResults } from './LastResults/LastResults';
 import { TableStat } from './TableStat';
 
+import { Totals } from './BetDetails/Totals';
+import History from './History/HistoryTable';
 import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
 	const { isRoundFinished } = useGetSelectedRound();
 
-	console.log('DesktopRoulette');
 	return (
-		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4 gap-y-4">
+		<div className="flex flex-col justify-between w-full flex-grow mx-auto p-4 2xl:pr-0  gap-y-4">
 			{/* Conteúdo Principal no Desktop */}
 			<div className="flex gap-4">
 				<div className="relative flex-1 flex flex-col w-full ">
@@ -33,13 +33,14 @@ export const DesktopRoulette = () => {
 								<TableStat />
 							</div>
 						</div>
-						{/* <TableRaceTrack/> */}
 
 						{!isRoundFinished && <TableRaceTrack />}
 					</div>
 				</div>
-				<div className="relative  ">
+				<div className="relative flex flex-col gap-4">
 					<BetDetails />
+
+					<Totals />
 				</div>
 			</div>
 			<div>

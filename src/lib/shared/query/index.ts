@@ -27,7 +27,8 @@ import {
 	undoPlace,
 	unplace,
 } from '../api';
-import type { ChiPlaceProps, LocalBet, SpinParams } from '../types';
+import { fetchBetsBitMapAndAmountByRound } from '../gql';
+import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
 
 export const closePaytable = (queryClient: QueryClient) => {
 	queryClient.setQueryData(['roulette', 'paytable'], false);
@@ -76,7 +77,7 @@ export const usePlace = () => {
 	const queryClient = useQueryClient();
 	const { t } = useTranslation('roulette', { keyPrefix: 'errors' });
 	const { data: chip = 0 } = useSelectedChip();
-	return useMutation<void, Error, ChiPlaceProps>({
+	return useMutation<void, Error, ChipPlaceProps>({
 		mutationKey: ['roulette', 'place'],
 		mutationFn: (e) => place(e, chip, t),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
@@ -89,7 +90,7 @@ export const usePlace = () => {
 };
 export const useUnplace = () => {
 	const queryClient = useQueryClient();
-	return useMutation<void, Error, ChiPlaceProps>({
+	return useMutation<void, Error, ChipPlaceProps>({
 		mutationKey: ['roulette', 'unplace'],
 		mutationFn: (e) => unplace(e),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
@@ -166,6 +167,9 @@ export const useRouletteNumbersState = () => {
 	});
 
 	const { data: bets = [] } = useLocalBets();
+	const { state: othersState } = useRouletteOthersBetsState();
+
+	const hasOtherState = othersState.data.selectedBetChips && othersState.data.selectedBetChips.length > 0;
 
 	const selected = bets.flatMap((e) => e.numbers);
 
@@ -175,6 +179,7 @@ export const useRouletteNumbersState = () => {
 	};
 
 	const isNumberHovered = (number: number) => {
+		// if (hasOtherState) return false;
 		return state.data.hovered.includes(number);
 	};
 	const isNumberSelected = (number: number) => selected.includes(number);
@@ -221,14 +226,16 @@ export const useSubmitBet = () => {
 				duration: 10000,
 			});
 			const reciept = await waitForTransactionReceipt(config.getClient(), { hash: data });
+
 			if (reciept.status === 'success') {
 				update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
 			}
 			if (reciept.status === 'reverted') {
+				console.log(reciept, 'reciept');
 				update({
 					id,
 					variant: 'destructive',
-					description: t('transactionIsReverted'),
+					description: t('betWasNotAccepted'),
 					title: t('betNotPlaced'),
 					action: getTransactionLink(data),
 					duration: 3000,
@@ -260,6 +267,12 @@ export const useGetBetAmountAndBitMap = (bet: Address) => {
 	return useMutation<LocalBet[], Error, Address>({
 		mutationKey: ['roulette', 'bet', 'amount', 'bitmap', bet],
 		mutationFn: () => fetchBetsBitMapAndAmount(config, bet),
+	});
+};
+export const useGetBetsAmountAndBitMapByRound = () => {
+	return useMutation<LocalBet[], Error, { round: number; table: Address }>({
+		mutationKey: ['roulette', 'bets', 'amount', 'bitmaps'],
+		mutationFn: ({ round, table }: { round: number; table: Address }) => fetchBetsBitMapAndAmountByRound(table, round),
 	});
 };
 
