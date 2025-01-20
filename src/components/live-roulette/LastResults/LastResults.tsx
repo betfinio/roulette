@@ -13,22 +13,22 @@ export const LastResults = () => {
 	const { tableAddress } = useGetTableAddress();
 
 	const { data: tableBets = [], isFetched: isBetsFetched } = useGetTableRounds(50, tableAddress);
+	const numbers = useMemo(() => {
+		const hasBets = tableBets.length > 0;
+		const hasResults = hasBets && tableBets.some((r) => r.status === RoundStatus.FINISHED);
+		if (hasResults) {
+			return tableBets
+				.map((r) => ({
+					winNumber: r.winNumber,
+					status: r.status,
+				}))
+				.filter((r) => r.status === RoundStatus.FINISHED);
+		}
 
-	const numbers = useMemo(
-		() =>
-			tableBets.length > 0
-				? tableBets
-						.map((r) => ({
-							winNumber: r.winNumber,
-							status: r.status,
-						}))
-						.filter((r) => r.status === RoundStatus.FINISHED)
-				: lastResultPlaceholder,
-		[tableBets],
-	);
+		return lastResultPlaceholder;
+	}, [tableBets]);
 
 	const lastSeven = useMemo(() => numbers.slice(0, 7).reverse(), [numbers]);
-
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: '-50%' }}

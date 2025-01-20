@@ -226,14 +226,16 @@ export const useSubmitBet = () => {
 				duration: 10000,
 			});
 			const reciept = await waitForTransactionReceipt(config.getClient(), { hash: data });
+
 			if (reciept.status === 'success') {
 				update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
 			}
 			if (reciept.status === 'reverted') {
+				console.log(reciept, 'reciept');
 				update({
 					id,
 					variant: 'destructive',
-					description: t('transactionIsReverted'),
+					description: t('betWasNotAccepted'),
 					title: t('betNotPlaced'),
 					action: getTransactionLink(data),
 					duration: 3000,

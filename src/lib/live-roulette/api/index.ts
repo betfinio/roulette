@@ -3,7 +3,7 @@ import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@
 import { readContract } from '@wagmi/core';
 import { getBlockByTimestamp } from 'betfinio_context/lib/gql';
 import { type Address, parseAbiItem } from 'viem';
-import { getContractEvents, getLogs } from 'viem/actions';
+import { getBlockNumber, getContractEvents, getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
 import { fetchBetInfo } from '../../shared/api';
 import { RoundStatus } from '../../shared/types';
@@ -137,8 +137,7 @@ export const fetchRoundStatus = async (config: Config, tableAddress?: Address, r
 
 export const fetchWinNumber = async (config: Config, tableAddress?: Address, round?: number) => {
 	if (!tableAddress || !round) return 42n;
-	console.log('fetching logs');
-	console.time('logs');
+
 	const interval = await readContract(config, {
 		abi: MultiPlayerTableABI,
 		address: tableAddress,
@@ -147,8 +146,11 @@ export const fetchWinNumber = async (config: Config, tableAddress?: Address, rou
 	const startTime = Number(interval * BigInt(round));
 	const startBlock = await getBlockByTimestamp(startTime);
 	const endBlock = startBlock + 9999n;
-	console.log('startBlock', startBlock);
-	console.log('endBlock', endBlock);
+
+	// const currentBlock = await getBlockNumber(config.getClient());
+	// console.log(currentBlock,"currentBlock")
+	// console.log(endBlock,"endBlock")
+
 	try {
 		const randomGeneratedData = await getContractEvents(config.getClient(), {
 			abi: LiveRouletteABI,
@@ -162,8 +164,7 @@ export const fetchWinNumber = async (config: Config, tableAddress?: Address, rou
 			fromBlock: startBlock,
 			toBlock: endBlock,
 		});
-		console.timeEnd('logs');
-		console.log(randomGeneratedData, 'randomGeneratedData');
+
 		if (randomGeneratedData.length === 0) {
 			return 42n;
 		}
