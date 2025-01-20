@@ -51,7 +51,6 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 	return (
 		<>
 			<TooltipContent side={'top'} className={'border border-border'}>
-				<div>{positionId.split('-')[0]}</div>
 				<div className={'flex flex-row items-center justify-between gap-1'}>
 					My bets: <BetValue value={myBetsAmount} withIcon />
 				</div>

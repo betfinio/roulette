@@ -71,14 +71,11 @@ export const useGetTableRounds = (last: number, tableAddress?: Address) => {
 
 export const useGetCurrentRound = (tableAddress?: Address) => {
 	const config = useConfig();
-
 	return useQuery({
 		queryKey: ['roulette', 'currentRound', tableAddress],
 		queryFn: () => fetchCurrentRoundOfTable(config, tableAddress),
 		refetchOnWindowFocus: false,
 		enabled: !!tableAddress,
-
-		//staleTime:Number.POSITIVE_INFINITY
 	});
 };
 

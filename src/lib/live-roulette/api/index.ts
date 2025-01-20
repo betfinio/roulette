@@ -36,15 +36,6 @@ export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Ad
 	};
 };
 
-export const fetchCurrentRound = async (config: Config, tableAddress: Address) => {
-	const result = await readContract(config, {
-		abi: MultiPlayerTableABI,
-		address: tableAddress,
-		functionName: 'getCurrentRound',
-	});
-	return result;
-};
-
 export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Address, tableAddress?: Address, round?: bigint, playerAddress?: Address) => {
 	if (!tableAddress) return;
 	const logs = await getLogs(config.getClient(), {
