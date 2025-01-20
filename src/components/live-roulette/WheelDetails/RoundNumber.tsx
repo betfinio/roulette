@@ -1,24 +1,9 @@
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { useToast } from '@betfinio/components/hooks';
-import { useLocation } from '@tanstack/react-router';
-import { motion } from 'framer-motion';
+
 import { CheckIcon, CopyIcon } from 'lucide-react';
-import { type FC, type PropsWithChildren, useState } from 'react';
+import { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-
-const fadeIn = {
-	initial: { opacity: 0 },
-	animate: { opacity: 1 },
-	transition: { duration: 0.5 },
-};
-
-const FadeInDiv = ({ key, children }: PropsWithChildren<{ key: number | string }>) => {
-	return (
-		<motion.slot key={key} initial={fadeIn.initial} transition={fadeIn.transition} animate={fadeIn.animate}>
-			{children}
-		</motion.slot>
-	);
-};
 
 export const RoundNumber: FC = () => {
 	const { toast } = useToast();
@@ -48,13 +33,9 @@ export const RoundNumber: FC = () => {
 			</svg>
 
 			{addressCopied ? (
-				<FadeInDiv key={'check-icon-address'}>
-					<CheckIcon className={'text-green-500 w-[10%]'} />
-				</FadeInDiv>
+				<CheckIcon className={'text-success w-[10%]'} />
 			) : (
-				<FadeInDiv key={'copy-icon-address'}>
-					<CopyIcon className={'text-secondary-foreground cursor-pointer w-[10%]'} onClick={handleCopyRoundAddress} />
-				</FadeInDiv>
+				<CopyIcon className={'text-secondary-foreground cursor-pointer w-[10%]'} onClick={handleCopyRoundAddress} />
 			)}
 		</>
 	);

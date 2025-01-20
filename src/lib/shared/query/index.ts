@@ -231,7 +231,6 @@ export const useSubmitBet = () => {
 				update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
 			}
 			if (reciept.status === 'reverted') {
-				console.log(reciept, 'reciept');
 				update({
 					id,
 					variant: 'destructive',

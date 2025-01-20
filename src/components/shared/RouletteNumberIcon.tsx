@@ -1,0 +1,23 @@
+import { getColor } from '@/src/lib/roulette';
+import { cn } from '@betfinio/components';
+import type { FC } from 'react';
+
+interface RouletteNumberIconProps extends React.SVGProps<SVGSVGElement> {
+	number: number;
+}
+export const RouletteNumberIcon: FC<RouletteNumberIconProps> = ({ number, ...props }) => {
+	const color = {
+		'text-red-roulette': getColor(number) === 'RED',
+		'text-black-roulette': getColor(number) === 'BLACK',
+		'text-green-roulette': getColor(number) === 'GREEN',
+	};
+	return (
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" {...props}>
+			<rect width="40" height="40" rx="10" fill="currentColor" className={cn(color)} />
+
+			<text x="20" y="25" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="white">
+				{number}
+			</text>
+		</svg>
+	);
+};
