@@ -29,11 +29,12 @@
 	"singlePlayer": "Single Player",
 	"playerStat": {
 		"hotAndCold": "Hot/Cold",
+		"hotAndColdTooltip": "Statistics of the table for whole period",
 		"redAndBlack": "Red/Black",
 		"oddAndEven": "Odd/Even"
 	},
 	"changeBetModal": {
-		"customMmountOfChip": "Custom amount of chip",
+		"customAmountOfChip": "Custom amount of chip",
 		"cancel": "Cancel",
 		"save": "Save",
 		"maxBetIs": "Max bet is:",
@@ -121,5 +122,6 @@
 	"round": "Round",
 	"betCount": "{count, plural, =0 {No bets} =1 {# bet} other {# bets}}",
 	"lastResults": "Last numbers",
-	"copiedCurrentRoundRef": "Copied current round reference"
+	"copiedCurrentRoundRef": "Copied current round reference",
+	"lastNumbersTooltip": "Last 7 numbers on this table"
 }

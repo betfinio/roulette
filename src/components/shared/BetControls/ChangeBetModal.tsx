@@ -56,7 +56,7 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 		<Dialog open={open} onOpenChange={setOpen}>
 			<DialogContent className={'games w-[300px] bg-card rounded-lg roulette'}>
 				<div className={' p-4 flex flex-col gap-2 text-foreground'}>
-					<h2 className={'text-sm text-foreground'}>{t('customMmountOfChip')}:</h2>
+					<h2 className={'text-sm text-foreground'}>{t('customAmountOfChip')}:</h2>
 					<div className={'flex gap-2 items-center'}>
 						<input type="number" min={0} className={'rounded-lg bg-transparent p-2 px-4 border border-border '} value={value} onChange={handleChange} />
 						<span className={''}>BET</span>
