@@ -6,9 +6,13 @@ import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
-import { Link } from '@tanstack/react-router';
+import { Button } from '@betfinio/components/ui';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import type { Table } from '@tanstack/react-table';
+import { Loader } from 'lucide-react';
 import { DateTime } from 'luxon';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BetResultCell } from '../../shared/BetResultCell';
 import { WinAmountCell } from '../../shared/WinAmountCell';
@@ -17,6 +21,8 @@ const columnHelper = createColumnHelper<RoundPlayerBet>();
 
 export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
+	const { t: TPure } = useTranslation('roulette');
+	const navigate = useNavigate();
 	const { tableAddress = ZeroAddress } = useGetTableAddress();
 	const { data: bets = [], isLoading } = useGetTablePlayerRounds(tableAddress);
 	const { isVertical } = useMediaQuery();
@@ -25,30 +31,37 @@ export const MyBetsTable = () => {
 	const { mutateAsync: spinManually } = useManualSpin();
 	const { data } = useGetCurrentRound(tableAddress);
 
+	const tableRef = useRef<Table<RoundPlayerBet>>(null);
+
 	const isRoundCreated = (status: number) => status === RoundStatus.CREATED;
 	const isPassedRound = (round: number) => round < Number(data?.round ?? Number.NEGATIVE_INFINITY);
 	const handleManualSpin = (round: number) => {
-		spinManually({
-			tableAddress,
-			round: BigInt(round),
-		});
+		spinManually(
+			{
+				tableAddress,
+				round: BigInt(round),
+			},
+			{
+				onSuccess: () => {
+					setSpinningRounds([...spinningRounds, round]);
+				},
+			},
+		);
 	};
+
+	const [spinningRounds, setSpinningRounds] = useState<number[]>([]);
 
 	const columns = [
 		columnHelper.accessor('round', {
 			header: t('round'),
 			cell: (props) => (
-				<Link
+				<span
 					className={cn({
-						'text-secondary-foreground': props.row.original.round === round,
+						'text-secondary-foreground': true,
 					})}
-					to="/games/roulette/live/$table"
-					onClick={scrollToHeader}
-					search={{ round: props.getValue() }}
-					params={{ table: tableAddress }}
 				>
 					#{props.getValue()}
-				</Link>
+				</span>
 			),
 		}),
 		columnHelper.accessor('created', {
@@ -72,14 +85,29 @@ export const MyBetsTable = () => {
 			cell: (props) => {
 				const roundCreated = isRoundCreated(props.row.original.status);
 				const roundHasPassed = isPassedRound(props.row.original.round);
+				const interval = Number(data?.interval ?? 0);
+				const roundFinishedPlusDelayTimestamp = props.row.original.round * interval + interval + 60;
+				const now = DateTime.now().toSeconds();
+				const roundHasPassedPlusDelay = roundHasPassed && roundFinishedPlusDelayTimestamp < now && props.row.original.status === RoundStatus.CREATED;
+
+				const isManuallySpining = spinningRounds.includes(props.row.original.round);
 				return (
-					<div
-						onClick={() => roundHasPassed && handleManualSpin(props.row.original.round)}
-						className={cn({
-							'cursor-pointer': roundHasPassed,
-						})}
-					>
-						<BetResultCell inProgress={roundCreated} winNumber={props.row.original.winNumber} />
+					<div>
+						{!roundHasPassedPlusDelay && <BetResultCell inProgress={roundCreated} winNumber={props.row.original.winNumber} />}
+						{roundHasPassedPlusDelay && (
+							<Button
+								disabled={isManuallySpining}
+								onClick={(e) => {
+									if (roundHasPassed) {
+										e.stopPropagation();
+										handleManualSpin(props.row.original.round);
+									}
+								}}
+							>
+								{isManuallySpining && <Loader color={'black'} className={'animate-spin absolute'} />}
+								<div className={cn('uppercase', { invisible: isManuallySpining })}>{TPure('spin')}</div>
+							</Button>
+						)}
 					</div>
 				);
 			},
@@ -109,17 +137,61 @@ export const MyBetsTable = () => {
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => <BetResultCell inProgress={props.row.original.status === 1} winNumber={props.row.original.winNumber} />,
+			cell: (props) => {
+				const roundCreated = isRoundCreated(props.row.original.status);
+				const roundHasPassed = isPassedRound(props.row.original.round);
+				const interval = Number(data?.interval ?? 0);
+				const roundFinishedPlusDelayTimestamp = props.row.original.round * interval + interval + 60;
+				const now = DateTime.now().toSeconds();
+				const roundHasPassedPlusDelay = roundHasPassed && roundFinishedPlusDelayTimestamp < now && props.row.original.status === RoundStatus.CREATED;
+
+				const isManuallySpining = spinningRounds.includes(props.row.original.round);
+				return (
+					<div>
+						{!roundHasPassedPlusDelay && <BetResultCell inProgress={roundCreated} winNumber={props.row.original.winNumber} />}
+						{roundHasPassedPlusDelay && (
+							<Button disabled={isManuallySpining} onClick={() => roundHasPassed && handleManualSpin(props.row.original.round)}>
+								{isManuallySpining && <Loader color={'black'} className={'animate-spin absolute'} />}
+								<div className={cn('uppercase', { invisible: isManuallySpining })}>{TPure('spin')}</div>
+							</Button>
+						)}
+					</div>
+				);
+			},
 		}),
 	] as ColumnDef<RoundPlayerBet>[];
+
+	useEffect(() => {
+		const rowIndex = bets.findIndex((bet) => bet.round === round);
+
+		tableRef.current?.setState((state) => {
+			return { ...state, rowSelection: { [rowIndex]: true } };
+		});
+	}, [bets, round]);
 
 	if (bets.length === 0 && !isLoading) {
 		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
 	}
 
+	const handleNavigateToTheRound = (row: RoundPlayerBet) => {
+		navigate({
+			to: '/games/roulette/live/$table',
+			search: { round: row.round },
+			params: { table: tableAddress },
+		});
+		scrollToHeader();
+	};
+
 	return (
 		<div className={cn('my-4')}>
-			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="h-[285px]" />
+			<DataTable
+				columns={isVertical ? columnsMobile : columns}
+				data={bets}
+				isLoading={isLoading}
+				loaderClassName="h-[285px]"
+				tableRef={tableRef}
+				onRowClick={handleNavigateToTheRound}
+			/>
 		</div>
 	);
 };

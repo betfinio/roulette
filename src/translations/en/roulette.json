@@ -110,7 +110,7 @@
 	"placingBet": "Placing a bet",
 	"transactionIsPending": "Transaction is pending",
 	"transactionIsConfirmed": "Transaction is confirmed",
-	"transactionIsReverted": "Transaction is reverted",
+	"betWasNotAccepted": "Bet was not accepted",
 	"betPlaced": "Bet placed",
 	"betNotPlaced": "Bet not placed",
 	"submitBet": "Bet",
@@ -122,5 +122,6 @@
 	"round": "Round",
 	"betCount": "{count, plural, =0 {No bets} =1 {# bet} other {# bets}}",
 	"lastResults": "Last numbers",
+	"copiedCurrentRoundRef": "Copied current round reference",
 	"lastNumbersTooltip": "Last 7 numbers on this table"
 }

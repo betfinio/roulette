@@ -48,9 +48,8 @@ export const WheelDetails: FC = () => {
 	const showBackToGame = isRoundFinished && rouletteIsNotSpinning;
 	const showRoundNumber = rouletteIsNotSpinning;
 	const showWaitingForSpin = roundHasBets && isRoundFinished && winNumber === 42n;
-	const showRoundIsOver = isRoundFinished && rouletteIsNotSpinning && !roundHasBets;
 
-	const showYouDidntWin = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && !playerStat.playerHasWon;
+	const showRoundIsOver = isRoundFinished && rouletteIsNotSpinning && !roundHasBets;
 
 	const showYouWon = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && playerStat.playerHasWon;
 	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning) return null;
@@ -67,7 +66,7 @@ export const WheelDetails: FC = () => {
 			>
 				{/* Round Number */}
 				{showRoundNumber && (
-					<div className="w-1/3 mb-[5%] flex justify-center mx-auto">
+					<div className="w-1/3 mb-[5%] flex justify-center items-center mx-auto">
 						<RoundNumber />
 					</div>
 				)}
@@ -77,12 +76,12 @@ export const WheelDetails: FC = () => {
 						<DynamicTextSVG text="Waiting For Spin" />
 					</div>
 				)}
-				{/*  You didn't win */}
-				{!!showYouDidntWin && (
-					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
-						<DynamicTextSVG text="You Didn't win" />
-					</div>
-				)}
+
+				{/* {!!showYouDidntWin && (
+          <div className={cn("w-1/4   inline-flex mx-auto ", {})}>
+            <DynamicTextSVG text="You Didn't win" />
+          </div>
+        )} */}
 				{/*  You won */}
 				{!!showYouWon && (
 					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
