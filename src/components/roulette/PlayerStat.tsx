@@ -1,10 +1,8 @@
-import { useGetPlayerBets } from '@/src/lib/roulette/query';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useGetRouletteTableStats } from '@/src/lib/roulette/query';
 import { Stat } from '../shared/Stat/Stat';
 
 export const PlayerStat = () => {
-	const { tableAddress } = useGetTableAddress();
-	const { data: bets = [] } = useGetPlayerBets(tableAddress);
+	const { data: playerStat, isLoading: isPlayerStatLoading } = useGetRouletteTableStats();
 
-	return <Stat winNumbers={bets.map((bet) => bet.winNumber)} />;
+	return <Stat tableOrPlayerStat={playerStat} isLoading={isPlayerStatLoading} />;
 };

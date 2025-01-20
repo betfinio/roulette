@@ -3,6 +3,8 @@ import {
 	type GetRouletteAllPlayerBetsQuery,
 	GetRoulettePlayerBetsDocument,
 	type GetRoulettePlayerBetsQuery,
+	GetRouletteStatsByTableDocument,
+	type GetRouletteStatsByTableQuery,
 	GetTransactionHashByBetDocument,
 	type GetTransactionHashByBetQuery,
 	execute,
@@ -12,6 +14,7 @@ import type { PlayerBet } from '@/src/lib/roulette/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
 import type { ExecutionResult } from 'graphql/execution';
 import type { Address } from 'viem';
+import type { IRouletteStat } from '../../shared/types';
 
 //This fetches my history
 export const fetchPlayerBets = async (player: Address, table?: Address) => {
@@ -65,4 +68,28 @@ export const fetchTransactionHashByBet = async (bet: Address) => {
 		return data.data.betEndeds[0].transactionHash as Address;
 	}
 	return ZeroAddress;
+};
+
+export const fetchRoulletteTableStats = async (player?: Address) => {
+	if (!player) return;
+	const data: ExecutionResult<GetRouletteStatsByTableQuery> = await execute(GetRouletteStatsByTableDocument, { player });
+	if (data.data) {
+		const hot = data.data.hotNumbers.map((num) => num.number);
+		const cold = data.data.coldNumbers.map((num) => num.number);
+		const odd = Number(data.data.rouletteStat[0].oddCount);
+		const even = Number(data.data.rouletteStat[0].evenCount);
+		const red = Number(data.data.rouletteStat[0].redCount);
+		const black = Number(data.data.rouletteStat[0].blackCount);
+		const totalRolls = Number(data.data.rouletteStat[0].totalRolls);
+		const rouletteStat: IRouletteStat = {
+			hot,
+			cold,
+			odd: Math.floor((odd / totalRolls) * 100),
+			even: Math.floor((even / totalRolls) * 100),
+			red: Math.floor((red / totalRolls) * 100),
+			black: Math.floor((black / totalRolls) * 100),
+			totalRolls,
+		};
+		return rouletteStat;
+	}
 };

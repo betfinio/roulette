@@ -14,13 +14,29 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 	const { data: activeChipValue = 0 } = useSelectedChip();
 
 	const handlePlus = () => {
-		if (activeChipValue > limits.max - limits.max / 100) return;
-		change({ amount: activeChipValue + limits.max / 100 });
+		if (activeChipValue > limits.max - limits.min / 100) return;
+		let amount: number;
+		if (activeChipValue < 100_000) {
+			amount = limits.min;
+		} else if (activeChipValue < 1_000_000) {
+			amount = 100_000;
+		} else {
+			amount = 250_000;
+		}
+		change({ amount: activeChipValue + amount });
 	};
 
 	const handleMinus = () => {
 		if (activeChipValue < limits.min + limits.max / 100) return;
-		change({ amount: activeChipValue - limits.max / 100 });
+		let amount: number;
+		if (activeChipValue <= 100_000) {
+			amount = limits.min;
+		} else if (activeChipValue <= 1_000_000) {
+			amount = 100_000;
+		} else {
+			amount = 250_000;
+		}
+		change({ amount: activeChipValue - amount });
 	};
 
 	const [incrementSpeed, setIncrementSpeed] = useState(1);

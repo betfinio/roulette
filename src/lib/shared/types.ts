@@ -1,6 +1,6 @@
 import type { Address } from 'viem';
 
-export interface ChiPlaceProps {
+export interface ChipPlaceProps {
 	item: string;
 	numbers: number[];
 }
@@ -9,6 +9,7 @@ export interface LocalBet {
 	numbers: number[];
 	amount: number;
 	item: string;
+	player?: Address;
 }
 
 export interface SpinParams {
@@ -34,4 +35,14 @@ export enum RoundStatus {
 export interface LastResult {
 	winNumber: number;
 	status: RoundStatus;
+}
+
+export interface IRouletteStat {
+	hot: number[];
+	cold: number[];
+	odd: number;
+	even: number;
+	red: number;
+	black: number;
+	totalRolls: number;
 }
