@@ -6,6 +6,7 @@ import { cn } from '@betfinio/components';
 import { motion } from 'framer-motion';
 import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount } from 'wagmi';
+import { RouletteNumberIcon } from '../../shared/RouletteNumberIcon';
 import { BackToGame } from './BackToGame';
 import { DynamicTextSVG } from './DynamicTextSVG';
 import { RoundIsOver } from './RoundIsOver';
@@ -24,6 +25,7 @@ export const WheelDetails: FC = () => {
 		roundHasBets: selectedRoundHasBets,
 		winNumber,
 		bankByRoundProps: { refetch: refetchBankByRound },
+		winNumberProps,
 	} = useGetSelectedRound();
 	const { data: tableroundBets, isLoading: isSelectedRoundBetsLoading } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
 
@@ -47,12 +49,16 @@ export const WheelDetails: FC = () => {
 	const showTimer = !isRoundFinished && isReady && !isExpired && rouletteIsNotSpinning;
 	const showBackToGame = isRoundFinished && rouletteIsNotSpinning;
 	const showRoundNumber = rouletteIsNotSpinning;
-	const showWaitingForSpin = roundHasBets && isRoundFinished && winNumber === 42n;
+	const showWaitingForSpin = roundHasBets && isRoundFinished && winNumber === 42n && state.data.state !== WheelStatus.Finished;
 
 	const showRoundIsOver = isRoundFinished && rouletteIsNotSpinning && !roundHasBets;
 
 	const showYouWon = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && playerStat.playerHasWon;
-	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning) return null;
+
+	const showWinNumber = rouletteIsNotSpinning && isRoundFinished && winNumber !== 42n;
+
+	console.log(winNumber, 'winNumber');
+	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning || winNumberProps.isLoading) return null;
 
 	return (
 		<div className="absolute inset-0 flex items-center justify-center">
@@ -66,8 +72,19 @@ export const WheelDetails: FC = () => {
 			>
 				{/* Round Number */}
 				{showRoundNumber && (
-					<div className="w-1/3 mb-[5%] flex justify-center items-center mx-auto">
+					<div
+						className={cn('w-1/3  flex justify-center items-center mx-auto', {
+							'mb-[5%]': !showWinNumber,
+							'mb-[2%]': showWinNumber,
+						})}
+					>
 						<RoundNumber />
+					</div>
+				)}
+				{/* Round Number */}
+				{showWinNumber && (
+					<div className="w-[10%]  flex justify-center items-center mx-auto">
+						<RouletteNumberIcon number={Number(winNumber)} />
 					</div>
 				)}
 				{/*  Waiting For Spin */}

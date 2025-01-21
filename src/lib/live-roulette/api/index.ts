@@ -7,6 +7,7 @@ import { getBlockNumber, getContractEvents, getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
 import { fetchBetInfo } from '../../shared/api';
 import { RoundStatus } from '../../shared/types';
+import { fetchSelectedTableRoundWinNumer } from '../gql';
 import type { RoundBet, RoundPlayerBet, WheelStatus } from '../types';
 
 export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Address) => {
@@ -138,30 +139,27 @@ export const fetchWinNumber = async (config: Config, tableAddress?: Address, rou
 	const startBlock = await getBlockByTimestamp(startTime);
 	const endBlock = startBlock + 9999n;
 
-	// const currentBlock = await getBlockNumber(config.getClient());
-	// console.log(currentBlock,"currentBlock")
-	// console.log(endBlock,"endBlock")
+	const currentBlock = await getBlockNumber(config.getClient());
+	if (currentBlock >= endBlock) {
+		const winNumber = await fetchSelectedTableRoundWinNumer(tableAddress, round);
+		return winNumber ?? 42n;
+	}
 
-	try {
-		const randomGeneratedData = await getContractEvents(config.getClient(), {
-			abi: LiveRouletteABI,
-			address: PUBLIC_LIRO_ADDRESS,
-			eventName: 'RandomGenerated',
-			args: {
-				table: tableAddress,
-				round: BigInt(round),
-				player: ZeroAddress,
-			},
-			fromBlock: startBlock,
-			toBlock: endBlock,
-		});
+	const randomGeneratedData = await getContractEvents(config.getClient(), {
+		abi: LiveRouletteABI,
+		address: PUBLIC_LIRO_ADDRESS,
+		eventName: 'RandomGenerated',
+		args: {
+			table: tableAddress,
+			round: BigInt(round),
+			player: ZeroAddress,
+		},
+		fromBlock: startBlock,
+		toBlock: endBlock,
+	});
 
-		if (randomGeneratedData.length === 0) {
-			return 42n;
-		}
-		return randomGeneratedData[0].args.value;
-	} catch (e) {
-		console.log(e);
+	if (randomGeneratedData.length === 0) {
 		return 42n;
 	}
+	return randomGeneratedData?.[0]?.args.value || 42n;
 };

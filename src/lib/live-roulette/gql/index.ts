@@ -1,6 +1,8 @@
 import {
 	GetLiveRoulettePlayerTableBetsDocument,
 	type GetLiveRoulettePlayerTableBetsQuery,
+	GetLiveRouletteRoundWinNumberDocument,
+	type GetLiveRouletteRoundWinNumberQuery,
 	GetLiveRouletteStatsByTableDocument,
 	type GetLiveRouletteStatsByTableQuery,
 	GetLiveRouletteTableAllBetsDocument,
@@ -144,5 +146,18 @@ export const fetchLiveRoulletteTableStats = async (table?: Address) => {
 		};
 
 		return rouletteStat;
+	}
+};
+
+export const fetchSelectedTableRoundWinNumer = async (table?: Address, round?: number) => {
+	if (table === undefined || round === undefined) return 42n;
+
+	const data: ExecutionResult<GetLiveRouletteRoundWinNumberQuery> = await execute(GetLiveRouletteRoundWinNumberDocument, {
+		table,
+		round,
+	});
+	if (data?.data?.roundBetPlaceds_collection[0].winNumber) {
+		const winNumber = data.data.roundBetPlaceds_collection[0].winNumber;
+		return BigInt(winNumber);
 	}
 };

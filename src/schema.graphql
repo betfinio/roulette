@@ -1,138 +1,169 @@
 # Roulette
 query GetRoulettePlayerBets($player: Bytes, $table: Bytes, $first: Int) {
-	playerRoundBetPlaceds_collection(where: { player: $player, table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $first) {
-		amount
-		player
-		blockTimestamp
-		bet
-		winAmount
-		winNumber
-		status
-	}
+  playerRoundBetPlaceds_collection(
+    where: { player: $player, table: $table }
+    orderBy: blockTimestamp
+    orderDirection: desc
+    first: $first
+  ) {
+    amount
+    player
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    status
+  }
 }
 query GetRouletteAllPlayerBets($last: Int, $table: Bytes) {
-	roundBetPlaceds_collection(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $last) {
-		amount
-		player
-		blockTimestamp
-		bet
-		winAmount
-		winNumber
-		status
-	}
+  roundBetPlaceds_collection(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $last) {
+    amount
+    player
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    status
+  }
 }
 query GetTransactionHashByBet($bet: Bytes) {
-	betEndeds(where: { bet: $bet }) {
-		transactionHash
-	}
+  betEndeds(where: { bet: $bet }) {
+    transactionHash
+  }
 }
 query GetRouletteStatsByTable($player: Bytes) {
-	hotNumbers: rouletteNumbers(where: { player: $player }, orderBy: score, orderDirection: desc, first: 3) {
-		number
-		count
-		score
-		lastUpdated
-	}
-	coldNumbers: rouletteNumbers(where: { player: $player }, orderBy: score, orderDirection: asc, first: 3) {
-		number
-		count
-		score
-		lastUpdated
-	}
-	rouletteStat: rouletteStats_collection(where: { player: $player }) {
-		id
-		totalRolls
-		evenCount
-		oddCount
-		zeroCount
-		redCount
-		blackCount
-	}
+  hotNumbers: rouletteNumbers(where: { player: $player }, orderBy: score, orderDirection: desc, first: 3) {
+    number
+    count
+    score
+    lastUpdated
+  }
+  coldNumbers: rouletteNumbers(where: { player: $player }, orderBy: score, orderDirection: asc, first: 3) {
+    number
+    count
+    score
+    lastUpdated
+  }
+  rouletteStat: rouletteStats_collection(where: { player: $player }) {
+    id
+    totalRolls
+    evenCount
+    oddCount
+    zeroCount
+    redCount
+    blackCount
+  }
 }
 
 # Live Roulette
 query GetLiveRoulettePlayerTableBets($last: Int, $table: Bytes, $player: Bytes) {
-	playerRoundBetPlaceds_collection(where: { table: $table, player: $player }, orderBy: blockTimestamp, orderDirection: desc, first: $last) {
-		amount
-		round
-		blockTimestamp
-		bet
-		winAmount
-		winNumber
-		player
-		status
-	}
+  playerRoundBetPlaceds_collection(
+    where: { table: $table, player: $player }
+    orderBy: blockTimestamp
+    orderDirection: desc
+    first: $last
+  ) {
+    amount
+    round
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    player
+    status
+  }
 }
 query GetLiveRouletteTableAllBets($table: Bytes, $first: Int) {
-	roundBetPlaceds_collection(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $first) {
-		amount
-		blockTimestamp
-		bet
-		winAmount
-		winNumber
-		status
-		round
-	}
+  roundBetPlaceds_collection(where: { table: $table }, orderBy: blockTimestamp, orderDirection: desc, first: $first) {
+    amount
+    blockTimestamp
+    bet
+    winAmount
+    winNumber
+    status
+    round
+  }
 }
 query GetLiveRouletteTableSelectedRoundBets($table: Bytes, $round: BigInt) {
-	playerRoundSingleBetPlaceds_collection(where: { table: $table, round: $round }, orderBy: blockTimestamp, orderDirection: desc) {
-		amount
-		winAmount
-		player
-		blockTimestamp
-		bet
-		chips {
-			id
-			bitMap
-		}
-	}
+  playerRoundSingleBetPlaceds_collection(
+    where: { table: $table, round: $round }
+    orderBy: blockTimestamp
+    orderDirection: desc
+  ) {
+    amount
+    winAmount
+    player
+    blockTimestamp
+    bet
+    chips {
+      id
+      bitMap
+    }
+  }
 }
 query GetLiveRouletteTableSelectedRoundPlayers($table: Bytes, $round: BigInt) {
-	playerRoundBetPlaceds_collection(where: { table: $table, round: $round }, orderBy: blockTimestamp, orderDirection: desc) {
-		amount
-		player
-		blockTimestamp
-		betsCount
-	}
+  playerRoundBetPlaceds_collection(
+    where: { table: $table, round: $round }
+    orderBy: blockTimestamp
+    orderDirection: desc
+  ) {
+    amount
+    player
+    blockTimestamp
+    betsCount
+  }
 }
 query GetLiveRouletteBitMapByRound($table: Bytes, $round: BigInt) {
-	chips: roundBetPlaceds_collection(where: { table: $table, round: $round }, orderBy: blockTimestamp, orderDirection: desc) {
-		chips {
-			id
-			bitMap
-			amount
-			player
-		}
-	}
+  chips: roundBetPlaceds_collection(
+    where: { table: $table, round: $round }
+    orderBy: blockTimestamp
+    orderDirection: desc
+  ) {
+    chips {
+      id
+      bitMap
+      amount
+      player
+    }
+  }
 }
 query GetLiveRouletteTables {
-	tables(where: { interval_not: "0" }, orderBy: interval, orderDirection: desc) {
-		id
-		interval
-		address
-	}
+  tables(where: { interval_not: "0" }, orderBy: interval, orderDirection: desc) {
+    id
+    interval
+    address
+  }
 }
 
 query GetLiveRouletteStatsByTable($table: Bytes) {
-	hotNumbers: rouletteNumbers(where: { table: $table }, orderBy: score, orderDirection: desc, first: 3) {
-		number
-		count
-		score
-		lastUpdated
-	}
-	coldNumbers: rouletteNumbers(where: { table: $table }, orderBy: score, orderDirection: asc, first: 3) {
-		number
-		count
-		score
-		lastUpdated
-	}
-	rouletteStat: rouletteStats_collection(where: { table: $table }) {
-		id
-		totalRolls
-		evenCount
-		oddCount
-		zeroCount
-		redCount
-		blackCount
-	}
+  hotNumbers: rouletteNumbers(where: { table: $table }, orderBy: score, orderDirection: desc, first: 3) {
+    number
+    count
+    score
+    lastUpdated
+  }
+  coldNumbers: rouletteNumbers(where: { table: $table }, orderBy: score, orderDirection: asc, first: 3) {
+    number
+    count
+    score
+    lastUpdated
+  }
+  rouletteStat: rouletteStats_collection(where: { table: $table }) {
+    id
+    totalRolls
+    evenCount
+    oddCount
+    zeroCount
+    redCount
+    blackCount
+  }
+}
+
+query GetLiveRouletteRoundWinNumber($table: Bytes, $round: BigInt) {
+  roundBetPlaceds_collection(
+    where: { table: $table, round: $round }
+    
+  ) {
+    winNumber
+  }
 }
