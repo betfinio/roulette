@@ -11,7 +11,7 @@ import { Button } from '@betfinio/components/ui';
 import { useAllowanceModal } from 'betfinio_context/lib/context';
 import { useAllowance, useIsMember } from 'betfinio_context/lib/query';
 import { Loader } from 'lucide-react';
-import type { FC } from 'react';
+import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
 
@@ -24,8 +24,8 @@ export const SubmitBet: FC = () => {
 
 	const { address = ZeroAddress } = useAccount();
 	const { data: isMember = false } = useIsMember(address);
-	const { requestAllowance } = useAllowanceModal();
-	const { mutate: submitBet, isPending } = useSubmitBet();
+	const { requestAllowance, setResult, requested } = useAllowanceModal();
+	const { mutate: submitBet, isPending, isSuccess, data } = useSubmitBet();
 	const { data: allowance = 0n, isFetching: loading } = useAllowance(address);
 	const { state: rouletteWheelStateData } = useRouletteState();
 	const { state: liveRouletteWheelStateData } = useLiveRouletteState();
@@ -72,6 +72,16 @@ export const SubmitBet: FC = () => {
 			playerAddress: address,
 		});
 	};
+	useEffect(() => {
+		if (data && isSuccess) {
+			setResult?.(data);
+		}
+	}, [isSuccess, data]);
+	useEffect(() => {
+		if (requested) {
+			handleSpin();
+		}
+	}, [requested]);
 
 	return (
 		<>

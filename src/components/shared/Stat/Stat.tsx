@@ -1,47 +1,73 @@
 import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
-import { getColor } from '@/src/lib/roulette';
-import type { PlayerBet } from '@/src/lib/roulette/types';
+import type { IRouletteStat } from '@/src/lib/shared/types';
+import { cn } from '@betfinio/components';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
 import { motion } from 'framer-motion';
-import _ from 'lodash';
+import { CircleHelp } from 'lucide-react';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
 interface IStatProps {
-	winNumbers: number[];
+	tableOrPlayerStat?: IRouletteStat;
+	isLoading?: boolean;
 }
-export const Stat: FC<IStatProps> = ({ winNumbers }) => {
+export const Stat: FC<IStatProps> = ({ tableOrPlayerStat, isLoading }) => {
 	const { t } = useTranslation('roulette');
-	const numbers = useMemo(() => (winNumbers.length > 0 ? winNumbers.map((winNumber) => winNumber) : [1, 2, 0, 4, 1, 4, 6, 6]), [winNumbers]);
+	const { black, red, odd, cold, even, hot }: IRouletteStat = useMemo(() => {
+		const rouletteNumbers = Array.from({ length: 37 }, (_, i) => i); // Numbers 0 to 36
+		const rouletteState: IRouletteStat = {
+			black: 1,
+			cold: [],
+			even: 1,
+			hot: [],
+			odd: 1,
+			red: 1,
+			totalRolls: 1,
+		};
 
-	const counts = useMemo(() => _.countBy(numbers), [numbers]);
-	const hot = useMemo(() => _.sortBy(numbers, (num) => -counts[num]).slice(0, 3), [numbers]);
-	const cold = useMemo(() => _.sortBy(numbers, (num) => counts[num]).slice(0, 3), [numbers]);
-	const { red = 0, black = 0 } = useMemo(() => {
-		if (numbers.length === 0) return { red: 50, black: 50 };
-		const counts = _.countBy(numbers, getColor);
-		const totalCount = numbers.length || 1;
-		const redCount = counts.RED || 0;
-		const blackCount = counts.BLACK || 0;
-		return { red: Math.floor((redCount / totalCount) * 100), black: Math.floor((blackCount / totalCount) * 100) };
-	}, [numbers]);
-	const { odd = 0, even = 0 } = useMemo(() => {
-		if (numbers.length === 0) return { even: 50, odd: 50 };
-		const counts = _.countBy(numbers, (n) => n % 2);
-		const totalCount = numbers.length || 1;
-		const oddCount = counts[1] || 0;
-		const evenCount = counts[0] || 0;
-		return { odd: Math.floor((oddCount / totalCount) * 100), even: Math.floor((evenCount / totalCount) * 100) };
-	}, [numbers]);
+		// Helper function to fill missing numbers randomly
+		const fillMissingNumbers = (current: number[], count: number) => {
+			while (current.length < count) {
+				const randomNum = rouletteNumbers[Math.floor(Math.random() * rouletteNumbers.length)];
+				if (!current.includes(randomNum)) {
+					current.push(randomNum);
+				}
+			}
+			return current;
+		};
+
+		const hot = fillMissingNumbers([...(tableOrPlayerStat?.hot ?? [])], 3);
+		const cold = fillMissingNumbers([...(tableOrPlayerStat?.cold ?? [])], 3);
+
+		if (!tableOrPlayerStat) {
+			return { ...(rouletteState ?? []), hot, cold };
+		}
+
+		return { ...tableOrPlayerStat, hot, cold };
+	}, [tableOrPlayerStat]);
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: '50%' }}
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
-			className="bg-card mt-4 p-2 rounded-lg border w-[122px] h-[266px] flex flex-col items-center justify-center border-border tabular-nums flex-shrink-0"
+			className={cn('bg-card mt-4 p-2 rounded-lg border w-[122px] h-[286px] flex flex-col items-center  border-border tabular-nums flex-shrink-0 gap-2', {
+				'animate-pulse blur-sm': isLoading,
+			})}
 		>
 			<motion.div {...SLIDE_DOWN_ANIMATION} className="text-center mb-2">
-				<h3 className="text-foreground text-xs font-medium">{t('playerStat.hotAndCold')}</h3>
+				<div className="text-foreground text-xs font-medium flex items-center gap-1 justify-center">
+					{t('playerStat.hotAndCold')}
+					<TooltipProvider>
+						<Tooltip>
+							<TooltipTrigger>
+								<CircleHelp className={'w-3 h-3'} />
+							</TooltipTrigger>
+							<TooltipContent>{t('playerStat.hotAndColdTooltip')}</TooltipContent>
+						</Tooltip>
+					</TooltipProvider>
+				</div>
 				<div className="flex justify-center items-center rounded-md p-1 gap-4">
 					<div className="flex flex-col items-center bg-red-roulette rounded-md w-8   py-1">
 						{hot.map((num, index) => (

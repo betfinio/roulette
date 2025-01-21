@@ -1,4 +1,3 @@
-import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { getChipColor } from '@/src/lib/roulette';
 import { useGetTableAddress, useLimits, useSelectedChip } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
@@ -12,7 +11,7 @@ import { RangeWithButtons } from './RangeWithButtons';
 import { SubmitBet } from './SubmitBet';
 
 export const BetControls = () => {
-	const { tableAddress, isSingle } = useGetTableAddress();
+	const { tableAddress } = useGetTableAddress();
 	const [openBetChangeModal, setOpenBetChangeModal] = useState(false);
 	const { isVertical } = useMediaQuery();
 

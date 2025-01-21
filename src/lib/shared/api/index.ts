@@ -1,13 +1,11 @@
 import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { LiroBetABI, LiveRouletteABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
-import { multicall } from '@wagmi/core';
-import { readContract, simulateContract, writeContract } from '@wagmi/core';
+import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
-import _ from 'lodash';
 import { type Address, encodeAbiParameters, parseAbiParameters } from 'viem';
 import type { Config } from 'wagmi';
 import { decodeBet, encodeBet } from '..';
-import type { ChiPlaceProps, LocalBet, SpinParams } from '../types';
+import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
 
 export const fetchLocalBets = (): LocalBet[] => {
 	const data = localStorage.getItem('bets');
@@ -54,7 +52,7 @@ export const fetchLimits = async (config: Config, tableAddress?: Address) => {
 	});
 };
 
-export const place = async (params: ChiPlaceProps, chip: number, t: TFunction<'roulette', 'errors'>) => {
+export const place = async (params: ChipPlaceProps, chip: number, t: TFunction<'roulette', 'errors'>) => {
 	const old = fetchLocalBets();
 	if (params.numbers.length === 0) {
 		localStorage.setItem('bets', JSON.stringify([]));
@@ -69,14 +67,10 @@ export const place = async (params: ChiPlaceProps, chip: number, t: TFunction<'r
 		item: params.item,
 	} as LocalBet;
 	const newBets = [...old, newBet];
-	const count = _.countBy(newBets, (e) => e.item)[params.item];
-	if (count > 5) {
-		throw new Error(t('only5Chips'));
-	}
 	localStorage.setItem('bets', JSON.stringify(newBets));
 };
 
-export const unplace = async (params: ChiPlaceProps) => {
+export const unplace = async (params: ChipPlaceProps) => {
 	const old = fetchLocalBets();
 	if (params.numbers.length === 0) {
 		localStorage.setItem('bets', JSON.stringify([]));
@@ -88,8 +82,7 @@ export const unplace = async (params: ChiPlaceProps) => {
 	if (index === -1) {
 		return;
 	}
-	old.splice(index, 1);
-	const newBets = [...old];
+	const newBets = [...old.filter((e) => e.item !== item)];
 	localStorage.setItem('bets', JSON.stringify(newBets));
 };
 export const doublePlace = async () => {
@@ -104,7 +97,7 @@ export const doublePlace = async () => {
 	}, {});
 	const newBets = Object.values(betsMap).reduce((acc, bets) => {
 		// biome-ignore lint/performance/noAccumulatingSpread: <explanation>
-		return [...acc, ...bets.slice(0, 5)];
+		return [...acc, ...bets];
 	}, []);
 	localStorage.setItem('bets', JSON.stringify(newBets));
 };

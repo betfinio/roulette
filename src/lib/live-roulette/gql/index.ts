@@ -1,6 +1,10 @@
 import {
 	GetLiveRoulettePlayerTableBetsDocument,
 	type GetLiveRoulettePlayerTableBetsQuery,
+	GetLiveRouletteRoundWinNumberDocument,
+	type GetLiveRouletteRoundWinNumberQuery,
+	GetLiveRouletteStatsByTableDocument,
+	type GetLiveRouletteStatsByTableQuery,
 	GetLiveRouletteTableAllBetsDocument,
 	type GetLiveRouletteTableAllBetsQuery,
 	GetLiveRouletteTableSelectedRoundBetsDocument,
@@ -14,6 +18,7 @@ import {
 import logger from '@/src/config/logger';
 import type { ExecutionResult } from 'graphql';
 import type { Address } from 'viem';
+import type { IRouletteStat } from '../../shared/types';
 import type { PlayerInProgressBet, PlayerRoundBets, RouletteTable, RoundBet, RoundPlayerBet } from '../types';
 
 export const fetchTablePlayerRounds = async (player: Address, table?: Address) => {
@@ -96,7 +101,7 @@ export const fetchTableSelectedRoundBets = async (table?: Address, round?: numbe
 	return [];
 };
 
-export const fetchLiveRoulletteTables = async () => {
+export const fetchLiveRouletteTables = async (): Promise<RouletteTable[]> => {
 	const data: ExecutionResult<GetLiveRouletteTablesQuery> = await execute(GetLiveRouletteTablesDocument, {});
 	if (data.data) {
 		const uniqueIntervals = new Set<bigint>(); // To track unique intervals
@@ -118,4 +123,41 @@ export const fetchLiveRoulletteTables = async () => {
 			});
 	}
 	return [];
+};
+export const fetchLiveRoulletteTableStats = async (table?: Address) => {
+	if (!table) return;
+	const data: ExecutionResult<GetLiveRouletteStatsByTableQuery> = await execute(GetLiveRouletteStatsByTableDocument, { table });
+	if (data.data) {
+		const hot = data.data.hotNumbers.map((num) => num.number);
+		const cold = data.data.coldNumbers.map((num) => num.number);
+		const odd = Number(data.data.rouletteStat[0].oddCount);
+		const even = Number(data.data.rouletteStat[0].evenCount);
+		const red = Number(data.data.rouletteStat[0].redCount);
+		const black = Number(data.data.rouletteStat[0].blackCount);
+		const totalRolls = Number(data.data.rouletteStat[0].totalRolls);
+		const rouletteStat: IRouletteStat = {
+			hot,
+			cold,
+			odd: Math.floor((odd / totalRolls) * 100),
+			even: Math.floor((even / totalRolls) * 100),
+			red: Math.floor((red / totalRolls) * 100),
+			black: Math.floor((black / totalRolls) * 100),
+			totalRolls,
+		};
+
+		return rouletteStat;
+	}
+};
+
+export const fetchSelectedTableRoundWinNumer = async (table?: Address, round?: number) => {
+	if (table === undefined || round === undefined) return 42n;
+
+	const data: ExecutionResult<GetLiveRouletteRoundWinNumberQuery> = await execute(GetLiveRouletteRoundWinNumberDocument, {
+		table,
+		round,
+	});
+	if (data?.data?.roundBetPlaceds_collection[0].winNumber) {
+		const winNumber = data.data.roundBetPlaceds_collection[0].winNumber;
+		return BigInt(winNumber);
+	}
 };

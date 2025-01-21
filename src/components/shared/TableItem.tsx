@@ -1,8 +1,10 @@
 import type React from 'react';
 
 import type { IRouletteLanguageKeys } from '@/src/i18next';
-import { useRouletteOthersBetsState } from '@/src/lib/shared/query';
+import { useGetCurrentRound, useGetSelectedRound } from '@/src/lib/live-roulette/query';
+import { useGetTableAddress } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
+import { useQueryClient } from '@tanstack/react-query';
 import { isNaN as _isNaN } from 'lodash';
 import { useTranslation } from 'react-i18next';
 import { BetPlacePoint, type PositionType } from './BetPlacePoint/BetPlacePoint';
@@ -49,10 +51,13 @@ const TableItem: React.FC<TableItemProps> = ({
 	onContextMenu,
 	onClick,
 }) => {
-	const { state } = useRouletteOthersBetsState();
+	const { tableAddress } = useGetTableAddress();
+	const { data: currentRound } = useGetCurrentRound(tableAddress);
+	const { round } = useGetSelectedRound();
 	const { t } = useTranslation('roulette', { keyPrefix: 'betTable' });
-	const positions: PositionType[] = ['center', 'top', 'left', 'right', 'bottom', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
+	const queryClient = useQueryClient();
 
+	const positions: PositionType[] = ['center', 'top', 'left', 'right', 'bottom', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
 	const selectionMap: Record<PositionType, number[] | undefined> & { [key: string]: number[] | undefined } = {
 		center: centerSelection,
 		top: topSelection,
@@ -74,10 +79,7 @@ const TableItem: React.FC<TableItemProps> = ({
 
 	const handleInteraction = (position: PositionType, action: 'hover' | 'leave' | 'click' | 'contextMenu', event?: React.MouseEvent) => {
 		event?.stopPropagation();
-
-		if (state.data.selectedBetChips) {
-			return;
-		}
+		if (round !== Number(currentRound?.round ?? 0)) return;
 		const relatedNumbers = selectionMap[position];
 		switch (action) {
 			case 'hover':

@@ -28,7 +28,7 @@ import {
 	unplace,
 } from '../api';
 import { fetchBetsBitMapAndAmountByRound } from '../gql';
-import type { ChiPlaceProps, LocalBet, SpinParams } from '../types';
+import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
 
 export const closePaytable = (queryClient: QueryClient) => {
 	queryClient.setQueryData(['roulette', 'paytable'], false);
@@ -77,7 +77,7 @@ export const usePlace = () => {
 	const queryClient = useQueryClient();
 	const { t } = useTranslation('roulette', { keyPrefix: 'errors' });
 	const { data: chip = 0 } = useSelectedChip();
-	return useMutation<void, Error, ChiPlaceProps>({
+	return useMutation<void, Error, ChipPlaceProps>({
 		mutationKey: ['roulette', 'place'],
 		mutationFn: (e) => place(e, chip, t),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
@@ -90,7 +90,7 @@ export const usePlace = () => {
 };
 export const useUnplace = () => {
 	const queryClient = useQueryClient();
-	return useMutation<void, Error, ChiPlaceProps>({
+	return useMutation<void, Error, ChipPlaceProps>({
 		mutationKey: ['roulette', 'unplace'],
 		mutationFn: (e) => unplace(e),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
@@ -171,7 +171,7 @@ export const useRouletteNumbersState = () => {
 
 	const hasOtherState = othersState.data.selectedBetChips && othersState.data.selectedBetChips.length > 0;
 
-	const selected = othersState.data.selectedBetChips ? othersState.data.selectedBetChips.flatMap((e) => e.numbers) : bets.flatMap((e) => e.numbers);
+	const selected = bets.flatMap((e) => e.numbers);
 
 	const updateState = (props: { hovered?: number[]; selected?: number[] }) => {
 		queryClient.setQueryData(['roulette', 'numbers'], { ...state.data, ...props });
@@ -179,7 +179,7 @@ export const useRouletteNumbersState = () => {
 	};
 
 	const isNumberHovered = (number: number) => {
-		if (hasOtherState) return false;
+		// if (hasOtherState) return false;
 		return state.data.hovered.includes(number);
 	};
 	const isNumberSelected = (number: number) => selected.includes(number);
@@ -226,6 +226,7 @@ export const useSubmitBet = () => {
 				duration: 10000,
 			});
 			const reciept = await waitForTransactionReceipt(config.getClient(), { hash: data });
+
 			if (reciept.status === 'success') {
 				update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
 			}
@@ -233,7 +234,7 @@ export const useSubmitBet = () => {
 				update({
 					id,
 					variant: 'destructive',
-					description: t('transactionIsReverted'),
+					description: t('betWasNotAccepted'),
 					title: t('betNotPlaced'),
 					action: getTransactionLink(data),
 					duration: 3000,

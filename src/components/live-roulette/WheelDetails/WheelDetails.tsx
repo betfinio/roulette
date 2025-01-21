@@ -3,10 +3,10 @@ import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { useGetTableAddress } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
-import { useQueryClient } from '@tanstack/react-query';
 import { motion } from 'framer-motion';
 import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount } from 'wagmi';
+import { RouletteNumberIcon } from '../../shared/RouletteNumberIcon';
 import { BackToGame } from './BackToGame';
 import { DynamicTextSVG } from './DynamicTextSVG';
 import { RoundIsOver } from './RoundIsOver';
@@ -14,13 +14,19 @@ import { RoundNumber } from './RoundNumber';
 import { Timer } from './Timer';
 
 export const WheelDetails: FC = () => {
-	const queryClient = useQueryClient();
 	const { tableAddress = ZeroAddress } = useGetTableAddress();
 
 	const { state } = useLiveRouletteState();
 	const { address } = useAccount();
-	const { data: currentRound, isLoading, refetch } = useGetCurrentRound(tableAddress);
-	const { round: selectedRound, isRoundFinished, roundHasBets: selectedRoundHasBets, winNumber, bankByRoundProps } = useGetSelectedRound();
+	const { data: currentRound, isLoading, refetch: refetchCurrentRound } = useGetCurrentRound(tableAddress);
+	const {
+		round: selectedRound,
+		isRoundFinished,
+		roundHasBets: selectedRoundHasBets,
+		winNumber,
+		bankByRoundProps: { refetch: refetchBankByRound },
+		winNumberProps,
+	} = useGetSelectedRound();
 	const { data: tableroundBets, isLoading: isSelectedRoundBetsLoading } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
 
 	const playerStat = useMemo(() => {
@@ -30,15 +36,9 @@ export const WheelDetails: FC = () => {
 		return { playerHasWon: hasWon, playerHasBets: playerBets.length };
 	}, [tableroundBets, address, winNumber]);
 
-	useEffect(() => {
-		return () => console.log('Wheel details unmount');
-	}, []);
-	const [lastExpired, setLastExpired] = useState<number>();
-
-	const handleExpiration = async (round: number) => {
-		console.log(handleExpiration, 'handleExpiration');
-		bankByRoundProps.refetch();
-		setTimeout(refetch, 1000);
+	const handleExpiration = async () => {
+		refetchBankByRound();
+		refetchCurrentRound();
 	};
 
 	const { timeLeft, isReady, isExpired } = useRoundCountdown(selectedRound, Number(currentRound?.interval), handleExpiration);
@@ -49,13 +49,16 @@ export const WheelDetails: FC = () => {
 	const showTimer = !isRoundFinished && isReady && !isExpired && rouletteIsNotSpinning;
 	const showBackToGame = isRoundFinished && rouletteIsNotSpinning;
 	const showRoundNumber = rouletteIsNotSpinning;
-	const showWaitingForSpin = roundHasBets && isRoundFinished && winNumber === 42n;
+	const showWaitingForSpin = roundHasBets && isRoundFinished && winNumber === 42n && state.data.state !== WheelStatus.Finished;
+
 	const showRoundIsOver = isRoundFinished && rouletteIsNotSpinning && !roundHasBets;
 
-	const showYouDidntWin = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && !playerStat.playerHasWon;
-
 	const showYouWon = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && playerStat.playerHasWon;
-	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning) return null;
+
+	const showWinNumber = rouletteIsNotSpinning && isRoundFinished && winNumber !== 42n;
+
+	console.log(winNumber, 'winNumber');
+	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning || winNumberProps.isLoading) return null;
 
 	return (
 		<div className="absolute inset-0 flex items-center justify-center">
@@ -68,23 +71,34 @@ export const WheelDetails: FC = () => {
 				transition={{ duration: 0.3, stiffness: 500 }}
 			>
 				{/* Round Number */}
-				{!!showRoundNumber && (
-					<div className="w-1/3 mb-[5%] flex justify-center mx-auto">
+				{showRoundNumber && (
+					<div
+						className={cn('w-1/3  flex justify-center items-center mx-auto', {
+							'mb-[5%]': !showWinNumber,
+							'mb-[2%]': showWinNumber,
+						})}
+					>
 						<RoundNumber />
 					</div>
 				)}
+				{/* Round Number */}
+				{showWinNumber && (
+					<div className="w-[10%]  flex justify-center items-center mx-auto">
+						<RouletteNumberIcon number={Number(winNumber)} />
+					</div>
+				)}
 				{/*  Waiting For Spin */}
-				{!!showWaitingForSpin && (
+				{showWaitingForSpin && (
 					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
-						<DynamicTextSVG text="Waiting: Stand by" />
+						<DynamicTextSVG text="Waiting For Spin" />
 					</div>
 				)}
-				{/*  You didn't win */}
-				{!!showYouDidntWin && (
-					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
-						<DynamicTextSVG text="You Didn't win" />
-					</div>
-				)}
+
+				{/* {!!showYouDidntWin && (
+          <div className={cn("w-1/4   inline-flex mx-auto ", {})}>
+            <DynamicTextSVG text="You Didn't win" />
+          </div>
+        )} */}
 				{/*  You won */}
 				{!!showYouWon && (
 					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
@@ -92,20 +106,20 @@ export const WheelDetails: FC = () => {
 					</div>
 				)}
 				{/*  Timer */}
-				{!!showTimer && (
+				{showTimer && (
 					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
 						<Timer timeLeft={timeLeft} />
 					</div>
 				)}
 				{/* Round Is Over */}
-				{!!showRoundIsOver && (
+				{showRoundIsOver && (
 					<div className={cn('w-1/3  mx-auto inline-flex', {})}>
 						<RoundIsOver />
 					</div>
 				)}
 				{/*  Back to Game */}
 
-				{!!showBackToGame && (
+				{showBackToGame && (
 					<div className={cn('w-1/3  mx-auto inline-flex', {})}>
 						<BackToGame />
 					</div>
