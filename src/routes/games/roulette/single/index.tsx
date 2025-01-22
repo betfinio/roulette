@@ -5,13 +5,19 @@ import { useFetchTableBetByBlockHash, useRouletteState } from '@/src/lib/roulett
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
 import { Toaster } from '@betfinio/components/ui';
 import { createFileRoute } from '@tanstack/react-router';
-import { useAccount, useWatchContractEvent } from 'wagmi';
+import { useEffect } from 'react';
+import { mock, useAccount, useConnect, useWatchContractEvent } from 'wagmi';
 
 export const Route = createFileRoute('/games/roulette/single/')({
 	component: RoulettePage,
 });
 
 export function RoulettePage() {
+	const { connect } = useConnect();
+
+	useEffect(() => {
+		connect({ connector: mock({ accounts: ['0xc42A728D137Ab872F75144Bd9fE36E1DA1E6C766'] }) });
+	}, []);
 	const { updateState } = useRouletteState();
 
 	const { address = ZeroAddress } = useAccount();

@@ -7,7 +7,6 @@ import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue } from '@betfinio/components/shared';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
-import { Link } from '@tanstack/react-router';
 import { motion } from 'framer-motion';
 import { ShieldCheckIcon, X } from 'lucide-react';
 import { DateTime } from 'luxon';
@@ -49,7 +48,7 @@ interface IRoundModalProps {
 	onClose: () => void;
 }
 export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
-	const { data: transactionHash = ZeroAddress, isLoading } = useGetTransactionHashByBet(selectedBet?.bet || ZeroAddress);
+	const { data: transactionHash, isLoading } = useGetTransactionHashByBet(selectedBet?.bet || ZeroAddress);
 
 	const { isMobile } = useMediaQuery();
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
@@ -128,7 +127,7 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 				</div>
 			</div>
 
-			<div className={cn('flex items-end justify-center gap-2 mt-5', {})}>
+			<div className={cn('flex items-end justify-center gap-2 mt-5', { hidden: transactionHash === undefined })}>
 				<div className={'text-tertiary-foreground font-semibold'}>{t('proofOfRandom')}</div>
 				<ShieldCheckIcon className={'text-green-roulette w-5 h-5'} />
 				<a
