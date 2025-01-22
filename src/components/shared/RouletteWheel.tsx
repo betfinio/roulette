@@ -12,7 +12,7 @@ export const RouletteWheel = () => {
 	const adjustmentAngle = -5; // Angle in degrees to shift the 0 position
 
 	return (
-		<svg viewBox="0 0 500 500">
+		<svg className="w-full" viewBox="0 0 500 500">
 			{/* Rotate the whole wheel slightly to position the 0 at the top */}
 			<g transform={`rotate(${adjustmentAngle}, ${center}, ${center})`}>
 				{/* Draw each number and its triangular background */}
