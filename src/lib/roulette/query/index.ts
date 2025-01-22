@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
 import { useGetTableAddress } from '../../shared/query';
-import { fetchAllPlayersBets, fetchPlayerBets, fetchRoulletteTableStats, fetchTransactionHashByBet } from '../gql';
+import { fetchAllPlayersBets, fetchPlayerBets, fetchRouletteTableStats, fetchTransactionHashByBet } from '../gql';
 import type { WheelState } from '../types';
 
 export const useRouletteState = () => {
@@ -67,7 +67,7 @@ export const useGetRouletteTableStats = () => {
 		queryKey,
 		...useQuery({
 			queryKey,
-			queryFn: () => fetchRoulletteTableStats(playerAddress),
+			queryFn: () => fetchRouletteTableStats(playerAddress),
 			refetchOnWindowFocus: false,
 			staleTime: Number.POSITIVE_INFINITY,
 		}),

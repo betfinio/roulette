@@ -51,7 +51,7 @@ export const fetchAllPlayersBets = async (last: number, table?: Address) => {
 				bet: bet.bet as Address,
 				created: bet.blockTimestamp,
 				winAmount: BigInt(bet.winAmount ?? 42n),
-				winNumber: Number(bet.winNumber),
+				winNumber: Number(bet.winNumber ?? 42n),
 				player: bet.player as Address,
 			} as PlayerBet;
 		});
@@ -70,7 +70,7 @@ export const fetchTransactionHashByBet = async (bet: Address) => {
 	return ZeroAddress;
 };
 
-export const fetchRoulletteTableStats = async (player?: Address) => {
+export const fetchRouletteTableStats = async (player?: Address) => {
 	if (!player) return;
 	const data: ExecutionResult<GetRouletteStatsByTableQuery> = await execute(GetRouletteStatsByTableDocument, { player });
 	if (data.data) {
