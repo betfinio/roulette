@@ -8,7 +8,7 @@ export const Timer: FC<TimerProps> = ({ timeLeft }) => {
 	const { t } = useTranslation('roulette');
 
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 25">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 25" className="w-full">
 			<text id="timerText" x="50%" y="20%" textAnchor="middle" className="fill-muted/50 text-xs" dy=".3em">
 				{t('timeLeft')}
 			</text>

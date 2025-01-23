@@ -166,7 +166,7 @@ export const Wheel = () => {
 		<>
 			<div className="w-full flex flex-col relative max-w-2xl mx-8 lg:mx-auto drop-shadow-[0_0_18px_rgba(0,172,231,0.45)] rounded-full">
 				{initialAnimationFinished && <WheelDetails />}
-				<motion.div className=" relative  mt-0   max-w-3xl	aspect-square pb-10" animate={wheelControlsWrapper}>
+				<motion.div className="w-full relative  mt-0   max-w-3xl	aspect-square pb-10" animate={wheelControlsWrapper}>
 					<motion.div style={{}} className={cn({ 'blur-md animate-pulse': !isBetsFetched })} animate={wheelControls}>
 						<div className="relative aspect-square w-full max-w-3xl ">
 							<div className="absolute rounded-full top-[-6px] right-[-6px] bottom-[-6px] left-[-6px]]  " />

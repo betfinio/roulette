@@ -27,7 +27,7 @@ export const BackToGame = () => {
 	};
 
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 30" fill="none">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 30" fill="none" className="w-full">
 			<text
 				id="timerText"
 				x="40%"
