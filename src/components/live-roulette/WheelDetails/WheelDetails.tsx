@@ -84,7 +84,7 @@ export const WheelDetails: FC = () => {
 				{/* Round Number */}
 				{showWinNumber && (
 					<div className="w-[10%]  flex justify-center items-center mx-auto">
-						<RouletteNumberIcon number={Number(winNumber)} />
+						<RouletteNumberIcon number={Number(winNumber)} className="w-full" />
 					</div>
 				)}
 				{/*  Waiting For Spin */}
@@ -94,11 +94,6 @@ export const WheelDetails: FC = () => {
 					</div>
 				)}
 
-				{/* {!!showYouDidntWin && (
-          <div className={cn("w-1/4   inline-flex mx-auto ", {})}>
-            <DynamicTextSVG text="You Didn't win" />
-          </div>
-        )} */}
 				{/*  You won */}
 				{!!showYouWon && (
 					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>

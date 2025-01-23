@@ -26,7 +26,7 @@ export const RoundNumber: FC = () => {
 
 	return (
 		<>
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 20">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 20" className="w-full">
 				<text id="timerText" x="50%" y="50%" textAnchor="middle" className="fill-muted/50 text-xs" dy=".3em">
 					{t('round')} #{round}
 				</text>
