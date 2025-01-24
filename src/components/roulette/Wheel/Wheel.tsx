@@ -1,7 +1,7 @@
 import { getWheelNumbers } from '@/src/lib/roulette';
 import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
 import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
@@ -17,9 +17,9 @@ export const Wheel = () => {
 	const { address = ZeroAddress } = useAccount();
 	const { state: wheelStateData, updateState } = useRouletteState();
 	const status = wheelStateData.data.state;
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 
-	const { isFetched: isBetsFetched, data: bets = [] } = useGetPlayerBets(tableAddress);
+	const { isFetched: isBetsFetched, data: bets = [] } = useGetPlayerBets(table);
 	const lastNumber = (wheelStateData.data as WheelLanded).result || 0;
 
 	// Animation control

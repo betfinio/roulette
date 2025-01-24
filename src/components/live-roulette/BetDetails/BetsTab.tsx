@@ -1,13 +1,13 @@
 import { useGetSelectedRound, useGetTableSelectedRoundBets } from '@/src/lib/live-roulette/query';
 import { WheelStatus } from '@/src/lib/live-roulette/types';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { useMemo } from 'react';
 import { BetItem } from './BetTabItem';
 
 export const BetsTab = () => {
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	const { round = 0, isRoundFinished, roundStatus, roundStatusProps, currentRoundProps } = useGetSelectedRound();
-	const { data = [] } = useGetTableSelectedRoundBets(tableAddress, round);
+	const { data = [] } = useGetTableSelectedRoundBets(table, round);
 
 	const computedRoundBets = useMemo(() => {
 		if (isRoundFinished && roundStatus !== undefined && [WheelStatus.Refunded, WheelStatus.Finished].includes(roundStatus)) {

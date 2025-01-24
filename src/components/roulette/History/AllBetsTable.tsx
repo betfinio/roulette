@@ -1,7 +1,7 @@
 import { ETHSCAN } from '@/src/global';
 import { useGetAllPlayersBets } from '@/src/lib/roulette/query';
 import type { PlayerBet } from '@/src/lib/roulette/types.ts';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
 import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
@@ -23,8 +23,8 @@ const columnHelper = createColumnHelper<PlayerBet>();
 export const AllBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const [selected, setSelected] = useState<null | PlayerBet>(null);
-	const { tableAddress } = useGetTableAddress();
-	const { data: bets = [], isLoading } = useGetAllPlayersBets(50, tableAddress);
+	const { table } = useVisibleTable();
+	const { data: bets = [], isLoading } = useGetAllPlayersBets(50, table);
 
 	const { isVertical } = useMediaQuery();
 

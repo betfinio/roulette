@@ -4,7 +4,7 @@ import type { PlayerBet } from '@/src/lib/roulette/types.ts';
 import { truncateEthAddress } from '@betfinio/abi';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
@@ -23,9 +23,9 @@ const columnHelper = createColumnHelper<PlayerBet>();
 export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const [selected, setSelected] = useState<null | PlayerBet>(null);
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 
-	const { data: bets = [], isLoading } = useGetPlayerBets(tableAddress);
+	const { data: bets = [], isLoading } = useGetPlayerBets(table);
 	const { isVertical } = useMediaQuery();
 	const columns = [
 		columnHelper.accessor('bet', {

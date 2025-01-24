@@ -1,6 +1,6 @@
 import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
-import { useGetTableAddress, useScrollToHeader } from '@/src/lib/shared/query';
+import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useRef } from 'react';
 import type { Address } from 'viem';
@@ -12,10 +12,10 @@ import { VerticalRoulette } from './VerticalRoulette';
 export const Roulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
 	const { toast } = useToast();
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	const { scrollToHeader } = useScrollToHeader();
 
-	const { data: bets = [] } = useGetPlayerBets(tableAddress);
+	const { data: bets = [] } = useGetPlayerBets(table);
 
 	const { state: wheelStateData } = useRouletteState();
 	const status = wheelStateData.data.state;

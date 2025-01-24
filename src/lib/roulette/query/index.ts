@@ -3,7 +3,7 @@ import { ZeroAddress } from '@betfinio/abi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
-import { useGetTableAddress } from '../../shared/query';
+import { useVisibleTable } from '../../shared/query';
 import { fetchAllPlayersBets, fetchPlayerBets, fetchRouletteTableStats, fetchTransactionHashByBet } from '../gql';
 import type { WheelState } from '../types';
 
@@ -43,11 +43,10 @@ export const useGetAllPlayersBets = (last: number, table?: Address) => {
 
 export const useFetchTableBetByBlockHash = () => {
 	const config = useConfig();
-
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	return useMutation({
 		mutationKey: ['roulette', 'bet', 'blockHash'],
-		mutationFn: (blockHash: Address) => fetchTableBetByBlockHash(config, blockHash, tableAddress),
+		mutationFn: (blockHash: Address) => fetchTableBetByBlockHash(config, blockHash, table),
 	});
 };
 

@@ -24,8 +24,8 @@ export const fetchSelectedChip = async (): Promise<number> => {
 	return Number(localStorage.getItem('chip') || 10000);
 };
 
-export const fetchLimits = async (config: Config, tableAddress?: Address) => {
-	if (!tableAddress) return [];
+export const fetchLimits = async (config: Config, table?: Address) => {
+	if (!table) return [];
 	const keys: { key: string; value: bigint; label?: string }[] = [
 		{ key: 'STRAIGHT', value: 1n },
 		{ key: 'SPLIT', value: 3n },
@@ -40,7 +40,7 @@ export const fetchLimits = async (config: Config, tableAddress?: Address) => {
 	const data = await multicall(config, {
 		contracts: keys.map((key) => ({
 			abi: SinglePlayerTableABI,
-			address: tableAddress,
+			address: table,
 			functionName: 'limits',
 			args: [key.key],
 		})),
@@ -112,7 +112,7 @@ export const undoPlace = async () => {
 };
 
 export const submitBet = async (params: SpinParams, config: Config) => {
-	const { bets, playerAddress, roundNumber, tableAddress } = params;
+	const { bets, playerAddress, roundNumber, table } = params;
 	const uniquesBets: Record<string, LocalBet> = {};
 	for (const bet of bets) {
 		const key = bet.item.toString();
@@ -129,7 +129,7 @@ export const submitBet = async (params: SpinParams, config: Config) => {
 	const totalAmount = newBets.reduce((sum, bet) => sum + BigInt(bet.amount) * 10n ** 18n, 0n);
 	const data = encodeAbiParameters(parseAbiParameters(['struct Bet {uint256 amount; uint256 bitmap;}', 'Bet[] bets, address, uint256, address']), [
 		preparedBets, // Array of bets, matching Library.Bet[]
-		tableAddress,
+		table,
 		roundNumber,
 		playerAddress,
 	]);
@@ -171,29 +171,28 @@ export const getRequiredAllowance = (): number => {
 };
 
 export const fetchTableByAddress = async (config: Config, address: Address) => {
-	const result = await readContract(config, {
+	return await readContract(config, {
 		abi: LiveRouletteABI,
 		address: PUBLIC_LIRO_ADDRESS,
 		functionName: 'tables',
 		args: [address],
 	});
-	return result;
 };
 
-export const manualSpin = async (config: Config, tableAddress: Address, round: bigint) => {
-	const simulate = await simulateContract(config, {
+export const manualSpin = async (config: Config, table: Address, round: bigint) => {
+	await simulateContract(config, {
 		abi: LiveRouletteABI,
 		address: PUBLIC_LIRO_ADDRESS,
 		functionName: 'spin',
-		args: [tableAddress, round],
+		args: [table, round],
 	}).catch((e) => {
 		console.log('error', e);
 	});
-	const result = await writeContract(config, {
+	return writeContract(config, {
 		abi: LiveRouletteABI,
 		address: PUBLIC_LIRO_ADDRESS,
 		functionName: 'spin',
-		args: [tableAddress, round],
+		args: [table, round],
 	});
 };
 
@@ -204,18 +203,16 @@ export const fetchBetsBitMapAndAmount = async (config: Config, betAddress: Addre
 		functionName: 'getBets',
 	});
 
-	const formattedResult = result[0].map((res, index) => ({ amount: res, bitmap: result[1][index] })).map(decodeBet);
-
-	return formattedResult;
+	return result[0].map((res, index) => ({ amount: res, bitmap: result[1][index] })).map(decodeBet);
 };
 
-export const fetchSinglePlayerAddress = async (config: Config) => {
-	const result = await readContract(config, {
+export const fetchSinglePlayerAddress = async (config: Config): Promise<Address> => {
+	const table = await readContract(config, {
 		abi: LiveRouletteABI,
 		address: PUBLIC_LIRO_ADDRESS,
 		functionName: 'singlePlayerTable',
 	});
-	return result;
+	return table.toLowerCase() as Address;
 };
 
 export const fetchBetInfo = async (config: Config, betAddress: Address) => {

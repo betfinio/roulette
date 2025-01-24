@@ -22,7 +22,7 @@ export const ZeroItem: FC = () => {
 			centerSelection={[0]}
 			isVertical={isVertical}
 			className={cn(
-				`bg-green-roulette w-full ${zeroClassName}  border-4 border-transparent transition-all duration-300`,
+				`bg-green-roulette w-full ${zeroClassName} border-[3px] border-transparent transition-all duration-300`,
 
 				{
 					'border-bonus': isNumberHovered(0) && !isDebugMode,

@@ -1,6 +1,6 @@
 import { useGetPlayerBets } from '@/src/lib/roulette/query';
 import { lastResultPlaceholder } from '@/src/lib/shared';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { motion } from 'framer-motion';
 import { useMemo } from 'react';
@@ -9,8 +9,8 @@ import { LastResultRow } from '../../shared/LastResultRow';
 
 export const LastResults = () => {
 	const { t } = useTranslation('roulette');
-	const { tableAddress } = useGetTableAddress();
-	const { data: playerBets = [], isFetched: isBetsFetched } = useGetPlayerBets(tableAddress);
+	const { table } = useVisibleTable();
+	const { data: playerBets = [], isFetched: isBetsFetched } = useGetPlayerBets(table);
 	const numbers = useMemo(
 		() =>
 			playerBets.length > 0

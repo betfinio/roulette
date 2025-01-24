@@ -1,35 +1,64 @@
+import { dozenItemsConfig, sideItemsConfig } from '@/src/components/shared/MainTable/SideTable.tsx';
 import PlayerAddress from '@/src/components/shared/PlayerAddress.tsx';
+import { fillItems } from '@/src/lib/live-roulette';
+import { useCurrentRound } from '@/src/lib/live-roulette/query';
 import { getChipColor } from '@/src/lib/roulette';
 import { mergeAndSummarize } from '@/src/lib/shared';
-import { useGetChipsForPosition, useRouletteOthersBetsState } from '@/src/lib/shared/query';
+import { useAllBets, useLocalChipsForPosition, useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
+import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue } from '@betfinio/components/shared';
 import { TooltipContent } from '@betfinio/components/ui';
 import millify from 'millify';
 import { type FC, useMemo } from 'react';
 import { useAccount } from 'wagmi';
+import { tableConfigHorizontal } from '../MainTable/tableConfigHorizontal';
+import { tableConfigVertical } from '../MainTable/tableConfigVertical';
+import { tableExtraConfigHorizontal, tableExtraConfigVertical } from '../MainTable/tableExtraItemsConfig';
 
 interface BetChipsProps {
 	positionId: string;
 }
 export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
-	const { data: chips = [] } = useGetChipsForPosition(positionId);
-	const { state } = useRouletteOthersBetsState();
+	const { data: localChips = [] } = useLocalChipsForPosition(positionId);
+	const { isVertical } = useMediaQuery();
+	const { table } = useVisibleTable();
+	const { isSingle } = useVisibleTable();
+	const { data: currentRound } = useCurrentRound(table);
 	const { address = ZeroAddress } = useAccount();
 
-	const chipsToShow = useMemo(() => {
-		if (state.data.selectedBetChips) {
-			return [...state.data.selectedBetChips.filter((chip) => chip.item === positionId), ...chips];
+	const { round } = useVisibleRound();
+	const { data: allBets = [] } = useAllBets(table, round);
+
+	const chips = useMemo(() => {
+		if (isSingle) return [];
+		const tableConfig = isVertical ? tableConfigVertical : tableConfigHorizontal;
+		const extraItems = isVertical ? tableExtraConfigVertical : tableExtraConfigHorizontal;
+		return fillItems(allBets, {
+			0: {
+				centerSelection: [0],
+			},
+			...dozenItemsConfig,
+			...sideItemsConfig,
+			...tableConfig,
+			...extraItems,
+		}).filter((item) => item.item === positionId);
+	}, [allBets, table, round, isVertical, isSingle, address]);
+
+	const myBets = mergeAndSummarize(chips.filter((chip) => chip.player?.toLowerCase() === address.toLowerCase() || chip.player === undefined));
+	const otherBets = mergeAndSummarize(chips.filter((chip) => chip.player !== undefined && chip.player.toLowerCase() !== address.toLowerCase()));
+	const localBets = mergeAndSummarize(localChips);
+
+	const allChips = useMemo(() => {
+		if (Number(currentRound) === Number(round)) {
+			return [...otherBets, ...myBets, ...localBets];
 		}
-		return chips;
-	}, [chips, state]);
-	if (chipsToShow === undefined || chipsToShow.length === 0) return null;
+		return [...otherBets, ...myBets];
+	}, [otherBets, myBets, localBets, round, currentRound]);
 
-	const myBets = mergeAndSummarize(chipsToShow.filter((chip) => chip.player?.toLowerCase() === address.toLowerCase() || chip.player === undefined));
-	const otherBets = mergeAndSummarize(chipsToShow.filter((chip) => chip.player !== undefined && chip.player.toLowerCase() !== address.toLowerCase()));
+	if (allChips.length === 0) return null;
 
-	const allChips = [...otherBets, ...myBets];
 	const totalOffset = allChips.length * 2;
 	const startOffset = totalOffset / 2;
 
@@ -37,7 +66,7 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 	const otherBetsAmount = otherBets.reduce((a, b) => a + b.amount, 0);
 
 	const renderPlayersList = () => {
-		return chipsToShow
+		return allChips
 			.filter((chip) => chip.player !== undefined && chip.player.toLowerCase() !== address.toLowerCase())
 			.map((chip, index) => {
 				return (
@@ -64,14 +93,16 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 			</TooltipContent>
 			{allChips.map((chip, index) => {
 				const zIndex = allChips.length + index + 1;
-				const offset = (index + 1) * 5;
+				const offset = index * 5;
 				const xOffset = offset - startOffset;
 				const yOffset = offset - startOffset;
 				const isGhost = chip.player?.toLowerCase() !== address.toLowerCase() && chip.player !== undefined;
 				return (
 					<div
 						key={index}
-						className={'absolute pointer-events-none w-8 scale-1 aspect-square'}
+						className={cn('absolute pointer-events-none w-7 md:w-9 scale-1 aspect-square border rounded-full border-background ', {
+							'border-2 rounded-full animate-bounce border-primary': chip.player === undefined,
+						})}
 						style={{
 							zIndex,
 							transform: `translate(${xOffset}px, ${yOffset}px)`,
@@ -150,8 +181,8 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 								d="M53.5122 22.1719C60.974 19.0035 68.9127 17.3993 77.1082 17.3993V6.06892e-05H76.9988C66.5933 -0.0130261 56.294 2.09051 46.7271 6.18255L53.5122 22.1719Z"
 								fill="currentColor"
 							/>
-							<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="#000" className="text-[37px] font-semibold">
-								{millify(chip.amount, { precision: 0 })}
+							<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="#000" className="text-3xl font-semibold">
+								{millify(chip.amount, { precision: 1 })}
 							</text>
 						</svg>
 					</div>

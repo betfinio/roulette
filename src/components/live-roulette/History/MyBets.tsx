@@ -1,6 +1,6 @@
-import { useGetCurrentRound, useGetSelectedRound, useGetTablePlayerRounds } from '@/src/lib/live-roulette/query';
+import { useGetCurrentRound, useGetSelectedRound, useTablePlayerRounds } from '@/src/lib/live-roulette/query';
 import type { RoundBet, RoundPlayerBet } from '@/src/lib/live-roulette/types';
-import { useGetTableAddress, useManualSpin, useScrollToHeader } from '@/src/lib/shared/query';
+import { useManualSpin, useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
@@ -23,13 +23,13 @@ export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const { t: TPure } = useTranslation('roulette');
 	const navigate = useNavigate();
-	const { tableAddress = ZeroAddress } = useGetTableAddress();
-	const { data: bets = [], isLoading } = useGetTablePlayerRounds(tableAddress);
+	const { table = ZeroAddress } = useVisibleTable();
+	const { data: bets = [], isLoading } = useTablePlayerRounds(table);
 	const { isVertical } = useMediaQuery();
 	const { scrollToHeader } = useScrollToHeader();
 	const { round = 0 } = useGetSelectedRound();
 	const { mutateAsync: spinManually } = useManualSpin();
-	const { data } = useGetCurrentRound(tableAddress);
+	const { data } = useGetCurrentRound(table);
 
 	const tableRef = useRef<Table<RoundPlayerBet>>(null);
 
@@ -38,7 +38,7 @@ export const MyBetsTable = () => {
 	const handleManualSpin = (round: number) => {
 		spinManually(
 			{
-				tableAddress,
+				table,
 				round: BigInt(round),
 			},
 			{
@@ -117,7 +117,7 @@ export const MyBetsTable = () => {
 		columnHelper.accessor('round', {
 			header: t('round'),
 			cell: (props) => (
-				<Link to="/games/roulette/live/$table" onClick={scrollToHeader} search={{ round: props.getValue() }} params={{ table: tableAddress }}>
+				<Link to="/games/roulette/live/$table" onClick={scrollToHeader} search={{ round: props.getValue() }} params={{ table: table }}>
 					#{props.getValue()}
 				</Link>
 			),
@@ -177,7 +177,7 @@ export const MyBetsTable = () => {
 		navigate({
 			to: '/games/roulette/live/$table',
 			search: { round: row.round },
-			params: { table: tableAddress },
+			params: { table: table },
 		});
 		scrollToHeader();
 	};

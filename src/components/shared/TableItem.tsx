@@ -1,8 +1,8 @@
 import type React from 'react';
 
 import type { IRouletteLanguageKeys } from '@/src/i18next';
-import { useGetCurrentRound, useGetSelectedRound } from '@/src/lib/live-roulette/query';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useCurrentRound } from '@/src/lib/live-roulette/query';
+import { useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { isNaN as _isNaN } from 'lodash';
 import { useTranslation } from 'react-i18next';
@@ -50,10 +50,12 @@ const TableItem: React.FC<TableItemProps> = ({
 	onContextMenu,
 	onClick,
 }) => {
-	const { tableAddress, isSingle } = useGetTableAddress();
-	const { data: currentRound } = useGetCurrentRound(tableAddress);
-	const { round } = useGetSelectedRound();
+	const { table, isSingle } = useVisibleTable();
+	const { data: currentRound } = useCurrentRound(table);
+	const { round } = useVisibleRound();
 	const { t } = useTranslation('roulette', { keyPrefix: 'betTable' });
+
+	const isCurrentRound = Number(currentRound) === Number(round);
 
 	const positions: PositionType[] = ['center', 'top', 'left', 'right', 'bottom', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'];
 	const selectionMap: Record<PositionType, number[] | undefined> & { [key: string]: number[] | undefined } = {
@@ -77,7 +79,7 @@ const TableItem: React.FC<TableItemProps> = ({
 
 	const handleInteraction = (position: PositionType, action: 'hover' | 'leave' | 'click' | 'contextMenu', event?: React.MouseEvent) => {
 		event?.stopPropagation();
-		if (round !== Number(currentRound?.round ?? 0) && !isSingle) return;
+		if (round !== Number(currentRound) && !isSingle) return;
 		const relatedNumbers = selectionMap[position];
 		switch (action) {
 			case 'hover':
@@ -98,8 +100,9 @@ const TableItem: React.FC<TableItemProps> = ({
 
 	return (
 		<div
+			data-potition-id={number}
 			className={cn(
-				'text-xs  xl:text-base cursor-pointer relative flex items-center justify-center',
+				'text-xs xl:text-base cursor-pointer relative flex items-center justify-center',
 				{
 					' w-10 h-full rounded-lg border border-border ': isRangeButton && isVertical,
 					' w-full': isRangeButton && !isVertical,
@@ -107,6 +110,7 @@ const TableItem: React.FC<TableItemProps> = ({
 					' w-full h-10 rounded-lg border border-border  font-semibold': !isRangeButton && isVertical,
 				},
 				className,
+				{ 'border-transparent': !isCurrentRound },
 			)}
 			onMouseOver={(e) => handleInteraction('center', 'hover', e)}
 			onMouseOut={(e) => handleInteraction('center', 'leave', e)}

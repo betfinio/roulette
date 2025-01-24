@@ -14,7 +14,7 @@ export interface LocalBet {
 
 export interface SpinParams {
 	bets: LocalBet[];
-	tableAddress: Address; //table address
+	table: Address; //table address
 	roundNumber: bigint; //round number
 	playerAddress: Address; //player address
 }

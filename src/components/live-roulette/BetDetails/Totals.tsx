@@ -1,14 +1,14 @@
 import { useGetSelectedRound, useGetTableRoundPlayers, useGetTableSelectedRoundBets } from '@/src/lib/live-roulette/query';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { BetValue } from '@betfinio/components/shared';
 import { UserIcon } from 'lucide-react';
 
 export const Totals = () => {
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	const { round = 0 } = useGetSelectedRound();
-	const { data = [] } = useGetTableSelectedRoundBets(tableAddress, round);
+	const { data = [] } = useGetTableSelectedRoundBets(table, round);
 	const totalBets = data.reduce((acc, bet) => acc + bet.amount, 0n);
-	const { data: players = [] } = useGetTableRoundPlayers(tableAddress, round);
+	const { data: players = [] } = useGetTableRoundPlayers(table, round);
 	const totalPlayers = players.length;
 	return (
 		<div className="bg-card p-4 flex justify-between border border-border rounded-lg    ">
