@@ -273,7 +273,6 @@ export const useAllBets = (table: Address, round: number) => {
 		queryKey: ['roulette', 'bets', 'all', table, round],
 		queryFn: () => fetchBetsBitMapAndAmountByRound(table, round),
 		refetchOnWindowFocus: false,
-		enabled: !!table,
 	});
 };
 

@@ -231,6 +231,13 @@ function Watchers() {
 				}
 
 				queryClient.setQueryData(tableRoundPlayersQueryKey, updatedTableRoundPlayers);
+
+				await new Promise((resolve) =>
+					setTimeout(async () => {
+						await queryClient.invalidateQueries({ queryKey: ['roulette', 'bets', 'all'] });
+						resolve(null);
+					}, 3000),
+				);
 			};
 			await Promise.all(logs.map(handleBetPlacedEvent));
 		},
