@@ -1,7 +1,7 @@
 import { ETHSCAN } from '@/src/global';
 import { useGetSelectedRound, useGetTableRoundPlayers } from '@/src/lib/live-roulette/query';
 import type { PlayerRoundBets } from '@/src/lib/live-roulette/types';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
@@ -13,9 +13,9 @@ import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
 
 export const PlayersTab = () => {
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	const { round } = useGetSelectedRound();
-	const { data: players = [] } = useGetTableRoundPlayers(tableAddress, round);
+	const { data: players = [] } = useGetTableRoundPlayers(table, round);
 
 	return (
 		<div className="flex flex-col gap-2">

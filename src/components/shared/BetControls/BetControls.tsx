@@ -1,5 +1,5 @@
 import { getChipColor } from '@/src/lib/roulette';
-import { useGetTableAddress, useLimits, useSelectedChip } from '@/src/lib/shared/query';
+import { useLimits, useSelectedChip, useVisibleTable } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
@@ -11,13 +11,13 @@ import { RangeWithButtons } from './RangeWithButtons';
 import { SubmitBet } from './SubmitBet';
 
 export const BetControls = () => {
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	const [openBetChangeModal, setOpenBetChangeModal] = useState(false);
 	const { isVertical } = useMediaQuery();
 
 	const { data: activeChipValue = 0 } = useSelectedChip();
 
-	const { data: limitsRaw = [] } = useLimits(tableAddress);
+	const { data: limitsRaw = [] } = useLimits(table);
 	const limits = useMemo(() => {
 		if (limitsRaw.length > 0) {
 			return {

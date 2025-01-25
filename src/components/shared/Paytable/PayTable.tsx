@@ -8,10 +8,10 @@ import type { Address } from 'viem';
 
 interface IPaytableProps {
 	onClose: () => void;
-	tableAddress?: Address;
+	table?: Address;
 }
-const Paytable: FC<IPaytableProps> = ({ onClose, tableAddress }) => {
-	const { data: limits = [] } = useLimits(tableAddress);
+const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
+	const { data: limits = [] } = useLimits(table);
 	const { t } = useTranslation('roulette');
 	return (
 		<div className={'roulette bg-card games rounded-lg p-4 w-full text-foreground relative'}>

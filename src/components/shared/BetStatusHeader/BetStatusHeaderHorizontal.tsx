@@ -1,6 +1,6 @@
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
 import { useGetLiveRouletteTables } from '@/src/lib/live-roulette/query';
-import { useGetTableAddress, usePaytable } from '@/src/lib/shared/query';
+import { usePaytable, useVisibleTable } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
 import { Roulette } from '@betfinio/components/icons';
 import { BetValue } from '@betfinio/components/shared';
@@ -20,7 +20,7 @@ export const BetStatusHeaderHorizontal: FC = () => {
 	const navigate = useNavigate();
 	const { t } = useTranslation('roulette');
 
-	const { tableAddress, isSingle } = useGetTableAddress();
+	const { table, isSingle } = useVisibleTable();
 	const { data: liveRouletteTables = [] } = useGetLiveRouletteTables();
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 	const { maximize } = useChatbot();
@@ -28,7 +28,7 @@ export const BetStatusHeaderHorizontal: FC = () => {
 		maximize();
 	};
 
-	const currentInterval = liveRouletteTables.find((table) => table.address === tableAddress)?.interval;
+	const currentInterval = liveRouletteTables.find((t) => t.address === table)?.interval;
 
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 
@@ -68,7 +68,7 @@ export const BetStatusHeaderHorizontal: FC = () => {
 								</DialogTrigger>
 								<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette '} aria-describedby={undefined}>
 									<DialogTitle className={'hidden'} />
-									<SwitchModal onClick={handleTableSwitch} selected={tableAddress || zeroAddress} tables={tablesToSwitchList} />
+									<SwitchModal onClick={handleTableSwitch} selected={table || zeroAddress} tables={tablesToSwitchList} />
 								</DialogContent>
 							</>
 						)}
@@ -101,7 +101,7 @@ export const BetStatusHeaderHorizontal: FC = () => {
 				<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
 					<DialogTitle hidden />
 					<DialogContent>
-						<Paytable tableAddress={tableAddress} onClose={closePaytable} />
+						<Paytable table={table} onClose={closePaytable} />
 					</DialogContent>
 				</Dialog>
 				<Button onClick={openPaytable} variant={'ghost'} size="freeSize" className={'text-foreground flex-col text-xs flex items-center font-normal'}>

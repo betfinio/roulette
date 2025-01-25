@@ -1,13 +1,7 @@
-import {
-	useGetSelectedRound,
-	useGetTablePlayerRounds,
-	useGetTableRounds,
-	useGetTableSelectedRoundBets,
-	useLiveRouletteState,
-} from '@/src/lib/live-roulette/query';
+import { useGetSelectedRound, useGetTableSelectedRoundBets, useLiveRouletteState, useTablePlayerRounds, useTableRounds } from '@/src/lib/live-roulette/query';
 import { type WheelState, WheelStatus } from '@/src/lib/live-roulette/types';
 import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
 import { motion, useAnimation } from 'framer-motion';
@@ -21,11 +15,11 @@ export const Wheel = () => {
 	const wheelNumbers = getWheelNumbers();
 	const { state: wheelStateData, updateState } = useLiveRouletteState();
 	const status = wheelStateData.data.state;
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	const { roundStatusProps, winNumberProps, round: selectedRound } = useGetSelectedRound();
-	const { isFetched: isBetsFetched, data: rounds = [], queryKey: tableRoundsQueryKey } = useGetTableRounds(50, tableAddress);
-	const { data: playerRounds = [], queryKey: playerRoundQueryKey } = useGetTablePlayerRounds(tableAddress);
-	const { refetch } = useGetTableSelectedRoundBets(tableAddress, selectedRound);
+	const { isFetched: isBetsFetched, data: rounds = [], queryKey: tableRoundsQueryKey } = useTableRounds(50, table);
+	const { data: playerRounds = [], queryKey: playerRoundQueryKey } = useTablePlayerRounds(table);
+	const { refetch } = useGetTableSelectedRoundBets(table, selectedRound);
 	const lastNumber = rounds.find((tableRound) => tableRound.round === selectedRound)?.winNumber || 0;
 
 	// Animation control
