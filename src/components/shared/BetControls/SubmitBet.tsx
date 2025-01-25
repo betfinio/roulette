@@ -1,8 +1,8 @@
-import { useGetCurrentRound, useLiveRouletteState } from '@/src/lib/live-roulette/query';
+import { useCurrentRound, useLiveRouletteState } from '@/src/lib/live-roulette/query';
 import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { useRouletteState } from '@/src/lib/roulette/query';
 import { getRequiredAllowance } from '@/src/lib/shared/api';
-import { useGetTableAddress, useLocalBets, useSubmitBet } from '@/src/lib/shared/query';
+import { useLocalBets, useSubmitBet, useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useToast } from '@betfinio/components/hooks';
@@ -19,14 +19,14 @@ export const SubmitBet: FC = () => {
 	const { t } = useTranslation('roulette');
 	const { toast } = useToast();
 
-	const { isSingle, tableAddress } = useGetTableAddress();
-	const { data: currentRound } = useGetCurrentRound(tableAddress || ZeroAddress);
+	const { isSingle, table } = useVisibleTable();
+	const { data: currentRound = 0 } = useCurrentRound(table);
 
 	const { address = ZeroAddress } = useAccount();
 	const { data: isMember = false } = useIsMember(address);
 	const { requestAllowance, setResult, requested } = useAllowanceModal();
 	const { mutate: submitBet, isPending, isSuccess, data } = useSubmitBet();
-	const { data: allowance = 0n, isFetching: loading } = useAllowance(address);
+	const { data: allowance = 0n } = useAllowance(address);
 	const { state: rouletteWheelStateData } = useRouletteState();
 	const { state: liveRouletteWheelStateData } = useLiveRouletteState();
 	const rouletteWheelState = rouletteWheelStateData.data;
@@ -67,8 +67,8 @@ export const SubmitBet: FC = () => {
 
 		submitBet({
 			bets,
-			roundNumber: currentRound?.round || 0n,
-			tableAddress: isSingle ? ZeroAddress : tableAddress || ZeroAddress,
+			roundNumber: isSingle ? 0n : BigInt(currentRound),
+			table: isSingle ? ZeroAddress : table || ZeroAddress,
 			playerAddress: address,
 		});
 	};

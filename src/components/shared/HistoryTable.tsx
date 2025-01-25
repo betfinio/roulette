@@ -1,7 +1,7 @@
 import { ETHSCAN } from '@/src/global.ts';
 import { getColor } from '@/src/lib/roulette';
 import { useGetTransactionHashByBet } from '@/src/lib/roulette/query';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress, truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
@@ -21,7 +21,7 @@ import { MyBetsTable as SinglePlayerMyBetsTable } from '../roulette/History/MyBe
 const History = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 
-	const { isSingle } = useGetTableAddress();
+	const { isSingle } = useVisibleTable();
 	return (
 		<Tabs defaultValue={'my'}>
 			<TabsList>

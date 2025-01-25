@@ -5,7 +5,7 @@ import { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useGetTableAddress, useLocalBets, usePaytable } from '@/src/lib/shared/query';
+import { useLocalBets, usePaytable, useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger, Drawer, DrawerContent, DrawerTrigger } from '@betfinio/components/ui';
@@ -24,7 +24,7 @@ export const BetStatusHeaderVertical: FC = () => {
 
 	const { t } = useTranslation('roulette');
 	const [showDrawer, setShowDrawer] = useState(false);
-	const { tableAddress, isSingle } = useGetTableAddress();
+	const { table, isSingle } = useVisibleTable();
 	const { data: liveRouletteTables = [] } = useGetLiveRouletteTables();
 
 	const tablesToSwitchList = useMemo(() => {
@@ -43,7 +43,7 @@ export const BetStatusHeaderVertical: FC = () => {
 			params: { table: address },
 		});
 	};
-	const currentInterval = liveRouletteTables.find((table) => table.address === tableAddress)?.interval;
+	const currentInterval = liveRouletteTables.find((t) => t.address === table)?.interval;
 	return (
 		<div className="roulette">
 			<div id={BET_STATUS_HEADER} className="p-3 lg:p-4 mb-0 border border-border rounded-md flex bg-background-lighter items-center gap-2">
@@ -56,7 +56,7 @@ export const BetStatusHeaderVertical: FC = () => {
 						</DialogTrigger>
 						<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette'} aria-describedby={undefined}>
 							<DialogTitle className={'hidden'} />
-							<SwitchModal onClick={handleTableSwitch} selected={tableAddress || ZeroAddress} tables={tablesToSwitchList} />
+							<SwitchModal onClick={handleTableSwitch} selected={table || ZeroAddress} tables={tablesToSwitchList} />
 						</DialogContent>
 					</Dialog>
 				)}
@@ -86,11 +86,10 @@ interface IBetStatusHeaderVerticalDetailsProps {
 	onCloseDrawer: () => void;
 }
 export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsProps> = ({ onCloseDrawer }) => {
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 	const { data: bets = [] } = useLocalBets();
-	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
 	const { maximize } = useChatbot();
 	const maxPayout = useMemo(() => {
 		return winningPool / 20n;
@@ -125,7 +124,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 					<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
 						<DialogTitle hidden />
 						<DialogContent>
-							<Paytable tableAddress={tableAddress} onClose={closePaytable} />
+							<Paytable table={table} onClose={closePaytable} />
 						</DialogContent>
 					</Dialog>
 					<Button onClick={openPaytable} variant={'ghost'} className={'text-foreground text-base flex items-center gap-x-2'}>

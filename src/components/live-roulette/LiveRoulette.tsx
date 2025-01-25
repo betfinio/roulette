@@ -1,7 +1,7 @@
-import { useGetSelectedRound, useGetTablePlayerRounds, useGetTableRounds, useLiveRouletteState } from '@/src/lib/live-roulette/query';
+import { useGetSelectedRound, useLiveRouletteState, useTablePlayerRounds, useTableRounds } from '@/src/lib/live-roulette/query';
 import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { shootConfetti } from '@/src/lib/roulette/utils';
-import { useGetTableAddress, useScrollToHeader } from '@/src/lib/shared/query';
+import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
 import { useMediaQuery, useToast } from '@betfinio/components/hooks';
 import { useEffect, useMemo, useRef } from 'react';
 import { RouletteResultToast } from '../RouletteResultToast';
@@ -12,11 +12,11 @@ import { VerticalRoulette } from './VerticalRoulette';
 export const LiveRoulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
 	const { toast } = useToast();
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	const { scrollToHeader } = useScrollToHeader();
 	const { round } = useGetSelectedRound();
 
-	const { data: playerRounds, isRefetching } = useGetTablePlayerRounds(tableAddress);
+	const { data: playerRounds, isRefetching } = useTablePlayerRounds(table);
 
 	const { state: wheelStateData, updateState } = useLiveRouletteState();
 	const status = wheelStateData.data.state;

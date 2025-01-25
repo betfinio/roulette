@@ -7,10 +7,10 @@ import { getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
 import { fetchBetInfo } from '../../shared/api';
 
-export const fetchTableBetByBlockHash = async (config: Config, blockHash: Address, tableAddress?: Address) => {
-	if (!tableAddress) return;
+export const fetchTableBetByBlockHash = async (config: Config, blockHash: Address, table?: Address) => {
+	if (!table) return;
 	const logs = await getLogs(config.getClient(), {
-		address: tableAddress,
+		address: table,
 		event: parseAbiItem('event BetEnded(address indexed bet, uint256 indexed round, uint256 value, uint256 winAmount)'),
 		args: {
 			round: BigInt(0),

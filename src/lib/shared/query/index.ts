@@ -1,9 +1,11 @@
 import { BET_STATUS_HEADER } from '@/src/components/shared/BetStatusHeader/BetStatusHeader';
 import logger from '@/src/config/logger';
+import { fetchBetsBitMapAndAmountByRound } from '@/src/lib/shared/gql';
 import { toast } from '@betfinio/components/hooks';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useParams } from '@tanstack/react-router';
+import { useParams, useSearch } from '@tanstack/react-router';
 import { getTransactionLink } from 'betfinio_context/lib/helpers';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType, WriteContractReturnType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
@@ -13,7 +15,6 @@ import {
 	clearAllBets,
 	doublePlace,
 	fetchBetInfo,
-	fetchBetsBitMapAndAmount,
 	fetchChipsByPosition,
 	fetchDebugMode,
 	fetchLimits,
@@ -22,12 +23,10 @@ import {
 	fetchSinglePlayerAddress,
 	manualSpin,
 	place,
-	setDebugMode,
 	submitBet,
 	undoPlace,
 	unplace,
 } from '../api';
-import { fetchBetsBitMapAndAmountByRound } from '../gql';
 import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
 
 export const closePaytable = (queryClient: QueryClient) => {
@@ -56,13 +55,13 @@ export const useLocalBets = () => {
 	});
 };
 
-export const useLimits = (tableAddress?: Address) => {
+export const useLimits = (table?: Address) => {
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['roulette', 'limits'],
-		queryFn: () => fetchLimits(config, tableAddress),
+		queryFn: () => fetchLimits(config, table),
 		refetchOnWindowFocus: false,
-		enabled: !!tableAddress,
+		enabled: !!table,
 	});
 };
 
@@ -124,7 +123,7 @@ export const useChangeChip = () => {
 		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'chip'] }),
 	});
 };
-export const useGetChipsForPosition = (position: string) => {
+export const useLocalChipsForPosition = (position: string) => {
 	return useQuery({
 		queryKey: ['roulette', 'local', 'bets', position],
 		queryFn: () => fetchChipsByPosition(position),
@@ -136,16 +135,6 @@ export const useGetDebugMode = () => {
 		queryKey: ['roulette', 'local', 'debug'],
 		queryFn: fetchDebugMode,
 		refetchOnWindowFocus: false,
-	});
-};
-
-export const useSetDebugMode = () => {
-	const queryClient = useQueryClient();
-
-	return useMutation<void, Error, boolean>({
-		mutationKey: ['roulette', 'local', 'debug'],
-		mutationFn: (e) => setDebugMode(e),
-		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'debug'] }),
 	});
 };
 
@@ -167,9 +156,6 @@ export const useRouletteNumbersState = () => {
 	});
 
 	const { data: bets = [] } = useLocalBets();
-	const { state: othersState } = useRouletteOthersBetsState();
-
-	const hasOtherState = othersState.data.selectedBetChips && othersState.data.selectedBetChips.length > 0;
 
 	const selected = bets.flatMap((e) => e.numbers);
 
@@ -198,6 +184,7 @@ export const useSubmitBet = () => {
 	const { t } = useTranslation('roulette');
 	const config = useConfig();
 	const queryClient = useQueryClient();
+	const { isSingle } = useVisibleTable();
 
 	return useMutation<WriteContractReturnType, WriteContractErrorType, SpinParams>({
 		mutationKey: ['roulette', 'spin'],
@@ -218,19 +205,28 @@ export const useSubmitBet = () => {
 				toast({ variant: 'destructive', description: errors('unknown') });
 			}
 		},
-		onSuccess: async (data) => {
+		onSuccess: async (data, variables) => {
 			const { update, id } = toast({
 				title: t('placingBet'),
 				description: t('transactionIsPending'),
 				variant: 'loading',
 				duration: 10000,
 			});
-			const reciept = await waitForTransactionReceipt(config.getClient(), { hash: data });
+			const receipt = await waitForTransactionReceipt(config.getClient(), { hash: data });
 
-			if (reciept.status === 'success') {
+			if (receipt.status === 'success') {
 				update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
+				await clearAllBets();
+				if (!isSingle) {
+					await queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] });
+				}
+				const allBets = queryClient.getQueryData<LocalBet[]>(['roulette', 'bets', 'all', variables.table, Number(variables.roundNumber)]) || [];
+				queryClient.setQueryData(
+					['roulette', 'bets', 'all', variables.table, Number(variables.roundNumber)],
+					[...allBets, ...variables.bets.map((bet) => ({ ...bet, player: variables.playerAddress }))],
+				);
 			}
-			if (reciept.status === 'reverted') {
+			if (receipt.status === 'reverted') {
 				update({
 					id,
 					variant: 'destructive',
@@ -244,50 +240,41 @@ export const useSubmitBet = () => {
 	});
 };
 
-export const useGetSinglePlayerTableAddress = (enabled = true) => {
+export const useSinglePlayerTable = () => {
 	const config = useConfig();
 	return useQuery({
-		queryKey: ['roulette', 'singlePlayer', 'address'],
+		queryKey: ['roulette', 'single', 'table'],
 		queryFn: () => fetchSinglePlayerAddress(config),
 		refetchOnWindowFocus: false,
-		enabled,
 	});
 };
 
-export const useGetTableAddress = () => {
-	const multiplayerTableAddress = useParams({ strict: false, select: (params) => params.table as Address | undefined });
-	const { data: siglePlayerTableAddress, isLoading } = useGetSinglePlayerTableAddress(!multiplayerTableAddress);
-
-	return { isSingle: !multiplayerTableAddress, tableAddress: multiplayerTableAddress || siglePlayerTableAddress, isLoading };
-};
-
-export const useGetBetAmountAndBitMap = (bet: Address) => {
-	const config = useConfig();
-	return useMutation<LocalBet[], Error, Address>({
-		mutationKey: ['roulette', 'bet', 'amount', 'bitmap', bet],
-		mutationFn: () => fetchBetsBitMapAndAmount(config, bet),
-	});
-};
-export const useGetBetsAmountAndBitMapByRound = () => {
-	return useMutation<LocalBet[], Error, { round: number; table: Address }>({
-		mutationKey: ['roulette', 'bets', 'amount', 'bitmaps'],
-		mutationFn: ({ round, table }: { round: number; table: Address }) => fetchBetsBitMapAndAmountByRound(table, round),
-	});
-};
-
-export const useRouletteOthersBetsState = () => {
-	const queryClient = useQueryClient();
-	const state = useQuery<{ selectedBetChips: LocalBet[] | null }>({
-		queryKey: ['roulette', 'selectedBetChips'],
-		initialData: { selectedBetChips: null },
-		refetchOnWindowFocus: false,
-	});
-	const updateState = (props: { selectedBetChips: LocalBet[] | null }) => {
-		queryClient.setQueryData(['roulette', 'selectedBetChips'], { ...state.data, ...props });
-		queryClient.refetchQueries({ queryKey: ['roulette', 'local', 'bets'] });
+export const useVisibleTable = () => {
+	const params = useParams({ strict: false });
+	const { data: single, isLoading } = useSinglePlayerTable();
+	const table: Address | undefined = useMemo(() => {
+		return (params.table || single) as Address;
+	}, [params, single]);
+	return {
+		isSingle: table === single,
+		table: table,
+		isLoading,
 	};
+};
 
-	return { state, updateState };
+export const useVisibleRound = () => {
+	const search = useSearch({ strict: false });
+
+	return { round: search?.round ? Number(search.round) : 0 };
+};
+
+export const useAllBets = (table: Address, round: number) => {
+	return useQuery({
+		queryKey: ['roulette', 'bets', 'all', table, round],
+		queryFn: () => fetchBetsBitMapAndAmountByRound(table, round),
+		refetchOnWindowFocus: false,
+		enabled: !!table,
+	});
 };
 
 export const useScrollToHeader = () => {
@@ -301,14 +288,16 @@ export const useScrollToHeader = () => {
 
 export const useManualSpin = () => {
 	const config = useConfig();
-
 	return useMutation({
 		mutationKey: ['roulette', 'manualSpin'],
-		mutationFn: (e: { tableAddress: Address; round: bigint }) => manualSpin(config, e.tableAddress, e.round),
+		mutationFn: (e: { table: Address; round: bigint }) => manualSpin(config, e.table, e.round),
+		onSuccess: async (data) => {
+			await waitForTransactionReceipt(config.getClient(), { hash: data });
+		},
 	});
 };
 
-export const useGetBetInfo = () => {
+export const useBetInfo = () => {
 	const config = useConfig();
 	return useMutation({
 		mutationKey: ['roulette', 'bet', 'info'],

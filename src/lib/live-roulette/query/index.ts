@@ -4,11 +4,19 @@ import { useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
-import { useGetTableAddress } from '../../shared/query';
-import { fetchBankByRound, fetchCurrentRoundOfTable, fetchRoundStatus, fetchTableBetsByBlockHash, fetchWinNumber } from '../api';
+import { useVisibleTable } from '../../shared/query';
 import {
+	fetchBankByRound,
+	fetchCurrentRound,
+	fetchCurrentRoundOfTable,
+	fetchRoundStatus,
+	fetchTableBetsByBlockHash,
+	fetchTableInterval,
+	fetchWinNumber,
+} from '../api';
+import {
+	fetchLiveRouletteTableStats,
 	fetchLiveRouletteTables,
-	fetchLiveRoulletteTableStats,
 	fetchSelectedTableRoundPlayers,
 	fetchTableBets,
 	fetchTablePlayerRounds,
@@ -17,90 +25,96 @@ import {
 import { type RouletteTable, type WheelState, WheelStatus } from '../types';
 
 export const useLiveRouletteState = () => {
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	const { roundStatus, round } = useGetSelectedRound();
 	const queryClient = useQueryClient();
 	const state = useQuery<WheelState>({
-		queryKey: ['liveroulette', 'state', round, tableAddress],
+		queryKey: ['live-roulette', 'state', round, table],
 		initialData: { state: WheelStatus.Loading },
 	});
 
 	useEffect(() => {
 		if (state.data.state === WheelStatus.Loading && roundStatus !== undefined) {
-			queryClient.setQueryData(['liveroulette', 'state', round, tableAddress], { state: roundStatus });
-			queryClient.refetchQueries({ queryKey: ['liveroulette', 'state', round, tableAddress] });
+			queryClient.setQueryData(['live-roulette', 'state', round, table], { state: roundStatus });
+			queryClient.refetchQueries({ queryKey: ['live-roulette', 'state', round, table] });
 		}
 	}, [roundStatus]);
 
 	const updateState = (st: WheelState) => {
-		queryClient.setQueryData(['liveroulette', 'state', round, tableAddress], { ...state.data, ...st });
-		queryClient.refetchQueries({ queryKey: ['liveroulette', 'state', round, tableAddress] });
+		queryClient.setQueryData(['live-roulette', 'state', round, table], { ...state.data, ...st });
+		queryClient.refetchQueries({ queryKey: ['liveroulette', 'state', round, table] });
 	};
 
 	return { state, updateState };
 };
-export const useGetTablePlayerRounds = (tableAddress?: Address) => {
+export const useTablePlayerRounds = (table?: Address) => {
 	const { address = ZeroAddress } = useAccount();
 
-	const queryKey = ['roulette', 'bets', 'player', address, tableAddress];
+	const queryKey = ['roulette', 'bets', 'player', address, table];
 	return {
 		queryKey,
 		...useQuery({
 			queryKey,
-			queryFn: () => fetchTablePlayerRounds(address, tableAddress),
+			queryFn: () => fetchTablePlayerRounds(address, table),
 			refetchOnWindowFocus: false,
-			enabled: !!tableAddress,
+			enabled: !!table,
 			staleTime: Number.POSITIVE_INFINITY,
 		}),
 	};
 };
 
-export const useGetTableRounds = (last: number, tableAddress?: Address) => {
-	const queryKey = ['roulette', 'bets', 'table', 'rounds', tableAddress, last];
+export const useTableRounds = (last: number, table?: Address) => {
+	const queryKey = ['roulette', 'bets', 'table', 'rounds', table, last];
 	return {
 		queryKey,
 		...useQuery({
 			queryKey,
-			queryFn: () => fetchTableBets(last, tableAddress),
+			queryFn: () => fetchTableBets(last, table),
 			refetchOnWindowFocus: false,
-			enabled: !!tableAddress,
+			enabled: !!table,
 			staleTime: Number.POSITIVE_INFINITY,
 		}),
 	};
 };
 
-export const useGetCurrentRound = (tableAddress?: Address) => {
+export const useGetCurrentRound = (table?: Address) => {
 	const config = useConfig();
 	return useQuery({
-		queryKey: ['roulette', 'currentRound', tableAddress],
-		queryFn: () => fetchCurrentRoundOfTable(config, tableAddress),
+		queryKey: ['roulette', 'currentRound', table],
+		queryFn: () => fetchCurrentRoundOfTable(config, table),
 		refetchOnWindowFocus: false,
-		enabled: !!tableAddress,
+		enabled: !!table,
 	});
 };
 
-export const useMutateCurrentRound = () => {
+export const useCurrentInterval = (table: Address) => {
 	const config = useConfig();
-	const queryClient = useQueryClient();
-	return useMutation({
-		mutationKey: ['roulette', 'currentRound'],
-		mutationFn: (tableAddress: Address) => fetchCurrentRoundOfTable(config, tableAddress),
-		onSuccess: () => {
-			queryClient.invalidateQueries({ queryKey: ['roulette', 'currentRound'] });
-		},
+	return useQuery({
+		queryKey: ['roulette', table, 'currentInterval'],
+		queryFn: () => fetchTableInterval(config, table),
+	});
+};
+
+export const useCurrentRound = (table: Address) => {
+	const { data: interval = 0 } = useCurrentInterval(table);
+	return useQuery({
+		queryKey: ['roulette', table, 'currentRound'],
+		queryFn: () => fetchCurrentRound(interval),
+		refetchInterval: 300,
 	});
 };
 
 export const useGetSelectedRound = () => {
 	const search = useSearch({ strict: false });
-	const { tableAddress } = useGetTableAddress();
-	const { data: currentRound, ...currentRoundProps } = useGetCurrentRound(tableAddress);
+	const { table } = useVisibleTable();
+	const { data: currentRound, ...currentRoundProps } = useGetCurrentRound(table);
 
 	const round = search?.round ? Number(search.round) : undefined;
+
 	const isRoundFinished = Number(currentRound?.round) > Number(round);
-	const { data: currentRoundBank, ...bankByRoundProps } = useGetBankByRound(tableAddress, round);
-	const { data: status, ...roundStatusProps } = useGetRoundStatus(tableAddress, round);
-	const { data: winNumber = 42n, ...winNumberProps } = useGetWinNumber(tableAddress, round);
+	const { data: currentRoundBank, ...bankByRoundProps } = useGetBankByRound(table, round);
+	const { data: status, ...roundStatusProps } = useGetRoundStatus(table, round);
+	const { data: winNumber = 42n, ...winNumberProps } = useGetWinNumber(table, round);
 
 	return {
 		round,
@@ -118,67 +132,65 @@ export const useGetSelectedRound = () => {
 export const useFetchTableBetsByBlockHash = () => {
 	const config = useConfig();
 	const { address = ZeroAddress } = useAccount();
-
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 	return useMutation({
 		mutationKey: ['roulette', 'bets', 'blockHash'],
-		mutationFn: ({ blockHash, round }: { blockHash: Address; round: bigint }) => fetchTableBetsByBlockHash(config, blockHash, tableAddress, round, address),
+		mutationFn: ({ blockHash, round }: { blockHash: Address; round: bigint }) => fetchTableBetsByBlockHash(config, blockHash, table, round, address),
 	});
 };
 
-export const useGetTableRoundPlayers = (tableAddress?: Address, round?: number) => {
-	const queryKey = ['roulette', 'table', 'round', 'players', tableAddress, round];
+export const useGetTableRoundPlayers = (table?: Address, round?: number) => {
+	const queryKey = ['roulette', 'table', 'round', 'players', table, round];
 	return {
 		queryKey,
 		...useQuery({
 			queryKey,
-			queryFn: () => fetchSelectedTableRoundPlayers(tableAddress, round),
+			queryFn: () => fetchSelectedTableRoundPlayers(table, round),
 			refetchOnWindowFocus: false,
-			enabled: !!tableAddress && !!round,
+			enabled: !!table && !!round,
 			staleTime: Number.POSITIVE_INFINITY,
 		}),
 	};
 };
 
-export const useGetTableSelectedRoundBets = (tableAddress?: Address, round?: number) => {
-	const queryKey = ['roulette', 'table', 'bets', tableAddress, round];
+export const useGetTableSelectedRoundBets = (table?: Address, round?: number) => {
+	const queryKey = ['roulette', 'table', 'bets', table, round];
 	return useQuery({
 		queryKey,
-		queryFn: () => fetchTableSelectedRoundBets(tableAddress, round),
+		queryFn: () => fetchTableSelectedRoundBets(table, round),
 		refetchOnWindowFocus: false,
-		enabled: !!tableAddress && !!round,
+		enabled: !!table && !!round,
 		staleTime: Number.POSITIVE_INFINITY,
 	});
 };
 
-export const useGetBankByRound = (tableAddress?: Address, round?: number) => {
+export const useGetBankByRound = (table?: Address, round?: number) => {
 	const config = useConfig();
 	return useQuery({
-		queryKey: ['roulette', 'bank', tableAddress, Number(round)],
-		queryFn: () => fetchBankByRound(config, tableAddress, round),
+		queryKey: ['roulette', 'bank', table, Number(round)],
+		queryFn: () => fetchBankByRound(config, table, round),
 		refetchOnWindowFocus: false,
-		enabled: !!tableAddress && !!round,
+		enabled: !!table && !!round,
 		staleTime: Number.POSITIVE_INFINITY,
 	});
 };
 
-export const useGetRoundStatus = (tableAddress?: Address, round?: number) => {
+export const useGetRoundStatus = (table?: Address, round?: number) => {
 	const config = useConfig();
 	return useQuery({
-		queryKey: ['roulette', 'round', 'status', tableAddress, Number(round)],
-		queryFn: () => fetchRoundStatus(config, tableAddress, round),
+		queryKey: ['roulette', 'round', 'status', table, Number(round)],
+		queryFn: () => fetchRoundStatus(config, table, round),
 		refetchOnWindowFocus: false,
-		enabled: !!tableAddress && !!round,
+		enabled: !!table && !!round,
 		staleTime: Number.POSITIVE_INFINITY,
 	});
 };
 
-export const useGetWinNumber = (tableAddress?: Address, round?: number) => {
+export const useGetWinNumber = (table?: Address, round?: number) => {
 	const config = useConfig();
-
 	return useQuery({
-		queryKey: ['roulette', 'round', 'winNumber', tableAddress, Number(round)],
-		queryFn: () => fetchWinNumber(config, tableAddress, round),
+		queryKey: ['roulette', 'round', 'winNumber', table, Number(round)],
+		queryFn: () => fetchWinNumber(config, table, round),
 		refetchOnWindowFocus: false,
 		staleTime: Number.POSITIVE_INFINITY,
 	});
@@ -193,13 +205,13 @@ export const useGetLiveRouletteTables = () => {
 	});
 };
 
-export const useGetLiveRouletteTableStats = (table?: Address) => {
+export const useLiveRouletteTableStats = (table?: Address) => {
 	const queryKey = ['roulette', 'table', 'stat', table];
 	return {
 		queryKey,
 		...useQuery({
 			queryKey,
-			queryFn: () => fetchLiveRoulletteTableStats(table),
+			queryFn: () => fetchLiveRouletteTableStats(table),
 			refetchOnWindowFocus: false,
 			staleTime: Number.POSITIVE_INFINITY,
 		}),

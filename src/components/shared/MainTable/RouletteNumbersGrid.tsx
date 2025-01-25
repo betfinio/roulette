@@ -1,5 +1,6 @@
+import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { getGridNumbers } from '@/src/lib/roulette';
-import { useGetDebugMode, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/shared/query';
+import { useGetDebugMode, usePlace, useRouletteNumbersState, useUnplace, useVisibleTable } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { type FC, Fragment } from 'react';
@@ -13,6 +14,8 @@ export const RouletteNumbersGrid: FC = () => {
 	const { mutate: unplace } = useUnplace();
 	const { isNumberHovered, isNumberSelected, onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
 	const { data: isDebugMode } = useGetDebugMode();
+	const { winNumber } = useGetSelectedRound();
+	const { table } = useVisibleTable();
 
 	const numbers = getGridNumbers(isVertical);
 
@@ -28,10 +31,11 @@ export const RouletteNumbersGrid: FC = () => {
 					{...tableConfig[item]}
 					onHoverNumbers={onHoverNumbers}
 					onLeaveHover={onLeaveHover}
-					className={cn(`${tableConfig[item]?.className} border-transparent border-4 outline-transparent transition-all duration-200 `, {
-						'border-bonus ': isNumberHovered(+item) && !isDebugMode,
+					className={cn(`${tableConfig[item]?.className} border-transparent border-[3px] outline-transparent transition-all `, {
+						'border-bonus/80 ': isNumberHovered(+item) && !isDebugMode,
 						'border-muted/50 ': !isNumberHovered(+item) && isDebugMode,
-						'border-secondary-foreground': isNumberSelected(+item),
+						'!border-white/80 border-[3px] animate-[pulse_2s_ease-in-out_infinite]': Number(winNumber) === Number(item),
+						'border-secondary-foreground/80': isNumberSelected(+item),
 						'aspect-square': !isVertical,
 					})}
 					onClick={(position, relatedNumbers) =>

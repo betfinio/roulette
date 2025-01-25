@@ -10,12 +10,17 @@ import { RoundStatus } from '../../shared/types';
 import { fetchSelectedTableRoundWinNumer } from '../gql';
 import type { RoundBet, RoundPlayerBet, WheelStatus } from '../types';
 
-export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Address) => {
-	if (!tableAddress) return;
+export const fetchCurrentRound = async (interval: number) => {
+	if (interval === 0) return 0;
+	return Math.floor(Date.now() / 1000 / interval);
+};
+
+export const fetchCurrentRoundOfTable = async (config: Config, table?: Address) => {
+	if (!table) return;
 
 	const interval = await readContract(config, {
 		abi: MultiPlayerTableABI,
-		address: tableAddress,
+		address: table,
 		functionName: 'interval',
 	});
 
@@ -25,7 +30,7 @@ export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Ad
 
 	const roundBank = await readContract(config, {
 		abi: MultiPlayerTableABI,
-		address: tableAddress,
+		address: table,
 		functionName: 'getRoundBank',
 		args: [round],
 	});
@@ -37,10 +42,10 @@ export const fetchCurrentRoundOfTable = async (config: Config, tableAddress?: Ad
 	};
 };
 
-export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Address, tableAddress?: Address, round?: bigint, playerAddress?: Address) => {
-	if (!tableAddress) return;
+export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Address, table?: Address, round?: bigint, playerAddress?: Address) => {
+	if (!table) return;
 	const logs = await getLogs(config.getClient(), {
-		address: tableAddress,
+		address: table,
 		event: parseAbiItem('event BetEnded(address indexed bet, uint256 indexed round, uint256 value, uint256 winAmount)'),
 		args: {
 			round: round,
@@ -103,11 +108,11 @@ export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Addre
 	return { roundAllBets, roundPlayerBets };
 };
 
-export const fetchBankByRound = async (config: Config, tableAddress?: Address, round?: number) => {
-	if (!tableAddress || !round) return;
+export const fetchBankByRound = async (config: Config, table?: Address, round?: number) => {
+	if (!table || !round) return;
 	const roundBank = await readContract(config, {
 		abi: MultiPlayerTableABI,
-		address: tableAddress,
+		address: table,
 		functionName: 'getRoundBank',
 		args: [BigInt(round)],
 	});
@@ -115,11 +120,11 @@ export const fetchBankByRound = async (config: Config, tableAddress?: Address, r
 	return Number(roundBank);
 };
 
-export const fetchRoundStatus = async (config: Config, tableAddress?: Address, round?: number) => {
-	if (!tableAddress || !round) return;
+export const fetchRoundStatus = async (config: Config, table?: Address, round?: number) => {
+	if (!table || !round) return;
 	const roundStatus = await readContract(config, {
 		abi: MultiPlayerTableABI,
-		address: tableAddress,
+		address: table,
 		functionName: 'roundStatus',
 		args: [BigInt(round)],
 	});
@@ -162,4 +167,14 @@ export const fetchWinNumber = async (config: Config, tableAddress?: Address, rou
 		return 42n;
 	}
 	return randomGeneratedData?.[0]?.args.value || 42n;
+};
+
+export const fetchTableInterval = async (config: Config, table?: Address) => {
+	if (!table || table === ZeroAddress) return 0;
+	const interval = await readContract(config, {
+		abi: MultiPlayerTableABI,
+		address: table,
+		functionName: 'interval',
+	});
+	return Number(interval);
 };

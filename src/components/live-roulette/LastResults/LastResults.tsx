@@ -1,6 +1,6 @@
-import { useGetTableRounds } from '@/src/lib/live-roulette/query';
+import { useTableRounds } from '@/src/lib/live-roulette/query';
 import { lastResultPlaceholder } from '@/src/lib/shared';
-import { useGetTableAddress } from '@/src/lib/shared/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
@@ -12,9 +12,9 @@ import { LastResultRow } from '../../shared/LastResultRow';
 
 export const LastResults = () => {
 	const { t } = useTranslation('roulette');
-	const { tableAddress } = useGetTableAddress();
+	const { table } = useVisibleTable();
 
-	const { data: tableBets = [], isFetched: isBetsFetched } = useGetTableRounds(50, tableAddress);
+	const { data: tableBets = [], isFetched: isBetsFetched } = useTableRounds(50, table);
 	const numbers = useMemo(() => {
 		const hasBets = tableBets.length > 0;
 		const hasResults = hasBets && tableBets.some((r) => r.status === RoundStatus.FINISHED);

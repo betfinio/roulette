@@ -124,7 +124,7 @@ export const fetchLiveRouletteTables = async (): Promise<RouletteTable[]> => {
 	}
 	return [];
 };
-export const fetchLiveRoulletteTableStats = async (table?: Address) => {
+export const fetchLiveRouletteTableStats = async (table?: Address) => {
 	if (!table) return;
 	const data: ExecutionResult<GetLiveRouletteStatsByTableQuery> = await execute(GetLiveRouletteStatsByTableDocument, { table });
 	if (data.data) {

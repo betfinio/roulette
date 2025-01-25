@@ -26,10 +26,14 @@ module.exports = {
 					'0%': { transform: 'rotateZ(0deg)' },
 					'100%': { transform: 'rotateZ(360deg)' },
 				},
+				wiggle: {
+					'0%': { opacity: 0.3 },
+					'100%': { opacity: 1 },
+				},
 			},
-
 			animation: {
 				wheel: 'rotate-wheel var(--spinningAnimationSpeed) linear infinite',
+				wiggle: '30s linear 10s wiggle infinite ',
 			},
 			backgroundImage: {
 				'roulette-center': "url('./assets/roulette-center.svg')",

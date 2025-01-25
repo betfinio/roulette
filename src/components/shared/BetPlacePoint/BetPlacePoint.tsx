@@ -14,8 +14,9 @@ interface BetPlacePointProps {
 	onMouseOut: (event?: MouseEvent) => void;
 	onClick: (event?: MouseEvent) => void;
 	onContextMenu: (event?: MouseEvent) => void;
+	isWinNumber?: boolean;
 }
-export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, ...events }) => {
+export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, isWinNumber = false, ...events }) => {
 	const { data: isDebugMode } = useGetDebugMode();
 
 	return (
