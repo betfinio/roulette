@@ -41,10 +41,16 @@ export const BetStatusHeaderVertical: FC = () => {
 		];
 	}, [liveRouletteTables]);
 	const handleTableSwitch = (address: Address) => {
-		navigate({
-			to: '/games/roulette/live/$table',
-			params: { table: address },
-		});
+		if (address === ZeroAddress) {
+			navigate({
+				to: '/games/roulette/single',
+			});
+		} else {
+			navigate({
+				to: '/games/roulette/live/$table',
+				params: { table: address },
+			});
+		}
 	};
 	const currentInterval = liveRouletteTables.find((t) => t.address === table)?.interval;
 	return (
