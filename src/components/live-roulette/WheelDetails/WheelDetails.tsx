@@ -42,7 +42,7 @@ export const WheelDetails: FC = () => {
 			return (bet.amount ?? 0n) + acc;
 		}, 0n);
 		return { playerHasWon: hasWon, playerHasBets: playerBets.length, winAmount: winAmount, betAmount: betAmount };
-	}, [tableRoundBets, address, winNumber, isRoundFinished]);
+	}, [tableRoundBets, address, winNumber]);
 
 	const handleExpiration = async () => {
 		refetchBankByRound();
@@ -194,7 +194,7 @@ export function useRoundCountdown(round?: number, interval?: number, onExpire?: 
 		refInterval.current = setInterval(calculateTimeLeft, 1000); // Update every second
 
 		return () => clearInterval(refInterval.current); // Cleanup on unmount
-	}, [round, interval]); // Re-run if round or interval changes
+	}, [round, interval, onExpire]); // Re-run if round or interval changes
 
 	return { timeLeft, isExpired, isReady };
 }
