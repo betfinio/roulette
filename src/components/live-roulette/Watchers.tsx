@@ -9,7 +9,7 @@ import {
 	useTableRounds,
 } from '@/src/lib/live-roulette/query';
 import { type PlayerInProgressBet, type PlayerRoundBets, type RoundBet, type RoundPlayerBet, WheelStatus } from '@/src/lib/live-roulette/types.ts';
-import { fetchBetBitmaps, fetchBetInfo } from '@/src/lib/shared/api';
+import { clearAllBets, fetchBetBitmaps, fetchBetInfo } from '@/src/lib/shared/api';
 import { useBetInfo, useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
 import { type LocalBet, RoundStatus } from '@/src/lib/shared/types.ts';
 import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
@@ -238,6 +238,10 @@ function Watchers() {
 
 				const allBets = queryClient.getQueryData<LocalBet[]>(['roulette', 'bets', 'all', table, Number(eventRound)]) || [];
 				await queryClient.setQueryData(['roulette', 'bets', 'all', table, Number(eventRound)], [...allBets, ...bets]);
+				if (player.toLowerCase() === address.toLowerCase()) {
+					await clearAllBets();
+					await queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] });
+				}
 			};
 			await Promise.all(logs.map(handleBetPlacedEvent));
 		},
