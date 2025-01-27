@@ -24,7 +24,7 @@ const SwitchModal: FC<ISwitchModalProsp> = ({ selected, onClick, tables }) => {
 							'border-border border bg-background-lighter ': table.address === selected,
 						})}
 					>
-						{table.interval}
+						{table.interval === '0' ? 'Single' : table.interval}
 					</div>
 				</DialogClose>
 			))}

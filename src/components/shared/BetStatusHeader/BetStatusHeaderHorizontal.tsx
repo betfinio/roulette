@@ -2,6 +2,7 @@ import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
 import { useGetLiveRouletteTables } from '@/src/lib/live-roulette/query';
 import { usePaytable, useVisibleTable } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
+import { ZeroAddress } from '@betfinio/abi';
 import { Roulette } from '@betfinio/components/icons';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger } from '@betfinio/components/ui';
@@ -15,7 +16,6 @@ import { type Address, zeroAddress } from 'viem';
 import Paytable from '../Paytable/PayTable';
 import SwitchModal from '../SwitchModal';
 import { BET_STATUS_HEADER } from './BetStatusHeader';
-
 export const BetStatusHeaderHorizontal: FC = () => {
 	const navigate = useNavigate();
 	const { t } = useTranslation('roulette');
@@ -37,21 +37,30 @@ export const BetStatusHeaderHorizontal: FC = () => {
 	}, [winningPool]);
 
 	const handleTableSwitch = (address: Address) => {
-		navigate({
-			to: '/games/roulette/live/$table',
-			params: { table: address },
-		});
+		if (address === ZeroAddress) {
+			navigate({
+				to: '/games/roulette/single',
+			});
+		} else {
+			navigate({
+				to: '/games/roulette/live/$table',
+				params: { table: address },
+			});
+		}
 	};
 
 	const tablesToSwitchList = useMemo(() => {
 		if (!liveRouletteTables) return [];
 
-		return liveRouletteTables.map((table) => {
-			return {
-				address: table.address,
-				interval: `${Number(table.interval) / 60}min`,
-			};
-		});
+		return [
+			...liveRouletteTables.map((table) => {
+				return {
+					address: table.address,
+					interval: `${Number(table.interval) / 60}min`,
+				};
+			}),
+			{ address: ZeroAddress, interval: '0' },
+		];
 	}, [liveRouletteTables]);
 
 	return (
@@ -59,32 +68,22 @@ export const BetStatusHeaderHorizontal: FC = () => {
 			<div className="flex gap-2 md:gap-9">
 				<div className="flex gap-2 items-center">
 					<Dialog>
-						{!isSingle && (
-							<>
-								<DialogTrigger asChild>
-									<div className={'flex gap-2 md:gap-4 items-center cursor-pointer'}>
-										<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
-									</div>
-								</DialogTrigger>
-								<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette '} aria-describedby={undefined}>
-									<DialogTitle className={'hidden'} />
-									<SwitchModal onClick={handleTableSwitch} selected={table || zeroAddress} tables={tablesToSwitchList} />
-								</DialogContent>
-							</>
-						)}
+						<DialogTrigger asChild>
+							<div className={'flex gap-2 md:gap-4 items-center cursor-pointer'}>
+								<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
+							</div>
+						</DialogTrigger>
+						<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette '} aria-describedby={undefined}>
+							<DialogTitle className={'hidden'} />
+							<SwitchModal onClick={handleTableSwitch} selected={isSingle ? ZeroAddress : table} tables={tablesToSwitchList} />
+						</DialogContent>
 						<Roulette className={'w-8 h-8 text-secondary-foreground'} />
 						<div className={'leading-1'}>
 							<div>{isSingle ? t('roulette') : t('liveRoulette')}</div>
 							<div>
 								<DialogTrigger className={'text-sm flex items-center gap-1'}>
-									{isSingle ? (
-										t('singlePlayer')
-									) : (
-										<>
-											{Number(currentInterval) / 60}min
-											<ArrowLeftRightIcon className={'w-3 h-3'} />
-										</>
-									)}
+									{currentInterval ? `${Number(currentInterval) / 60}min` : 'Single'}
+									<ArrowLeftRightIcon className={'w-3 h-3'} />
 								</DialogTrigger>
 							</div>
 						</div>

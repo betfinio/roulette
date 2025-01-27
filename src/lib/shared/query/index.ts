@@ -216,16 +216,6 @@ export const useSubmitBet = () => {
 
 			if (receipt.status === 'success') {
 				update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
-				await clearAllBets();
-				if (!isSingle) {
-					await queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] });
-				}
-				// const allBets = queryClient.getQueryData<LocalBet[]>(['roulette', 'bets', 'all', variables.table, Number(variables.roundNumber)]) || [];
-				// console.log(variables.bets);
-				// queryClient.setQueryData(
-				// 	['roulette', 'bets', 'all', variables.table, Number(variables.roundNumber)],
-				// 	[...allBets, ...variables.bets.map((bet) => ({ ...bet, player: variables.playerAddress }))],
-				// );
 			}
 			if (receipt.status === 'reverted') {
 				update({
