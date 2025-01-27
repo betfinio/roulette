@@ -5,7 +5,7 @@ import { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useLocalBets, usePaytable, useVisibleTable } from '@/src/lib/shared/query';
+import { usePaytable, useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger, Drawer, DrawerContent, DrawerTrigger } from '@betfinio/components/ui';
@@ -89,7 +89,6 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 	const { table } = useVisibleTable();
 
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
-	const { data: bets = [] } = useLocalBets();
 	const { maximize } = useChatbot();
 	const maxPayout = useMemo(() => {
 		return winningPool / 20n;

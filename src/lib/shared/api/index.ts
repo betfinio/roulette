@@ -1,5 +1,5 @@
 import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global';
-import { LiroBetABI, LiveRouletteABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
+import { LiroBetABI, LiveRouletteABI, PartnerABI, SinglePlayerTableABI, valueToNumber } from '@betfinio/abi';
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import { type Address, encodeAbiParameters, parseAbiParameters } from 'viem';
@@ -222,4 +222,23 @@ export const fetchBetInfo = async (config: Config, betAddress: Address) => {
 		functionName: 'getBetInfo',
 		args: [],
 	});
+};
+
+export const fetchBetBitmaps = async (config: Config, betAddress: Address): Promise<LocalBet[]> => {
+	const [amounts, bitmaps] = await readContract(config, {
+		abi: LiroBetABI,
+		address: betAddress,
+		functionName: 'getBets',
+	});
+	const player = await readContract(config, {
+		abi: LiroBetABI,
+		address: betAddress,
+		functionName: 'getPlayer',
+	});
+
+	const bets: LocalBet[] = bitmaps.map((bitmap, index) => {
+		return decodeBet({ bitmap: bitmap, amount: amounts[index], player: player });
+	});
+
+	return bets;
 };

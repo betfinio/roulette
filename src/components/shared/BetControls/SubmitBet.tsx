@@ -10,6 +10,7 @@ import { BetValue } from '@betfinio/components/shared';
 import { Button } from '@betfinio/components/ui';
 import { useAllowanceModal } from 'betfinio_context/lib/context';
 import { useAllowance, useIsMember } from 'betfinio_context/lib/query';
+import * as _ from 'lodash';
 import { Loader } from 'lucide-react';
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -34,6 +35,10 @@ export const SubmitBet: FC = () => {
 	const { data: bets = [] } = useLocalBets();
 	const isSpinning =
 		isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested);
+
+	useEffect(() => {
+		console.log('bets', bets);
+	}, [bets]);
 
 	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
 
@@ -64,9 +69,8 @@ export const SubmitBet: FC = () => {
 			requestAllowance?.('bet', BigInt(getRequiredAllowance()) * 10n ** 18n);
 			return;
 		}
-
 		submitBet({
-			bets,
+			bets: _.cloneDeep(bets),
 			roundNumber: isSingle ? 0n : BigInt(currentRound),
 			table: isSingle ? ZeroAddress : table || ZeroAddress,
 			playerAddress: address,

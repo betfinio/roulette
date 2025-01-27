@@ -69,7 +69,7 @@ export const lastResultPlaceholder: LastResult[] = [
 export function mergeAndSummarize(objects: LocalBet[]): LocalBet[] {
 	const mergedMap: Map<string, LocalBet> = new Map();
 
-	objects.forEach((obj) => {
+	for (const obj of objects) {
 		const existing = mergedMap.get(obj.item);
 
 		if (existing) {
@@ -81,7 +81,7 @@ export function mergeAndSummarize(objects: LocalBet[]): LocalBet[] {
 			// Add new entry
 			mergedMap.set(obj.item, { ...obj });
 		}
-	});
+	}
 
 	// Convert Map back to an array
 	return Array.from(mergedMap.values());

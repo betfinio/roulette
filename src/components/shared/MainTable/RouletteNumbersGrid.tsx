@@ -1,6 +1,6 @@
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { getGridNumbers } from '@/src/lib/roulette';
-import { useGetDebugMode, usePlace, useRouletteNumbersState, useUnplace, useVisibleTable } from '@/src/lib/shared/query';
+import { useGetDebugMode, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { type FC, Fragment } from 'react';
@@ -15,7 +15,6 @@ export const RouletteNumbersGrid: FC = () => {
 	const { isNumberHovered, isNumberSelected, onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
 	const { data: isDebugMode } = useGetDebugMode();
 	const { winNumber } = useGetSelectedRound();
-	const { table } = useVisibleTable();
 
 	const numbers = getGridNumbers(isVertical);
 
