@@ -38,8 +38,11 @@ export const WheelDetails: FC = () => {
 		const winAmount = playerBets.reduce((acc, bet) => {
 			return (bet.winAmount ?? 0n) + acc;
 		}, 0n);
-		return { playerHasWon: hasWon, playerHasBets: playerBets.length, winAmount: winAmount };
-	}, [tableRoundBets, address, winNumber]);
+		const betAmount = playerBets.reduce((acc, bet) => {
+			return (bet.amount ?? 0n) + acc;
+		}, 0n);
+		return { playerHasWon: hasWon, playerHasBets: playerBets.length, winAmount: winAmount, betAmount: betAmount };
+	}, [tableRoundBets, address, winNumber, isRoundFinished]);
 
 	const handleExpiration = async () => {
 		refetchBankByRound();
@@ -68,7 +71,7 @@ export const WheelDetails: FC = () => {
 		<div className="absolute inset-0 flex items-center justify-center">
 			<motion.div
 				key="countdown"
-				className="  w-full h-full flex mt-[25%] flex-col  z-20 text-center  text-foreground    "
+				className="  w-full h-full flex mt-[15%] md:mt-[20%] flex-col  z-20 text-center  text-foreground    "
 				initial={{ opacity: 0, scale: 0.5 }}
 				animate={{ opacity: 1, scale: 1 }}
 				exit={{ opacity: 0, scale: 0.8 }}
@@ -79,7 +82,6 @@ export const WheelDetails: FC = () => {
 					<div
 						className={cn('w-1/3 flex justify-center items-center mx-auto', {
 							'mb-[5%]': !showWinNumber,
-							'mb-[2%]': showWinNumber,
 						})}
 					>
 						<RoundNumber />
@@ -88,13 +90,12 @@ export const WheelDetails: FC = () => {
 				{/* Round Number */}
 				{showWinNumber && (
 					<div className="w-[10%] flex justify-center items-center mx-auto border md:border-2 border-white/60 rounded-lg md:rounded-2xl md:mb-2">
-						<RouletteNumberIcon number={Number(winNumber)} />
+						<RouletteNumberIcon number={Number(winNumber)} className={'w-full'} />
 					</div>
 				)}
 				{/*  Waiting For Spin */}
 				{showWaitingForSpin && (
 					<div className={cn('w-1/3 flex flex-col mx-auto mb-4 ')}>
-						{/*<DynamicTextSVG text="Waiting For Spin" />*/}
 						<ManualSpin />
 					</div>
 				)}

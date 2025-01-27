@@ -27,7 +27,7 @@ import {
 	undoPlace,
 	unplace,
 } from '../api';
-import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
+import type { ChipPlaceProps, SpinParams } from '../types';
 
 export const closePaytable = (queryClient: QueryClient) => {
 	queryClient.setQueryData(['roulette', 'paytable'], false);
@@ -220,11 +220,12 @@ export const useSubmitBet = () => {
 				if (!isSingle) {
 					await queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] });
 				}
-				const allBets = queryClient.getQueryData<LocalBet[]>(['roulette', 'bets', 'all', variables.table, Number(variables.roundNumber)]) || [];
-				queryClient.setQueryData(
-					['roulette', 'bets', 'all', variables.table, Number(variables.roundNumber)],
-					[...allBets, ...variables.bets.map((bet) => ({ ...bet, player: variables.playerAddress }))],
-				);
+				// const allBets = queryClient.getQueryData<LocalBet[]>(['roulette', 'bets', 'all', variables.table, Number(variables.roundNumber)]) || [];
+				// console.log(variables.bets);
+				// queryClient.setQueryData(
+				// 	['roulette', 'bets', 'all', variables.table, Number(variables.roundNumber)],
+				// 	[...allBets, ...variables.bets.map((bet) => ({ ...bet, player: variables.playerAddress }))],
+				// );
 			}
 			if (receipt.status === 'reverted') {
 				update({
@@ -273,7 +274,6 @@ export const useAllBets = (table: Address, round: number) => {
 		queryKey: ['roulette', 'bets', 'all', table, round],
 		queryFn: () => fetchBetsBitMapAndAmountByRound(table, round),
 		refetchOnWindowFocus: false,
-		enabled: !!table,
 	});
 };
 

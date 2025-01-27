@@ -36,15 +36,23 @@ const RouletteSlider: FC<RouletteSliderProps> = ({ minPrice, maxPrice, marks, va
 	};
 
 	useEffect(() => {
-		if (value < 100_000) {
+		if (value < 10_000) {
 			setStep(minPrice);
+		} else if (value < 100_000) {
+			// round value to 100_000
+			handleSliderChange(Math.round(value / 10_000) * 10_000);
+			setStep(10_000);
 		} else if (value < 1_000_000) {
 			// round value to 100_000
 			handleSliderChange(Math.round(value / 100_000) * 100_000);
 			setStep(100_000);
+		} else if (value < 10_000_000) {
+			// round value to 100_000
+			handleSliderChange(Math.round(value / 1_000_000) * 1_000_000);
+			setStep(1_000_000);
 		} else {
-			handleSliderChange(Math.round(value / 250_000) * 250_000);
-			setStep(250_000);
+			handleSliderChange(Math.round(value / 1_000_000) * 1_000_000);
+			setStep(1_000_000);
 		}
 	}, [value]);
 
