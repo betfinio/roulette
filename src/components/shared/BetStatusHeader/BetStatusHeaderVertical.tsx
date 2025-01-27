@@ -30,12 +30,15 @@ export const BetStatusHeaderVertical: FC = () => {
 	const tablesToSwitchList = useMemo(() => {
 		if (!liveRouletteTables) return [];
 
-		return liveRouletteTables.map((table) => {
-			return {
-				address: table.address,
-				interval: `${Number(table.interval) / 60}min`,
-			};
-		});
+		return [
+			...liveRouletteTables.map((table) => {
+				return {
+					address: table.address,
+					interval: `${Number(table.interval) / 60}min`,
+				};
+			}),
+			{ address: ZeroAddress, interval: '0' },
+		];
 	}, [liveRouletteTables]);
 	const handleTableSwitch = (address: Address) => {
 		navigate({
@@ -47,19 +50,17 @@ export const BetStatusHeaderVertical: FC = () => {
 	return (
 		<div className="roulette">
 			<div id={BET_STATUS_HEADER} className="p-3 lg:p-4 mb-0 border border-border rounded-md flex bg-background-lighter items-center gap-2">
-				{!isSingle && (
-					<Dialog>
-						<DialogTrigger asChild>
-							<div className={'flex gap-2 md:gap-4 items-center cursor-pointer'}>
-								<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
-							</div>
-						</DialogTrigger>
-						<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette'} aria-describedby={undefined}>
-							<DialogTitle className={'hidden'} />
-							<SwitchModal onClick={handleTableSwitch} selected={table || ZeroAddress} tables={tablesToSwitchList} />
-						</DialogContent>
-					</Dialog>
-				)}
+				<Dialog>
+					<DialogTrigger asChild>
+						<div className={'flex gap-2 md:gap-4 items-center cursor-pointer'}>
+							<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
+						</div>
+					</DialogTrigger>
+					<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette'} aria-describedby={undefined}>
+						<DialogTitle className={'hidden'} />
+						<SwitchModal onClick={handleTableSwitch} selected={isSingle ? ZeroAddress : table} tables={tablesToSwitchList} />
+					</DialogContent>
+				</Dialog>
 				<Drawer open={showDrawer} onOpenChange={setShowDrawer}>
 					<DrawerTrigger className="flex justify-between w-full gap-4 items-center">
 						<div className="flex gap-2 items-center">

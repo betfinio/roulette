@@ -80,7 +80,7 @@ export const SubmitBet: FC = () => {
 		if (data && isSuccess) {
 			setResult?.(data);
 		}
-	}, [isSuccess, data]);
+	}, [isSuccess, data, setResult]);
 	useEffect(() => {
 		if (requested) {
 			handleSpin();
