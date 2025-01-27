@@ -90,13 +90,12 @@ export const WheelDetails: FC = () => {
 				{/* Round Number */}
 				{showWinNumber && (
 					<div className="w-[10%] flex justify-center items-center mx-auto border md:border-2 border-white/60 rounded-lg md:rounded-2xl md:mb-2">
-						<RouletteNumberIcon number={Number(winNumber)} />
+						<RouletteNumberIcon number={Number(winNumber)} className={'w-full'} />
 					</div>
 				)}
 				{/*  Waiting For Spin */}
 				{showWaitingForSpin && (
 					<div className={cn('w-1/3 flex flex-col mx-auto mb-4 ')}>
-						{/*<DynamicTextSVG text="Waiting For Spin" />*/}
 						<ManualSpin />
 					</div>
 				)}

@@ -21,7 +21,7 @@ export const BackToGame = () => {
 	};
 
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 25" fill="none" className={'border border-primary rounded-lg'}>
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 25" fill="none" className={'border border-primary rounded-lg w-full'}>
 			<text
 				id="timerText"
 				x="50%"

@@ -9,12 +9,13 @@ import {
 	useTableRounds,
 } from '@/src/lib/live-roulette/query';
 import { type PlayerInProgressBet, type PlayerRoundBets, type RoundBet, type RoundPlayerBet, WheelStatus } from '@/src/lib/live-roulette/types.ts';
+import { fetchBetBitmaps, fetchBetInfo } from '@/src/lib/shared/api';
 import { useBetInfo, useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
-import { RoundStatus } from '@/src/lib/shared/types.ts';
+import { type LocalBet, RoundStatus } from '@/src/lib/shared/types.ts';
 import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRef } from 'react';
-import { useAccount, useWatchContractEvent } from 'wagmi';
+import { useAccount, useConfig, useWatchContractEvent } from 'wagmi';
 
 function Watchers() {
 	const queryClient = useQueryClient();
@@ -28,7 +29,7 @@ function Watchers() {
 
 	const { data: rounds = [], queryKey } = useTableRounds(50, table);
 	const { data: playerRounds = [], queryKey: playerRoundsQueryKey } = useTablePlayerRounds(table);
-	const { mutateAsync: fetchBetInfo } = useBetInfo();
+	const config = useConfig();
 
 	const { data: tableSelectedRoundBets } = useGetTableSelectedRoundBets(table, visibleRound);
 	const { data: tableRoundPlayers = [], queryKey: tableRoundPlayersQueryKey } = useGetTableRoundPlayers(table, visibleRound);
@@ -132,7 +133,7 @@ function Watchers() {
 				const eventRound = log.args.round;
 				if (eventRound !== BigInt(visibleRound)) return;
 				const betAddress = log.args.bet || ZeroAddress;
-				const [player, , amount, winAmount, , created] = await fetchBetInfo(betAddress);
+				const [player, , amount, winAmount, , created] = await fetchBetInfo(config, betAddress);
 				const roundBet: RoundBet = {
 					amount: amount,
 					winAmount: winAmount,
@@ -231,6 +232,12 @@ function Watchers() {
 				}
 
 				queryClient.setQueryData(tableRoundPlayersQueryKey, updatedTableRoundPlayers);
+
+				// update roulette main table
+				const bets = await fetchBetBitmaps(config, betAddress);
+
+				const allBets = queryClient.getQueryData<LocalBet[]>(['roulette', 'bets', 'all', table, Number(eventRound)]) || [];
+				await queryClient.setQueryData(['roulette', 'bets', 'all', table, Number(eventRound)], [...allBets, ...bets]);
 			};
 			await Promise.all(logs.map(handleBetPlacedEvent));
 		},
