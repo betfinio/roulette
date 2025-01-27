@@ -58,7 +58,7 @@ export const useLocalBets = () => {
 export const useLimits = (table?: Address) => {
 	const config = useConfig();
 	return useQuery({
-		queryKey: ['roulette', 'limits'],
+		queryKey: ['roulette', 'limits', table],
 		queryFn: () => fetchLimits(config, table),
 		refetchOnWindowFocus: false,
 		enabled: !!table,
