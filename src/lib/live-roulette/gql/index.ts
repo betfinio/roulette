@@ -122,7 +122,7 @@ export const fetchLiveRouletteTables = async (): Promise<RouletteTable[]> => {
 				}
 				return false;
 			})
-			.filter((table) => BigInt(table.interval) === 90n || BigInt(table.interval) === 180n);
+			.filter((table) => (import.meta.env.PUBLIC_ENVIRONMENT === 'development' ? true : BigInt(table.interval) === 90n || BigInt(table.interval) === 180n));
 	}
 	return [];
 };

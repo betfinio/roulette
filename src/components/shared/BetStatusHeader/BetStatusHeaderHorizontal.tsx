@@ -37,10 +37,16 @@ export const BetStatusHeaderHorizontal: FC = () => {
 	}, [winningPool]);
 
 	const handleTableSwitch = (address: Address) => {
-		navigate({
-			to: '/games/roulette/live/$table',
-			params: { table: address },
-		});
+		if (address === ZeroAddress) {
+			navigate({
+				to: '/games/roulette/single',
+			});
+		} else {
+			navigate({
+				to: '/games/roulette/live/$table',
+				params: { table: address },
+			});
+		}
 	};
 
 	const tablesToSwitchList = useMemo(() => {
