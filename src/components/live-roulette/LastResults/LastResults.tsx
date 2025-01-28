@@ -14,7 +14,7 @@ export const LastResults = () => {
 	const { t } = useTranslation('roulette');
 	const { table } = useVisibleTable();
 
-	const { data: tableBets = [], isFetched: isBetsFetched } = useTableRounds(50, table);
+	const { data: tableBets = [], isFetched: isBetsFetched } = useTableRounds(table);
 	const numbers = useMemo(() => {
 		const hasBets = tableBets.length > 0;
 		const hasResults = hasBets && tableBets.some((r) => r.status === RoundStatus.FINISHED);

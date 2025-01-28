@@ -1,4 +1,4 @@
-import { useLiveRouletteTableStats, useTableRounds } from '@/src/lib/live-roulette/query';
+import { useLiveRouletteTableStats } from '@/src/lib/live-roulette/query';
 import { useVisibleTable } from '@/src/lib/shared/query';
 import { Stat } from '../shared/Stat/Stat';
 

@@ -24,7 +24,7 @@ export const AllBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const [selected, setSelected] = useState<null | PlayerBet>(null);
 	const { table } = useVisibleTable();
-	const { data: bets = [], isLoading } = useGetAllPlayersBets(50, table);
+	const { data: bets = [], isLoading } = useGetAllPlayersBets(table);
 
 	const { isVertical } = useMediaQuery();
 
