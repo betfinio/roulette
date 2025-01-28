@@ -1,4 +1,4 @@
-import { useGetSelectedRound, useLiveRouletteState, useTablePlayerRounds, useTableRounds } from '@/src/lib/live-roulette/query';
+import { useGetSelectedRound, useLiveRouletteState, useTablePlayerRounds } from '@/src/lib/live-roulette/query';
 import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { shootConfetti } from '@/src/lib/roulette/utils';
 import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';

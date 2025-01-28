@@ -27,7 +27,7 @@ function Watchers() {
 
 	const { mutateAsync: fetchTableBetsByBlockHash } = useFetchTableBetsByBlockHash();
 
-	const { data: rounds = [], queryKey } = useTableRounds(50, table);
+	const { data: rounds = [], queryKey } = useTableRounds(table);
 	const { data: playerRounds = [], queryKey: playerRoundsQueryKey } = useTablePlayerRounds(table);
 	const config = useConfig();
 

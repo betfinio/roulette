@@ -39,10 +39,10 @@ export const fetchPlayerBets = async (player: Address, table?: Address) => {
 };
 
 //this fetches all history
-export const fetchAllPlayersBets = async (last: number, table?: Address) => {
+export const fetchAllPlayersBets = async (table?: Address) => {
 	if (table === undefined) return [];
 	logger.start('fetching all bets');
-	const data: ExecutionResult<GetRouletteAllPlayerBetsQuery> = await execute(GetRouletteAllPlayerBetsDocument, { last, table });
+	const data: ExecutionResult<GetRouletteAllPlayerBetsQuery> = await execute(GetRouletteAllPlayerBetsDocument, { last: 1000, table });
 	logger.success('fetching bets by player', data.data?.roundBetPlaceds_collection.length);
 	if (data.data) {
 		return data.data.roundBetPlaceds_collection.map((bet) => {

@@ -32,10 +32,10 @@ export const useGetPlayerBets = (table?: Address) => {
 	});
 };
 
-export const useGetAllPlayersBets = (last: number, table?: Address) => {
+export const useGetAllPlayersBets = (table?: Address) => {
 	return useQuery({
 		queryKey: ['roulette', 'bets', 'player', 'all'],
-		queryFn: () => fetchAllPlayersBets(last, table),
+		queryFn: () => fetchAllPlayersBets(table),
 		refetchOnWindowFocus: false,
 		enabled: !!table,
 	});

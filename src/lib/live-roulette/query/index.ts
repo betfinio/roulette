@@ -63,13 +63,13 @@ export const useTablePlayerRounds = (table?: Address) => {
 	};
 };
 
-export const useTableRounds = (last: number, table?: Address) => {
-	const queryKey = ['roulette', 'bets', 'table', 'rounds', table, last];
+export const useTableRounds = (table?: Address) => {
+	const queryKey = ['roulette', 'bets', 'table', 'rounds', table];
 	return {
 		queryKey,
 		...useQuery({
 			queryKey,
-			queryFn: () => fetchTableBets(last, table),
+			queryFn: () => fetchTableBets(table),
 			refetchOnWindowFocus: false,
 			enabled: !!table,
 			staleTime: Number.POSITIVE_INFINITY,

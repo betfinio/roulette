@@ -17,7 +17,7 @@ export const Wheel = () => {
 	const status = wheelStateData.data.state;
 	const { table } = useVisibleTable();
 	const { roundStatusProps, winNumberProps, round: selectedRound } = useGetSelectedRound();
-	const { isFetched: isBetsFetched, data: rounds = [], queryKey: tableRoundsQueryKey } = useTableRounds(50, table);
+	const { isFetched: isBetsFetched, data: rounds = [], queryKey: tableRoundsQueryKey } = useTableRounds(table);
 	const { data: playerRounds = [], queryKey: playerRoundQueryKey } = useTablePlayerRounds(table);
 	const { refetch } = useGetTableSelectedRoundBets(table, selectedRound);
 	const lastNumber = rounds.find((tableRound) => tableRound.round === selectedRound)?.winNumber || 0;

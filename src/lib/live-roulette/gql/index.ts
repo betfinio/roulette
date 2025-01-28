@@ -43,10 +43,10 @@ export const fetchTablePlayerRounds = async (player: Address, table?: Address) =
 	return [];
 };
 
-export const fetchTableBets = async (last: number, table?: Address) => {
+export const fetchTableBets = async (table?: Address) => {
 	if (!table) return [];
 	logger.start('fetching bets by table', table);
-	const data: ExecutionResult<GetLiveRouletteTableAllBetsQuery> = await execute(GetLiveRouletteTableAllBetsDocument, { table, first: last });
+	const data: ExecutionResult<GetLiveRouletteTableAllBetsQuery> = await execute(GetLiveRouletteTableAllBetsDocument, { table, first: 1000 });
 	logger.success('fetching bets by table', data.data?.roundBetPlaceds_collection.length);
 	if (data.data) {
 		return data.data.roundBetPlaceds_collection.map((bet) => {
