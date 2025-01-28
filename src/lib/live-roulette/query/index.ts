@@ -4,7 +4,7 @@ import { useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
-import { useVisibleTable } from '../../shared/query';
+import { useVisibleRound, useVisibleTable } from '../../shared/query';
 import {
 	fetchBankByRound,
 	fetchCurrentRound,
@@ -97,7 +97,7 @@ export const useCurrentInterval = (table: Address) => {
 
 export const useCurrentRound = (table: Address) => {
 	const { data: interval = 0 } = useCurrentInterval(table);
-	return useQuery({
+	return useQuery<number>({
 		queryKey: ['roulette', table, 'currentRound'],
 		queryFn: () => fetchCurrentRound(interval),
 		refetchInterval: 300,
@@ -105,13 +105,11 @@ export const useCurrentRound = (table: Address) => {
 };
 
 export const useGetSelectedRound = () => {
-	const search = useSearch({ strict: false });
 	const { table } = useVisibleTable();
-	const { data: currentRound, ...currentRoundProps } = useGetCurrentRound(table);
+	const { round } = useVisibleRound();
+	const { data: currentRound, ...currentRoundProps } = useCurrentRound(table);
 
-	const round = search?.round ? Number(search.round) : undefined;
-
-	const isRoundFinished = Number(currentRound?.round) > Number(round);
+	const isRoundFinished = Number(currentRound) > Number(round);
 	const { data: currentRoundBank, ...bankByRoundProps } = useGetBankByRound(table, round);
 	const { data: status, ...roundStatusProps } = useGetRoundStatus(table, round);
 	const { data: winNumber = 42n, ...winNumberProps } = useGetWinNumber(table, round);
