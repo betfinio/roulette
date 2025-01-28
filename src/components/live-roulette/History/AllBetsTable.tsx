@@ -21,7 +21,7 @@ export const AllBetsTable = () => {
 	const navigate = useNavigate();
 
 	const { table = ZeroAddress } = useVisibleTable();
-	const { data: bets = [], isLoading } = useTableRounds(50, table || ZeroAddress);
+	const { data: bets = [], isLoading } = useTableRounds(table || ZeroAddress);
 	const { data: playerBets = [] } = useTablePlayerRounds(table);
 
 	const { isVertical } = useMediaQuery();
