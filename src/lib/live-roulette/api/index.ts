@@ -135,6 +135,7 @@ export const fetchRoundStatus = async (config: Config, table?: Address, round?: 
 };
 
 export const fetchWinNumber = async (config: Config, tableAddress?: Address, round?: number) => {
+	logger.start('fetchWinNumber', tableAddress, round);
 	if (!tableAddress || !round) return 42n;
 
 	const interval = await readContract(config, {
@@ -149,6 +150,7 @@ export const fetchWinNumber = async (config: Config, tableAddress?: Address, rou
 	const currentBlock = await getBlockNumber(config.getClient());
 	if (currentBlock >= endBlock) {
 		const winNumber = await fetchSelectedTableRoundWinNumer(tableAddress, round);
+		logger.success('fetchWinNumber from graph', tableAddress, round, winNumber);
 		return winNumber ?? 42n;
 	}
 
@@ -164,11 +166,13 @@ export const fetchWinNumber = async (config: Config, tableAddress?: Address, rou
 		fromBlock: startBlock,
 		toBlock: endBlock,
 	});
+	logger.success('fetchWinNumber from blockchain', tableAddress, round, randomGeneratedData);
 
 	if (randomGeneratedData.length === 0) {
 		return 42n;
 	}
-	return randomGeneratedData?.[0]?.args.value || 42n;
+	logger.success('fetchWinNumber from blockchain', tableAddress, round, randomGeneratedData[0].args.value);
+	return randomGeneratedData[0].args.value;
 };
 
 export const fetchTableInterval = async (config: Config, table?: Address) => {

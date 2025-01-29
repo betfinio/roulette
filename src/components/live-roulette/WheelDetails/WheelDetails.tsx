@@ -64,7 +64,6 @@ export const WheelDetails: FC = () => {
 	const showYouWon = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && playerStat.playerHasWon;
 
 	const showWinNumber = rouletteIsNotSpinning && isRoundFinished && winNumber !== 42n;
-
 	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning || winNumberProps.isLoading) return null;
 
 	return (
