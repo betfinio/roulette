@@ -1,3 +1,4 @@
+import logger from '@/src/config/logger';
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
 import { readContract } from '@wagmi/core';
@@ -110,6 +111,7 @@ export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Addre
 
 export const fetchBankByRound = async (config: Config, table?: Address, round?: number) => {
 	if (!table || !round) return;
+	logger.start('fetchBankByRound', table, round);
 	const roundBank = await readContract(config, {
 		abi: MultiPlayerTableABI,
 		address: table,
