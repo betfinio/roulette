@@ -185,8 +185,6 @@ export const manualSpin = async (config: Config, table: Address, round: bigint) 
 		address: PUBLIC_LIRO_ADDRESS,
 		functionName: 'spin',
 		args: [table, round],
-	}).catch((e) => {
-		console.log('error', e);
 	});
 	return writeContract(config, {
 		abi: LiveRouletteABI,
