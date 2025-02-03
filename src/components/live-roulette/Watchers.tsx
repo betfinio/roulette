@@ -132,6 +132,7 @@ function Watchers() {
 			const handleBetPlacedEvent = async (log: (typeof logs)[0]) => {
 				const eventRound = log.args.round;
 				if (eventRound !== BigInt(visibleRound)) return;
+				await queryClient.invalidateQueries({ queryKey: ['roulette', 'bank'] });
 				const betAddress = log.args.bet || ZeroAddress;
 				const [player, , amount, winAmount, , created] = await fetchBetInfo(config, betAddress);
 				const roundBet: RoundBet = {
