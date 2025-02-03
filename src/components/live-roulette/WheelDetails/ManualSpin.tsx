@@ -17,7 +17,7 @@ const ManualSpin = () => {
 			const roundEnd = roundStarted + interval;
 			const now = Date.now();
 			const diff = Math.abs(roundEnd * 1000 - now);
-			const value = (diff * 100) / 10000;
+			const value = (diff * 100) / 15000;
 			if (value <= 100) {
 				setTimer(value);
 			} else {
