@@ -12,6 +12,7 @@ jobs:
     environment: ${{ github.ref_name }}
     runs-on: ubuntu-latest
     permissions:
+      packages: read
       pull-requests: write
     steps:
       - name: Configure AWS credentials
