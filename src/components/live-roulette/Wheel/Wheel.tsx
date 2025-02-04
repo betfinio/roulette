@@ -126,7 +126,7 @@ export const Wheel = () => {
 						refetch();
 						roundStatusProps.refetch();
 						winNumberProps.refetch();
-					}, 2000);
+					}, 500);
 				});
 
 			wheelControlsWrapper.start({

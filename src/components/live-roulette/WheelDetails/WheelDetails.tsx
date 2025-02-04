@@ -70,7 +70,7 @@ export const WheelDetails: FC = () => {
 		<div className="absolute inset-0 flex items-center justify-center">
 			<motion.div
 				key="countdown"
-				className="  w-full h-full flex mt-[15%] md:mt-[20%] flex-col  z-20 text-center  text-foreground    "
+				className="w-full h-full flex mt-[15%] md:mt-[20%] flex-col  z-20 text-center  text-foreground    "
 				initial={{ opacity: 0, scale: 0.5 }}
 				animate={{ opacity: 1, scale: 1 }}
 				exit={{ opacity: 0, scale: 0.8 }}
