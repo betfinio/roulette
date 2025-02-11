@@ -11,7 +11,7 @@ import { RoundStatus } from '../../shared/types';
 import { fetchSelectedTableRoundWinNumer } from '../gql';
 import type { RoundBet, RoundPlayerBet, WheelStatus } from '../types';
 
-export const fetchCurrentRound = async (interval: number) => {
+export const fetchCurrentRound = (interval: number) => {
 	if (interval === 0) return 0;
 	return Math.floor(Date.now() / 1000 / interval);
 };
