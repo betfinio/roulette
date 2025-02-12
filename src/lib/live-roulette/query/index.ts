@@ -100,7 +100,10 @@ export const useCurrentRound = (table: Address) => {
 	return useQuery<number>({
 		queryKey: ['roulette', table, 'currentRound'],
 		queryFn: () => fetchCurrentRound(interval),
-		refetchInterval: 300,
+		refetchInterval: (query) => {
+			if (fetchCurrentRound(interval) === query.state.data) return false;
+			return 300;
+		},
 	});
 };
 
