@@ -11,8 +11,11 @@ export function IndexLiveRoulette() {
 	const navigate = useNavigate();
 	useEffect(() => {
 		if (tables.length > 0) {
-			navigate({ to: '/games/roulette/live/$table', params: { table: tables[tables.length - 1].address } });
+			navigate({
+				to: '/games/roulette/live/$table',
+				params: { table: tables[tables.length - 1].address },
+			});
 		}
 	}, [tables]);
-	return <div>Loading...</div>;
+	return null;
 }
