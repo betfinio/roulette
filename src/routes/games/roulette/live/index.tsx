@@ -3,10 +3,10 @@ import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
 export const Route = createFileRoute('/games/roulette/live/')({
-	component: RouteComponent,
+	component: IndexLiveRoulette,
 });
 
-function RouteComponent() {
+export function IndexLiveRoulette() {
 	const { data: tables = [] } = useGetLiveRouletteTables();
 	const navigate = useNavigate();
 	useEffect(() => {
