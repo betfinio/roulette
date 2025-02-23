@@ -14,15 +14,24 @@ const liveRouletteSchema = z.object({
 	round: fallback(z.number().optional(), undefined),
 });
 
+export const validateSearch = zodValidator(liveRouletteSchema);
+
+export const loaderDeps = ({ search }: { search: { round?: number | undefined } }) => {
+	if (search?.round) {
+		return { round: search.round };
+	}
+	return {};
+};
+
+export const onError: (e: Error) => void = (e) => {
+	console.error(e, 'my error');
+	throw redirect({ to: '/games/roulette' });
+};
+
 export const Route = createFileRoute('/games/roulette/live/$table')({
 	component: RouletteLiveTable,
-	validateSearch: zodValidator(liveRouletteSchema),
-	loaderDeps: ({ search }) => {
-		if (search?.round) {
-			return { round: search.round };
-		}
-		return {};
-	},
+	validateSearch,
+	loaderDeps,
 	loader: async ({ params, context, deps }) => {
 		const isValidAddress = isAddress(params.table);
 		if (!isValidAddress) {
@@ -44,11 +53,10 @@ export const Route = createFileRoute('/games/roulette/live/$table')({
 			});
 		}
 	},
-	onError: (e) => {
-		console.error(e, 'my error');
-		throw redirect({ to: '/games/roulette' });
-	},
+	onError,
 });
+
+export const loader = Route.options.loader;
 
 export function RouletteLiveTable() {
 	return (
