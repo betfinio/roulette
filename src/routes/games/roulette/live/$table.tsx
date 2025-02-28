@@ -3,6 +3,7 @@ import { LiveRoulette } from '@/src/components/live-roulette/LiveRoulette';
 import Watchers from '@/src/components/live-roulette/Watchers.tsx';
 import { PUBLIC_BRANCH, PUBLIC_DEPLOYED } from '@/src/global';
 import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
+import { fetchLiveRouletteTables } from '@/src/lib/live-roulette/gql';
 import { fetchTableByAddress } from '@/src/lib/shared/api';
 import { Toaster } from '@betfinio/components/ui';
 import { createFileRoute, redirect } from '@tanstack/react-router';
@@ -35,7 +36,14 @@ export const Route = createFileRoute('/games/roulette/live/$table')({
 	loader: async ({ params, context, deps }) => {
 		const isValidAddress = isAddress(params.table);
 		if (!isValidAddress) {
-			throw redirect({ to: '/games/roulette' });
+			// check if table is interval (number of seconds)
+			const interval = Number(params.table);
+			const tables = await fetchLiveRouletteTables();
+			const table = tables.find((table) => Number(table.interval) === interval);
+			if (table) {
+				throw redirect({ to: '/games/roulette/live/$table', params: { table: table.address } });
+			}
+			throw redirect({ to: '/games/roulette/live' });
 		}
 
 		const isTableExist = await fetchTableByAddress(context.wagmiConfig, params.table as Address);
