@@ -16,6 +16,6 @@ export function IndexLiveRoulette() {
 				params: { table: tables[tables.length - 1].address },
 			});
 		}
-	}, [tables]);
+	}, [tables, navigate]);
 	return null;
 }
