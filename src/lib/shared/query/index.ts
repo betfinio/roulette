@@ -254,7 +254,7 @@ export const useVisibleTable = () => {
 };
 
 export const useVisibleRound = () => {
-	const search = useSearch({ strict: false });
+	const search: { round: number } = useSearch({ strict: false });
 
 	return { round: search?.round ? Number(search.round) : 0 };
 };
