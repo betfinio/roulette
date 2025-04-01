@@ -4,7 +4,7 @@ import * as i18 from 'i18next';
 import I18nextBrowserLanguageDetector from 'i18next-browser-languagedetector';
 import ICU from 'i18next-icu';
 import { initReactI18next } from 'react-i18next';
-import czJSON from './translations/cz/roulette.json';
+import csJSON from './translations/cs/roulette.json';
 import enJSON from './translations/en/roulette.json';
 import ruJSON from './translations/ru/roulette.json';
 
@@ -19,7 +19,7 @@ export const resources = {
 		shared: sharedLang.ru,
 	},
 	cs: {
-		roulette: czJSON,
+		roulette: csJSON,
 		shared: sharedLang.cs,
 	},
 } as const;
