@@ -16,7 +16,7 @@
 	},
 	"dependencies": {
 		"@betfinio/abi": "^2.3.4",
-		"@betfinio/components": "^1.5.12",
+		"@betfinio/components": "^1.8.0-dev.8",
 		"@module-federation/enhanced": "^0.8.9",
 		"@tanstack/react-query": "^5.66.0",
 		"@tanstack/react-router": "^1.99.0",

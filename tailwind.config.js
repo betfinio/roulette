@@ -10,7 +10,6 @@ module.exports = {
 	theme: {
 		extend: {
 			colors: {
-				ring: 'hsl(var(--ring))',
 				black: {
 					roulette: 'hsl(var(--black-roulette))',
 				},
