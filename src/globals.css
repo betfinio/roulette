@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-	:root {
+	* {
 		--spinningAnimationSpeed: 30s;
 		--spinningSpeed: 9s;
 
@@ -20,12 +20,6 @@
 		--gold: 46 93% 46%;
 		--silver: 218 10% 63%;
 		--bronze: 27 89% 59%;
-		--border-primary: 226 33% 12%;
-		--bg-primary: 232 27% 22%;
-		--bg-sec: 229 31% 11%;
-		--bg-lighter: 231 40% 17%;
-		--bg-darker: 227 32% 9%;
-		--text-gray: 228 11% 47%;
 	}
 }
 
