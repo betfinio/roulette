@@ -12,7 +12,7 @@ export const BetDetails = () => {
 					<TabsTrigger value={'bets'}>{t('bets')}</TabsTrigger>
 					<TabsTrigger value={'players'}>{t('players')}</TabsTrigger>
 				</TabsList>
-				<div className="flex-grow ">
+				<div className="grow ">
 					<div className="h-full relative">
 						<div className="absolute inset-0">
 							<TabsContent value={'players'} className={'max-h-full overflow-y-auto overflow-x-hidden '}>

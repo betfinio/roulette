@@ -1,7 +1,8 @@
 import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
 import { shootConfetti } from '@/src/lib/roulette/utils';
 import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
-import { useMediaQuery, useToast } from '@betfinio/components/hooks';
+import { useMediaQuery } from '@betfinio/components/hooks';
+import { toast } from '@betfinio/components/ui';
 import { useEffect, useRef } from 'react';
 import type { Address } from 'viem';
 import { RouletteResultToast } from '../RouletteResultToast';
@@ -11,7 +12,6 @@ import { VerticalRoulette } from './VerticalRoulette';
 
 export const Roulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
-	const { toast } = useToast();
 	const { table } = useVisibleTable();
 	const { scrollToHeader } = useScrollToHeader();
 
@@ -20,13 +20,11 @@ export const Roulette = () => {
 	const { state: wheelStateData } = useRouletteState();
 	const status = wheelStateData.data.state;
 
-	const lastShownBet = useRef<Address>();
-	const lastStatus = useRef<typeof status>();
+	const lastShownBet = useRef<Address>(undefined);
+	const lastStatus = useRef<typeof status>(undefined);
 	useEffect(() => {
 		if (status === 'landed' && bets[0].bet.toLowerCase() !== lastShownBet.current?.toLowerCase()) {
-			toast({
-				component: <RouletteResultToast rouletteBet={bets[0]} />,
-			});
+			toast.success(<RouletteResultToast rouletteBet={bets[0]} />);
 
 			const hasWon = bets[0].amount < bets[0].winAmount;
 			hasWon && shootConfetti();

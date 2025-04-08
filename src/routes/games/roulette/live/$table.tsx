@@ -5,7 +5,7 @@ import { PUBLIC_BRANCH, PUBLIC_DEPLOYED } from '@/src/global';
 import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
 import { fetchLiveRouletteTables } from '@/src/lib/live-roulette/gql';
 import { fetchTableByAddress } from '@/src/lib/shared/api';
-import { Toaster } from '@betfinio/components/ui';
+import { SonnerToaster } from '@betfinio/components/ui';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { type Address, isAddress } from 'viem';
@@ -65,7 +65,7 @@ export function RouletteLiveTable() {
 		<div className="roulette">
 			<Watchers />
 			<LiveRoulette />
-			<Toaster />
+			<SonnerToaster />
 			<VersionValidation repository={'roulette'} branch={PUBLIC_BRANCH} current={PUBLIC_DEPLOYED} />
 		</div>
 	);

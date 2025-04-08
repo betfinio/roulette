@@ -3,7 +3,7 @@ import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { useState } from 'react';
 import Racetrack from './Racetrack';
 

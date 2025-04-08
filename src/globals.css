@@ -1,26 +1,46 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "@betfinio/components/globals.css";
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@config '../tailwind.config.ts';
+
+@theme {
+	--color-bonus: var(--bonus);
+	--color-primary: var(--primary);
+	--color-muted: var(--muted);
+	--color-success: var(--success);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-foreground: var(--foreground);
+}
 
 @layer base {
-	* {
-		--spinningAnimationSpeed: 30s;
-		--spinningSpeed: 9s;
-
-		--green: 153 54% 48%;
-		--orange: 0 86% 68%;
-		--red: 346 71% 54%;
-		--black: 199 21% 15%;
-		--purple: 300 100% 32%;
-		--purple-lighter: 291 81% 71%;
-		--yellow: 47 100% 50%;
-		--blue: 195 100% 46%;
-		--blue-purple: 233 82% 71%;
-		--blue-shiny: 245 100% 70%;
-		--gold: 46 93% 46%;
-		--silver: 218 10% 63%;
-		--bronze: 27 89% 59%;
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-border, currentcolor);
 	}
+}
+
+:root {
+	--spinningAnimationSpeed: 30s;
+	--spinningSpeed: 9s;
+
+	--green: hsl(153 54% 48%);
+	--orange: hsl(0 86% 68%);
+	--red: hsl(346 71% 54%);
+	--black: hsl(199 21% 15%);
+	--purple: hsl(300 100% 32%);
+	--purple-lighter: hsl(291 81% 71%);
+	--yellow: hsl(47 100% 50%);
+	--blue: hsl(195 100% 46%);
+	--blue-purple: hsl(233 82% 71%);
+	--blue-shiny: hsl(245 100% 70%);
+	--gold: hsl(46 93% 46%);
+	--silver: hsl(218 10% 63%);
+	--bronze: hsl(27 89% 59%);
+	--wheel-shadow: rgba(0, 172, 231, 0.45);
 }
 
 @layer base {

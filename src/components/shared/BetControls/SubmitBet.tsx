@@ -5,9 +5,8 @@ import { getRequiredAllowance } from '@/src/lib/shared/api';
 import { useLocalBets, useSubmitBet, useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
-import { useToast } from '@betfinio/components/hooks';
 import { BetValue } from '@betfinio/components/shared';
-import { Button } from '@betfinio/components/ui';
+import { Button, toast } from '@betfinio/components/ui';
 import { useAllowanceModal } from 'betfinio_context/lib/context';
 import { useAllowance, useIsMember } from 'betfinio_context/lib/query';
 import * as _ from 'lodash';
@@ -18,7 +17,6 @@ import { useAccount } from 'wagmi';
 
 export const SubmitBet: FC = () => {
 	const { t } = useTranslation('roulette');
-	const { toast } = useToast();
 
 	const { isSingle, table } = useVisibleTable();
 	const { data: currentRound = 0 } = useCurrentRound(table);
@@ -44,17 +42,11 @@ export const SubmitBet: FC = () => {
 
 	const handleSpin = () => {
 		if (address === ZeroAddress) {
-			toast({
-				description: t('pleaseConnectYourWallet'),
-				variant: 'destructive',
-			});
+			toast.error(t('pleaseConnectYourWallet'));
 			return;
 		}
 		if (!isMember) {
-			toast({
-				description: t('connectedWalletIsNotMember'),
-				variant: 'destructive',
-			});
+			toast.error(t('connectedWalletIsNotMember'));
 			return;
 		}
 
@@ -62,10 +54,7 @@ export const SubmitBet: FC = () => {
 		if (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested) return;
 
 		if (valueToNumber(allowance) < Number(getRequiredAllowance())) {
-			toast({
-				description: t('pleaseIncreaseAllowance'),
-				variant: 'destructive',
-			});
+			toast.error(t('pleaseIncreaseAllowance'));
 			requestAllowance?.('bet', BigInt(getRequiredAllowance()) * 10n ** 18n);
 			return;
 		}

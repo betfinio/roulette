@@ -13,7 +13,7 @@ export const Totals = () => {
 	return (
 		<div className="bg-card p-4 flex justify-between border border-border rounded-lg    ">
 			<div>
-				<div className="font-semibold text-secondary-foreground">
+				<div className="font-semibold text-primary">
 					<BetValue withIcon value={totalBets} />
 				</div>
 			</div>

@@ -7,7 +7,7 @@ import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
 import { Fox } from '@betfinio/ui';
 import { useCustomUsername, useUsername } from 'betfinio_context/lib/query';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
@@ -54,7 +54,7 @@ export const PlayersTabItem: FC<IPlayersTabItemProps> = ({ playerRoundBets }) =>
 							target={'_blank'}
 							className={cn(
 								'font-semibold text-sm text-tertiary-foreground hover:underline',
-								playerRoundBets.player.toLowerCase() === address?.toLowerCase() && '!text-secondary-foreground',
+								playerRoundBets.player.toLowerCase() === address?.toLowerCase() && 'text-primary!',
 							)}
 							rel="noreferrer"
 						>

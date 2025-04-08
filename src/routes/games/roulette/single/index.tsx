@@ -3,7 +3,7 @@ import { Roulette } from '@/src/components/roulette/Roulette';
 import { PUBLIC_BRANCH, PUBLIC_DEPLOYED, PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { useFetchTableBetByBlockHash, useRouletteState } from '@/src/lib/roulette/query';
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
-import { Toaster } from '@betfinio/components/ui';
+import { SonnerToaster } from '@betfinio/components/ui';
 import { createFileRoute } from '@tanstack/react-router';
 import { useAccount, useWatchContractEvent } from 'wagmi';
 
@@ -50,7 +50,7 @@ export function RoulettePage() {
 	return (
 		<div className="roulette">
 			<Roulette />
-			<Toaster />
+			<SonnerToaster />
 			<VersionValidation repository={'roulette'} branch={PUBLIC_BRANCH} current={PUBLIC_DEPLOYED} />
 		</div>
 	);

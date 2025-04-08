@@ -37,15 +37,12 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 					{numbersTop.map((num) => (
 						<div
 							key={num}
-							className={cn(
-								'w-7 h-7  outline outline-transparent transition-all duration-300 outline-2  flex items-center justify-center text-xs rounded-md ',
-								{
-									'outline-bonus': isNumberHovered(num),
-									'bg-red-roulette': getColor(num) === 'RED',
-									'bg-black-roulette': getColor(num) === 'BLACK',
-									'bg-green-roulette': getColor(num) === 'GREEN',
-								},
-							)}
+							className={cn('w-7 h-7  outline-transparent transition-all duration-300 outline-2  flex items-center justify-center text-xs rounded-md ', {
+								'outline-bonus': isNumberHovered(num),
+								'bg-red-roulette': getColor(num) === 'RED',
+								'bg-black-roulette': getColor(num) === 'BLACK',
+								'bg-green-roulette': getColor(num) === 'GREEN',
+							})}
 						>
 							{num}
 						</div>
@@ -73,7 +70,7 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 									});
 									onPlace?.();
 								}}
-								className={'!border-none w-fit relative   h-4 cursor-pointer'}
+								className={'border-none w-fit relative h-4 cursor-pointer'}
 							/>
 						))}
 					</div>

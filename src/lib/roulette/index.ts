@@ -15,12 +15,12 @@ export const getRed = () => {
 };
 
 export const getChipColor = (value: number) => {
-	if (value <= 10000) return 'hsl(var(--blue-purple))';
-	if (value <= 25000) return 'hsl(var(--purple-lighter))';
-	if (value <= 100_000) return 'hsl(var(--green))';
-	if (value <= 500_000) return 'hsl(var(--orange))';
-	if (value <= 2000000) return 'hsl(var(--yellow))';
-	return 'hsl(var(--blue))';
+	if (value <= 10000) return 'var(--blue-purple)';
+	if (value <= 25000) return 'var(--purple-lighter)';
+	if (value <= 100_000) return 'var(--green)';
+	if (value <= 500_000) return 'var(--orange)';
+	if (value <= 2000000) return 'var(--yellow)';
+	return 'var(--blue)';
 };
 
 export const getGridNumbers = (isVertical: boolean): string[] => {

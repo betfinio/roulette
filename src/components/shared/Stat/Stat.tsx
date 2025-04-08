@@ -2,8 +2,8 @@ import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import type { IRouletteStat } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
-import { motion } from 'framer-motion';
 import { CircleHelp } from 'lucide-react';
+import { motion } from 'motion/react';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -52,8 +52,8 @@ export const Stat: FC<IStatProps> = ({ tableOrPlayerStat, isLoading }) => {
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
-			className={cn('bg-card mt-4 p-2 rounded-lg border w-[122px] h-[286px] flex flex-col items-center  border-border tabular-nums flex-shrink-0 gap-2', {
-				'animate-pulse blur-sm': isLoading,
+			className={cn('bg-card mt-4 p-2 rounded-lg border w-[122px] h-[286px] flex flex-col items-center  border-border tabular-nums shrink-0 gap-2', {
+				'animate-pulse blur-xs': isLoading,
 			})}
 		>
 			<motion.div {...SLIDE_DOWN_ANIMATION} className="text-center mb-2">

@@ -58,7 +58,7 @@ export const MyBetsTable = () => {
 			cell: (props) => (
 				<span
 					className={cn({
-						'text-secondary-foreground': true,
+						'text-primary': true,
 					})}
 				>
 					#{props.getValue()}

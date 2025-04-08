@@ -49,7 +49,7 @@ export const AllBetsTable = () => {
 			cell: (props) => (
 				<span
 					className={cn({
-						'text-secondary-foreground': !!playerRounds[props.row.original.round],
+						'text-primary': !!playerRounds[props.row.original.round],
 					})}
 				>
 					#{props.getValue()}

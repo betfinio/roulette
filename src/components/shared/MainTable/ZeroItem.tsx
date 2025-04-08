@@ -27,7 +27,7 @@ export const ZeroItem: FC = () => {
 				{
 					'border-bonus': isNumberHovered(0) && !isDebugMode,
 					'border-muted/50 ': !isNumberHovered(0) && isDebugMode,
-					'border-secondary-foreground': isNumberSelected(0),
+					'border-primary': isNumberSelected(0),
 				},
 			)}
 			onHoverNumbers={onHoverNumbers}
