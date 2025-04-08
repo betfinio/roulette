@@ -1,4 +1,4 @@
-import { Roulette } from '@betfinio/ui/dist/icons';
+import { Roulette } from '@betfinio/components/icons';
 
 import { AlertCircle, ChartBarIcon, CircleAlert, CircleHelp, Menu } from 'lucide-react';
 import { type FC, useMemo, useState } from 'react';
