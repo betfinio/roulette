@@ -72,7 +72,7 @@ export const BetStatusHeaderVertical: FC = () => {
 						<div className="flex gap-2 items-center">
 							<Roulette className={'w-8 h-8 aspect-square text-primary'} />
 							<div className="flex flex-col items-start">
-								<div className={'leading-2'}>{isSingle ? t('roulette') : t('liveRoulette')}</div>
+								<div className={'leading-none'}>{isSingle ? t('roulette') : t('liveRoulette')}</div>
 								<div className={'text-xs'}>{isSingle ? t('singlePlayer') : `${Number(currentInterval) / 60}min`}</div>
 							</div>
 						</div>
