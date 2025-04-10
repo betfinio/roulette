@@ -35,7 +35,7 @@ const ManualSpin = () => {
 
 	if (timer >= 0) {
 		return (
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 35" fill="none" className={'text-secondary-foreground rounded-lg'}>
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 35" fill="none" className={'text-primary rounded-lg'}>
 				<text id="timerText" x="50%" y="15%" textAnchor="middle" fill={'currentColor'} className="text-[10px] cursor-pointer" dy=".3em">
 					Waiting for spin
 				</text>

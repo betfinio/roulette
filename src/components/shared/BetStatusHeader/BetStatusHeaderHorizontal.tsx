@@ -77,8 +77,8 @@ export const BetStatusHeaderHorizontal: FC = () => {
 							<DialogTitle className={'hidden'} />
 							<SwitchModal onClick={handleTableSwitch} selected={isSingle ? ZeroAddress : table} tables={tablesToSwitchList} />
 						</DialogContent>
-						<Roulette className={'w-8 h-8 text-secondary-foreground'} />
-						<div className={'leading-1'}>
+						<Roulette className={'w-8 h-8 text-primary'} />
+						<div className={''}>
 							<div>{isSingle ? t('roulette') : t('liveRoulette')}</div>
 							<div>
 								<DialogTrigger className={'text-sm flex items-center gap-1'}>
@@ -122,7 +122,7 @@ export const BetStatusHeaderHorizontal: FC = () => {
 					onClick={handleReport}
 					variant={'link'}
 					size="freeSize"
-					className={'flex-col text-secondary-foreground  text-xs flex justify-start font-normal items-center  '}
+					className={'flex-col text-primary  text-xs flex justify-start font-normal items-center  '}
 				>
 					<CircleAlert className={'w-6 h-6'} />
 					<div>{t('report')}</div>

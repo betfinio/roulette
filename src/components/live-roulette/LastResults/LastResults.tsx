@@ -4,8 +4,8 @@ import { useVisibleTable } from '@/src/lib/shared/query';
 import { RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
-import { motion } from 'framer-motion';
 import { CircleHelp } from 'lucide-react';
+import { motion } from 'motion/react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LastResultRow } from '../../shared/LastResultRow';
@@ -37,7 +37,7 @@ export const LastResults = () => {
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
-			className={'bg-card rounded-lg p-2 mt-4 border border-border flex-shrink-0'}
+			className={'bg-card rounded-lg p-2 mt-4 border border-border shrink-0'}
 		>
 			<h3 className="text-foreground flex justify-center gap-1 text-xs font-medium mb-1">
 				{t('lastResults')}
@@ -50,7 +50,7 @@ export const LastResults = () => {
 					</Tooltip>
 				</TooltipProvider>
 			</h3>
-			<div className={cn('grid grid-cols-3 grid-rows-7 gap-1', { 'blur-sm animate-pulse': !isBetsFetched })}>
+			<div className={cn('grid grid-cols-3 grid-rows-7 gap-1', { 'blur-xs animate-pulse': !isBetsFetched })}>
 				{lastSeven.map((result, index) => (
 					<LastResultRow result={result} key={index} index={index} />
 				))}

@@ -1,24 +1,19 @@
-import preset from '@betfinio/components/tailwind-config';
-import animate from 'tailwindcss-animate';
-
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-	presets: [preset],
+export default {
 	darkMode: ['class'],
 	important: '.roulette',
 	content: ['./src/**/*.{ts,tsx}'],
 	theme: {
 		extend: {
 			colors: {
-				ring: 'hsl(var(--ring))',
 				black: {
-					roulette: 'hsl(var(--black-roulette))',
+					roulette: 'var(--black-roulette)',
 				},
 				green: {
-					roulette: 'hsl(var(--green-roulette))',
+					roulette: 'var(--green-roulette)',
 				},
 				red: {
-					roulette: 'hsl(var(--red-roulette))',
+					roulette: 'var(--red-roulette)',
 				},
 			},
 			keyframes: {
@@ -40,5 +35,4 @@ module.exports = {
 			},
 		},
 	},
-	plugins: [animate],
 };

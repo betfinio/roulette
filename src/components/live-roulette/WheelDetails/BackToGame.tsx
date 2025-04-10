@@ -27,7 +27,7 @@ export const BackToGame = () => {
 				x="50%"
 				y="50%"
 				textAnchor="middle"
-				className="fill-foreground hover:fill-secondary-foreground text-xs cursor-pointer"
+				className="fill-foreground hover:fill-primary text-xs cursor-pointer"
 				dy=".3em"
 				onClick={handleClick}
 			>

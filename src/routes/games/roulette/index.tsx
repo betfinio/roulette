@@ -1,7 +1,16 @@
-import { createFileRoute, redirect } from '@tanstack/react-router';
+import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { useEffect } from 'react';
 
 export const Route = createFileRoute('/games/roulette/')({
-	beforeLoad: () => {
-		throw redirect({ to: '/games/roulette/live' });
-	},
+	component: RouletteRedirect,
 });
+
+function RouletteRedirect() {
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		navigate({ to: '/games/roulette/live' });
+	}, [navigate]);
+
+	return null;
+}

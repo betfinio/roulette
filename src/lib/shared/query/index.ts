@@ -1,7 +1,7 @@
 import { BET_STATUS_HEADER } from '@/src/components/shared/BetStatusHeader/BetStatusHeader';
 import logger from '@/src/config/logger';
 import { fetchBetsBitMapAndAmountByRound } from '@/src/lib/shared/gql';
-import { toast } from '@betfinio/components/hooks';
+import { toast } from '@betfinio/components/ui';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams, useSearch } from '@tanstack/react-router';
 import { getTransactionLink } from 'betfinio_context/lib/helpers';
@@ -80,11 +80,7 @@ export const usePlace = () => {
 		mutationKey: ['roulette', 'place'],
 		mutationFn: (e) => place(e, chip, t),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
-		onError: (e) =>
-			toast({
-				variant: 'destructive',
-				description: e.message,
-			}),
+		onError: (e) => toast.error(e.message),
 	});
 };
 export const useUnplace = () => {
@@ -93,7 +89,7 @@ export const useUnplace = () => {
 		mutationKey: ['roulette', 'unplace'],
 		mutationFn: (e) => unplace(e),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
-		onError: (e) => toast({ variant: 'destructive', description: e.message }),
+		onError: (e) => toast.error(e.message),
 	});
 };
 export const useDoublePlace = () => {
@@ -199,34 +195,24 @@ export const useSubmitBet = () => {
 				}
 
 				// @ts-ignore
-				toast({ variant: 'destructive', description: errors(e.cause?.reason, { defaultValue: t(`errors.${e.cause?.reason}`) }) });
-				// @ts-ignore
+				toast.error(errors(e.cause?.reason, { defaultValue: t(`errors.${e.cause?.reason}`) }));
 			} else {
-				toast({ variant: 'destructive', description: errors('unknown') });
+				toast.error(errors('unknown'));
 			}
 		},
 		onSuccess: async (data, variables) => {
-			const { update, id } = toast({
-				title: t('placingBet'),
-				description: t('transactionIsPending'),
-				variant: 'loading',
-				duration: 10000,
+			const promise = async () => {
+				const receipt = await waitForTransactionReceipt(config.getClient(), { hash: data });
+				if (receipt.status !== 'success') {
+					throw new Error('Transaction failed');
+				}
+			};
+			toast.promise(promise, {
+				loading: t('placingBet'),
+				success: t('transactionIsConfirmed'),
+				error: t('betWasNotAccepted'),
+				action: getTransactionLink(data),
 			});
-			const receipt = await waitForTransactionReceipt(config.getClient(), { hash: data });
-
-			if (receipt.status === 'success') {
-				update({ id, variant: 'default', description: t('transactionIsConfirmed'), title: t('betPlaced'), action: getTransactionLink(data), duration: 3000 });
-			}
-			if (receipt.status === 'reverted') {
-				update({
-					id,
-					variant: 'destructive',
-					description: t('betWasNotAccepted'),
-					title: t('betNotPlaced'),
-					action: getTransactionLink(data),
-					duration: 3000,
-				});
-			}
 		},
 	});
 };

@@ -7,9 +7,9 @@ import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue } from '@betfinio/components/shared';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@betfinio/components/ui';
-import { motion } from 'framer-motion';
 import { ShieldCheckIcon, X } from 'lucide-react';
 import { DateTime } from 'luxon';
+import { motion } from 'motion/react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address } from 'viem';
@@ -72,7 +72,7 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 				<div className={'flex items-center justify-center gap-3'}>
 					<div
 						className={cn('font-semibold text-4xl text-tertiary-foreground flex gap-2', {
-							'!text-green-roulette': valueToNumber(selectedBet?.winAmount) > 0,
+							'text-green-roulette!': valueToNumber(selectedBet?.winAmount) > 0,
 						})}
 					>
 						{valueToNumber(selectedBet?.winAmount ?? 0n) > 0 && '+'}
@@ -115,7 +115,7 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 				<div className={'text-center'}>{t('betID')}</div>
 				<a
 					href={`${ETHSCAN}/address/${selectedBet?.bet}`}
-					className={'block text-center underline cursor-pointer hover:text-secondary-foreground duration-300 px-4 '}
+					className={'block text-center underline cursor-pointer hover:text-primary duration-300 px-4 '}
 					target={'_blank'}
 					rel="noreferrer"
 				>
@@ -133,7 +133,7 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 				<a
 					href={`${ETHSCAN}/tx/${transactionHash}`}
 					target={'_blank'}
-					className={cn('block text-center underline cursor-pointer hover:text-secondary-foreground duration-300', {
+					className={cn('block text-center underline cursor-pointer hover:text-primary duration-300', {
 						blur: isLoading,
 					})}
 					rel="noreferrer"

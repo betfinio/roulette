@@ -6,9 +6,9 @@ import { RoundStatus } from '@/src/lib/shared/types';
 import { truncateEthAddress, valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
+import { Fox } from '@betfinio/components/icons';
 import { BetValue, DataTable } from '@betfinio/components/shared';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
-import Fox from '@betfinio/ui/dist/icons/Fox';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { Search } from 'lucide-react';
 import { DateTime } from 'luxon';
@@ -22,6 +22,7 @@ const columnHelper = createColumnHelper<PlayerBet>();
 
 export const AllBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
+	const { t: tShared } = useTranslation('shared', { keyPrefix: 'tables' });
 	const [selected, setSelected] = useState<null | PlayerBet>(null);
 	const { table } = useVisibleTable();
 	const { data: bets = [], isLoading } = useGetAllPlayersBets(table);
@@ -122,7 +123,7 @@ export const AllBetsTable = () => {
 				</DialogContent>
 			</Dialog>
 
-			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="h-[285px]" />
+			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="h-[285px]" t={tShared} />
 		</div>
 	);
 };

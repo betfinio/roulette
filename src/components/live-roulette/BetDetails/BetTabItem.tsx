@@ -4,7 +4,7 @@ import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
 import { useCustomUsername, useUsername } from 'betfinio_context/lib/query';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import type { FC } from 'react';
 import { useAccount } from 'wagmi';
 
@@ -32,9 +32,9 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet, showWinnders, index }) => {
 			exit={{ opacity: 0, y: 10 }}
 			className={cn('rounded-lg flex justify-between', {
 				'bg-background': !isWinnerCard,
-				'bg-gradient-to-r from-primary/50 via-primaryLight to-transparent border-primary border': index === 0 && isWinnerCard,
-				'bg-gradient-to-r from-tertiary-foreground/20 via-primaryLight to-transparent border-tertiary-foreground border': index === 1 && isWinnerCard,
-				'bg-gradient-to-r from-orange-600/50 via-primaryLight to-transparent border-orange-600 border ': index === 2 && isWinnerCard,
+				'bg-linear-to-r from-primary/50 via-primaryLight to-transparent border-primary border': index === 0 && isWinnerCard,
+				'bg-linear-to-r from-tertiary-foreground/20 via-primaryLight to-transparent border-tertiary-foreground border': index === 1 && isWinnerCard,
+				'bg-linear-to-r from-orange-600/50 via-primaryLight to-transparent border-orange-600 border ': index === 2 && isWinnerCard,
 			})}
 		>
 			<div className={'py-3 px-2 flex justify-between items-center grow gap-2'}>
@@ -47,7 +47,7 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet, showWinnders, index }) => {
 								'font-semibold text-sm text-tertiary-foreground hover:underline',
 
 								{
-									'!text-secondary-foreground': bet.player.toLowerCase() === address?.toLowerCase(),
+									'text-primary!': bet.player.toLowerCase() === address?.toLowerCase(),
 									'text-tertiary-foreground ': !isWinnerCard,
 									'text-foreground ': isWinnerCard,
 								},

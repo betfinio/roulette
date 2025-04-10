@@ -15,7 +15,7 @@ export const WinAmountCell: FC<WinAmountCellProps> = ({ amount, inProgress }) =>
 		return <span className="text-tertiary-foreground">{t('table.waiting')}</span>;
 	}
 	return (
-		<span className={cn('font-semibold text-tertiary-foreground', amount > 0n && '!text-success')}>
+		<span className={cn('font-semibold text-tertiary-foreground', amount > 0n && 'text-success')}>
 			<BetValue value={valueToNumber(amount)} />
 		</span>
 	);

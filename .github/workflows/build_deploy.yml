@@ -5,60 +5,101 @@ on:
     branches:
       - prod/*
       - dev
+      - inlang
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: read
+  id-token: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: 20
 
 jobs:
-  build:
-    name: build
+  setup:
+    name: Setup and Build
+    if: github.ref_name != 'inlang'
     environment: ${{ github.ref_name }}
     runs-on: ubuntu-latest
-    permissions:
-      packages: read
-      pull-requests: write
     steps:
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@4fc4975a852c8cd99761e2de1f4ba73402e44dd9 # v4.0.3
+        uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
+      
       - name: Fetch variables
-        uses: aws-actions/aws-secretsmanager-get-secrets@1d6311ab61b4856de027ff508aac818ddc1e141b #v2.0.7
+        uses: aws-actions/aws-secretsmanager-get-secrets@v2
         with:
           secret-ids: |
             ,${{ secrets.AWS_ENVIRONMENT }}
             ,${{ github.ref_name }}
           parse-json-secrets: true
+      
       - name: Checkout
         uses: actions/checkout@v4
+      
       - name: Setup Bun
-        uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2.0.1
+        uses: oven-sh/setup-bun@v2
         with:
           registry-url: "https://npm.pkg.github.com"
           scope: '@betfinio'
           bun-version: latest
+      
       - name: Install dependencies
         run: bun install
         env:
           BUN_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Build
         env:
           PUBLIC_OUTPUT_URL: https://${{secrets.AWS_BUCKET}}
           PUBLIC_BRANCH: ${{ github.ref_name }}
           PUBLIC_DEPLOYED: ${{ github.sha }}
         run: bun run build --env-mode ${{ secrets.AWS_ENVIRONMENT }}
-      - name: Deploy
-        run: |
-          aws s3 cp ./dist s3://${{secrets.AWS_BUCKET}} --cache-control 'public, max-age=0' --recursive
+      
+      - name: Deploy to S3
+        run: aws s3 cp ./dist s3://${{secrets.AWS_BUCKET}} --cache-control 'public, max-age=0' --recursive
+      
       - name: Invalidate CloudFront
-        run: |
-          aws cloudfront create-invalidation --distribution-id ${{secrets.AWS_DISTRIBUTION_ID}} --paths '/*'
-      - name: Release
-        if: ${{github.ref_name == 'dev'}}
-        continue-on-error: true
+        run: aws cloudfront create-invalidation --distribution-id ${{secrets.AWS_DISTRIBUTION_ID}} --paths '/*'
+
+  inlang-pr:
+    name: Create Inlang PR
+    if: github.ref_name == 'inlang'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create PR to dev
         env:
           GH_TOKEN: ${{ github.token }}
+        continue-on-error: true
         run: |
-          gh pr create -B prod/io -H dev --title 'Release to prod/io' --body 'Created by Github Action'
-          gh pr create -B prod/gg -H dev --title 'Release to prod/gg' --body 'Created by Github Action'
-          gh pr create -B prod/games -H dev --title 'Release to prod/games' --body 'Created by Github Action'
+          gh pr create -B dev -H inlang \
+            --title 'Update locales' \
+            --body 'Created by Github Action'
 
+  release-pr:
+    name: Create Release PRs
+    if: github.ref_name == 'dev'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Create PRs to prod branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        continue-on-error: true
+        run: |
+          for branch in io gg games; do
+            gh pr create -B prod/$branch -H dev \
+              --title "Release to prod/$branch" \
+              --body 'Created by Github Action'
+          done

@@ -100,12 +100,9 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 				return (
 					<div
 						key={index}
-						className={cn(
-							'absolute pointer-events-none w-7 md:w-9 scale-1 aspect-square border rounded-full animate-[ping_1s_linear_reverse] border-background ',
-							{
-								'border-2 rounded-full animate-bounce border-primary': chip.player === undefined,
-							},
-						)}
+						className={cn('absolute pointer-events-none w-7 md:w-9  aspect-square border rounded-full animate-[ping_1s_linear_reverse] border-background ', {
+							'border-2 rounded-full animate-bounce border-primary': chip.player === undefined,
+						})}
 						style={{
 							zIndex,
 							transform: `translate(${xOffset}px, ${yOffset}px)`,

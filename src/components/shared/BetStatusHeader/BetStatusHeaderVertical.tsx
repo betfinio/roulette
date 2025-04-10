@@ -1,4 +1,4 @@
-import { Roulette } from '@betfinio/ui/dist/icons';
+import { Roulette } from '@betfinio/components/icons';
 
 import { AlertCircle, ChartBarIcon, CircleAlert, CircleHelp, Menu } from 'lucide-react';
 import { type FC, useMemo, useState } from 'react';
@@ -70,13 +70,13 @@ export const BetStatusHeaderVertical: FC = () => {
 				<Drawer open={showDrawer} onOpenChange={setShowDrawer}>
 					<DrawerTrigger className="flex justify-between w-full gap-4 items-center">
 						<div className="flex gap-2 items-center">
-							<Roulette className={'w-8 h-8 aspect-square text-secondary-foreground'} />
-							<div className="flex flex-col items-start leading-1">
-								<div className={'leading-2'}>{isSingle ? t('roulette') : t('liveRoulette')}</div>
+							<Roulette className={'w-8 h-8 aspect-square text-primary'} />
+							<div className="flex flex-col items-start">
+								<div className={'leading-none'}>{isSingle ? t('roulette') : t('liveRoulette')}</div>
 								<div className={'text-xs'}>{isSingle ? t('singlePlayer') : `${Number(currentInterval) / 60}min`}</div>
 							</div>
 						</div>
-						<ChartBarIcon className={'text-secondary-foreground w-6'} />
+						<ChartBarIcon className={'text-primary w-6'} />
 					</DrawerTrigger>
 					<DrawerContent hasLine={false}>
 						<div className="bg-card py-2">
@@ -148,7 +148,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 					<div>{t('howToPlay')}</div>
 				</a>
 
-				<Button onClick={handleReport} variant={'link'} className={' text-secondary-foreground  text-base flex justify-start items-center  gap-x-2'}>
+				<Button onClick={handleReport} variant={'link'} className={' text-primary  text-base flex justify-start items-center  gap-x-2'}>
 					<CircleAlert className={'w-6'} />
 					<div>{t('report')}</div>
 				</Button>

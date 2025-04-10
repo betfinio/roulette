@@ -21,7 +21,7 @@ const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 					'absolute top-4 right-4 rounded-full  text-foreground border border-foreground w-6 h-6 p-1 cursor-pointer hover:border-red-roulette hover:text-red-roulette duration-300'
 				}
 			/>
-			<h2 className={'text-secondary-foreground font-semibold text-lg'}>{t('payTable.paytable')}</h2>
+			<h2 className={'text-primary font-semibold text-lg'}>{t('payTable.paytable')}</h2>
 			<div className={'w-full grid grid-cols-4 gap-1 my-4'}>
 				<span className={'font-semibold text-lg'}>{t('payTable.betType')}</span>
 				<span className={'font-semibold text-lg'}>{t('payTable.payout')}</span>
@@ -31,7 +31,7 @@ const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 				{limits.map((limit, i) => (
 					<div className={'col-span-4  grid grid-cols-4'} key={i}>
 						<span className={'text-foreground/50'}>{limit.title}</span>
-						<span className={'text-secondary-foreground'}>{limit.payout}x</span>
+						<span className={'text-primary'}>{limit.payout}x</span>
 						<div className={'text-success flex flex-row gap-1 items-center'}>
 							<BetValue value={valueToNumber(limit.min)} withIcon />
 						</div>
@@ -43,7 +43,7 @@ const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 			</div>
 			<div className={'mt-5 text-sm flex justify-end'}>
 				<a
-					className={'flex gap-1 underline hover:text-secondary-foreground duration-300'}
+					className={'flex gap-1 underline hover:text-primary duration-300'}
 					href="https://betfin.gitbook.io/betfin-public/games-guide/roulette-single-player/roulette-single-player-terms"
 					target={'_blank'}
 					rel="noreferrer"

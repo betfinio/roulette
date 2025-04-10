@@ -33,8 +33,8 @@ export const RouletteNumbersGrid: FC = () => {
 					className={cn(`${tableConfig[item]?.className} border-transparent border-[3px] outline-transparent transition-all `, {
 						'border-bonus/80 ': isNumberHovered(+item) && !isDebugMode,
 						'border-muted/50 ': !isNumberHovered(+item) && isDebugMode,
-						'!border-white/80 border-[3px] animate-[pulse_2s_ease-in-out_infinite]': Number(winNumber) === Number(item),
-						'border-secondary-foreground/80': isNumberSelected(+item),
+						'border-white/80! border-[3px] animate-[pulse_2s_ease-in-out_infinite]': Number(winNumber) === Number(item),
+						'border-primary/80': isNumberSelected(+item),
 						'aspect-square': !isVertical,
 					})}
 					onClick={(position, relatedNumbers) =>

@@ -65,7 +65,7 @@ const RouletteSlider: FC<RouletteSliderProps> = ({ minPrice, maxPrice, marks, va
 				max={maxPrice}
 				step={step}
 				value={[value]}
-				onValueChange={([value]: [number]) => handleSliderChange(value)}
+				onValueChange={([value]) => handleSliderChange(value)}
 				className="w-full h-2 bg-card-secondary/20 rounded-full relative"
 			/>
 

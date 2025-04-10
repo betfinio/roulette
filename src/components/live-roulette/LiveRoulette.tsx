@@ -2,7 +2,8 @@ import { useGetSelectedRound, useLiveRouletteState, useTablePlayerRounds } from 
 import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { shootConfetti } from '@/src/lib/roulette/utils';
 import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
-import { useMediaQuery, useToast } from '@betfinio/components/hooks';
+import { useMediaQuery } from '@betfinio/components/hooks';
+import { toast } from '@betfinio/components/ui';
 import { useEffect, useMemo, useRef } from 'react';
 import { RouletteResultToast } from '../RouletteResultToast';
 import { DesktopRoulette } from './DesktopRoulette';
@@ -11,7 +12,6 @@ import { VerticalRoulette } from './VerticalRoulette';
 
 export const LiveRoulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
-	const { toast } = useToast();
 	const { table } = useVisibleTable();
 	const { scrollToHeader } = useScrollToHeader();
 	const { round } = useGetSelectedRound();
@@ -21,7 +21,7 @@ export const LiveRoulette = () => {
 	const { state: wheelStateData, updateState } = useLiveRouletteState();
 	const status = wheelStateData.data.state;
 
-	const lastStatus = useRef<typeof status>();
+	const lastStatus = useRef<typeof status>(undefined);
 
 	const selectedRound = useMemo(() => {
 		return playerRounds?.find((playerRound) => playerRound.round === round);
@@ -29,9 +29,7 @@ export const LiveRoulette = () => {
 
 	useEffect(() => {
 		if (status === WheelStatus.JustFinished && selectedRound) {
-			toast({
-				component: <RouletteResultToast rouletteBet={selectedRound} />,
-			});
+			toast.success(<RouletteResultToast rouletteBet={selectedRound} />);
 
 			const hasWon = selectedRound.winAmount > 0n;
 			hasWon && shootConfetti();
