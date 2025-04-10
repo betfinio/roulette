@@ -2,7 +2,7 @@ import { getColor } from '@/src/lib/roulette';
 import type { PlayerBet } from '@/src/lib/roulette/types';
 import { valueToNumber } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
-import { BetLogo } from '@betfinio/ui/dist/icons';
+import { BetLogo } from '@betfinio/components/icons';
 import { useTranslation } from 'react-i18next';
 
 interface IRouletteResultToastProp {

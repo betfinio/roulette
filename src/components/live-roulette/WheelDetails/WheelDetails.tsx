@@ -4,7 +4,7 @@ import { useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import { useAccount } from 'wagmi';
 import { RouletteNumberIcon } from '../../shared/RouletteNumberIcon';
@@ -112,20 +112,20 @@ export const WheelDetails: FC = () => {
 				)}
 				{/*  Timer */}
 				{showTimer && (
-					<div className={cn('w-1/4   inline-flex mx-auto ', {})}>
+					<div className={cn('w-1/4 inline-flex mx-auto ', {})}>
 						<Timer timeLeft={timeLeft} />
 					</div>
 				)}
 				{/* Round Is Over */}
 				{showRoundIsOver && (
-					<div className={cn('w-1/3  mx-auto inline-flex mb-2', {})}>
+					<div className={cn('w-1/3 mx-auto inline-flex mb-2', {})}>
 						<RoundIsOver />
 					</div>
 				)}
 				{/*  Back to Game */}
 
 				{showBackToGame && (
-					<div className={cn('w-1/3  mx-auto inline-flex mt-1', {})}>
+					<div className={cn('w-1/3 mx-auto inline-flex mt-1', {})}>
 						<BackToGame />
 					</div>
 				)}
@@ -144,7 +144,7 @@ export function useRoundCountdown(round?: number, interval?: number, onExpire?: 
 	const [timeLeft, setTimeLeft] = useState<string>('--:--');
 	const [isExpired, setIsExpired] = useState<boolean>(false);
 	const [isReady, setIsReady] = useState<boolean>(false);
-	const refInterval = useRef<ReturnType<typeof setInterval>>();
+	const refInterval = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
 	useEffect(() => {
 		if (round === undefined || interval === undefined) {
 			setIsReady(false);

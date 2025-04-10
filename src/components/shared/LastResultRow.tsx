@@ -2,7 +2,7 @@ import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
 import { getColor } from '@/src/lib/roulette';
 import { type LastResult, RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
-import { motion } from 'framer-motion';
+import { motion } from 'motion/react';
 import type { FC } from 'react';
 
 interface ILastResultRowProps {

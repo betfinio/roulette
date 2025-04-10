@@ -1,6 +1,5 @@
 import { useChangeChip } from '@/src/lib/shared/query';
-import { toast } from '@betfinio/components/hooks';
-import { Button, Dialog, DialogClose, DialogContent } from '@betfinio/components/ui';
+import { Button, Dialog, DialogClose, DialogContent, toast } from '@betfinio/components/ui';
 import millify from 'millify';
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -32,15 +31,9 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 	const handleSave = () => {
 		const num = Number(value);
 		if (num > max) {
-			toast({
-				description: `${t('maxBetIs')} ${millify(max)}`,
-				variant: 'destructive',
-			});
+			toast.error(`${t('maxBetIs')} ${millify(max)}`);
 		} else if (num < min) {
-			toast({
-				description: `${t('minBetIs')} ${millify(min)}`,
-				variant: 'destructive',
-			});
+			toast.error(`${t('minBetIs')} ${millify(min)}`);
 		} else {
 			change({ amount: Number(value) });
 

@@ -71,10 +71,10 @@ export const BetControls = () => {
 		<>
 			<ChangeBetModal initialValue={activeChipValue} max={limits.max} min={limits.min} open={openBetChangeModal} setOpen={setOpenBetChangeModal} />
 			<div className="md:flex-row md:justify-between gap-2 flex w-full border border-border items-center bg-card px-2 py-4 rounded-xl mt-6 md:px-6 flex-wrap">
-				<div className="flex flex-col items-center justify-start flex-shrink-0">
+				<div className="flex flex-col items-center justify-start shrink-0">
 					<SubmitBet />
 				</div>
-				<div className=" flex items-center justify-center gap-x-2 flex-grow flex-shrink-0 min-w-96">
+				<div className=" flex items-center justify-center gap-x-2 grow shrink-0 min-w-96">
 					<div className="flex  items-center justify-center w-full">
 						<RangeWithButtons limits={limits} />
 					</div>
@@ -92,7 +92,7 @@ export const BetControls = () => {
 						</Button>
 					</div>
 				</div>
-				<div className="md:w-fit flex gap-2 md:gap-3 justify-center flex-shrink-0">
+				<div className="md:w-fit flex gap-2 md:gap-3 justify-center shrink-0">
 					<ExtraControls />
 				</div>
 			</div>

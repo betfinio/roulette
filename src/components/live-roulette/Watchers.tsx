@@ -35,7 +35,7 @@ function Watchers() {
 	const { data: tableRoundPlayers = [], queryKey: tableRoundPlayersQueryKey } = useGetTableRoundPlayers(table, visibleRound);
 
 	const { queryKey: tableStatQueryKey } = useLiveRouletteTableStats(table);
-	const tableStatTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+	const tableStatTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
 	/**
 	 * Watcher for the Requested event

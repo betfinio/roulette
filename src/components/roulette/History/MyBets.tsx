@@ -22,6 +22,7 @@ const columnHelper = createColumnHelper<PlayerBet>();
 
 export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
+	const { t: tShared } = useTranslation('shared', { keyPrefix: 'tables' });
 	const [selected, setSelected] = useState<null | PlayerBet>(null);
 	const { table } = useVisibleTable();
 
@@ -115,7 +116,7 @@ export const MyBetsTable = () => {
 				</DialogContent>
 			</Dialog>
 
-			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="h-[285px]" />
+			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="h-[285px]" t={tShared} />
 		</div>
 	);
 };

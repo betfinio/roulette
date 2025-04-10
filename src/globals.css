@@ -1,64 +1,46 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "@betfinio/components/globals.css";
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@config '../tailwind.config.ts';
+
+@theme {
+	--color-bonus: var(--bonus);
+	--color-primary: var(--primary);
+	--color-muted: var(--muted);
+	--color-success: var(--success);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-foreground: var(--foreground);
+}
 
 @layer base {
-	:root {
-		--spinningAnimationSpeed: 30s;
-		--spinningSpeed: 9s;
-
-		--green: hsl(153, 54%, 48%);
-		--orange: hsl(0, 86%, 68%);
-		--red: hsl(346, 71%, 54%);
-		--black: hsl(199, 21%, 15%);
-		--purple: hsl(300, 100%, 32%);
-		--purple-lighter: hsl(291, 81%, 71%);
-		--yellow: hsl(47, 100%, 50%);
-		--blue: hsl(195, 100%, 46%);
-		--blue-purple: hsl(233, 82%, 71%);
-		--blue-shiny: hsl(245, 100%, 70%);
-		--gold: hsl(46, 93%, 46%);
-		--silver: hsl(218, 10%, 63%);
-		--bronze: hsl(27, 89%, 59%);
-		--border-primary: hsl(226, 33%, 12%);
-		--bg-primary: hsl(232, 27%, 22%);
-		--bg-sec: hsl(229, 31%, 11%);
-		--bg-lighter: hsl(231, 40%, 17%);
-		--bg-darker: hsl(227, 32%, 9%);
-		--text-gray: hsl(228, 11%, 47%);
-		--min-width-sm: 344px;
-		--max-w-global: 822px;
-		--border-default: 1px;
+	*,
+	::after,
+	::before,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-border, currentcolor);
 	}
+}
 
-	.dark {
-		--spinningAnimationSpeed: 30s;
-		--spinningSpeed: 9s;
-		--background: 0 0% 3.9%;
-		--foreground: 0 0% 98%;
-		--card: 0 0% 3.9%;
-		--card-foreground: 0 0% 98%;
-		--popover: 0 0% 3.9%;
-		--popover-foreground: 0 0% 98%;
-		--primary: 0 0% 98%;
-		--primary-foreground: 0 0% 9%;
-		--secondary: 0 0% 14.9%;
-		--secondary-foreground: 0 0% 98%;
-		--muted: 0 0% 14.9%;
-		--muted-foreground: 0 0% 63.9%;
-		--accent: 0 0% 14.9%;
-		--accent-foreground: 0 0% 98%;
-		--destructive: 0 62.8% 30.6%;
-		--destructive-foreground: 0 0% 98%;
-		--border: 0 0% 14.9%;
-		--input: 0 0% 14.9%;
-		--ring: 0 0% 83.1%;
-		--chart-1: 220 70% 50%;
-		--chart-2: 160 60% 45%;
-		--chart-3: 30 80% 55%;
-		--chart-4: 280 65% 60%;
-		--chart-5: 340 75% 55%;
-	}
+:root {
+	--spinningAnimationSpeed: 30s;
+	--spinningSpeed: 9s;
+
+	--green: hsl(153 54% 48%);
+	--orange: hsl(0 86% 68%);
+	--red: hsl(346 71% 54%);
+	--black: hsl(199 21% 15%);
+	--purple: hsl(300 100% 32%);
+	--purple-lighter: hsl(291 81% 71%);
+	--yellow: hsl(47 100% 50%);
+	--blue: hsl(195 100% 46%);
+	--blue-purple: hsl(233 82% 71%);
+	--blue-shiny: hsl(245 100% 70%);
+	--gold: hsl(46 93% 46%);
+	--silver: hsl(218 10% 63%);
+	--bronze: hsl(27 89% 59%);
+	--wheel-shadow: rgba(0, 172, 231, 0.45);
 }
 
 @layer base {

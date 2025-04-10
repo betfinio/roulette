@@ -1,22 +1,18 @@
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
-import { useToast } from '@betfinio/components/hooks';
+import { toast } from '@betfinio/components/ui';
 
 import { CheckIcon, CopyIcon } from 'lucide-react';
 import { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 export const RoundNumber: FC = () => {
-	const { toast } = useToast();
 	const { t } = useTranslation('roulette');
 
 	const { round } = useGetSelectedRound();
 	const [addressCopied, setAddressCopied] = useState(false);
 
 	const handleCopyRoundAddress = async () => {
-		toast({
-			title: t('copiedCurrentRoundRef'),
-			variant: 'default',
-		});
+		toast.success(t('copiedCurrentRoundRef'));
 		await navigator.clipboard.writeText(location.href);
 		setAddressCopied(true);
 		setTimeout(() => {
@@ -35,7 +31,7 @@ export const RoundNumber: FC = () => {
 			{addressCopied ? (
 				<CheckIcon className={'text-success w-[10%]'} />
 			) : (
-				<CopyIcon className={'text-secondary-foreground cursor-pointer w-[10%]'} onClick={handleCopyRoundAddress} />
+				<CopyIcon className={'text-primary cursor-pointer w-[10%]'} onClick={handleCopyRoundAddress} />
 			)}
 		</>
 	);

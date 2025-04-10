@@ -18,6 +18,7 @@ const columnHelper = createColumnHelper<RoundBet>();
 const TABLE_ID = 'All Bets Table';
 export const AllBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
+	const { t: tShared } = useTranslation('shared', { keyPrefix: 'tables' });
 	const navigate = useNavigate();
 
 	const { table = ZeroAddress } = useVisibleTable();
@@ -48,7 +49,7 @@ export const AllBetsTable = () => {
 			cell: (props) => (
 				<span
 					className={cn({
-						'text-secondary-foreground': !!playerRounds[props.row.original.round],
+						'text-primary': !!playerRounds[props.row.original.round],
 					})}
 				>
 					#{props.getValue()}
@@ -120,6 +121,7 @@ export const AllBetsTable = () => {
 	return (
 		<div id={TABLE_ID} className={cn('my-4 ')}>
 			<DataTable
+				t={tShared}
 				tableRef={tableRef}
 				columns={isVertical ? columnsMobile : columns}
 				data={bets}
