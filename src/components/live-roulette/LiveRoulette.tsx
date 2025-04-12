@@ -29,21 +29,14 @@ export const LiveRoulette = () => {
 
 	useEffect(() => {
 		if (status === WheelStatus.JustFinished && selectedRound) {
-			toast.success(<RouletteResultToast rouletteBet={selectedRound} />, {
-				classNames: {
-					icon: '!hidden',
-					content: '!w-full',
-				},
-			});
+			toast(<RouletteResultToast rouletteBet={selectedRound} />, { classNames: { content: '!w-full' } });
 
 			const hasWon = selectedRound.winAmount > 0n;
 			hasWon && shootConfetti();
 
 			lastStatus.current = status;
 
-			updateState({
-				state: WheelStatus.Finished,
-			});
+			updateState({ state: WheelStatus.Finished });
 		}
 
 		if (status === WheelStatus.Requested && lastStatus.current !== status) {
