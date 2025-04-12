@@ -29,7 +29,12 @@ export const LiveRoulette = () => {
 
 	useEffect(() => {
 		if (status === WheelStatus.JustFinished && selectedRound) {
-			toast.success(<RouletteResultToast rouletteBet={selectedRound} />);
+			toast.success(<RouletteResultToast rouletteBet={selectedRound} />, {
+				classNames: {
+					icon: '!hidden',
+					content: '!w-full',
+				},
+			});
 
 			const hasWon = selectedRound.winAmount > 0n;
 			hasWon && shootConfetti();
