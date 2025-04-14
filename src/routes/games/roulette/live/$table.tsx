@@ -53,6 +53,7 @@ export function RouletteLiveTable() {
 					to: '/games/roulette/live/$table',
 					params: { table: params.table },
 					search: { round: Number(round?.round) || 0 },
+					replace: true,
 				});
 				return;
 			}
