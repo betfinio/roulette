@@ -34,10 +34,12 @@ export function RouletteLiveTable() {
 						to: '/games/roulette/live/$table',
 						params: { table: table.address },
 						search: { round: 0 },
+						replace: true,
 					});
 					return;
 				}
-				navigate({ to: '/games/roulette/live' });
+
+				navigate({ to: '/games/roulette/live', replace: true });
 				return;
 			}
 
@@ -49,6 +51,7 @@ export function RouletteLiveTable() {
 
 			if (!search.round) {
 				const round = await fetchCurrentRoundOfTable(wagmiConfig, params.table as Address);
+
 				navigate({
 					to: '/games/roulette/live/$table',
 					params: { table: params.table },
