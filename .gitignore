@@ -12,16 +12,10 @@ dist/
 !.vscode/extensions.json
 .idea
 
-@mf-types/
-
 bun.lockb
 
 .env.development.local
 .env.production.local
-
-#types
-
-@mf-types/
 
 #gql
 
