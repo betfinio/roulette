@@ -3,7 +3,7 @@ import type { PlayerInProgressBet } from '@/src/lib/live-roulette/types';
 import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
-import { useCustomUsername, useUsername } from 'betfinio_context/lib/query';
+import { useUsername } from 'betfinio_context/lib/query';
 import { motion } from 'motion/react';
 import type { FC } from 'react';
 import { useAccount } from 'wagmi';
@@ -17,8 +17,7 @@ interface IBetTabItemProps {
 export const BetItem: FC<IBetTabItemProps> = ({ bet, showWinnders, index }) => {
 	const { address } = useAccount();
 
-	const { data: username } = useUsername(bet.player);
-	const { data: customUsername } = useCustomUsername(address, bet.player);
+	const { data: username } = useUsername(bet.player, address);
 
 	const hasWon = bet.winAmount && bet.winAmount > 0n;
 	const isWinnerCard = showWinnders && hasWon && index < 3;
@@ -54,7 +53,7 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet, showWinnders, index }) => {
 							)}
 							rel="noreferrer"
 						>
-							{customUsername || username || truncateEthAddress(bet.player)}
+							{username}
 						</a>
 						<a
 							href={`${ETHSCAN}/address/${bet.bet}`}

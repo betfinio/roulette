@@ -14,6 +14,7 @@ export function IndexLiveRoulette() {
 			navigate({
 				to: '/games/roulette/live/$table',
 				params: { table: tables[tables.length - 1].address },
+				replace: true,
 			});
 		}
 	}, [tables, navigate]);
