@@ -24,7 +24,7 @@ export const Roulette = () => {
 	const lastStatus = useRef<typeof status>(undefined);
 	useEffect(() => {
 		if (status === 'landed' && bets[0].bet.toLowerCase() !== lastShownBet.current?.toLowerCase()) {
-			toast.success(<RouletteResultToast rouletteBet={bets[0]} />);
+			toast(<RouletteResultToast rouletteBet={bets[0]} />, { classNames: { content: '!w-full' } });
 
 			const hasWon = bets[0].amount < bets[0].winAmount;
 			hasWon && shootConfetti();

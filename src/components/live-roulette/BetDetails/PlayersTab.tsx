@@ -2,11 +2,10 @@ import { ETHSCAN } from '@/src/global';
 import { useGetSelectedRound, useGetTableRoundPlayers } from '@/src/lib/live-roulette/query';
 import type { PlayerRoundBets } from '@/src/lib/live-roulette/types';
 import { useVisibleTable } from '@/src/lib/shared/query';
-import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { Fox } from '@betfinio/components/icons';
 import { BetValue } from '@betfinio/components/shared';
-import { useCustomUsername, useUsername } from 'betfinio_context/lib/query';
+import { useUsername } from 'betfinio_context/lib/query';
 import { motion } from 'motion/react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -33,8 +32,7 @@ export const PlayersTabItem: FC<IPlayersTabItemProps> = ({ playerRoundBets }) =>
 	const { t } = useTranslation('roulette');
 	const { address } = useAccount();
 
-	const { data: username } = useUsername(playerRoundBets.player);
-	const { data: customUsername } = useCustomUsername(address, playerRoundBets.player);
+	const { data: username } = useUsername(playerRoundBets.player, address);
 	return (
 		<motion.div
 			key={playerRoundBets.created}
@@ -58,7 +56,7 @@ export const PlayersTabItem: FC<IPlayersTabItemProps> = ({ playerRoundBets }) =>
 							)}
 							rel="noreferrer"
 						>
-							{customUsername || username || truncateEthAddress(playerRoundBets.player)}
+							{username}
 						</a>
 						<span
 							className={cn({
