@@ -16,7 +16,7 @@ export const TableRaceTrack = () => {
 	};
 
 	return (
-		<div className={cn('w-full grid grid-cols-12', {})}>
+		<div className={cn(' ', {})}>
 			{/* If vertical layout, Racetrack is always visible */}
 			{/* {isVertical && <Racetrack />} */}
 
@@ -25,7 +25,7 @@ export const TableRaceTrack = () => {
 				<>
 					<div className="col-span-1 flex justify-center items-center">
 						<Button variant="ghost" onClick={toggleRacetrack} className="h-auto p-0 mb-2">
-							<img src={miniTableImg} alt="Mini Table" className="h-12" />
+							<img src={miniTableImg} alt="Mini Table" className="h-14" />
 						</Button>
 					</div>
 					<div className="col-span-10 flex justify-center">

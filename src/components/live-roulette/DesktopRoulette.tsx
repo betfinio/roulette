@@ -7,6 +7,7 @@ import { BetDetails } from './BetDetails/BetDetails';
 import { LastResults } from './LastResults/LastResults';
 import { TableStat } from './TableStat';
 
+import { motion } from 'motion/react';
 import { Totals } from './BetDetails/Totals';
 import History from './History/HistoryTable';
 import Wheel from './Wheel/Wheel';
@@ -27,14 +28,18 @@ export const DesktopRoulette = () => {
 							<div className="absolute inset-0 bg-linear-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 							<div className="relative w-full h-full mx-auto flex items-start gap-4 ">
 								{/* <ResultHistory /> */}
-
-								<LastResults />
+								<div className="flex flex-col gap-4">
+									<LastResults />
+									{!isRoundFinished && (
+										<motion.div initial={{ opacity: 0, x: '-50%' }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 2 }}>
+											<TableRaceTrack />
+										</motion.div>
+									)}
+								</div>
 								<Wheel />
 								<TableStat />
 							</div>
 						</div>
-
-						{!isRoundFinished && <TableRaceTrack />}
 					</div>
 				</div>
 				<div className="relative flex flex-col gap-4">

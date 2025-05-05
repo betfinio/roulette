@@ -7,7 +7,7 @@ import type { FC } from 'react';
 
 interface ILastResultRowProps {
 	result: LastResult;
-	isActive: boolean;
+	isActive?: boolean;
 	index: number;
 }
 export const LastResultRow: FC<ILastResultRowProps> = ({ result, isActive, index }) => {
