@@ -88,7 +88,7 @@ export const Wheel = () => {
 				})
 				.then(async () => {
 					const { bet } = wheelStateData.data as WheelLanded;
-					console.log(bet, 'bet!!');
+
 					const updatedBets = bets.filter((b) => b.bet.toLowerCase() !== bet?.bet.toLowerCase());
 
 					queryClient.setQueryData(['roulette', 'bets', 'player', address], [bet, ...updatedBets], {

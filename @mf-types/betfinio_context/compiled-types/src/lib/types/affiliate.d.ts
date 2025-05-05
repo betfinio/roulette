@@ -56,6 +56,8 @@ export interface TreeMember {
     stakingDirect: bigint;
     stakingLinear: bigint;
     linearLevel: number;
+    binaryLevel: number;
+    totalMatched: bigint;
     path: LinearData['path'];
 }
 export interface BalanceInfo {

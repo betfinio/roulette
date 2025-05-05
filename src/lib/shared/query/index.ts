@@ -262,10 +262,10 @@ export const useScrollToHeader = () => {
 	return { scrollToHeader };
 };
 
-export const useManualSpin = () => {
+export const useManualSpin = (roundId?: number | bigint) => {
 	const config = useConfig();
 	return useMutation({
-		mutationKey: ['roulette', 'manualSpin'],
+		mutationKey: ['roulette', 'manualSpin', roundId ? roundId.toString() : 'global'],
 		mutationFn: (e: { table: Address; round: bigint }) => manualSpin(config, e.table, e.round),
 		onSuccess: async (data) => {
 			await waitForTransactionReceipt(config.getClient(), { hash: data });

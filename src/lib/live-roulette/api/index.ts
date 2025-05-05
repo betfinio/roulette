@@ -1,6 +1,6 @@
 import logger from '@/src/config/logger';
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
-import { LiroBetABI, LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
+import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
 import { readContract } from '@wagmi/core';
 import { getBlockByTimestamp } from 'betfinio_context/lib/gql';
 import { type Address, parseAbiItem } from 'viem';
@@ -9,7 +9,7 @@ import type { Config } from 'wagmi';
 import { fetchBetInfo } from '../../shared/api';
 import { RoundStatus } from '../../shared/types';
 import { fetchSelectedTableRoundWinNumer } from '../gql';
-import type { RoundBet, RoundPlayerBet, WheelStatus } from '../types';
+import type { PlayerInProgressBet, RoundBet, RoundPlayerBet, WheelStatus } from '../types';
 
 export const fetchCurrentRound = (interval: number) => {
 	if (interval === 0) return 0;
@@ -64,20 +64,15 @@ export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Addre
 	};
 
 	let roundPlayerBets: RoundPlayerBet | null = null;
+	const roundPlayersDetailedBets: PlayerInProgressBet[] = [];
 
 	// Iterate over each log entry
 	for (const log of logs) {
 		const betAddress = log.args.bet as Address;
+		const winNumber = log.args.value;
 
 		// Fetch bet info
 		const betInfo = await fetchBetInfo(config, betAddress);
-
-		const winNumber = await readContract(config, {
-			abi: LiroBetABI,
-			address: betAddress,
-			functionName: 'winNumber',
-			args: [],
-		});
 
 		// Extract values from bet info
 		const [player, , amount, winAmount, , created] = betInfo;
@@ -105,8 +100,16 @@ export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Addre
 				};
 			}
 		}
+		roundPlayersDetailedBets.push({
+			amount,
+			created,
+			winAmount,
+			player,
+			bet: betAddress,
+			chips: [],
+		});
 	}
-	return { roundAllBets, roundPlayerBets };
+	return { roundAllBets, roundPlayerBets, roundPlayersDetailedBets };
 };
 
 export const fetchBankByRound = async (config: Config, table?: Address, round?: number) => {

@@ -32,29 +32,8 @@ const RouletteSlider: FC<RouletteSliderProps> = ({ minPrice, maxPrice, marks, va
 
 	// Function to handle clicking on marks
 	const handleMarkClick = (markValue: number) => {
-		setSliderValue(markValue); // Update slider value when a mark is clicked
+		setSliderValue(markValue);
 	};
-
-	useEffect(() => {
-		if (value < 10_000) {
-			setStep(minPrice);
-		} else if (value < 100_000) {
-			// round value to 100_000
-			handleSliderChange(Math.round(value / 10_000) * 10_000);
-			setStep(10_000);
-		} else if (value < 1_000_000) {
-			// round value to 100_000
-			handleSliderChange(Math.round(value / 100_000) * 100_000);
-			setStep(100_000);
-		} else if (value < 10_000_000) {
-			// round value to 100_000
-			handleSliderChange(Math.round(value / 1_000_000) * 1_000_000);
-			setStep(1_000_000);
-		} else {
-			handleSliderChange(Math.round(value / 1_000_000) * 1_000_000);
-			setStep(1_000_000);
-		}
-	}, [value]);
 
 	return (
 		<div className=" w-full mt-6">

@@ -33,9 +33,11 @@ export const LastResults = () => {
 			className={'bg-card rounded-lg p-2 mt-4 border border-border shrink-0'}
 		>
 			<h3 className="text-foreground flex justify-center text-xs font-medium mb-1">{t('lastResults')}</h3>
-			<div className={cn('grid grid-cols-3 grid-rows-7 gap-1', { 'blur-xs animate-pulse': !isBetsFetched })}>
+			<div className={cn('flex flex-col gap-1', { 'blur-xs animate-pulse': !isBetsFetched })}>
 				{lastSeven.map((result, index) => (
-					<LastResultRow result={result} key={index} index={index} />
+					<div key={index} className={cn('grid grid-cols-3 gap-x-1 transition-all', {})}>
+						<LastResultRow result={result} index={index} />
+					</div>
 				))}
 			</div>
 		</motion.div>

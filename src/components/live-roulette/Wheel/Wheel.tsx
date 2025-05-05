@@ -19,8 +19,8 @@ export const Wheel = () => {
 	const { roundStatusProps, winNumberProps, round: selectedRound } = useGetSelectedRound();
 	const { isFetched: isBetsFetched, data: rounds = [], queryKey: tableRoundsQueryKey } = useTableRounds(table);
 	const { data: playerRounds = [], queryKey: playerRoundQueryKey } = useTablePlayerRounds(table);
-	const { refetch } = useGetTableSelectedRoundBets(table, selectedRound);
 	const lastNumber = rounds.find((tableRound) => tableRound.round === selectedRound)?.winNumber || 0;
+	const { queryKey: tableSelectedRoundBetsQueryKey } = useGetTableSelectedRoundBets(table, selectedRound);
 
 	// Animation control
 	const wheelControlsWrapper = useAnimation();
@@ -91,8 +91,7 @@ export const Wheel = () => {
 					},
 				})
 				.then(async () => {
-					const { tableRound, tablePlayerRound } = wheelStateData.data;
-
+					const { tableRound, tablePlayerRound, tableSelectedRoundBets } = wheelStateData.data;
 					//Populate all bets for the current round
 					if (tableRound) {
 						const updatedRounds = rounds.map((round) => {
@@ -120,10 +119,14 @@ export const Wheel = () => {
 							updatedAt: Date.now(),
 						});
 					}
+					if (tableSelectedRoundBets) {
+						queryClient.setQueryData(tableSelectedRoundBetsQueryKey, tableSelectedRoundBets, {
+							updatedAt: Date.now(),
+						});
+					}
 
 					updateState({ state: WheelStatus.JustFinished } as WheelState);
 					setTimeout(async () => {
-						refetch();
 						roundStatusProps.refetch();
 						winNumberProps.refetch();
 					}, 500);
