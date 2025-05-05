@@ -35,7 +35,7 @@ export const LastResults = () => {
 			<h3 className="text-foreground flex justify-center text-xs font-medium mb-1">{t('lastResults')}</h3>
 			<div className={cn('grid grid-cols-3 grid-rows-7 gap-1', { 'blur-xs animate-pulse': !isBetsFetched })}>
 				{lastSeven.map((result, index) => (
-					<LastResultRow result={result} key={index} index={index} />
+					<LastResultRow result={result} key={index} index={index} isActive={index === 0} />
 				))}
 			</div>
 		</motion.div>

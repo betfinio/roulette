@@ -39,6 +39,7 @@ export interface WheelState {
 	result?: number;
 	tableRound?: RoundBet;
 	tablePlayerRound?: RoundPlayerBet;
+	tableSelectedRoundBets?: PlayerInProgressBet[];
 }
 
 // 0 - not exists, 1 - created, 2 - requested, 3 - finished, 4 - refunded

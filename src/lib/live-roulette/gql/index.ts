@@ -105,7 +105,6 @@ export const fetchLiveRouletteTables = async (): Promise<RouletteTable[]> => {
 	const data: ExecutionResult<GetLiveRouletteTablesQuery> = await execute(GetLiveRouletteTablesDocument, {});
 	if (data.data) {
 		const uniqueIntervals = new Set<bigint>(); // To track unique intervals
-		console.log(data.data);
 
 		return data.data.tables
 			.map((table) => {

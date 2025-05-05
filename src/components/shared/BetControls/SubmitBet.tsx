@@ -34,10 +34,6 @@ export const SubmitBet: FC = () => {
 	const isSpinning =
 		isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested);
 
-	useEffect(() => {
-		console.log('bets', bets);
-	}, [bets]);
-
 	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
 
 	const handleSpin = () => {
