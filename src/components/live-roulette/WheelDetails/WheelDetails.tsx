@@ -1,5 +1,6 @@
 import { useGetCurrentRound, useGetSelectedRound, useGetTableSelectedRoundBets, useLiveRouletteState } from '@/src/lib/live-roulette/query';
 import { WheelStatus } from '@/src/lib/live-roulette/types';
+import { getColor } from '@/src/lib/roulette';
 import { useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
@@ -88,7 +89,13 @@ export const WheelDetails: FC = () => {
 				)}
 				{/* Round Number */}
 				{showWinNumber && (
-					<div className="w-[10%] flex justify-center items-center mx-auto border md:border-2 border-white/60 rounded-lg md:rounded-2xl md:mb-2">
+					<div
+						className={cn('w-[10%] flex justify-center items-center mx-auto border md:border-2 border-white/50 rounded-lg md:rounded-2xl md:mb-2', {
+							'bg-green-roulette': getColor(Number(winNumber)) === 'GREEN',
+							'bg-red-roulette': getColor(Number(winNumber)) === 'RED',
+							'bg-black-roulette': getColor(Number(winNumber)) === 'BLACK',
+						})}
+					>
 						<RouletteNumberIcon number={Number(winNumber)} className={'w-full'} />
 					</div>
 				)}
