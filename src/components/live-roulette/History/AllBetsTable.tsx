@@ -128,6 +128,7 @@ export const AllBetsTable = () => {
 				isLoading={isLoading}
 				loaderClassName="h-[285px]"
 				onRowClick={handleNavigateToTheRound}
+				autoResetPageIndex={false}
 			/>
 		</div>
 	);
