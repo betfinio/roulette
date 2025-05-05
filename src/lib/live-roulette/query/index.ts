@@ -131,6 +131,7 @@ export const useGetSelectedRound = () => {
 		roundStatusProps,
 		bankByRoundProps,
 		currentRoundProps,
+		currentRoundBank,
 	};
 };
 

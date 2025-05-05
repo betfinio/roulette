@@ -33,8 +33,9 @@ export const WheelDetails: FC = () => {
 		isRoundFinished,
 		roundHasBets: selectedRoundHasBets,
 		winNumber,
-		bankByRoundProps: { refetch: refetchBankByRound },
+		bankByRoundProps: { refetch: refetchBankByRound, isFetching: isBankByRoundLoading },
 		winNumberProps,
+		currentRoundBank,
 	} = useGetSelectedRound();
 	const { data: tableRoundBets, isLoading: isSelectedRoundBetsLoading } = useGetTableSelectedRoundBets(table, selectedRound);
 	const { data: playerRounds = [] } = useTablePlayerRounds(table);
@@ -60,11 +61,11 @@ export const WheelDetails: FC = () => {
 	const rouletteStatusStandBy = state.data.state === WheelStatus.NotExist || state.data.state === WheelStatus.Created;
 	const roundHasBets = selectedRoundHasBets;
 	const showTimer = !isRoundFinished && isReady && !isExpired && rouletteIsNotSpinning;
-	const showRoundNumber = rouletteIsNotSpinning;
+	const showRoundNumber = rouletteIsNotSpinning && !!selectedRound;
 	const showWaitingForSpin =
 		roundHasBets && isRoundFinished && winNumber === 42n && ![WheelStatus.Finished, WheelStatus.Requested, WheelStatus.Landing].includes(state.data.state);
 
-	const showRoundIsOver = isRoundFinished && rouletteIsNotSpinning && !roundHasBets;
+	const showRoundIsOver = isRoundFinished && rouletteIsNotSpinning && !roundHasBets && currentRoundBank !== undefined;
 
 	const showYouWon = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && playerStat.playerHasWon;
 
