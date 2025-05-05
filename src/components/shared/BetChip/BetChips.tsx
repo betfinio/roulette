@@ -66,18 +66,6 @@ export const BetChips: FC<BetChipsProps> = ({ positionId, winNumber }) => {
 	const myBetsAmount = myBets.reduce((a, b) => a + b.amount, 0);
 	const otherBetsAmount = otherBets.reduce((a, b) => a + b.amount, 0);
 
-	const renderPlayersList = () => {
-		return allChips
-			.filter((chip) => chip.player !== undefined && chip.player.toLowerCase() !== address.toLowerCase())
-			.map((chip, index) => {
-				return (
-					<div className={'w-full flex justify-between gap-2'} key={index}>
-						<PlayerAddress address={chip.player || ZeroAddress} />
-						<BetValue value={chip.amount} withIcon />
-					</div>
-				);
-			});
-	};
 	return (
 		<>
 			<TooltipContent side={'top'} className={'border border-border'}>
@@ -86,10 +74,6 @@ export const BetChips: FC<BetChipsProps> = ({ positionId, winNumber }) => {
 				</div>
 				<div className={cn('flex flex-row items-center justify-between gap-1', otherBetsAmount === 0 && 'hidden')}>
 					Other's bets: <BetValue value={otherBetsAmount} withIcon />
-				</div>
-				<div className={cn('flex flex-col items-start gap-1 mt-2', otherBetsAmount === 0 && 'hidden')}>
-					<span className={'text-xs'}>Players:</span>
-					{renderPlayersList()}
 				</div>
 			</TooltipContent>
 			{allChips.map((chip, index) => {
