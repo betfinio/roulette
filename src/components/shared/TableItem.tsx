@@ -25,7 +25,7 @@ interface TableItemProps {
 	className?: string;
 	onHoverNumbers?: (numbers: number[]) => void;
 	onLeaveHover?: () => void;
-
+	winNumber?: number;
 	onClick?: (position: string, relatedNumbers: number[], number: string | number) => void;
 	onContextMenu?: (position: string, relatedNumbers: number[], number: string | number) => void;
 }
@@ -41,7 +41,7 @@ const TableItem: React.FC<TableItemProps> = ({
 	topRightSelection,
 	bottomLeftSelection,
 	bottomRightSelection,
-
+	winNumber,
 	isVertical = true,
 	className = '',
 	isRangeButton = false,
@@ -133,6 +133,7 @@ const TableItem: React.FC<TableItemProps> = ({
 
 				return (
 					<BetPlacePoint
+						winNumber={winNumber}
 						key={index}
 						positionId={`${number}-${position}`}
 						position={position}

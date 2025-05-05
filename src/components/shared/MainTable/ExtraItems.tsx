@@ -1,3 +1,4 @@
+import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
@@ -10,6 +11,7 @@ export const ExtraItems: FC = () => {
 	const { mutate: unplace } = useUnplace();
 	const extraItems = ['1st', '2nd', '3rd'];
 	const { onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
+	const { winNumber } = useGetSelectedRound();
 
 	const { isVertical } = useMediaQuery();
 	return (
@@ -22,6 +24,7 @@ export const ExtraItems: FC = () => {
 					{...(isVertical ? tableExtraConfigVertical[item] : tableExtraConfigHorizontal[item])}
 					onHoverNumbers={onHoverNumbers}
 					onLeaveHover={onLeaveHover}
+					winNumber={Number(winNumber)}
 					onClick={(position, relatedNumbers) =>
 						place({
 							item: `${item}-${position}`,

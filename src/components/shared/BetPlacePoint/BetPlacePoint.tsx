@@ -14,9 +14,9 @@ interface BetPlacePointProps {
 	onMouseOut: (event?: MouseEvent) => void;
 	onClick: (event?: MouseEvent) => void;
 	onContextMenu: (event?: MouseEvent) => void;
-	isWinNumber?: boolean;
+	winNumber?: number;
 }
-export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, isWinNumber = false, ...events }) => {
+export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, winNumber, ...events }) => {
 	const { data: isDebugMode } = useGetDebugMode();
 
 	return (
@@ -30,7 +30,7 @@ export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, is
 						})}
 						{...events}
 					>
-						<BetChips positionId={positionId} />
+						<BetChips positionId={positionId} winNumber={winNumber} />
 					</div>
 				</TooltipTrigger>
 			</Tooltip>

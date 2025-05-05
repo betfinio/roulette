@@ -19,8 +19,9 @@ import { tableExtraConfigHorizontal, tableExtraConfigVertical } from '../MainTab
 
 interface BetChipsProps {
 	positionId: string;
+	winNumber?: number;
 }
-export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
+export const BetChips: FC<BetChipsProps> = ({ positionId, winNumber }) => {
 	const { data: localChips = [] } = useLocalChipsForPosition(positionId);
 	const { isVertical } = useMediaQuery();
 	const { table } = useVisibleTable();
@@ -97,11 +98,13 @@ export const BetChips: FC<BetChipsProps> = ({ positionId }) => {
 				const xOffset = offset - startOffset;
 				const yOffset = offset - startOffset;
 				const isGhost = chip.player?.toLowerCase() !== address.toLowerCase() && chip.player !== undefined;
+				const isWinNumber = winNumber && chip.numbers.includes(winNumber);
 				return (
 					<div
 						key={index}
 						className={cn('absolute pointer-events-none w-7 md:w-9  aspect-square border rounded-full animate-[ping_1s_linear_reverse] border-background ', {
 							'border-2 rounded-full animate-bounce border-primary': chip.player === undefined,
+							'after:animate-pulse after:bg-black/35 after:rounded-full after:absolute after:z-20 after:inset-0': isWinNumber,
 						})}
 						style={{
 							zIndex,

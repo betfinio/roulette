@@ -1,3 +1,4 @@
+import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { getBlack, getRed, numbersVertical } from '@/src/lib/roulette';
 import { usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
@@ -53,6 +54,7 @@ export const SideTable: FC = () => {
 	const { mutate: place } = usePlace();
 	const { mutate: unplace } = useUnplace();
 	const { onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
+	const { winNumber } = useGetSelectedRound();
 
 	const { isVertical } = useMediaQuery();
 	return (
@@ -72,6 +74,7 @@ export const SideTable: FC = () => {
 						centerSelection={sideItemsConfig[key].centerSelection}
 						onHoverNumbers={onHoverNumbers}
 						onLeaveHover={onLeaveHover}
+						winNumber={Number(winNumber)}
 						onClick={(position, relatedNumbers) =>
 							place({
 								item: `${key}-${position}`,
@@ -106,6 +109,7 @@ export const SideTable: FC = () => {
 						centerSelection={dozenItemsConfig[key].centerSelection}
 						onHoverNumbers={onHoverNumbers}
 						onLeaveHover={onLeaveHover}
+						winNumber={Number(winNumber)}
 						onClick={(position, relatedNumbers) =>
 							place({
 								item: `${key}-${position}`,
