@@ -28,7 +28,7 @@ export const DesktopRoulette = () => {
 							<div className="absolute inset-0 bg-linear-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 							<div className="relative w-full h-full mx-auto flex items-start gap-4 ">
 								{/* <ResultHistory /> */}
-								<div className="flex flex-col gap-4">
+								<div className="flex flex-col gap-4 relative z-50">
 									<LastResults />
 									{!isRoundFinished && (
 										<motion.div initial={{ opacity: 0, x: '-50%' }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 2 }}>
