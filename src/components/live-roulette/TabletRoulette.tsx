@@ -23,7 +23,7 @@ export const TabletRoulette = () => {
 				<div className="relative overflow-hidden">
 					<div className="absolute inset-0 bg-linear-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 					<div className="relative w-full h-full mx-auto flex items-start gap-4">
-						<div className="flex flex-col gap-2">
+						<div className="flex flex-col gap-2 relative z-50">
 							{/* <ResultHistory /> */}
 							<LastResults />
 							{!isRoundFinished && (

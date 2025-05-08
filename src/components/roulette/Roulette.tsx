@@ -31,7 +31,9 @@ export const Roulette = () => {
 			lastShownBet.current = bets[0].bet;
 			lastStatus.current = status;
 		}
-		if (status === 'spinning' && lastStatus.current === 'spinning') {
+
+		console.log(status, 'status');
+		if (status === 'spinning' && lastStatus.current !== 'spinning') {
 			scrollToHeader();
 			lastStatus.current = status;
 		}

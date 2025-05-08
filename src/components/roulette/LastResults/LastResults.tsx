@@ -30,7 +30,7 @@ export const LastResults = () => {
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
-			className={'bg-card rounded-lg p-2 mt-4 border border-border shrink-0'}
+			className={'bg-card rounded-lg p-2 mt-4 border border-border shrink-0 w-[122px]'}
 		>
 			<h3 className="text-foreground flex justify-center text-xs font-medium mb-1">{t('lastResults')}</h3>
 			<div className={cn('flex flex-col gap-1', { 'blur-xs animate-pulse': !isBetsFetched })}>
