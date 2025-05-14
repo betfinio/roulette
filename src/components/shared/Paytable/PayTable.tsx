@@ -44,7 +44,7 @@ const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 			<div className={'mt-5 text-sm flex justify-end'}>
 				<a
 					className={'flex gap-1 underline hover:text-primary duration-300'}
-					href="https://betfin.gitbook.io/betfin-public/games-guide/roulette-single-player/roulette-single-player-terms"
+					href="https://betfin.gitbook.io/betfin-public/games-manual/games-guide/roulette/roulette-t-and-c"
 					target={'_blank'}
 					rel="noreferrer"
 				>
