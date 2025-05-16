@@ -1,4 +1,5 @@
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
+import { motion } from 'motion/react';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
@@ -22,15 +23,20 @@ export const TabletRoulette = () => {
 				<div className="relative overflow-hidden">
 					<div className="absolute inset-0 bg-linear-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 					<div className="relative w-full h-full mx-auto flex items-start gap-4">
-						{/* <ResultHistory /> */}
-						<LastResults />
+						<div className="flex flex-col gap-2 relative z-50">
+							{/* <ResultHistory /> */}
+							<LastResults />
+							{!isRoundFinished && (
+								<motion.div initial={{ opacity: 0, x: '-50%' }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 2 }}>
+									<TableRaceTrack />
+								</motion.div>
+							)}
+						</div>
 						<Wheel />
 						<TableStat />
 					</div>
 				</div>
 
-				{/* <TableRaceTrack/> */}
-				{!isRoundFinished && <TableRaceTrack />}
 				<div className="mx-auto max-w-5xl flex w-full">
 					<MainTable hideBetControls={isRoundFinished} />
 				</div>

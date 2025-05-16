@@ -193,6 +193,7 @@ export const MyBetsTable = () => {
 				loaderClassName="h-[285px]"
 				tableRef={tableRef}
 				onRowClick={handleNavigateToTheRound}
+				autoResetPageIndex={false}
 			/>
 		</div>
 	);

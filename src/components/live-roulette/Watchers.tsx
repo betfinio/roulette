@@ -10,7 +10,7 @@ import {
 } from '@/src/lib/live-roulette/query';
 import { type PlayerInProgressBet, type PlayerRoundBets, type RoundBet, type RoundPlayerBet, WheelStatus } from '@/src/lib/live-roulette/types.ts';
 import { clearAllBets, fetchBetBitmaps, fetchBetInfo } from '@/src/lib/shared/api';
-import { useBetInfo, useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
+import { useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
 import { type LocalBet, RoundStatus } from '@/src/lib/shared/types.ts';
 import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
 import { useQueryClient } from '@tanstack/react-query';
@@ -20,18 +20,18 @@ import { useAccount, useConfig, useWatchContractEvent } from 'wagmi';
 function Watchers() {
 	const queryClient = useQueryClient();
 	const { address = ZeroAddress } = useAccount();
-	const { updateState } = useLiveRouletteState();
+	const { updateState, updateRoundState } = useLiveRouletteState();
 
 	const { table } = useVisibleTable();
 	const { round: visibleRound } = useVisibleRound();
 
 	const { mutateAsync: fetchTableBetsByBlockHash } = useFetchTableBetsByBlockHash();
 
-	const { data: rounds = [], queryKey } = useTableRounds(table);
+	const { data: rounds = [], queryKey: tableRoundsQueryKey } = useTableRounds(table);
 	const { data: playerRounds = [], queryKey: playerRoundsQueryKey } = useTablePlayerRounds(table);
 	const config = useConfig();
 
-	const { data: tableSelectedRoundBets } = useGetTableSelectedRoundBets(table, visibleRound);
+	const { data: tableSelectedRoundBets, queryKey: tableSelectedRoundBetsQueryKey } = useGetTableSelectedRoundBets(table, visibleRound);
 	const { data: tableRoundPlayers = [], queryKey: tableRoundPlayersQueryKey } = useGetTableRoundPlayers(table, visibleRound);
 
 	const { queryKey: tableStatQueryKey } = useLiveRouletteTableStats(table);
@@ -46,10 +46,10 @@ function Watchers() {
 		eventName: 'Requested',
 		args: {
 			table: table,
-			round: BigInt(visibleRound),
 		},
-		onLogs: async () => {
-			updateState({ state: WheelStatus.Requested });
+		onLogs: async (requestedLogs) => {
+			const requestedRound = requestedLogs[0].args.round;
+			updateRoundState(Number(requestedRound), { state: WheelStatus.Requested });
 			await queryClient.invalidateQueries({ queryKey: ['roulette'] });
 		},
 	});
@@ -61,13 +61,14 @@ function Watchers() {
 		abi: LiveRouletteABI,
 		address: PUBLIC_LIRO_ADDRESS,
 		eventName: 'RandomGenerated',
+		args: {
+			table,
+		},
 		onLogs: async (landedLogs) => {
 			const handleLandedEvent = async (landedLog: (typeof landedLogs)[0]) => {
-				const eventTable = landedLog.args.table;
 				const eventRound = landedLog.args.round;
 
 				const isVisibleRound = eventRound === BigInt(visibleRound);
-				const isVisibleTable = eventTable?.toString().toLowerCase() === table?.toLowerCase();
 
 				// Update Stat
 				if (tableStatTimeoutRef.current) {
@@ -78,36 +79,47 @@ function Watchers() {
 				}, 5000);
 
 				// check if the event is for the visible table and round
-				if (isVisibleRound && isVisibleTable) {
+				if (isVisibleRound) {
 					const roundInfo = await fetchTableBetsByBlockHash({
 						blockHash: landedLog.blockHash,
 						round: eventRound,
 					});
-
 					if (!roundInfo) return;
+					const { roundAllBets, roundPlayerBets, roundPlayersDetailedBets } = roundInfo;
+					let updatedTableSelectedRoundBets = tableSelectedRoundBets;
+					if (roundPlayersDetailedBets && tableSelectedRoundBets) {
+						updatedTableSelectedRoundBets = tableSelectedRoundBets.map((bet) => {
+							const blockChainResult = roundPlayersDetailedBets.find((result) => result.bet.toLowerCase() === bet.bet.toLowerCase());
+							if (blockChainResult) {
+								return { ...bet, ...blockChainResult, chips: bet.chips };
+							}
+							return bet;
+						});
+					}
 					updateState({
 						state: WheelStatus.Landing,
 						result: Number(landedLog.args.value),
-						tableRound: roundInfo.roundAllBets,
-						tablePlayerRound: roundInfo.roundPlayerBets || undefined,
+						tableRound: roundAllBets,
+						tablePlayerRound: roundPlayerBets || undefined,
+						tableSelectedRoundBets: updatedTableSelectedRoundBets || [],
 					});
 					await queryClient.invalidateQueries({ queryKey: ['roulette', 'state'] });
 				}
 				// check if the event is for the visible table but not the visible round
-				if (!isVisibleRound && isVisibleTable) {
+				if (!isVisibleRound) {
 					const roundInfo = await fetchTableBetsByBlockHash({
 						blockHash: landedLog.blockHash,
 						round: eventRound ?? 0n,
 					});
 
 					if (!roundInfo) return;
-					const { roundAllBets, roundPlayerBets } = roundInfo;
+					const { roundAllBets, roundPlayerBets, roundPlayersDetailedBets } = roundInfo;
 
 					// Populate all bets for the current round
 
 					if (roundAllBets) {
 						const updatedRounds = rounds.map((round) => (round.round === roundAllBets.round ? roundAllBets : round));
-						queryClient.setQueryData(queryKey, updatedRounds, {
+						queryClient.setQueryData(tableRoundsQueryKey, updatedRounds, {
 							updatedAt: Date.now(),
 						});
 					}
@@ -118,6 +130,16 @@ function Watchers() {
 							updatedAt: Date.now(),
 						});
 					}
+					updateRoundState(Number(eventRound), {
+						state: WheelStatus.JustFinished,
+						result: Number(landedLog.args.value),
+						tableRound: roundAllBets,
+						tablePlayerRound: roundPlayerBets || undefined,
+						tableSelectedRoundBets: tableSelectedRoundBets || [],
+					});
+
+					queryClient.refetchQueries({ queryKey: ['roulette', 'round', 'status', table, Number(eventRound)] });
+					queryClient.refetchQueries({ queryKey: ['roulette', 'round', 'winNumber', table, Number(eventRound)] });
 				}
 			};
 			await Promise.all(landedLogs.map(handleLandedEvent));
@@ -128,18 +150,20 @@ function Watchers() {
 		abi: MultiPlayerTableABI,
 		address: table,
 		eventName: 'BetPlaced',
+
 		onLogs: async (logs) => {
 			const handleBetPlacedEvent = async (log: (typeof logs)[0]) => {
 				const eventRound = log.args.round;
-				if (eventRound !== BigInt(visibleRound)) return;
+
 				await queryClient.invalidateQueries({ queryKey: ['roulette', 'bank'] });
 				const betAddress = log.args.bet || ZeroAddress;
+
 				const [player, , amount, winAmount, , created] = await fetchBetInfo(config, betAddress);
 				const roundBet: RoundBet = {
 					amount: amount,
 					winAmount: winAmount,
 					created: created,
-					round: Number(visibleRound),
+					round: Number(eventRound),
 					winNumber: -1,
 					status: RoundStatus.CREATED,
 				};
@@ -160,7 +184,7 @@ function Watchers() {
 				} else {
 					updatedRounds = [roundBet, ...rounds];
 				}
-				queryClient.setQueryData(queryKey, updatedRounds);
+				queryClient.setQueryData(tableRoundsQueryKey, updatedRounds);
 
 				const roundPlayerBet: RoundPlayerBet = { ...roundBet, player };
 
@@ -205,7 +229,7 @@ function Watchers() {
 					updatedTableSelectedRoundBets = [...tableSelectedRoundBets, playerInProgressBet];
 				}
 
-				queryClient.setQueryData(['roulette', 'table', 'bets', table, visibleRound], updatedTableSelectedRoundBets);
+				queryClient.setQueryData(tableSelectedRoundBetsQueryKey, updatedTableSelectedRoundBets);
 
 				//Update round players(side panel)
 				let updatedTableRoundPlayers: PlayerRoundBets[];

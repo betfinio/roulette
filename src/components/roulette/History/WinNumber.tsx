@@ -26,7 +26,7 @@ function WinNumber(props: CellContext<RoundBet, number>) {
 	const roundFinishedPlusDelayTimestamp = props.row.original.round * interval + interval + 60;
 	const now = DateTime.now().toSeconds();
 	const roundHasPassedPlusDelay = roundHasPassed && roundFinishedPlusDelayTimestamp < now && props.row.original.status === RoundStatus.CREATED;
-	const { mutate: manualSpin, isPending } = useManualSpin();
+	const { mutate: manualSpin, isPending } = useManualSpin(props.row.original.round);
 
 	const handleManualSpin = (e: MouseEvent) => {
 		if (roundHasPassed) {

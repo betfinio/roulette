@@ -17,15 +17,18 @@ export const TabletRoulette = () => {
 				<div className="relative overflow-hidden">
 					<div className="absolute inset-0 bg-linear-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 					<div className="relative w-full h-full mx-auto flex items-start gap-4">
-						{/* <ResultHistory /> */}
-						<LastResults />
+						<div className="flex flex-col gap-4">
+							{/* <ResultHistory /> */}
+							<LastResults />
+							{/* <TableRaceTrack/> */}
+							<TableRaceTrack />
+						</div>
+
 						<Wheel />
 						<PlayerStat />
 					</div>
 				</div>
 
-				{/* <TableRaceTrack/> */}
-				<TableRaceTrack />
 				<div className="mx-auto max-w-5xl flex w-full">
 					<MainTable />
 				</div>
