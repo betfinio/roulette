@@ -9,7 +9,7 @@ const ManualSpin = () => {
 	const { round } = useVisibleRound();
 	const { table } = useVisibleTable();
 	const { data: interval = 0 } = useCurrentInterval(table);
-	const { mutate: spin, isPending } = useManualSpin();
+	const { mutate: spin, isPending } = useManualSpin(round);
 
 	useEffect(() => {
 		const i = setInterval(() => {

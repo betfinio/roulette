@@ -1,6 +1,5 @@
 import { ZeroAddress } from '@betfinio/abi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
@@ -45,7 +44,12 @@ export const useLiveRouletteState = () => {
 		queryClient.refetchQueries({ queryKey: ['liveroulette', 'state', round, table] });
 	};
 
-	return { state, updateState };
+	const updateRoundState = (round: number, st: WheelState) => {
+		queryClient.setQueryData(['live-roulette', 'state', round, table], { ...state.data, ...st });
+		queryClient.refetchQueries({ queryKey: ['liveroulette', 'state', round, table] });
+	};
+
+	return { state, updateState, updateRoundState };
 };
 export const useTablePlayerRounds = (table?: Address) => {
 	const { address = ZeroAddress } = useAccount();
@@ -127,6 +131,7 @@ export const useGetSelectedRound = () => {
 		roundStatusProps,
 		bankByRoundProps,
 		currentRoundProps,
+		currentRoundBank,
 	};
 };
 
@@ -156,13 +161,16 @@ export const useGetTableRoundPlayers = (table?: Address, round?: number) => {
 
 export const useGetTableSelectedRoundBets = (table?: Address, round?: number) => {
 	const queryKey = ['roulette', 'table', 'bets', table, round];
-	return useQuery({
+	return {
 		queryKey,
-		queryFn: () => fetchTableSelectedRoundBets(table, round),
-		refetchOnWindowFocus: false,
-		enabled: !!table && !!round,
-		staleTime: Number.POSITIVE_INFINITY,
-	});
+		...useQuery({
+			queryKey,
+			queryFn: () => fetchTableSelectedRoundBets(table, round),
+			refetchOnWindowFocus: false,
+			enabled: !!table && !!round,
+			staleTime: Number.POSITIVE_INFINITY,
+		}),
+	};
 };
 
 export const useGetBankByRound = (table?: Address, round?: number) => {

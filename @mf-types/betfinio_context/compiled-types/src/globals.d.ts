@@ -17,3 +17,4 @@ export declare const LOTTERY_ADDRESS: Address;
 export declare const ACADEMY_LINK: any;
 export declare const PRIVY_APP_ID: any;
 export declare const WALLETCONNECT_ID: any;
+export declare const ENVIRONMENT: any;

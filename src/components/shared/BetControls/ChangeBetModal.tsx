@@ -13,12 +13,12 @@ interface IChangeBetModalProps {
 }
 export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, min, open, setOpen }) => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'changeBetModal' });
-	const [value, setValue] = useState(initialValue);
+	const [value, setValue] = useState<number | string>(initialValue);
 	const { mutate: change } = useChangeChip();
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		const inputValue = e.target.value;
 		if ((inputValue === '' || Number.isInteger(+inputValue)) && Number(+inputValue) >= 0) {
-			setValue(Number(inputValue));
+			setValue(inputValue === '' ? '' : Number(inputValue));
 		}
 	};
 
@@ -51,7 +51,7 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 				<div className={' p-4 flex flex-col gap-2 text-foreground'}>
 					<h2 className={'text-sm text-foreground'}>{t('customAmountOfChip')}:</h2>
 					<div className={'flex gap-2 items-center'}>
-						<input type="number" min={0} className={'rounded-lg bg-transparent p-2 px-4 border border-border '} value={value} onChange={handleChange} />
+						<input type="number" className={'rounded-lg bg-transparent p-2 px-4 border border-border '} value={value} onChange={handleChange} />
 						<span className={''}>BET</span>
 					</div>
 					<DialogClose>

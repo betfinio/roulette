@@ -336,6 +336,10 @@ export declare const sharedLang: {
             "roulette-single": string;
             "roulette-90": string;
             "roulette-180": string;
+            "roulette-60": string;
+            "roulette-300": string;
+            "roulette-1200": string;
+            "roulette-3600": string;
             lottery: string;
             luro: string;
             "luro-5m": string;

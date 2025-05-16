@@ -1,3 +1,4 @@
+import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { useGetDebugMode, usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
@@ -13,6 +14,7 @@ export const ZeroItem: FC = () => {
 	const { data: isDebugMode } = useGetDebugMode();
 
 	const { isNumberHovered, isNumberSelected, onHoverNumbers, onLeaveHover } = useRouletteNumbersState();
+	const { winNumber } = useGetSelectedRound();
 
 	return (
 		<TableItem
@@ -21,6 +23,7 @@ export const ZeroItem: FC = () => {
 			number={'0'}
 			centerSelection={[0]}
 			isVertical={isVertical}
+			winNumber={Number(winNumber)}
 			className={cn(
 				`bg-green-roulette w-full ${zeroClassName} border-[3px] border-transparent transition-all duration-300`,
 
@@ -28,6 +31,7 @@ export const ZeroItem: FC = () => {
 					'border-bonus': isNumberHovered(0) && !isDebugMode,
 					'border-muted/50 ': !isNumberHovered(0) && isDebugMode,
 					'border-primary': isNumberSelected(0),
+					'border-white/80! border-[3px] animate-[pulse_2s_ease-in-out_infinite] z-10': Number(winNumber) === Number(0),
 				},
 			)}
 			onHoverNumbers={onHoverNumbers}
