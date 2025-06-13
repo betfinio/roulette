@@ -1,6 +1,5 @@
-import { VersionValidation } from '@/src/components/VersionValidation';
 import { Roulette } from '@/src/components/roulette/Roulette';
-import { PUBLIC_BRANCH, PUBLIC_DEPLOYED, PUBLIC_LIRO_ADDRESS } from '@/src/global';
+import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { useFetchTableBetByBlockHash, useRouletteState } from '@/src/lib/roulette/query';
 import { LiveRouletteABI, ZeroAddress } from '@betfinio/abi';
 import { SonnerToaster } from '@betfinio/components/ui';
