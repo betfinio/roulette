@@ -51,7 +51,6 @@ export function RoulettePage() {
 		<div className="roulette">
 			<Roulette />
 			<SonnerToaster />
-			<VersionValidation repository={'roulette'} branch={PUBLIC_BRANCH} current={PUBLIC_DEPLOYED} />
 		</div>
 	);
 }

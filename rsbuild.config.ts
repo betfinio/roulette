@@ -22,7 +22,6 @@ export default defineConfig({
 	html: {
 		title: 'Betfin Roulette',
 		favicon: './src/assets/favicon.svg',
-		template: './src/assets/index.html',
 	},
 	output: {
 		assetPrefix: process.env.PUBLIC_OUTPUT_URL,
