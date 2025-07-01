@@ -1,3 +1,4 @@
+import logger from '@/src/config/logger';
 import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { LiroBetABI, LiveRouletteABI, PartnerABI, SinglePlayerTableABI, valueToNumber } from '@betfinio/abi';
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
@@ -171,12 +172,15 @@ export const getRequiredAllowance = (): number => {
 };
 
 export const fetchTableByAddress = async (config: Config, address: Address) => {
-	return await readContract(config, {
+	logger.info('fetchTableByAddress', { address });
+	const result = await readContract(config, {
 		abi: LiveRouletteABI,
 		address: PUBLIC_LIRO_ADDRESS,
 		functionName: 'tables',
 		args: [address],
 	});
+	logger.info('fetchTableByAddress result', { result });
+	return result;
 };
 
 export const manualSpin = async (config: Config, table: Address, round: bigint) => {

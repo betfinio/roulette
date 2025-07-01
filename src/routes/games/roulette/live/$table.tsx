@@ -1,7 +1,5 @@
-import { VersionValidation } from '@/src/components/VersionValidation';
 import { LiveRoulette } from '@/src/components/live-roulette/LiveRoulette';
 import Watchers from '@/src/components/live-roulette/Watchers.tsx';
-import { PUBLIC_BRANCH, PUBLIC_DEPLOYED } from '@/src/global';
 import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
 import { fetchLiveRouletteTables } from '@/src/lib/live-roulette/gql';
 import { fetchTableByAddress } from '@/src/lib/shared/api';
@@ -70,7 +68,6 @@ export function RouletteLiveTable() {
 			<Watchers />
 			<LiveRoulette />
 			<SonnerToaster />
-			<VersionValidation repository={'roulette'} branch={PUBLIC_BRANCH} current={PUBLIC_DEPLOYED} />
 		</div>
 	);
 }

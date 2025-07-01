@@ -6,6 +6,12 @@ on:
     branches:
       - dev
 
+permissions:
+  contents: write
+  pull-requests: write
+  packages: read
+  id-token: write
+
 jobs:
   release-pr:
     name: Create Release
