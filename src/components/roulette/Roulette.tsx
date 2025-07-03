@@ -1,10 +1,10 @@
-import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
-import { shootConfetti } from '@/src/lib/roulette/utils';
-import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { toast } from '@betfinio/components/ui';
 import { useEffect, useRef } from 'react';
 import type { Address } from 'viem';
+import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
+import { shootConfetti } from '@/src/lib/roulette/utils';
+import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
 import { RouletteResultToast } from '../RouletteResultToast';
 import { DesktopRoulette } from './DesktopRoulette';
 import { TabletRoulette } from './TabletRoulette';

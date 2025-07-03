@@ -1,10 +1,10 @@
-import { useChangeChip, useSelectedChip } from '@/src/lib/shared/query';
 import { usePressAndHold } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
 import { Minus, PlusIcon } from 'lucide-react';
 import millify from 'millify';
 import type { FC } from 'react';
 import { useCallback, useEffect, useRef } from 'react';
+import { useChangeChip, useSelectedChip } from '@/src/lib/shared/query';
 import RouletteSlider from '../RouletteSlider/RouletteSlider';
 
 interface IRangeWithButtonsProps {

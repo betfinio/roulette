@@ -106,7 +106,7 @@ export const useCurrentRound = (table: Address) => {
 		queryFn: () => fetchCurrentRound(interval),
 		refetchInterval: (query) => {
 			if (fetchCurrentRound(interval) === query.state.data) return false;
-			return 300;
+			return 60;
 		},
 	});
 };

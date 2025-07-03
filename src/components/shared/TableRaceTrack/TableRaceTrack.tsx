@@ -1,10 +1,8 @@
-import miniTableImg from '@/src/assets/images/mini-table.svg';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
-import { Button } from '@betfinio/components/ui';
-import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
-import { motion } from 'motion/react';
+import { Button, Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
 import { useState } from 'react';
+import miniTableImg from '@/src/assets/images/mini-table.svg';
 import Racetrack from './Racetrack';
 
 export const TableRaceTrack = () => {

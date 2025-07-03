@@ -1,7 +1,3 @@
-import { getWheelNumbers } from '@/src/lib/roulette';
-import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
-import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
-import { useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
@@ -9,6 +5,10 @@ import { PlayIcon } from 'lucide-react';
 import { motion, useAnimation } from 'motion/react';
 import { useEffect } from 'react';
 import { useAccount } from 'wagmi';
+import { getWheelNumbers } from '@/src/lib/roulette';
+import { useGetPlayerBets, useRouletteState } from '@/src/lib/roulette/query';
+import type { WheelLanded, WheelState } from '@/src/lib/roulette/types';
+import { useVisibleTable } from '@/src/lib/shared/query';
 import RouletteWheel from '../../shared/RouletteWheel';
 
 export const Wheel = () => {
@@ -123,20 +123,18 @@ export const Wheel = () => {
 	}, [status, wheelControls]);
 
 	return (
-		<>
-			<div className="w-full max-w-2xl mx-8 lg:mx-auto drop-shadow-[0_0_18px_var(--wheel-shadow)] rounded-full">
-				<motion.div className=" relative  mt-0   max-w-3xl	aspect-square pb-10" animate={wheelControlsWrapper}>
-					<motion.div style={{}} className={cn({ 'blur-md animate-pulse': !isBetsFetched })} animate={wheelControls}>
-						<div className="relative aspect-square w-full max-w-3xl text-background-light">
-							<div className="absolute rounded-full top-[-6px] right-[-6px] bottom-[-6px] left-[-6px]]  " />
-							<RouletteWheel />
-							<span className="absolute z-3 top-[12%] right-[12%] bottom-[12%] left-[12%] bg-center bg-cover bg-roulette-center " />
-						</div>
-					</motion.div>
-					<PlayIcon className={'absolute w-5 h-5 text-foreground z-5 bottom-6 rotate-[270deg] left-1/2 -translate-x-1/2'} />
+		<div className="w-full max-w-2xl mx-8 lg:mx-auto drop-shadow-[0_0_18px_var(--wheel-shadow)] rounded-full">
+			<motion.div className=" relative  mt-0   max-w-3xl	aspect-square pb-10" animate={wheelControlsWrapper}>
+				<motion.div style={{}} className={cn({ 'blur-md animate-pulse': !isBetsFetched })} animate={wheelControls}>
+					<div className="relative aspect-square w-full max-w-3xl text-background-light">
+						<div className="absolute rounded-full top-[-6px] right-[-6px] bottom-[-6px] left-[-6px]]  " />
+						<RouletteWheel />
+						<span className="absolute z-3 top-[12%] right-[12%] bottom-[12%] left-[12%] bg-center bg-cover bg-roulette-center " />
+					</div>
 				</motion.div>
-			</div>
-		</>
+				<PlayIcon className={'absolute w-5 h-5 text-foreground z-5 bottom-6 rotate-[270deg] left-1/2 -translate-x-1/2'} />
+			</motion.div>
+		</div>
 	);
 };
 

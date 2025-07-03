@@ -1,6 +1,3 @@
-import { BET_STATUS_HEADER } from '@/src/components/shared/BetStatusHeader/BetStatusHeader';
-import logger from '@/src/config/logger';
-import { fetchBetsBitMapAndAmountByRound } from '@/src/lib/shared/gql';
 import { toast } from '@betfinio/components/ui';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams, useSearch } from '@tanstack/react-router';
@@ -10,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType, WriteContractReturnType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useConfig } from 'wagmi';
+import { BET_STATUS_HEADER } from '@/src/components/shared/BetStatusHeader/BetStatusHeader';
+import { fetchBetsBitMapAndAmountByRound } from '@/src/lib/shared/gql';
 import {
 	changeChip,
 	clearAllBets,
@@ -185,6 +184,7 @@ export const useSubmitBet = () => {
 		mutationKey: ['roulette', 'spin'],
 		mutationFn: (params) => submitBet(params, config),
 		onError: (e) => {
+			// @ts-expect-error todo
 			if (e.cause.reason === 'LT02' || e.cause.reason === 'LT03') {
 				openPaytable(queryClient);
 			}

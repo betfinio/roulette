@@ -1,5 +1,4 @@
-import { createRootRouteWithContext } from '@tanstack/react-router';
-import { Outlet } from '@tanstack/react-router';
+import { createRootRouteWithContext, Outlet } from '@tanstack/react-router';
 import MockRoot from 'betfinio_context/components/MockRoot';
 import { GlobalContextProvider } from 'betfinio_context/lib/context';
 import { I18nextProvider } from 'react-i18next';
