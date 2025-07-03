@@ -1,10 +1,10 @@
-import { LiroBetABI, LiveRouletteABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
+import { DefaultPartnerV2ABI, LiroBetABI, LiveRouletteABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import { type Address, encodeAbiParameters, parseAbiParameters } from 'viem';
 import type { Config } from 'wagmi';
 import logger from '@/src/config/logger';
-import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global';
+import { IS_DEV, PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { decodeBet, encodeBet } from '..';
 import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
 
@@ -134,6 +134,20 @@ export const submitBet = async (params: SpinParams, config: Config) => {
 		roundNumber,
 		playerAddress,
 	]);
+	if (IS_DEV) {
+		await simulateContract(config, {
+			abi: DefaultPartnerV2ABI,
+			address: PARTNER,
+			functionName: 'placeBet',
+			args: [params.playerAddress, PUBLIC_LIRO_ADDRESS, totalAmount, data],
+		});
+		return await writeContract(config, {
+			abi: DefaultPartnerV2ABI,
+			address: PARTNER,
+			functionName: 'placeBet',
+			args: [params.playerAddress, PUBLIC_LIRO_ADDRESS, totalAmount, data],
+		});
+	}
 	await simulateContract(config, {
 		abi: PartnerABI,
 		address: PARTNER,

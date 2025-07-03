@@ -32,7 +32,6 @@ export const Roulette = () => {
 			lastStatus.current = status;
 		}
 
-		console.log(status, 'status');
 		if (status === 'spinning' && lastStatus.current !== 'spinning') {
 			scrollToHeader();
 			lastStatus.current = status;

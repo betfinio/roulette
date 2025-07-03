@@ -184,6 +184,7 @@ export const useSubmitBet = () => {
 		mutationKey: ['roulette', 'spin'],
 		mutationFn: (params) => submitBet(params, config),
 		onError: (e) => {
+			console.log('e', e);
 			// @ts-expect-error todo
 			if (e.cause.reason === 'LT02' || e.cause.reason === 'LT03') {
 				openPaytable(queryClient);

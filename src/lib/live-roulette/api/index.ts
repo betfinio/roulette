@@ -146,6 +146,7 @@ export const fetchWinNumber = async (config: Config, tableAddress?: Address, rou
 		address: tableAddress,
 		functionName: 'interval',
 	});
+
 	const startTime = Number(interval * BigInt(round));
 	const startBlock = await getBlockByTimestamp(startTime);
 	const endBlock = startBlock + 9999n;
@@ -157,25 +158,30 @@ export const fetchWinNumber = async (config: Config, tableAddress?: Address, rou
 		return winNumber ?? 42n;
 	}
 
-	const randomGeneratedData = await getContractEvents(config.getClient(), {
-		abi: LiveRouletteABI,
-		address: PUBLIC_LIRO_ADDRESS,
-		eventName: 'RandomGenerated',
-		args: {
-			table: tableAddress,
-			round: BigInt(round),
-			player: ZeroAddress,
-		},
-		fromBlock: startBlock,
-		toBlock: endBlock,
-	});
-	logger.success('fetchWinNumber from blockchain', tableAddress, round, randomGeneratedData);
+	try {
+		console.log('fetchWinNumber from blockchain', tableAddress, round, startBlock, endBlock);
+		const randomGeneratedData = await getContractEvents(config.getClient(), {
+			abi: LiveRouletteABI,
+			address: PUBLIC_LIRO_ADDRESS,
+			eventName: 'RandomGenerated',
+			args: {
+				table: tableAddress,
+				round: BigInt(round),
+				player: ZeroAddress,
+			},
+			fromBlock: startBlock,
+			toBlock: endBlock,
+		});
 
-	if (randomGeneratedData.length === 0) {
+		if (randomGeneratedData.length === 0) {
+			return 42n;
+		}
+		logger.success('fetchWinNumber from blockchain', tableAddress, round, randomGeneratedData[0].args.value);
+		return randomGeneratedData[0].args.value;
+	} catch (e) {
+		logger.error('fetchWinNumber failed from blockchain', tableAddress, round, e);
 		return 42n;
 	}
-	logger.success('fetchWinNumber from blockchain', tableAddress, round, randomGeneratedData[0].args.value);
-	return randomGeneratedData[0].args.value;
 };
 
 export const fetchTableInterval = async (config: Config, table?: Address) => {
