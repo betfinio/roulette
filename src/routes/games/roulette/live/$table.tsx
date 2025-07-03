@@ -43,7 +43,7 @@ export function RouletteLiveTable() {
 
 			const isTableExist = await fetchTableByAddress(wagmiConfig, params.table as Address);
 			if (!isTableExist) {
-				navigate({ to: '/games/roulette' });
+				navigate({ to: '/not-found' });
 				return;
 			}
 
