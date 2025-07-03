@@ -1,5 +1,6 @@
+@import "@betfinio/components/globals.css";
+
 @import "tailwindcss";
-@import "@betfinio/components/globals.css" important;
 @import "tw-animate-css";
 
 @theme {
@@ -13,6 +14,7 @@
 	--color-green-roulette: var(--green-roulette);
 	--color-red-roulette: var(--red-roulette);
 	--roulette-center: url("./assets/roulette-center.svg");
+	--color-card: var(--card);
 }
 
 @layer utilities {
@@ -22,6 +24,7 @@
 }
 
 @layer base {
+
 	*,
 	::after,
 	::before,
@@ -60,6 +63,7 @@
 	* {
 		user-select: none;
 	}
+
 	input[type="number"]::-webkit-inner-spin-button,
 	input[type="number"]::-webkit-outer-spin-button {
 		-webkit-appearance: none;
@@ -72,6 +76,7 @@
 	0% {
 		transform: rotateZ(0deg);
 	}
+
 	100% {
 		transform: rotateZ(360deg);
 	}
@@ -81,6 +86,7 @@
 	0% {
 		opacity: 0.3;
 	}
+
 	100% {
 		opacity: 1;
 	}
