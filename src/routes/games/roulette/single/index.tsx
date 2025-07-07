@@ -47,7 +47,7 @@ export function RoulettePage() {
 	});
 
 	return (
-		<div className="roulette">
+		<div className="max-w-screen-2xl mx-auto">
 			<Roulette />
 			<SonnerToaster />
 		</div>
