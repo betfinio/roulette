@@ -1,7 +1,7 @@
+import { useMemo } from 'react';
 import { useGetSelectedRound, useGetTableSelectedRoundBets } from '@/src/lib/live-roulette/query';
 import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { useVisibleTable } from '@/src/lib/shared/query';
-import { useMemo } from 'react';
 import { BetItem } from './BetTabItem';
 
 export const BetsTab = () => {

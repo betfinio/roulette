@@ -1,5 +1,3 @@
-import type { Address } from 'viem';
-
 export function getColor(num: number): 'RED' | 'BLACK' | 'GREEN' | undefined {
 	if (num === 0) return 'GREEN';
 	if ([1, 3, 5, 7, 9, 12, 14, 16, 18, 19, 21, 23, 25, 27, 30, 32, 36, 34].includes(num)) return 'RED';

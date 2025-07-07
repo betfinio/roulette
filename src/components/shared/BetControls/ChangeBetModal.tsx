@@ -1,8 +1,8 @@
-import { useChangeChip } from '@/src/lib/shared/query';
 import { Button, Dialog, DialogClose, DialogContent, toast } from '@betfinio/components/ui';
 import millify from 'millify';
 import { type ChangeEvent, type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useChangeChip } from '@/src/lib/shared/query';
 
 interface IChangeBetModalProps {
 	initialValue: number;

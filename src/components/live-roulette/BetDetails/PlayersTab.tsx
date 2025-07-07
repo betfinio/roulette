@@ -1,7 +1,3 @@
-import { ETHSCAN } from '@/src/global';
-import { useGetSelectedRound, useGetTableRoundPlayers } from '@/src/lib/live-roulette/query';
-import type { PlayerRoundBets } from '@/src/lib/live-roulette/types';
-import { useVisibleTable } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import { Fox } from '@betfinio/components/icons';
 import { BetValue } from '@betfinio/components/shared';
@@ -10,6 +6,10 @@ import { motion } from 'motion/react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
+import { ETHSCAN } from '@/src/global';
+import { useGetSelectedRound, useGetTableRoundPlayers } from '@/src/lib/live-roulette/query';
+import type { PlayerRoundBets } from '@/src/lib/live-roulette/types';
+import { useVisibleTable } from '@/src/lib/shared/query';
 
 export const PlayersTab = () => {
 	const { table } = useVisibleTable();
