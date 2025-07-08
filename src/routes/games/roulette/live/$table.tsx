@@ -64,7 +64,7 @@ export function RouletteLiveTable() {
 	}, [params.table, search.round]);
 
 	return (
-		<div className="max-w-screen-2xl mx-auto">
+		<div className="roulette  ">
 			<Watchers />
 			<LiveRoulette />
 			<SonnerToaster />
