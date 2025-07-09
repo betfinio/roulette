@@ -101,15 +101,15 @@ const TableItem: React.FC<TableItemProps> = ({
 		<div
 			data-potition-id={number}
 			className={cn(
-				'text-xs xl:text-base cursor-pointer relative flex items-center justify-center',
+				'rl:text-xs rl:xl:text-base rl:cursor-pointer rl:relative rl:flex rl:items-center rl:justify-center',
 				{
-					' w-10 h-full rounded-lg border border-border ': isRangeButton && isVertical,
-					' w-full': isRangeButton && !isVertical,
-					' w-full  rounded-lg border border-border  font-semibold': !isRangeButton && !isVertical,
-					' w-full h-10 rounded-lg border border-border  font-semibold': !isRangeButton && isVertical,
+					' rl:w-10 rl:h-full rl:rounded-lg rl:border rl:border-border ': isRangeButton && isVertical,
+					' rl:w-full': isRangeButton && !isVertical,
+					' rl:w-full  rl:rounded-lg rl:border rl:border-border  rl:font-semibold': !isRangeButton && !isVertical,
+					' rl:w-full rl:h-10 rl:rounded-lg rl:border rl:border-border  rl:font-semibold': !isRangeButton && isVertical,
 				},
 				className,
-				{ 'border-transparent': !isCurrentRound },
+				{ 'rl:border-transparent': !isCurrentRound },
 			)}
 			onMouseOver={(e) => handleInteraction('center', 'hover', e)}
 			onMouseOut={(e) => handleInteraction('center', 'leave', e)}
@@ -118,7 +118,7 @@ const TableItem: React.FC<TableItemProps> = ({
 			{/* Number Display */}
 			<div
 				className={cn({
-					'rotate-90 whitespace-nowrap': isVertical && isRangeButton,
+					'rl:rotate-90 rl:whitespace-nowrap': isVertical && isRangeButton,
 				})}
 			>
 				{number !== 'Black' && number !== 'Red' ? (!_isNaN(+number) ? number : t(number as keyof IRouletteLanguageKeys['betTable'])) : ''}

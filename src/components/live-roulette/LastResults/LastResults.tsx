@@ -43,26 +43,26 @@ export const LastResults = () => {
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
-			className={'bg-card rounded-lg p-2 mt-4 border border-border shrink-0 w-[122px]'}
+			className={'rl:bg-card rl:rounded-lg rl:p-2 rl:mt-4 rl:border rl:border-border rl:shrink-0 rl:w-[122px]'}
 		>
-			<h3 className="text-foreground flex justify-center gap-1 text-xs font-medium mb-1">
+			<h3 className="rl:text-foreground rl:flex rl:justify-center rl:gap-1 rl:text-xs rl:font-medium rl:mb-1">
 				{t('lastResults')}
 				<TooltipProvider>
 					<Tooltip>
 						<TooltipTrigger>
-							<CircleHelp className={'w-3 h-3'} />
+							<CircleHelp className={'rl:w-3 rl:h-3'} />
 						</TooltipTrigger>
 						<TooltipContent>{t('lastNumbersTooltip')}</TooltipContent>
 					</Tooltip>
 				</TooltipProvider>
 			</h3>
-			<div className={cn('flex flex-col gap-1', { 'blur-xs animate-pulse': !isBetsFetched })}>
+			<div className={cn('rl:flex rl:flex-col rl:gap-1', { 'rl:blur-xs rl:animate-pulse': !isBetsFetched })}>
 				{lastSeven.map((result, index) => (
 					<div
 						key={index}
-						className={cn('grid grid-cols-3 gap-x-1 transition-all', {
-							'opacity-60': isAnyFinishedSelected && round !== result.round,
-							'cursor-pointer': round !== result.round,
+						className={cn('rl:grid rl:grid-cols-3 rl:gap-x-1 rl:transition-all', {
+							'rl:opacity-60': isAnyFinishedSelected && round !== result.round,
+							'rl:cursor-pointer': round !== result.round,
 						})}
 						onClick={() => navigate({ to: '/games/roulette/live/$table', params: { table }, search: { round: result.round } })}
 					>

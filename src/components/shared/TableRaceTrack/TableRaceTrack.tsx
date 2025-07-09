@@ -21,17 +21,17 @@ export const TableRaceTrack = () => {
 			{/* If not vertical, display the button and animate Racetrack */}
 			{!isVertical && (
 				<>
-					<div className="col-span-1 flex justify-center items-center">
-						<Button variant="ghost" onClick={toggleRacetrack} className="h-auto p-0 mb-2">
-							<img src={miniTableImg} alt="Mini Table" className="h-14" />
+					<div className="rl:col-span-1 rl:flex rl:justify-center rl:items-center">
+						<Button variant="ghost" onClick={toggleRacetrack} className="rl:h-auto rl:p-0 rl:mb-2">
+							<img src={miniTableImg} alt="Mini Table" className="rl:h-14" />
 						</Button>
 					</div>
-					<div className="col-span-10 flex justify-center">
+					<div className="rl:col-span-10 rl:flex rl:justify-center">
 						<Dialog open={isRacetrackOpen} onOpenChange={setIsRacetrackOpen}>
-							<DialogContent className="roulette">
-								<DialogTitle className={'hidden'} />
-								<DialogDescription className={'hidden'} />
-								<div className="p-4">
+							<DialogContent className="rl:p-0">
+								<DialogTitle className={'rl:hidden'} />
+								<DialogDescription className={'rl:hidden'} />
+								<div className="rl:p-4">
 									{' '}
 									<Racetrack onPlace={() => setIsRacetrackOpen(false)} />{' '}
 								</div>{' '}

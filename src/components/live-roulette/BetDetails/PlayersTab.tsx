@@ -17,7 +17,7 @@ export const PlayersTab = () => {
 	const { data: players = [] } = useGetTableRoundPlayers(table, round);
 
 	return (
-		<div className="flex flex-col gap-2">
+		<div className="rl:flex rl:flex-col rl:gap-2">
 			{players.map((playerRoundBets) => {
 				return <PlayersTabItem key={playerRoundBets.created} playerRoundBets={playerRoundBets} />;
 			})}
@@ -41,18 +41,18 @@ export const PlayersTabItem: FC<IPlayersTabItemProps> = ({ playerRoundBets }) =>
 			animate={{ scale: 1 }}
 			transition={{ type: 'spring', stiffness: 500, damping: 30 }}
 			exit={{ opacity: 0, y: 10 }}
-			className={cn('rounded-lg flex bg-background justify-between')}
+			className={cn('rl:rounded-lg rl:flex rl:bg-background rl:justify-between')}
 		>
-			<div className={'py-3 px-2 flex justify-between items-center grow gap-2'}>
-				<div className={'flex items-start gap-2.5'}>
-					<Fox className={'w-5 h-5'} />
-					<div className={'flex flex-col text-tertiary-foreground text-xs gap-2'}>
+			<div className={'rl:py-3 rl:px-2 rl:flex rl:justify-between rl:items-center rl:grow rl:gap-2'}>
+				<div className={'rl:flex rl:items-start rl:gap-2.5'}>
+					<Fox className={'rl:w-5 rl:h-5'} />
+					<div className={'rl:flex rl:flex-col rl:text-tertiary-foreground rl:text-xs rl:gap-2'}>
 						<a
 							href={`${ETHSCAN}/address/${playerRoundBets.player}`}
 							target={'_blank'}
 							className={cn(
-								'font-semibold text-sm text-tertiary-foreground hover:underline',
-								playerRoundBets.player.toLowerCase() === address?.toLowerCase() && 'text-primary!',
+								'rl:font-semibold rl:text-sm rl:text-tertiary-foreground rl:hover:underline',
+								playerRoundBets.player.toLowerCase() === address?.toLowerCase() && 'rl:text-primary!',
 							)}
 							rel="noreferrer"
 						>
@@ -60,15 +60,15 @@ export const PlayersTabItem: FC<IPlayersTabItemProps> = ({ playerRoundBets }) =>
 						</a>
 						<span
 							className={cn({
-								'opacity-0': playerRoundBets.betCounts === 0,
-								'opacity-100': playerRoundBets.betCounts > 0,
+								'rl:opacity-0': playerRoundBets.betCounts === 0,
+								'rl:opacity-100': playerRoundBets.betCounts > 0,
 							})}
 						>
 							{t('betCount', { count: playerRoundBets.betCounts })}
 						</span>
 					</div>
 				</div>
-				<div className={'flex flex-col items-end text-xs gap-2'}>
+				<div className={'rl:flex rl:flex-col rl:items-end rl:text-xs rl:gap-2'}>
 					<span>
 						<BetValue precision={2} value={playerRoundBets.amount} withIcon />
 					</span>

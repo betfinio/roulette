@@ -14,18 +14,18 @@ export const MainTable: FC<MainTableProps> = ({ hideBetControls }) => {
 
 	if (isVertical) {
 		return (
-			<div className="flex flex-col items-center gap-y-2">
-				<div className={'flex gap-x-5 items-center justify-center'}>
-					<div className={'flex gap-x-5 items-center justify-center'}>
-						<div className={'grid grid-cols-2 gap-1 h-fit'}>
+			<div className="rl:flex rl:flex-col rl:items-center rl:gap-y-2">
+				<div className={'rl:flex rl:gap-x-5 rl:items-center rl:justify-center'}>
+					<div className={'rl:flex rl:gap-x-5 rl:items-center rl:justify-center'}>
+						<div className={'rl:grid rl:grid-cols-2 rl:gap-1 h-fit'}>
 							<SideTable />
 						</div>
-						<div className={'  flex flex-col gap-y-1 items-center justify-center'}>
-							<div className={'grid grid-cols-[repeat(3,64px)] gap-1 justify-center items-center  '}>
+						<div className={'rl:flex rl:flex-col rl:gap-y-1 rl:items-center rl:justify-center'}>
+							<div className={'rl:grid rl:grid-cols-[repeat(3,64px)] rl:gap-1 rl:justify-center rl:items-center  '}>
 								<ZeroItem />
 								<RouletteNumbersGrid />
 							</div>
-							<div className="flex gap-1">
+							<div className="rl:flex rl:gap-1">
 								<ExtraItems />
 							</div>
 						</div>
@@ -37,21 +37,21 @@ export const MainTable: FC<MainTableProps> = ({ hideBetControls }) => {
 	}
 
 	return (
-		<div className="flex flex-col items-center gap-y-2 w-full">
-			<div className={'flex gap-x-1 items-center justify-center w-full'}>
-				<div className="grid grid-cols-[repeat(14,1fr)] gap-1 justify-center items-center w-full">
+		<div className="rl:flex rl:flex-col rl:items-center rl:gap-y-2 rl:w-full">
+			<div className={'rl:flex rl:gap-x-1 rl:items-center rl:justify-center rl:w-full'}>
+				<div className="rl:grid rl:grid-cols-[repeat(14,1fr)] rl:gap-1 rl:justify-center rl:items-center rl:w-full">
 					<ZeroItem />
 
-					<div className="col-span-12 grid grid-cols-[repeat(12,1fr)] gap-1">
+					<div className="rl:col-span-12 rl:grid rl:grid-cols-[repeat(12,1fr)] rl:gap-1">
 						<RouletteNumbersGrid />
 					</div>
 					{/* ExtraItems occupying the 14th column */}
-					<div className="col-span-1 grid grid-cols-[repeat(1,1fr)] gap-1 h-full">
+					<div className="rl:col-span-1 rl:grid rl:grid-cols-[repeat(1,1fr)] rl:gap-1 rl:h-full">
 						{/* Adjust row span as necessary */}
 						<ExtraItems />
 					</div>
-					<div className="col-span-1" />
-					<div className=" col-span-12 grid grid-rows-2 gap-1">
+					<div className="rl:col-span-1" />
+					<div className=" rl:col-span-12 rl:grid rl:grid-rows-2 rl:gap-1">
 						<SideTable />
 					</div>
 				</div>

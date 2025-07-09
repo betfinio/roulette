@@ -1,13 +1,13 @@
 import type { PositionType } from '@/src/components/shared/BetPlacePoint/BetPlacePoint.tsx';
 
 export const positionClasses: Record<PositionType, string> = {
-	center: 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 ',
-	top: 'top-[-50%]  sm:top-[-37%] left-1/2 transform -translate-x-1/2',
-	left: 'top-1/2 sm:-left-[40%] -left-[32%]  transform -translate-y-1/2 ',
-	right: 'top-1/2 sm:right-[-30%] right-[-25%] transform -translate-y-1/2',
-	bottom: 'bottom-[-37%] left-1/2 transform -translate-x-1/2',
-	topLeft: 'sm:top-[-37%] sm:-left-[40%] -left-[32%]  top-[-50%] ',
-	topRight: 'top-[-50%] sm:top-[-37%] sm:right-[-30%] right-[-25%]  ',
-	bottomLeft: 'bottom-[-37%] -left-[40%]',
-	bottomRight: 'bottom-[-30%] right-[-30%]',
+	center: 'rl:top-1/2 rl:left-1/2 rl:transform rl:-translate-x-1/2 rl:-translate-y-1/2 ',
+	top: 'rl:top-[-50%]  rl:sm:top-[-37%] rl:left-1/2 rl:transform rl:-translate-x-1/2',
+	left: 'rl:top-1/2 rl:sm:-left-[40%] rl:-left-[32%]  rl:transform rl:-translate-y-1/2 ',
+	right: 'rl:top-1/2 rl:sm:right-[-30%] rl:right-[-25%] rl:transform rl:-translate-y-1/2',
+	bottom: 'rl:bottom-[-37%] rl:left-1/2 rl:transform rl:-translate-x-1/2',
+	topLeft: 'rl:sm:top-[-37%] rl:sm:-left-[40%] rl:-left-[32%]  rl:top-[-50%] ',
+	topRight: 'rl:top-[-50%] rl:sm:top-[-37%] rl:sm:right-[-30%] rl:right-[-25%]  ',
+	bottomLeft: 'rl:bottom-[-37%] rl:-left-[40%]',
+	bottomRight: 'rl:bottom-[-30%] rl:right-[-30%]',
 } as const;

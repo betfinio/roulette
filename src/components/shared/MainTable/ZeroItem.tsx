@@ -7,7 +7,7 @@ import TableItem from '../TableItem';
 
 export const ZeroItem: FC = () => {
 	const { isVertical } = useMediaQuery();
-	const zeroClassName = isVertical ? 'col-span-3 h-10' : 'h-full'; // `zero-${isVertical ? "v" : "h"} zero-european-${isVertical ? "v" : "h"}`;
+	const zeroClassName = isVertical ? 'rl:col-span-3 rl:h-10' : 'rl:h-full'; // `zero-${isVertical ? "v" : "h"} zero-european-${isVertical ? "v" : "h"}`;
 	const { mutate: place } = usePlace();
 	const { mutate: unplace } = useUnplace();
 
@@ -25,13 +25,13 @@ export const ZeroItem: FC = () => {
 			isVertical={isVertical}
 			winNumber={Number(winNumber)}
 			className={cn(
-				`bg-green-roulette w-full ${zeroClassName} border-[3px] border-transparent transition-all duration-300`,
+				`rl:bg-green-roulette rl:w-full ${zeroClassName} rl:border-[3px] rl:border-transparent rl:transition-all rl:duration-300`,
 
 				{
-					'border-bonus': isNumberHovered(0) && !isDebugMode,
-					'border-muted/50 ': !isNumberHovered(0) && isDebugMode,
-					'border-primary': isNumberSelected(0),
-					'border-white/80! border-[3px] animate-[pulse_2s_ease-in-out_infinite] z-10': Number(winNumber) === Number(0),
+					'rl:border-bonus': isNumberHovered(0) && !isDebugMode,
+					'rl:border-muted/50 ': !isNumberHovered(0) && isDebugMode,
+					'rl:border-primary': isNumberSelected(0),
+					'rl:border-white/80! rl:border-[3px] rl:animate-[pulse_2s_ease-in-out_infinite] rl:z-10': Number(winNumber) === Number(0),
 				},
 			)}
 			onHoverNumbers={onHoverNumbers}

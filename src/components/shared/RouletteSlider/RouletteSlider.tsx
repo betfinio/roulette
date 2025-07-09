@@ -35,7 +35,7 @@ const RouletteSlider: FC<RouletteSliderProps> = ({ minPrice, maxPrice, marks, va
 	};
 
 	return (
-		<div className=" w-full mt-6">
+		<div className=" rl:w-full rl:mt-6">
 			{/* Slider */}
 
 			<Slider
@@ -44,15 +44,15 @@ const RouletteSlider: FC<RouletteSliderProps> = ({ minPrice, maxPrice, marks, va
 				step={minPrice}
 				value={[value]}
 				onValueChange={([value]) => handleSliderChange(value)}
-				className="w-full h-2 bg-card-secondary/20 rounded-full relative"
+				className="rl:w-full rl:h-2 rl:bg-card-secondary/20 rl:rounded-full rl:relative"
 			/>
 
 			{/* Marks for each value */}
-			<div className="relative w-full flex justify-between mt-3">
+			<div className="rl:relative rl:w-full rl:flex rl:justify-between rl:mt-3">
 				{markPositions.map((mark) => (
 					<div
 						key={mark.value}
-						className="absolute text-sm text-tertiary-foreground cursor-pointer"
+						className="rl:absolute rl:text-sm rl:text-tertiary-foreground rl:cursor-pointer"
 						style={{
 							left: `${mark.position}%`,
 							transform: 'translateX(-50%)',

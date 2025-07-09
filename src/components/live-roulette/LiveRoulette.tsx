@@ -47,7 +47,7 @@ export const LiveRoulette = () => {
 
 	if (isVertical) {
 		return (
-			<div className="relative w-full flex flex-col items-center justify-center gap-y-2">
+			<div className="rl:relative rl:w-full rl:flex rl:flex-col rl:items-center rl:justify-center rl:gap-y-2">
 				<VerticalRoulette />
 			</div>
 		);
@@ -55,14 +55,14 @@ export const LiveRoulette = () => {
 
 	if (isTablet) {
 		return (
-			<div className="relative w-full flex flex-col items-center justify-center gap-y-2">
+			<div className="rl:relative rl:w-full rl:flex rl:flex-col rl:items-center rl:justify-center rl:gap-y-2">
 				<TabletRoulette />
 			</div>
 		);
 	}
 
 	return (
-		<div className="relative w-full flex flex-col items-center justify-center gap-y-2">
+		<div className="rl:relative rl:w-full rl:flex rl:flex-col rl:items-center rl:justify-center rl:gap-y-2">
 			<DesktopRoulette />
 		</div>
 	);

@@ -75,10 +75,10 @@ export const WheelDetails: FC = () => {
 	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning || winNumberProps.isLoading) return null;
 
 	return (
-		<div className="absolute inset-0 flex items-center justify-center">
+		<div className="rl:absolute rl:inset-0 rl:flex rl:items-center rl:justify-center">
 			<motion.div
 				key={state.data.state + winNumber.toString()}
-				className="w-full h-full flex mt-[15%] md:mt-[20%] flex-col  z-20 text-center  text-foreground    "
+				className="rl:w-full rl:h-full rl:flex rl:mt-[15%] rl:md:mt-[20%] rl:flex-col  rl:z-20 rl:text-center  rl:text-foreground    "
 				initial={{ opacity: 0, scale: 0.5 }}
 				animate={{ opacity: 1, scale: 1 }}
 				exit={{ opacity: 0, scale: 0.8 }}
@@ -87,8 +87,8 @@ export const WheelDetails: FC = () => {
 				{/* Round Number */}
 				{showRoundNumber && (
 					<div
-						className={cn('w-1/3 flex justify-center items-center mx-auto', {
-							'mb-[5%]': !showWinNumber,
+						className={cn('rl:w-1/3 rl:flex rl:justify-center rl:items-center rl:mx-auto', {
+							'rl:mb-[5%]': !showWinNumber,
 						})}
 					>
 						<RoundNumber />
@@ -97,49 +97,52 @@ export const WheelDetails: FC = () => {
 				{/* Round Number */}
 				{showWinNumber && (
 					<div
-						className={cn('w-[10%] flex justify-center items-center mx-auto border md:border-2 border-white/50 rounded-lg md:rounded-2xl md:mb-2', {
-							'bg-green-roulette': getColor(Number(winNumber)) === 'GREEN',
-							'bg-red-roulette': getColor(Number(winNumber)) === 'RED',
-							'bg-black-roulette': getColor(Number(winNumber)) === 'BLACK',
-						})}
+						className={cn(
+							'rl:w-[10%] rl:flex rl:justify-center rl:items-center rl:mx-auto rl:border rl:md:border-2 rl:border-white/50 rl:rounded-lg rl:md:rounded-2xl rl:md:mb-2',
+							{
+								'rl:bg-green-roulette': getColor(Number(winNumber)) === 'GREEN',
+								'rl:bg-red-roulette': getColor(Number(winNumber)) === 'RED',
+								'rl:bg-black-roulette': getColor(Number(winNumber)) === 'BLACK',
+							},
+						)}
 					>
-						<RouletteNumberIcon number={Number(winNumber)} className={'w-full'} />
+						<RouletteNumberIcon number={Number(winNumber)} className={'rl:w-full'} />
 					</div>
 				)}
 				{/*  Waiting For Spin */}
 				{showWaitingForSpin && (
-					<div className={cn('w-1/3 flex flex-col mx-auto mb-4 ')}>
+					<div className={cn('rl:w-1/3 rl:flex rl:flex-col rl:mx-auto rl:mb-4 ')}>
 						<ManualSpin />
 					</div>
 				)}
 
 				{/*  You won */}
 				{!!showYouWon && (
-					<div className={cn('w-1/5 inline-flex mx-auto ', {})}>
+					<div className={cn('rl:w-1/5 rl:inline-flex rl:mx-auto ', {})}>
 						<DynamicTextSVG text="You Won !" />
 					</div>
 				)}
 				{!!showYouWon && (
-					<div className={cn('w-1/4 flex justify-center mx-auto -mt-2 md:text-xl', {})}>
+					<div className={cn('rl:w-1/4 rl:flex rl:justify-center rl:mx-auto rl:-mt-2 rl:md:text-xl', {})}>
 						+<BetValue value={playerStat?.winAmount} withIcon />
 					</div>
 				)}
 				{/*  Timer */}
 				{showTimer && (
-					<div className={cn('w-1/4 inline-flex mx-auto ', {})}>
+					<div className={cn('rl:w-1/4 rl:inline-flex rl:mx-auto ', {})}>
 						<Timer timeLeft={timeLeft} />
 					</div>
 				)}
 				{/* Round Is Over */}
 				{showRoundIsOver && (
-					<div className={cn('w-1/3 mx-auto inline-flex mb-2', {})}>
+					<div className={cn('rl:w-1/3 rl:mx-auto rl:inline-flex rl:mb-2', {})}>
 						<RoundIsOver />
 					</div>
 				)}
 				{/*  Back to Game */}
 
 				{showBackToGame && (
-					<div className={cn('w-1/3 mx-auto inline-flex mt-1', {})}>
+					<div className={cn('rl:w-1/3 rl:mx-auto rl:inline-flex rl:mt-1', {})}>
 						<BackToGame />
 					</div>
 				)}

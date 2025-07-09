@@ -37,7 +37,7 @@ export const AllBetsTable = () => {
 					target={'_blank'}
 					rel={'noreferrer'}
 					href={`${ETHSCAN}/address/${props.getValue()}`}
-					className={'text-tertiary-foreground whitespace-nowrap flex gap-2'}
+					className={'rl:text-tertiary-foreground rl:whitespace-nowrap rl:flex gap-2'}
 				>
 					<Fox />
 					{truncateEthAddress(props.getValue())}
@@ -47,7 +47,7 @@ export const AllBetsTable = () => {
 		columnHelper.accessor('bet', {
 			header: t('address'),
 			cell: (props) => (
-				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary-foreground whitespace-nowrap'}>
+				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'rl:text-tertiary-foreground whitespace-nowrap'}>
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),
@@ -76,13 +76,13 @@ export const AllBetsTable = () => {
 		columnHelper.display({
 			id: 'action',
 			header: '',
-			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
+			cell: (props) => <Search className={'rl:w-5 rl:h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
 	] as ColumnDef<PlayerBet>[];
 	const columnsMobile = [
 		columnHelper.accessor('player', {
 			header: t('address'),
-			cell: (props) => <span className={'text-tertiary-foreground whitespace-nowrap'}>{truncateEthAddress(props.getValue())}</span>,
+			cell: (props) => <span className={'rl:text-tertiary-foreground rl:whitespace-nowrap'}>{truncateEthAddress(props.getValue())}</span>,
 		}),
 
 		columnHelper.accessor('amount', {
@@ -105,25 +105,25 @@ export const AllBetsTable = () => {
 		columnHelper.display({
 			id: 'action',
 			header: '',
-			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
+			cell: (props) => <Search className={'rl:w-5 rl:h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
 	] as ColumnDef<PlayerBet>[];
 
 	if (bets.length === 0 && !isLoading) {
-		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
+		return <div className={'rl:flex rl:justify-center rl:p-3'}>{t('noBetsYet')}</div>;
 	}
 
 	return (
-		<div className={cn('my-4')}>
+		<div className={cn('rl:my-4')}>
 			<Dialog open={!!selected}>
 				<DialogContent className="games">
-					<DialogTitle className={'hidden'} />
-					<DialogDescription className={'hidden'} />
+					<DialogTitle className={'rl:hidden'} />
+					<DialogDescription className={'rl:hidden'} />
 					<RoundModal selectedBet={selected} onClose={() => setSelected(null)} />
 				</DialogContent>
 			</Dialog>
 
-			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="h-[285px]" t={tShared} />
+			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="rl:h-[285px]" t={tShared} />
 		</div>
 	);
 };
