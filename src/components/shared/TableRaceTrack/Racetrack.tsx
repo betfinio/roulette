@@ -34,19 +34,21 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 			<div className="flex flex-col ">
 				{/* Top numbers */}
 				<div className="flex justify-center mx-1 gap-x-1">
-					{numbersTop.map((num) => (
-						<div
-							key={num}
-							className={cn('w-7 h-7  outline-transparent transition-all duration-300 outline-2  flex items-center justify-center text-xs rounded-md ', {
-								'outline-bonus': isNumberHovered(num),
-								'bg-red-roulette': getColor(num) === 'RED',
-								'bg-black-roulette': getColor(num) === 'BLACK',
-								'bg-green-roulette': getColor(num) === 'GREEN',
-							})}
-						>
-							{num}
-						</div>
-					))}
+					{numbersTop.map((num) => {
+						return (
+							<div
+								key={num}
+								className={cn('w-7 h-7  border-transparent transition-all duration-300 border-2 flex items-center justify-center text-xs rounded-md ', {
+									'border-bonus': isNumberHovered(num),
+									'bg-red-roulette': getColor(num) === 'RED',
+									'bg-black-roulette': getColor(num) === 'BLACK',
+									'bg-green-roulette': getColor(num) === 'GREEN',
+								})}
+							>
+								{num}
+							</div>
+						);
+					})}
 				</div>
 				{/* Central area with labels */}
 				<div className="relative w-full flex items-center justify-center">
@@ -70,7 +72,7 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 									});
 									onPlace?.();
 								}}
-								className={'border-none w-fit relative h-4 cursor-pointer'}
+								className={'border-none w-fit relative h-4 cursor-pointer text-[9px] xl:!text-[9px]'}
 							/>
 						))}
 					</div>
@@ -92,22 +94,24 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 				</div>
 				{/* Bottom numbers */}
 				<div className="flex justify-center gap-x-1">
-					{numbersBottom.map((num) => (
-						<div
-							key={num}
-							className={cn(
-								'w-[28px] h-[28px]  outline outline-transparent transition-all duration-300 outline-2  flex items-center justify-center text-xs rounded-md ',
-								{
-									'outline-bonus': isNumberHovered(num),
-									'bg-red-roulette': getColor(num) === 'RED',
-									'bg-black-roulette': getColor(num) === 'BLACK',
-									'bg-green-roulette': getColor(num) === 'GREEN',
-								},
-							)}
-						>
-							{num}
-						</div>
-					))}
+					{numbersBottom.map((num) => {
+						return (
+							<div
+								key={num}
+								className={cn(
+									'w-[28px] h-[28px]  outline border-transparent transition-all duration-300 border-2  flex items-center justify-center text-xs rounded-md ',
+									{
+										'border-bonus': isNumberHovered(num),
+										'bg-red-roulette': getColor(num) === 'RED',
+										'bg-black-roulette': getColor(num) === 'BLACK',
+										'bg-green-roulette': getColor(num) === 'GREEN',
+									},
+								)}
+							>
+								{num}
+							</div>
+						);
+					})}
 				</div>
 			</div>
 
