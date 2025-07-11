@@ -1,17 +1,20 @@
-import { valueToNumber, ZeroAddress } from '@betfinio/abi';
 import { Roulette } from '@betfinio/components/icons';
-import { BetValue } from '@betfinio/components/shared';
-import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger, Drawer, DrawerContent, DrawerTrigger } from '@betfinio/components/ui';
-import { useNavigate } from '@tanstack/react-router';
-import { useChatbot } from 'betfinio_context/lib/context';
-import { useBalance } from 'betfinio_context/lib/query';
+
 import { AlertCircle, ChartBarIcon, CircleAlert, CircleHelp, Menu } from 'lucide-react';
 import { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import type { Address } from 'viem';
+
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
-import { useGetLiveRouletteTables } from '@/src/lib/live-roulette/query';
 import { usePaytable, useVisibleTable } from '@/src/lib/shared/query';
+import { ZeroAddress, valueToNumber } from '@betfinio/abi';
+import { BetValue } from '@betfinio/components/shared';
+import { Button, Dialog, DialogContent, DialogTitle, DialogTrigger, Drawer, DrawerContent, DrawerTrigger } from '@betfinio/components/ui';
+
+import { useGetLiveRouletteTables } from '@/src/lib/live-roulette/query';
+import { useNavigate } from '@tanstack/react-router';
+import { useChatbot } from 'betfinio_context/lib/context';
+import { useBalance } from 'betfinio_context/lib/query';
+import type { Address } from 'viem';
 import Paytable from '../Paytable/PayTable';
 import SwitchModal from '../SwitchModal';
 import { BET_STATUS_HEADER } from './BetStatusHeader';

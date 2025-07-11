@@ -1,10 +1,10 @@
+import type { PlayerBet } from '@/src/lib/roulette/types.ts';
 import { LiroBetABI } from '@betfinio/abi';
 import { readContract } from '@wagmi/core';
 import type { Address } from 'viem';
 import { parseAbiItem } from 'viem';
 import { getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
-import type { PlayerBet } from '@/src/lib/roulette/types.ts';
 import { fetchBetInfo } from '../../shared/api';
 
 export const fetchTableBetByBlockHash = async (config: Config, blockHash: Address, table?: Address) => {

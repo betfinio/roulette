@@ -1,9 +1,9 @@
+import { getChipColor } from '@/src/lib/roulette';
+import { useLimits, useSelectedChip, useVisibleTable } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { Button } from '@betfinio/components/ui';
 import { useMemo, useState } from 'react';
-import { getChipColor } from '@/src/lib/roulette';
-import { useLimits, useSelectedChip, useVisibleTable } from '@/src/lib/shared/query';
 import { BetControlChip } from './BetControlChip';
 import { ChangeBetModal } from './ChangeBetModal';
 import { ExtraControls } from './ExtraControls';

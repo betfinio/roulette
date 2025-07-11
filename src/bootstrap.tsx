@@ -1,5 +1,5 @@
 import './globals.css';
-import { createRouter, RouterProvider } from '@tanstack/react-router';
+import { RouterProvider, createRouter } from '@tanstack/react-router';
 import { queryClient, wagmiConfig } from 'betfinio_context/config';
 import ReactDOM from 'react-dom/client';
 import { routeTree } from './routeTree.gen';

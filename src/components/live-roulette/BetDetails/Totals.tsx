@@ -1,7 +1,7 @@
-import { BetValue } from '@betfinio/components/shared';
-import { UserIcon } from 'lucide-react';
 import { useGetSelectedRound, useGetTableRoundPlayers, useGetTableSelectedRoundBets } from '@/src/lib/live-roulette/query';
 import { useVisibleTable } from '@/src/lib/shared/query';
+import { BetValue } from '@betfinio/components/shared';
+import { UserIcon } from 'lucide-react';
 
 export const Totals = () => {
 	const { table } = useVisibleTable();

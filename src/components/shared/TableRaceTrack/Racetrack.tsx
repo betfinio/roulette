@@ -1,13 +1,12 @@
+import { getColor } from '@/src/lib/roulette';
+import { usePlace } from '@/src/lib/shared/query';
 import { cn } from '@betfinio/components';
 import type React from 'react';
 import { useState } from 'react';
-import { getColor } from '@/src/lib/roulette';
-import { usePlace } from '@/src/lib/shared/query';
 import TableItem from '../TableItem';
 import { LeftCorner } from './LeftCorner';
 import { RightCorner } from './RightCorner';
 import { racetrackConfig } from './racetrackConfig';
-
 interface RacetrackProps {
 	onPlace?: () => void;
 }
@@ -62,7 +61,7 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 								centerSelection={racetrackConfig[strategy].relatedNumbers}
 								onHoverNumbers={handleHoverNumbers}
 								onLeaveHover={handleLeaveHover}
-								onClick={(position: string, relatedNumbers: number[]) => {
+								onClick={(position: string, relatedNumbers: number[], number) => {
 									relatedNumbers.forEach(async (number) => {
 										await place({
 											numbers: [number],

@@ -1,14 +1,15 @@
+import { BET_STATUS_HEADER } from '@/src/components/shared/BetStatusHeader/BetStatusHeader';
+import logger from '@/src/config/logger';
+import { fetchBetsBitMapAndAmountByRound } from '@/src/lib/shared/gql';
 import { toast } from '@betfinio/components/ui';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams, useSearch } from '@tanstack/react-router';
-import { getTransactionLink, handleError } from 'betfinio_context/lib/helpers';
+import { getTransactionLink } from 'betfinio_context/lib/helpers';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address, WriteContractErrorType, WriteContractReturnType } from 'viem';
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useConfig } from 'wagmi';
-import { BET_STATUS_HEADER } from '@/src/components/shared/BetStatusHeader/BetStatusHeader';
-import { fetchBetsBitMapAndAmountByRound } from '@/src/lib/shared/gql';
 import {
 	changeChip,
 	clearAllBets,
@@ -179,20 +180,27 @@ export const useSubmitBet = () => {
 	const { t } = useTranslation('roulette');
 	const config = useConfig();
 	const queryClient = useQueryClient();
+	const { isSingle } = useVisibleTable();
 
 	return useMutation<WriteContractReturnType, WriteContractErrorType, SpinParams>({
 		mutationKey: ['roulette', 'spin'],
 		mutationFn: (params) => submitBet(params, config),
 		onError: (e) => {
-			console.log('e', e);
-			// @ts-expect-error todo
-			if (e.cause.reason === 'LT02' || e.cause.reason === 'LT03') {
-				openPaytable(queryClient);
-			}
+			logger.error(e);
+			// @ts-ignore
+			if (e.cause?.reason) {
+				// @ts-ignore
+				if (e.cause.reason === 'LT02' || e.cause.reason === 'LT03') {
+					openPaytable(queryClient);
+				}
 
-			toast.error(handleError(e, errors));
+				// @ts-ignore
+				toast.error(errors(e.cause?.reason, { defaultValue: t(`errors.${e.cause?.reason}`) }));
+			} else {
+				toast.error(errors('unknown'));
+			}
 		},
-		onSuccess: async (data) => {
+		onSuccess: async (data, variables) => {
 			const promise = async () => {
 				const receipt = await waitForTransactionReceipt(config.getClient(), { hash: data });
 				if (receipt.status !== 'success') {

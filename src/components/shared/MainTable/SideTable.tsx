@@ -1,9 +1,9 @@
-import { cn } from '@betfinio/components';
-import { useMediaQuery } from '@betfinio/components/hooks';
-import type { FC } from 'react';
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { getBlack, getRed, numbersVertical } from '@/src/lib/roulette';
 import { usePlace, useRouletteNumbersState, useUnplace } from '@/src/lib/shared/query';
+import { cn } from '@betfinio/components';
+import { useMediaQuery } from '@betfinio/components/hooks';
+import type { FC } from 'react';
 import TableItem from '../TableItem';
 
 export const sideItemsConfig = {
