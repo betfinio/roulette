@@ -52,34 +52,31 @@ export const BetStatusHeaderVertical: FC = () => {
 	const currentInterval = liveRouletteTables.find((t) => t.address === table)?.interval;
 	return (
 		<div className="roulette">
-			<div
-				id={BET_STATUS_HEADER}
-				className="rl:p-3 lg:p-4 rl:mb-0 rl:border rl:border-border rl:rounded-md rl:flex rl:bg-background-lighter rl:items-center rl:gap-2"
-			>
+			<div id={BET_STATUS_HEADER} className="p-3 lg:p-4 mb-0 border border-border rounded-md flex bg-background-lighter items-center gap-2">
 				<Dialog>
 					<DialogTrigger asChild>
-						<div className={'rl:flex rl:gap-2 rl:md:gap-4 rl:items-center rl:cursor-pointer'}>
-							<Menu className={'rl:w-8 rl:md:w-10 rl:aspect-square rl:text-foreground'} />
+						<div className={'flex gap-2 md:gap-4 items-center cursor-pointer'}>
+							<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
 						</div>
 					</DialogTrigger>
-					<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'rl:w-fit roulette'} aria-describedby={undefined}>
+					<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette'} aria-describedby={undefined}>
 						<DialogTitle className={'hidden'} />
 						<SwitchModal onClick={handleTableSwitch} selected={isSingle ? ZeroAddress : table} tables={tablesToSwitchList} />
 					</DialogContent>
 				</Dialog>
 				<Drawer open={showDrawer} onOpenChange={setShowDrawer}>
-					<DrawerTrigger className="rl:flex rl:justify-between rl:w-full rl:gap-4 rl:items-center">
-						<div className="rl:flex rl:gap-2 rl:items-center">
-							<Roulette className={'rl:w-8 rl:h-8 rl:aspect-square rl:text-primary'} />
-							<div className="rl:flex rl:flex-col rl:items-start">
+					<DrawerTrigger className="flex justify-between w-full gap-4 items-center">
+						<div className="flex gap-2 items-center">
+							<Roulette className={'w-8 h-8 aspect-square text-primary'} />
+							<div className="flex flex-col items-start">
 								<div className={'leading-none'}>{isSingle ? t('roulette') : t('liveRoulette')}</div>
 								<div className={'text-xs'}>{isSingle ? t('singlePlayer') : `${Number(currentInterval) / 60}min`}</div>
 							</div>
 						</div>
-						<ChartBarIcon className={'rl:text-primary rl:w-6'} />
+						<ChartBarIcon className={'text-primary w-6'} />
 					</DrawerTrigger>
 					<DrawerContent hasLine={false}>
-						<div className="rl:bg-card rl:py-2">
+						<div className="bg-card py-2">
 							<BetStatusHeaderVerticalDetail onCloseDrawer={() => setShowDrawer(false)} />
 						</div>
 					</DrawerContent>
@@ -110,46 +107,46 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 
 	return (
-		<div id={BET_STATUS_HEADER} className="rl:text-foreground  rl:flex   rl:justify-between rl:h-full  rl:mx-auto rl:rounded-b-md rl:px-4 rl:py-2">
+		<div id={BET_STATUS_HEADER} className="roulette text-foreground  flex   justify-between h-full  mx-auto rounded-b-md px-4 py-2">
 			<div className="space-y-2">
 				<div>
 					<div>{t('winningPool')}</div>
-					<div className="rl:font-semibold">
+					<div className="font-semibold">
 						<BetValue withIcon value={winningPool} />
 					</div>
 				</div>
 				<div>
 					<div>{t('maxPayout')}</div>
-					<div className="rl:font-semibold">
+					<div className="font-semibold">
 						<BetValue withIcon value={valueToNumber(maxPayout)} />
 					</div>
 				</div>
 			</div>
-			<div className=" rl:gap-2 rl:justify-around  rl:flex rl:flex-col">
-				<div className="rl:flex rl:items-center rl:gap-x-2">
+			<div className=" gap-2 justify-around  flex flex-col">
+				<div className="flex items-center gap-x-2">
 					<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
 						<DialogTitle hidden />
 						<DialogContent>
 							<Paytable table={table} onClose={closePaytable} />
 						</DialogContent>
 					</Dialog>
-					<Button onClick={openPaytable} variant={'ghost'} className={'rl:text-foreground rl:text-base rl:flex rl:items-center rl:gap-x-2'}>
-						<CircleHelp className={'rl:w-6 rl:h-6'} />
+					<Button onClick={openPaytable} variant={'ghost'} className={'text-foreground text-base flex items-center gap-x-2'}>
+						<CircleHelp className={'w-6 h-6'} />
 						{t('paytable')}
 					</Button>
 				</div>
 				<a
 					target={'_blank'}
 					href={ROULETTE_TUTORIAL}
-					className={'rl:flex rl:gap-2  rl:items-center rl:justify-center rl:cursor-pointer rl:text-foreground rl:px-4 rl:whitespace-nowrap'}
+					className={'flex gap-2  items-center justify-center cursor-pointer text-foreground px-4 whitespace-nowrap'}
 					rel="noreferrer"
 				>
-					<AlertCircle className={'rl:w-6 rl:h-6'} />
+					<AlertCircle className={'w-6 h-6'} />
 					<div>{t('howToPlay')}</div>
 				</a>
 
-				<Button onClick={handleReport} variant={'link'} className={' rl:text-primary  rl:text-base rl:flex rl:justify-start rl:items-center  rl:gap-x-2'}>
-					<CircleAlert className={'rl:w-6'} />
+				<Button onClick={handleReport} variant={'link'} className={' text-primary  text-base flex justify-start items-center  gap-x-2'}>
+					<CircleAlert className={'w-6'} />
 					<div>{t('report')}</div>
 				</Button>
 			</div>

@@ -6,20 +6,20 @@ import Wheel from './Wheel/Wheel';
 
 export const VerticalRoulette = () => {
 	return (
-		<div className="rl:flex rl:flex-col rl:items-center rl:justify-center rl:w-full rl:gap-y-2">
-			<div className={'rl:relative rl:w-full'}>
-				<div className="rl:relative">
+		<div className="flex flex-col items-center justify-center w-full gap-y-2">
+			<div className={'relative w-full'}>
+				<div className="relative">
 					<BetStatusHeader />
 				</div>
-				<div className="rl:relative rl:overflow-hidden">
-					<div className="rl:absolute rl:inset-0 rl:bg-linear-to-b rl:from-gradientDarkStart rl:via-gradientDarkMid rl:to-gradientDarkEnd rl:z-10 rl:pointer-events-none" />
-					<div className={'rl:relative rl:w-full rl:h-full rl:mx-auto rl:flex rl:max-w-sm'}>
+				<div className="relative overflow-hidden">
+					<div className="absolute inset-0 bg-linear-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
+					<div className={'relative w-full h-full mx-auto flex max-w-sm'}>
 						<Wheel />
 					</div>
 				</div>
 			</div>
 			<TableRaceTrack />
-			<div className={' rl:w-full rl:flex rl:flex-col rl:gap-y-6 rl:mb-8'}>
+			<div className={' w-full flex flex-col gap-y-6 mb-8'}>
 				<MainTable />
 
 				<History />

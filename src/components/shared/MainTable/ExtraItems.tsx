@@ -37,9 +37,9 @@ export const ExtraItems: FC = () => {
 							numbers: relatedNumbers,
 						})
 					}
-					className={cn(' rl:bg-card', {
-						' rl:rounded-md rl:w-full rl:h-full  rl:box-border': !isVertical,
-						' rl:rounded-md rl:w-16 rl:h-10  rl:box-border': isVertical,
+					className={cn(' bg-card', {
+						' rounded-md w-full h-full  box-border': !isVertical,
+						' rounded-md w-16 h-10  box-border': isVertical,
 					})}
 				/>
 			))}

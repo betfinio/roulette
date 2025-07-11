@@ -39,8 +39,8 @@ function WinNumber(props: CellContext<RoundBet, number>) {
 			{!roundHasPassedPlusDelay && <BetResultCell inProgress={roundCreated} winNumber={props.row.original.winNumber} />}
 			{roundHasPassedPlusDelay && (
 				<Button disabled={isPending} onClick={handleManualSpin}>
-					{isPending && <Loader className={'rl:animate-spin rl:absolute rl:text-background'} />}
-					<div className={cn('rl:uppercase', { 'rl:invisible': isPending })}>{t('spin')}</div>
+					{isPending && <Loader className={'animate-spin absolute text-background'} />}
+					<div className={cn('uppercase', { invisible: isPending })}>{t('spin')}</div>
 				</Button>
 			)}
 		</div>

@@ -63,29 +63,26 @@ export const BetStatusHeaderHorizontal: FC = () => {
 	}, [liveRouletteTables]);
 
 	return (
-		<div
-			id={BET_STATUS_HEADER}
-			className=" rl:rounded-lg rl:bg-card rl:items-center rl:border rl:border-border rl:p-3 rl:px-4 rl:flex rl:justify-between rl:min-h-16 rl:gap-2 rl:md:gap-4 "
-		>
-			<div className="rl:flex rl:gap-2 md:gap-9">
-				<div className="rl:flex rl:gap-2 rl:items-center">
+		<div id={BET_STATUS_HEADER} className=" rounded-lg bg-card items-center border border-border p-3 px-4 flex justify-between min-h-16 gap-2 md:gap-4 ">
+			<div className="flex gap-2 md:gap-9">
+				<div className="flex gap-2 items-center">
 					<Dialog>
 						<DialogTrigger asChild>
-							<div className={'rl:flex rl:gap-2 rl:md:gap-4 rl:items-center rl:cursor-pointer'}>
-								<Menu className={'rl:w-8 rl:md:w-10 rl:aspect-square rl:text-foreground'} />
+							<div className={'flex gap-2 md:gap-4 items-center cursor-pointer'}>
+								<Menu className={'w-8 md:w-10 aspect-square text-foreground'} />
 							</div>
 						</DialogTrigger>
-						<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'rl:w-fit '} aria-describedby={undefined}>
-							<DialogTitle className={'rl:hidden'} />
+						<DialogContent onOpenAutoFocus={(e) => e.preventDefault()} className={'w-fit roulette '} aria-describedby={undefined}>
+							<DialogTitle className={'hidden'} />
 							<SwitchModal onClick={handleTableSwitch} selected={isSingle ? ZeroAddress : table} tables={tablesToSwitchList} />
 						</DialogContent>
-						<Roulette className={'rl:w-8 rl:h-8 text-primary'} />
+						<Roulette className={'w-8 h-8 text-primary'} />
 						<div className={''}>
 							<div>{isSingle ? t('roulette') : t('liveRoulette')}</div>
 							<div>
-								<DialogTrigger className={'rl:text-sm rl:flex rl:items-center rl:gap-1'}>
+								<DialogTrigger className={'text-sm flex items-center gap-1'}>
 									{currentInterval ? `${Number(currentInterval) / 60}min` : 'Single'}
-									<ArrowLeftRightIcon className={'rl:w-3 h-3'} />
+									<ArrowLeftRightIcon className={'w-3 h-3'} />
 								</DialogTrigger>
 							</div>
 						</div>
@@ -93,37 +90,30 @@ export const BetStatusHeaderHorizontal: FC = () => {
 				</div>
 				<div>
 					<div>{t('maxPayout')}</div>
-					<div className="rl:text-sm">
+					<div className="text-sm">
 						<BetValue withIcon value={valueToNumber(maxPayout)} />
 					</div>
 				</div>
 			</div>
-			<div className=" rl:gap-2 rl:flex ">
+			<div className=" gap-2 flex ">
 				<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
 					<DialogTitle hidden />
 					<DialogContent>
 						<Paytable table={table} onClose={closePaytable} />
 					</DialogContent>
 				</Dialog>
-				<Button
-					onClick={openPaytable}
-					variant={'ghost'}
-					size="freeSize"
-					className={'rl:text-foreground rl:flex-col rl:text-xs rl:flex rl:items-center rl:font-normal'}
-				>
-					<CircleHelp className={'rl:w-6 rl:h-6'} />
+				<Button onClick={openPaytable} variant={'ghost'} size="freeSize" className={'text-foreground flex-col text-xs flex items-center font-normal'}>
+					<CircleHelp className={'w-6 h-6'} />
 					{t('paytable')}
 				</Button>
 
 				<a
 					target={'_blank'}
 					href={ROULETTE_TUTORIAL}
-					className={
-						'rl:flex rl:flex-col  rl:text-xs  rl:items-center rl:justify-center rl:cursor-pointer rl:text-foreground rl:font-normal rl:whitespace-nowrap'
-					}
+					className={'flex flex-col  text-xs  items-center justify-center cursor-pointer text-foreground font-normal whitespace-nowrap'}
 					rel="noreferrer"
 				>
-					<AlertCircle className={'rl:w-6 rl:h-6'} />
+					<AlertCircle className={'w-6 h-6'} />
 					<div>{t('howToPlay')}</div>
 				</a>
 
@@ -131,9 +121,9 @@ export const BetStatusHeaderHorizontal: FC = () => {
 					onClick={handleReport}
 					variant={'link'}
 					size="freeSize"
-					className={'rl:flex-col rl:text-primary  rl:text-xs rl:flex rl:justify-start rl:font-normal rl:items-center  '}
+					className={'flex-col text-primary  text-xs flex justify-start font-normal items-center  '}
 				>
-					<CircleAlert className={'rl:w-6 rl:h-6'} />
+					<CircleAlert className={'w-6 h-6'} />
 					<div>{t('report')}</div>
 				</Button>
 			</div>

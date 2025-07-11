@@ -31,7 +31,7 @@ export const MyBetsTable = () => {
 		columnHelper.accessor('bet', {
 			header: t('address'),
 			cell: (props) => (
-				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'rl:text-tertiary-foreground whitespace-nowrap'}>
+				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary-foreground whitespace-nowrap'}>
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),
@@ -62,7 +62,7 @@ export const MyBetsTable = () => {
 			header: '',
 			cell: (props) => (
 				<>
-					<Search className={'rl:w-5 rl:h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />
+					<Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />
 				</>
 			),
 		}),
@@ -71,7 +71,7 @@ export const MyBetsTable = () => {
 		columnHelper.accessor('bet', {
 			header: t('address'),
 			cell: (props) => (
-				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'rl:text-tertiary whitespace-nowrap'}>
+				<a target={'_blank'} rel={'noreferrer'} href={`${ETHSCAN}/address/${props.getValue()}`} className={'text-tertiary whitespace-nowrap'}>
 					{truncateEthAddress(props.getValue())}
 				</a>
 			),
@@ -97,25 +97,25 @@ export const MyBetsTable = () => {
 		columnHelper.display({
 			id: 'action',
 			header: '',
-			cell: (props) => <Search className={'rl:w-5 rl:h-5 rl:cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
+			cell: (props) => <Search className={'w-5 h-5 cursor-pointer'} onClick={() => setSelected(props.row.original)} />,
 		}),
 	] as ColumnDef<PlayerBet>[];
 
 	if (bets.length === 0 && !isLoading) {
-		return <div className={'rl:flex rl:justify-center p-3'}>{t('noBetsYet')}</div>;
+		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
 	}
 
 	return (
 		<div className={cn('my-4')}>
 			<Dialog open={!!selected}>
 				<DialogContent className="games">
-					<DialogTitle className={'rl:hidden'} />
-					<DialogDescription className={'rl:hidden'} />
+					<DialogTitle className={'hidden'} />
+					<DialogDescription className={'hidden'} />
 					<RoundModal selectedBet={selected} onClose={() => setSelected(null)} />
 				</DialogContent>
 			</Dialog>
 
-			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="rl:h-[285px]" t={tShared} />
+			<DataTable columns={isVertical ? columnsMobile : columns} data={bets} isLoading={isLoading} loaderClassName="h-[285px]" t={tShared} />
 		</div>
 	);
 };

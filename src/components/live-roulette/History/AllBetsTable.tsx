@@ -63,7 +63,7 @@ export const AllBetsTable = () => {
 		columnHelper.accessor('amount', {
 			header: t('amount'),
 			cell: (props) => (
-				<span className={'rl:font-semibold'}>
+				<span className={' font-semibold'}>
 					<BetValue value={valueToNumber(props.getValue())} />
 				</span>
 			),
@@ -82,7 +82,7 @@ export const AllBetsTable = () => {
 		columnHelper.accessor('amount', {
 			header: t('amount'),
 			cell: (props) => (
-				<span className={'rl:font-semibold'}>
+				<span className={' font-semibold'}>
 					<BetValue value={valueToNumber(props.getValue())} />
 				</span>
 			),
@@ -106,7 +106,7 @@ export const AllBetsTable = () => {
 	}, [bets, round]);
 
 	if (bets.length === 0 && !isLoading) {
-		return <div className={'rl:flex rl:justify-center rl:p-3'}>{t('noBetsYet')}</div>;
+		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
 	}
 
 	const handleNavigateToTheRound = (row: RoundBet) => {
@@ -119,14 +119,14 @@ export const AllBetsTable = () => {
 	};
 
 	return (
-		<div id={TABLE_ID} className={cn('rl:my-4 ')}>
+		<div id={TABLE_ID} className={cn('my-4 ')}>
 			<DataTable
 				t={tShared}
 				tableRef={tableRef}
 				columns={isVertical ? columnsMobile : columns}
 				data={bets}
 				isLoading={isLoading}
-				loaderClassName="rl:h-[285px]"
+				loaderClassName="h-[285px]"
 				onRowClick={handleNavigateToTheRound}
 				autoResetPageIndex={false}
 			/>

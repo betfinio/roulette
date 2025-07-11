@@ -24,14 +24,10 @@ export const BetPlacePoint: FC<BetPlacePointProps> = ({ positionId, position, wi
 			<Tooltip delayDuration={200}>
 				<TooltipTrigger asChild>
 					<div
-						className={cn(
-							'rl:absolute rl:w-[40%]  rl:sm:w-[60%] rl:max-w-10 rl:aspect-square rl:bg-muted/40  rl:flex rl:items-center rl:justify-center rl:z-10',
-							positionClasses[position],
-							{
-								'rl:bg-muted/40': isDebugMode,
-								'rl:bg-transparent': !isDebugMode,
-							},
-						)}
+						className={cn('absolute w-[40%]  sm:w-[60%] max-w-10 aspect-square bg-muted/40  flex items-center justify-center z-10', positionClasses[position], {
+							'bg-muted/40': isDebugMode,
+							'bg-transparent': !isDebugMode,
+						})}
 						{...events}
 					>
 						<BetChips positionId={positionId} winNumber={winNumber} />
