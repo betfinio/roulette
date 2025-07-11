@@ -1,9 +1,8 @@
-import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import { toast } from '@betfinio/components/ui';
-
 import { CheckIcon, CopyIcon } from 'lucide-react';
 import { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 
 export const RoundNumber: FC = () => {
 	const { t } = useTranslation('roulette');

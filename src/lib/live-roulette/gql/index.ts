@@ -1,4 +1,7 @@
+import type { ExecutionResult } from 'graphql';
+import type { Address } from 'viem';
 import {
+	execute,
 	GetLiveRoulettePlayerTableBetsDocument,
 	type GetLiveRoulettePlayerTableBetsQuery,
 	GetLiveRouletteRoundWinNumberDocument,
@@ -13,11 +16,8 @@ import {
 	type GetLiveRouletteTableSelectedRoundPlayersQuery,
 	GetLiveRouletteTablesDocument,
 	type GetLiveRouletteTablesQuery,
-	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
-import type { ExecutionResult } from 'graphql';
-import type { Address } from 'viem';
 import type { IRouletteStat } from '../../shared/types';
 import type { PlayerInProgressBet, PlayerRoundBets, RouletteTable, RoundBet, RoundPlayerBet } from '../types';
 

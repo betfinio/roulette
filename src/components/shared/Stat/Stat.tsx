@@ -1,11 +1,11 @@
-import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
-import type { IRouletteStat } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
 import { CircleHelp } from 'lucide-react';
 import { motion } from 'motion/react';
 import { type FC, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
+import type { IRouletteStat } from '@/src/lib/shared/types';
 
 interface IStatProps {
 	tableOrPlayerStat?: IRouletteStat;

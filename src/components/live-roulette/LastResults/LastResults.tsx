@@ -1,7 +1,3 @@
-import { useGetSelectedRound, useTableRounds } from '@/src/lib/live-roulette/query';
-import { lastResultPlaceholder } from '@/src/lib/shared';
-import { useVisibleTable } from '@/src/lib/shared/query';
-import { RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
 import { useNavigate } from '@tanstack/react-router';
@@ -9,6 +5,10 @@ import { CircleHelp } from 'lucide-react';
 import { motion } from 'motion/react';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useGetSelectedRound, useTableRounds } from '@/src/lib/live-roulette/query';
+import { lastResultPlaceholder } from '@/src/lib/shared';
+import { useVisibleTable } from '@/src/lib/shared/query';
+import { RoundStatus } from '@/src/lib/shared/types';
 import { LastResultRow } from '../../shared/LastResultRow';
 
 export const LastResults = () => {

@@ -1,6 +1,6 @@
-import { useGetLiveRouletteTables } from '@/src/lib/live-roulette/query';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
+import { useGetLiveRouletteTables } from '@/src/lib/live-roulette/query';
 
 export const Route = createFileRoute('/games/roulette/live/')({
 	component: IndexLiveRoulette,

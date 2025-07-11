@@ -1,9 +1,9 @@
-import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
-import { getColor } from '@/src/lib/roulette';
-import type { LastResult } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { motion } from 'motion/react';
 import type { FC } from 'react';
+import { SLIDE_DOWN_ANIMATION } from '@/src/animations';
+import { getColor } from '@/src/lib/roulette';
+import type { LastResult } from '@/src/lib/shared/types';
 
 interface ILastResultRowProps {
 	result: LastResult;

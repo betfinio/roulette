@@ -1,8 +1,3 @@
-import { BetResultCell } from '@/src/components/shared/BetResultCell.tsx';
-import { useCurrentInterval, useCurrentRound } from '@/src/lib/live-roulette/query';
-import type { RoundBet } from '@/src/lib/live-roulette/types.ts';
-import { useManualSpin, useVisibleTable } from '@/src/lib/shared/query';
-import { RoundStatus } from '@/src/lib/shared/types.ts';
 import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { Button } from '@betfinio/components/ui';
@@ -11,6 +6,11 @@ import { Loader } from 'lucide-react';
 import { DateTime } from 'luxon';
 import type { MouseEvent } from 'react';
 import { useTranslation } from 'react-i18next';
+import { BetResultCell } from '@/src/components/shared/BetResultCell.tsx';
+import { useCurrentInterval, useCurrentRound } from '@/src/lib/live-roulette/query';
+import type { RoundBet } from '@/src/lib/live-roulette/types.ts';
+import { useManualSpin, useVisibleTable } from '@/src/lib/shared/query';
+import { RoundStatus } from '@/src/lib/shared/types.ts';
 
 function WinNumber(props: CellContext<RoundBet, number>) {
 	const { table = ZeroAddress } = useVisibleTable();
