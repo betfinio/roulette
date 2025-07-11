@@ -11,16 +11,16 @@ export const Totals = () => {
 	const { data: players = [] } = useGetTableRoundPlayers(table, round);
 	const totalPlayers = players.length;
 	return (
-		<div className="rl:bg-card rl:p-4 rl:flex rl:justify-between rl:border rl:border-border rl:rounded-lg">
+		<div className="bg-card p-4 flex justify-between border border-border rounded-lg    ">
 			<div>
-				<div className="rl:font-semibold text-primary">
+				<div className="font-semibold text-primary">
 					<BetValue withIcon value={totalBets} />
 				</div>
 			</div>
 			<div>
-				<div className="rl:font-semibold rl:flex rl:gap-1 rl:justify-center rl:items-center rl:text-success">
+				<div className="font-semibold flex gap-1 justify-center items-center text-success">
 					{totalPlayers}
-					<UserIcon className={'rl:h-4 rl:w-4'} />
+					<UserIcon className={'h-4 w-4'} />
 				</div>
 			</div>
 		</div>

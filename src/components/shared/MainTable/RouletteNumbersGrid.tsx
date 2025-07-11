@@ -31,12 +31,12 @@ export const RouletteNumbersGrid: FC = () => {
 					winNumber={Number(winNumber)}
 					onHoverNumbers={onHoverNumbers}
 					onLeaveHover={onLeaveHover}
-					className={cn(`${tableConfig[item]?.className} rl:border-transparent rl:border-[3px] rl:outline-transparent rl:transition-all `, {
-						'rl:border-bonus/80 ': isNumberHovered(+item) && !isDebugMode,
-						'rl:border-muted/50 ': !isNumberHovered(+item) && isDebugMode,
-						'rl:border-white/80! rl:border-[3px] rl:animate-[pulse_2s_ease-in-out_infinite] rl:z-10': Number(winNumber) === Number(item),
-						'rl:border-primary/80': isNumberSelected(+item),
-						'rl:aspect-square': !isVertical,
+					className={cn(`${tableConfig[item]?.className} border-transparent border-[3px] outline-transparent transition-all `, {
+						'border-bonus/80 ': isNumberHovered(+item) && !isDebugMode,
+						'border-muted/50 ': !isNumberHovered(+item) && isDebugMode,
+						'border-white/80! border-[3px] animate-[pulse_2s_ease-in-out_infinite] z-10': Number(winNumber) === Number(item),
+						'border-primary/80': isNumberSelected(+item),
+						'aspect-square': !isVertical,
 					})}
 					onClick={(position, relatedNumbers) =>
 						place({

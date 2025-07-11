@@ -72,7 +72,7 @@ export const MyBetsTable = () => {
 		columnHelper.accessor('amount', {
 			header: t('amount'),
 			cell: (props) => (
-				<span className={'rl:font-semibold'}>
+				<span className={' font-semibold'}>
 					<BetValue value={props.getValue()} />
 				</span>
 			),
@@ -105,8 +105,8 @@ export const MyBetsTable = () => {
 									}
 								}}
 							>
-								{isManuallySpining && <Loader color={'black'} className={'rl:animate-spin rl:absolute'} />}
-								<div className={cn('rl:uppercase', { invisible: isManuallySpining })}>{TPure('spin')}</div>
+								{isManuallySpining && <Loader color={'black'} className={'animate-spin absolute'} />}
+								<div className={cn('uppercase', { invisible: isManuallySpining })}>{TPure('spin')}</div>
 							</Button>
 						)}
 					</div>
@@ -127,7 +127,7 @@ export const MyBetsTable = () => {
 		columnHelper.accessor('amount', {
 			header: t('amount'),
 			cell: (props) => (
-				<span className={'rl:font-semibold'}>
+				<span className={' font-semibold'}>
 					<BetValue value={props.getValue()} />
 				</span>
 			),
@@ -152,8 +152,8 @@ export const MyBetsTable = () => {
 						{!roundHasPassedPlusDelay && <BetResultCell inProgress={roundCreated} winNumber={props.row.original.winNumber} />}
 						{roundHasPassedPlusDelay && (
 							<Button disabled={isManuallySpining} onClick={() => roundHasPassed && handleManualSpin(props.row.original.round)}>
-								{isManuallySpining && <Loader color={'black'} className={'rl:animate-spin rl:absolute'} />}
-								<div className={cn('rl:uppercase', { invisible: isManuallySpining })}>{TPure('spin')}</div>
+								{isManuallySpining && <Loader color={'black'} className={'animate-spin absolute'} />}
+								<div className={cn('uppercase', { invisible: isManuallySpining })}>{TPure('spin')}</div>
 							</Button>
 						)}
 					</div>
@@ -171,7 +171,7 @@ export const MyBetsTable = () => {
 	}, [bets, round]);
 
 	if (bets.length === 0 && !isLoading) {
-		return <div className={'rl:flex rl:justify-center rl:p-3'}>{t('noBetsYet')}</div>;
+		return <div className={'flex justify-center p-3'}>{t('noBetsYet')}</div>;
 	}
 
 	const handleNavigateToTheRound = (row: RoundPlayerBet) => {
@@ -190,7 +190,7 @@ export const MyBetsTable = () => {
 				columns={isVertical ? columnsMobile : columns}
 				data={bets}
 				isLoading={isLoading}
-				loaderClassName="rl:h-[285px]"
+				loaderClassName="h-[285px]"
 				tableRef={tableRef}
 				onRowClick={handleNavigateToTheRound}
 				autoResetPageIndex={false}

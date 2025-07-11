@@ -73,12 +73,12 @@ export const SubmitBet: FC = () => {
 	}, [requested]);
 
 	return (
-		<Button className="rl:w-full rl:uppercase rl:text-xl rl:px-4 rl:relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>
-			{isSpinning && <Loader color={'black'} className={'rl:animate-spin rl:absolute'} />}
-			<div className={cn('rl:uppercase', { invisible: isSpinning })}>
-				<div className="rl:flex rl:gap-2 rl:w-32 rl:justify-center rl:text-base">
+		<Button className="w-full uppercase text-xl px-4 relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>
+			{isSpinning && <Loader color={'black'} className={'animate-spin absolute'} />}
+			<div className={cn('uppercase', { invisible: isSpinning })}>
+				<div className="flex gap-2 w-32 justify-center text-base">
 					{t('submitBet')}
-					<BetValue iconClassName="rl:rounded-full rl:border rl:border-border" withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
+					<BetValue iconClassName="rounded-full border border-border" withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
 				</div>
 			</div>
 		</Button>

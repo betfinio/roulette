@@ -12,7 +12,7 @@ export const RouletteWheel = () => {
 	const adjustmentAngle = -5; // Angle in degrees to shift the 0 position
 
 	return (
-		<svg className="rl:w-full" viewBox="0 0 500 500">
+		<svg className="w-full" viewBox="0 0 500 500">
 			{/* Rotate the whole wheel slightly to position the 0 at the top */}
 			<g transform={`rotate(${adjustmentAngle}, ${center}, ${center})`}>
 				{/* Draw each number and its triangular background */}
@@ -37,9 +37,9 @@ export const RouletteWheel = () => {
 								points={`${x1},${y1} ${x2},${y2} ${xCenter},${yCenter}`}
 								fill="currentColor"
 								className={cn({
-									'rl:text-red-roulette': getColor(+number) === 'RED',
-									'rl:text-black-roulette': getColor(+number) === 'BLACK',
-									'rl:text-green-roulette': getColor(+number) === 'GREEN',
+									'text-red-roulette': getColor(+number) === 'RED',
+									'text-black-roulette': getColor(+number) === 'BLACK',
+									'text-green-roulette': getColor(+number) === 'GREEN',
 								})}
 							/>
 
@@ -62,8 +62,8 @@ export const RouletteWheel = () => {
 			</g>
 
 			{/* Center circle */}
-			<circle cx={center} cy={center} r={30} fill="rl:bg-card" />
-			<circle cx={center} cy={center} r={radius} strokeWidth={7} stroke="currentColor" className="rl:text-card" fill="transparent" />
+			<circle cx={center} cy={center} r={30} fill="bg-card" />
+			<circle cx={center} cy={center} r={radius} strokeWidth={7} stroke="currentColor" className="text-card" fill="transparent" />
 		</svg>
 	);
 };

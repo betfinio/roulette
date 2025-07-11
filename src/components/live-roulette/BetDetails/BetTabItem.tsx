@@ -29,27 +29,26 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet, showWinnders, index }) => {
 			animate={{ scale: 1 }}
 			transition={{ type: 'spring', stiffness: 500, damping: 30 }}
 			exit={{ opacity: 0, y: 10 }}
-			className={cn('rl:rounded-lg rl:flex rl:justify-between', {
-				'rl:bg-background': !isWinnerCard,
-				'rl:bg-linear-to-r rl:from-primary/50 rl:via-primaryLight rl:to-transparent rl:border-primary rl:border': index === 0 && isWinnerCard,
-				'rl:bg-linear-to-r rl:from-tertiary-foreground/20 rl:via-primaryLight rl:to-transparent rl:border-tertiary-foreground rl:border':
-					index === 1 && isWinnerCard,
-				'rl:bg-linear-to-r rl:from-orange-600/50 rl:via-primaryLight rl:to-transparent rl:border-orange-600 rl:border ': index === 2 && isWinnerCard,
+			className={cn('rounded-lg flex justify-between', {
+				'bg-background': !isWinnerCard,
+				'bg-linear-to-r from-primary/50 via-primaryLight to-transparent border-primary border': index === 0 && isWinnerCard,
+				'bg-linear-to-r from-tertiary-foreground/20 via-primaryLight to-transparent border-tertiary-foreground border': index === 1 && isWinnerCard,
+				'bg-linear-to-r from-orange-600/50 via-primaryLight to-transparent border-orange-600 border ': index === 2 && isWinnerCard,
 			})}
 		>
-			<div className={'rl:py-3 rl:px-2 rl:flex rl:justify-between rl:items-center rl:grow rl:gap-2'}>
-				<div className={'rl:flex rl:items-start gap-2.5'}>
-					<div className={'rl:flex rl:flex-col rl:text-xs gap-2'}>
+			<div className={'py-3 px-2 flex justify-between items-center grow gap-2'}>
+				<div className={'flex items-start gap-2.5'}>
+					<div className={'flex flex-col text-xs gap-2'}>
 						<a
 							href={`${ETHSCAN}/address/${bet.player}`}
 							target={'_blank'}
 							className={cn(
-								'rl:font-semibold rl:text-sm rl:text-tertiary-foreground rl:hover:underline',
+								'font-semibold text-sm text-tertiary-foreground hover:underline',
 
 								{
-									'rl:text-primary!': bet.player.toLowerCase() === address?.toLowerCase(),
-									'rl:text-tertiary-foreground ': !isWinnerCard,
-									'rl:text-foreground ': isWinnerCard,
+									'text-primary!': bet.player.toLowerCase() === address?.toLowerCase(),
+									'text-tertiary-foreground ': !isWinnerCard,
+									'text-foreground ': isWinnerCard,
 								},
 							)}
 							rel="noreferrer"
@@ -61,15 +60,15 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet, showWinnders, index }) => {
 							target={'_blank'}
 							rel={'noreferrer'}
 							className={cn({
-								'rl:text-tertiary-foreground ': !isWinnerCard,
-								'rl:text-foreground ': isWinnerCard,
+								'text-tertiary-foreground ': !isWinnerCard,
+								'text-foreground ': isWinnerCard,
 							})}
 						>
 							{truncateEthAddress(bet.bet)}
 						</a>
 					</div>
 				</div>
-				<div className={'rl:flex rl:flex-col rl:items-end rl:text-xs rl:gap-2'}>
+				<div className={'flex flex-col items-end text-xs gap-2'}>
 					<span>
 						<BetValue precision={2} value={bet.amount} withIcon />
 					</span>
@@ -77,7 +76,7 @@ export const BetItem: FC<IBetTabItemProps> = ({ bet, showWinnders, index }) => {
 						<span>
 							<BetValue
 								className={cn({
-									'rl:text-success rl:font-medium': hasWon,
+									'text-success font-medium': hasWon,
 								})}
 								precision={2}
 								value={bet.winAmount ?? 0n}

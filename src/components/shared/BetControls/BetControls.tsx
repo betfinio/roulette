@@ -33,19 +33,19 @@ export const BetControls = () => {
 			<>
 				<ChangeBetModal initialValue={activeChipValue} max={limits.max} min={limits.min} open={openBetChangeModal} setOpen={setOpenBetChangeModal} />
 
-				<div className="rl:flex-col rl:gap-y-2 rl:w-full rl:flex rl:items-center rl:bg-card rl:p-4 rl:rounded-lg rl:border rl:border-border">
-					<div className="rl:flex rl:flex-col rl:items-center rl:justify-start w-full">
+				<div className="flex-col gap-y-2 w-full flex items-center bg-card p-4 rounded-lg border border-border">
+					<div className="flex flex-col items-center justify-start w-full">
 						<SubmitBet />
 					</div>
 				</div>
 
-				<div className="rl:gap-y-2 rl:flex rl:items-center rl:bg-card rl:p-4 rl:rounded-lg rl:border rl:border-border rl:w-full rl:flex-col">
-					<div className="rl:flex rl:w-full rl:items-center rl:justify-center ">
+				<div className="gap-y-2 flex items-center bg-card p-4 rounded-lg border border-border w-full flex-col">
+					<div className="flex w-full items-center justify-center ">
 						<RangeWithButtons limits={limits} />
 					</div>
-					<div className="rl:relative rl:flex rl:items-center rl:justify-center">
+					<div className="relative flex items-center justify-center">
 						<div
-							className="rl:absolute rl:h-12 rl:w-12 rl:opacity-25 rl:blur-lg rl:rounded-full rl:pointer-events-none"
+							className="absolute h-12 w-12 opacity-25 blur-lg rounded-full pointer-events-none"
 							style={{
 								backgroundColor: getChipColor(activeChipValue),
 								zIndex: 1, // Certifica que o div da cor fique atrás
@@ -58,8 +58,8 @@ export const BetControls = () => {
 					</div>
 				</div>
 
-				<div className="rl:w-full rl:flex-col rl:gap-y-2 rl:flex rl:items-center rl:bg-card rl:border rl:border-border rl:p-4 rl:rounded-lg">
-					<div className="rl:flex rl:gap-2 rl:justify-center">
+				<div className="w-full flex-col gap-y-2 flex items-center bg-card border border-border p-4 rounded-lg">
+					<div className="flex gap-2 justify-center">
 						<ExtraControls />
 					</div>
 				</div>
@@ -70,17 +70,17 @@ export const BetControls = () => {
 	return (
 		<>
 			<ChangeBetModal initialValue={activeChipValue} max={limits.max} min={limits.min} open={openBetChangeModal} setOpen={setOpenBetChangeModal} />
-			<div className="rl:md:flex-row rl:md:justify-between rl:gap-2 rl:flex rl:w-full rl:border rl:border-border rl:items-center rl:bg-card rl:px-2 rl:py-4 rl:rounded-xl rl:mt-6 rl:md:px-6 rl:flex-wrap">
-				<div className="rl:flex rl:flex-col rl:items-center rl:justify-start rl:shrink-0">
+			<div className="md:flex-row md:justify-between gap-2 flex w-full border border-border items-center bg-card px-2 py-4 rounded-xl mt-6 md:px-6 flex-wrap">
+				<div className="flex flex-col items-center justify-start shrink-0">
 					<SubmitBet />
 				</div>
-				<div className=" rl:flex rl:items-center rl:justify-center rl:gap-x-2 rl:grow rl:shrink-0 rl:min-w-96">
-					<div className="rl:flex  rl:items-center rl:justify-center rl:w-full">
+				<div className=" flex items-center justify-center gap-x-2 grow shrink-0 min-w-96">
+					<div className="flex  items-center justify-center w-full">
 						<RangeWithButtons limits={limits} />
 					</div>
-					<div className="rl:relative rl:flex rl:items-center rl:justify-center">
+					<div className="relative flex items-center justify-center">
 						<div
-							className="rl:absolute rl:h-11 rl:w-11 rl:opacity-25 rl:blur-lg rl:rounded-full rl:pointer-events-none"
+							className="absolute h-11 w-11 opacity-25 blur-lg rounded-full pointer-events-none"
 							style={{
 								backgroundColor: getChipColor(activeChipValue),
 								zIndex: 1,
@@ -92,7 +92,7 @@ export const BetControls = () => {
 						</Button>
 					</div>
 				</div>
-				<div className="rl:md:w-fit rl:flex rl:gap-2 rl:md:gap-3 rl:justify-center rl:shrink-0">
+				<div className="md:w-fit flex gap-2 md:gap-3 justify-center shrink-0">
 					<ExtraControls />
 				</div>
 			</div>

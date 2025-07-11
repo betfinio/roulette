@@ -52,37 +52,34 @@ export const Stat: FC<IStatProps> = ({ tableOrPlayerStat, isLoading }) => {
 			animate={{ opacity: 1, x: 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
-			className={cn(
-				'rl:bg-card rl:mt-4 rl:p-2 rl:rounded-lg rl:border rl:w-[122px] rl:h-[286px] rl:flex rl:flex-col rl:items-center  rl:border-border rl:tabular-nums rl:shrink-0 rl:gap-2',
-				{
-					'rl:animate-pulse rl:blur-xs': isLoading,
-				},
-			)}
+			className={cn('bg-card mt-4 p-2 rounded-lg border w-[122px] h-[286px] flex flex-col items-center  border-border tabular-nums shrink-0 gap-2', {
+				'animate-pulse blur-xs': isLoading,
+			})}
 		>
-			<motion.div {...SLIDE_DOWN_ANIMATION} className="rl:text-center rl:mb-2">
-				<div className="rl:text-foreground rl:text-xs rl:font-medium rl:flex rl:items-center rl:gap-1 rl:justify-center">
+			<motion.div {...SLIDE_DOWN_ANIMATION} className="text-center mb-2">
+				<div className="text-foreground text-xs font-medium flex items-center gap-1 justify-center">
 					{t('playerStat.hotAndCold')}
 					<TooltipProvider>
 						<Tooltip>
 							<TooltipTrigger>
-								<CircleHelp className={'rl:w-3 rl:h-3'} />
+								<CircleHelp className={'w-3 h-3'} />
 							</TooltipTrigger>
 							<TooltipContent>{t('playerStat.hotAndColdTooltip')}</TooltipContent>
 						</Tooltip>
 					</TooltipProvider>
 				</div>
-				<div className="rl:flex rl:justify-center rl:items-center rl:rounded-md rl:p-1 rl:gap-4">
-					<div className="rl:flex rl:flex-col rl:items-center rl:bg-red-roulette rl:rounded-md rl:w-8   rl:py-1">
+				<div className="flex justify-center items-center rounded-md p-1 gap-4">
+					<div className="flex flex-col items-center bg-red-roulette rounded-md w-8   py-1">
 						{hot.map((num, index) => (
-							<div className="rl:py-1" key={index}>
+							<div className="py-1" key={index}>
 								{num}
 							</div>
 						))}
 					</div>
 
-					<div className="rl:flex rl:flex-col rl:items-center rl:bg-bonus rl:rounded-md rl:w-8   rl:py-1">
+					<div className="flex flex-col items-center bg-bonus rounded-md w-8   py-1">
 						{cold.map((num, index) => (
-							<div className="rl:py-1" key={index}>
+							<div className="py-1" key={index}>
 								{num}
 							</div>
 						))}
@@ -90,21 +87,21 @@ export const Stat: FC<IStatProps> = ({ tableOrPlayerStat, isLoading }) => {
 				</div>
 			</motion.div>
 
-			<motion.div {...SLIDE_DOWN_ANIMATION} className="rl:mb-2">
-				<h3 className=" rl:text-xs rl:text-center">{t('playerStat.redAndBlack')}</h3>
-				<div className="rl:flex rl:justify-center rl:text-xs rl:items-center rl:gap-4">
-					<div className="rl:flex rl:flex-col rl:items-center rl:w-8 rl:bg-red-roulette rl:rounded-md rl:py-2   rl:border rl:border-border">{red}%</div>
+			<motion.div {...SLIDE_DOWN_ANIMATION} className="mb-2">
+				<h3 className=" text-xs text-center">{t('playerStat.redAndBlack')}</h3>
+				<div className="flex justify-center text-xs items-center gap-4">
+					<div className="flex flex-col items-center w-8 bg-red-roulette rounded-md py-2   border border-border">{red}%</div>
 
-					<div className="rl:flex rl:flex-col rl:items-center rl:w-8 rl:py-2  rl:border rl:border-border rl:rounded-md">{black}%</div>
+					<div className="flex flex-col items-center w-8 py-2  border border-border rounded-md">{black}%</div>
 				</div>
 			</motion.div>
 
 			<motion.div {...SLIDE_DOWN_ANIMATION} className="">
-				<h3 className=" rl:text-xs rl:text-center">{t('playerStat.oddAndEven')}</h3>
-				<div className="rl:flex rl:justify-center rl:items-center rl:border rl:border-border rl:rounded-md rl:text-xs rl:p-1 rl:w-20 rl:h-10 rl:mx-auto">
-					<div className="rl:flex rl:items-center rl:justify-between rl:w-full  ">
-						<div className="rl:w-1/2 text-center">{odd}%</div>
-						<div className="rl:w-1/2 text-center">{even}%</div>
+				<h3 className=" text-xs text-center">{t('playerStat.oddAndEven')}</h3>
+				<div className="flex justify-center items-center border border-border rounded-md text-xs p-1 w-20 h-10 mx-auto">
+					<div className="flex items-center justify-between w-full  ">
+						<div className="w-1/2 text-center">{odd}%</div>
+						<div className="w-1/2 text-center">{even}%</div>
 					</div>
 				</div>
 			</motion.div>

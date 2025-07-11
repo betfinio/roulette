@@ -8,16 +8,16 @@ import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
 	return (
-		<div className="rl:flex rl:flex-col rl:justify-between rl:w-full rl:grow rl:mx-auto rl:p-4">
+		<div className="flex flex-col justify-between w-full grow mx-auto p-4">
 			{/* Conteúdo Principal no Desktop */}
-			<div className="rl:relative rl:flex-1 rl:flex rl:flex-col rl:w-full ">
-				<div className="rl:relative">
+			<div className="relative flex-1 flex flex-col w-full ">
+				<div className="relative">
 					<BetStatusHeader />
 				</div>
-				<div className="rl:relative rl:overflow-hidden">
-					<div className="rl:absolute rl:inset-0 rl:bg-linear-to-b rl:from-gradientDarkStart rl:via-gradientDarkMid rl:to-gradientDarkEnd rl:z-10 rl:pointer-events-none" />
-					<div className="rl:relative rl:w-full rl:h-full rl:mx-auto rl:flex rl:items-start rl:gap-4">
-						<div className="rl:flex rl:flex-col rl:gap-4">
+				<div className="relative overflow-hidden">
+					<div className="absolute inset-0 bg-linear-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
+					<div className="relative w-full h-full mx-auto flex items-start gap-4">
+						<div className="flex flex-col gap-4">
 							<LastResults />
 							{/* <TableRaceTrack/> */}
 							<TableRaceTrack />
@@ -29,13 +29,13 @@ export const DesktopRoulette = () => {
 					</div>
 				</div>
 
-				<div className="rl:mx-auto rl:max-w-5xl rl:flex rl:w-full">
+				<div className="mx-auto max-w-5xl flex w-full">
 					<MainTable />
 				</div>
 			</div>
 
 			{/* BetHistory ao lado direito do conteúdo principal */}
-			<div className=" rl:shrink-0 rl:mt-4">
+			<div className=" shrink-0 mt-4">
 				<History />
 			</div>
 		</div>

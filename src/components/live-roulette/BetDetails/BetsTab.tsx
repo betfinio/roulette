@@ -23,7 +23,7 @@ export const BetsTab = () => {
 	}
 
 	return (
-		<div className="rl:flex rl:flex-col rl:gap-2">
+		<div className="flex flex-col gap-2">
 			{computedRoundBets.map((bet, index) => {
 				return (
 					<BetItem

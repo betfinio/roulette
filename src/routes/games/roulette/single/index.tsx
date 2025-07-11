@@ -47,7 +47,7 @@ export function RoulettePage() {
 	});
 
 	return (
-		<div className="  ">
+		<div className="roulette  ">
 			<Roulette />
 			<SonnerToaster />
 		</div>

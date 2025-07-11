@@ -12,10 +12,10 @@ export const WinAmountCell: FC<WinAmountCellProps> = ({ amount, inProgress }) =>
 	const { t } = useTranslation('roulette');
 
 	if (inProgress) {
-		return <span className="rl:text-tertiary-foreground">{t('table.waiting')}</span>;
+		return <span className="text-tertiary-foreground">{t('table.waiting')}</span>;
 	}
 	return (
-		<span className={cn('rl:font-semibold rl:text-tertiary-foreground', amount > 0n && 'rl:text-success')}>
+		<span className={cn('font-semibold text-tertiary-foreground', amount > 0n && 'text-success')}>
 			<BetValue value={valueToNumber(amount)} />
 		</span>
 	);

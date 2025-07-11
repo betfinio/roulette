@@ -27,35 +27,32 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 	const numbersRight = [3, 26, 0];
 
 	return (
-		<div className="rl:w-full rl:h-32 rl:flex rl:items-center rl:justify-start">
+		<div className="w-full h-32 flex items-center justify-start">
 			{/* Left Corner */}
 
 			<LeftCorner numbersLeft={numbersLeft} hoveredNumbers={hoveredNumbers} />
 			{/* Central Tracks */}
-			<div className="rl:flex rl:flex-col ">
+			<div className="flex flex-col ">
 				{/* Top numbers */}
-				<div className="rl:flex rl:justify-center rl:mx-1 gap-x-1">
+				<div className="flex justify-center mx-1 gap-x-1">
 					{numbersTop.map((num) => (
 						<div
 							key={num}
-							className={cn(
-								'rl:w-7 rl:h-7  rl:outline-transparent rl:transition-all rl:duration-300 rl:outline-2  rl:flex rl:items-center rl:justify-center rl:text-xs rl:rounded-md ',
-								{
-									'rl:outline-bonus': isNumberHovered(num),
-									'rl:bg-red-roulette': getColor(num) === 'RED',
-									'rl:bg-black-roulette': getColor(num) === 'BLACK',
-									'rl:bg-green-roulette': getColor(num) === 'GREEN',
-								},
-							)}
+							className={cn('w-7 h-7  outline-transparent transition-all duration-300 outline-2  flex items-center justify-center text-xs rounded-md ', {
+								'outline-bonus': isNumberHovered(num),
+								'bg-red-roulette': getColor(num) === 'RED',
+								'bg-black-roulette': getColor(num) === 'BLACK',
+								'bg-green-roulette': getColor(num) === 'GREEN',
+							})}
 						>
 							{num}
 						</div>
 					))}
 				</div>
 				{/* Central area with labels */}
-				<div className="rl:relative rl:w-full rl:flex rl:items-center rl:justify-center">
+				<div className="relative w-full flex items-center justify-center">
 					{/* Labels */}
-					<div className="rl:w-full rl:flex rl:items-center rl:justify-between rl:gap-4 rl:z-10 rl:py-2 rl:pl-8">
+					<div className="w-full flex items-center justify-between gap-4 z-10 py-2 pl-8">
 						{Object.keys(racetrackConfig).map((strategy) => (
 							<TableItem
 								key={strategy}
@@ -74,7 +71,7 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 									});
 									onPlace?.();
 								}}
-								className={'rl:border-none rl:w-fit rl:relative rl:h-4 rl:cursor-pointer'}
+								className={'border-none w-fit relative h-4 cursor-pointer'}
 							/>
 						))}
 					</div>
@@ -82,7 +79,7 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 					{/* SVG lines */}
 
 					<svg
-						className="rl:absolute rl:w-full rl:h-auto rl:z-0 rl:text-foreground"
+						className="absolute w-full h-auto z-0 text-foreground"
 						width="475"
 						height="31"
 						viewBox="0 0 475 31"
@@ -95,17 +92,17 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 					</svg>
 				</div>
 				{/* Bottom numbers */}
-				<div className="rl:flex rl:justify-center gap-x-1">
+				<div className="flex justify-center gap-x-1">
 					{numbersBottom.map((num) => (
 						<div
 							key={num}
 							className={cn(
-								'rl:w-[28px] rl:h-[28px]   rl:outline-transparent rl:transition-all rl:duration-300 rl:outline-2  rl:flex rl:items-center rl:justify-center rl:text-xs rl:rounded-md ',
+								'w-[28px] h-[28px]  outline outline-transparent transition-all duration-300 outline-2  flex items-center justify-center text-xs rounded-md ',
 								{
-									'rl:outline-bonus': isNumberHovered(num),
-									'rl:bg-red-roulette': getColor(num) === 'RED',
-									'rl:bg-black-roulette': getColor(num) === 'BLACK',
-									'rl:bg-green-roulette': getColor(num) === 'GREEN',
+									'outline-bonus': isNumberHovered(num),
+									'bg-red-roulette': getColor(num) === 'RED',
+									'bg-black-roulette': getColor(num) === 'BLACK',
+									'bg-green-roulette': getColor(num) === 'GREEN',
 								},
 							)}
 						>

@@ -47,24 +47,19 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 	};
 	return (
 		<Dialog open={open} onOpenChange={setOpen}>
-			<DialogContent className={'rl:w-[300px] rl:bg-card rl:rounded-lg'}>
-				<div className={' rl:p-4 rl:flex rl:flex-col rl:gap-2 rl:text-foreground'}>
-					<h2 className={'rl:text-sm rl:text-foreground'}>{t('customAmountOfChip')}:</h2>
-					<div className={'rl:flex rl:gap-2 rl:items-center'}>
-						<input
-							type="number"
-							className={'rl:rounded-lg rl:bg-transparent rl:p-2 rl:px-4 rl:border rl:border-border '}
-							value={value}
-							onChange={handleChange}
-						/>
+			<DialogContent className={'games w-[300px] bg-card rounded-lg roulette'}>
+				<div className={' p-4 flex flex-col gap-2 text-foreground'}>
+					<h2 className={'text-sm text-foreground'}>{t('customAmountOfChip')}:</h2>
+					<div className={'flex gap-2 items-center'}>
+						<input type="number" className={'rounded-lg bg-transparent p-2 px-4 border border-border '} value={value} onChange={handleChange} />
 						<span className={''}>BET</span>
 					</div>
 					<DialogClose>
-						<div className={'rl:flex rl:flex-row rl:justify-between rl:gap-2'}>
-							<Button variant="destructive" className="rl:w-full" onClick={handleClose}>
+						<div className={'flex flex-row justify-between gap-2'}>
+							<Button variant="destructive" className="w-full" onClick={handleClose}>
 								{t('cancel')}
 							</Button>
-							<Button variant="success" className="rl:w-full" onClick={handleSave}>
+							<Button variant="success" className="w-full" onClick={handleSave}>
 								{t('save')}
 							</Button>
 						</div>
