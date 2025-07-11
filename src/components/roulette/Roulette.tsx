@@ -24,7 +24,7 @@ export const Roulette = () => {
 	const lastStatus = useRef<typeof status>(undefined);
 	useEffect(() => {
 		if (status === 'landed' && bets[0].bet.toLowerCase() !== lastShownBet.current?.toLowerCase()) {
-			toast(<RouletteResultToast rouletteBet={bets[0]} />, { classNames: { content: '!w-full' } });
+			toast(<RouletteResultToast rouletteBet={bets[0]} />, { classNames: { content: 'rl:!w-full' } });
 
 			const hasWon = bets[0].amount < bets[0].winAmount;
 			hasWon && shootConfetti();
@@ -46,7 +46,7 @@ export const Roulette = () => {
 
 	if (isVertical) {
 		return (
-			<div className="relative w-full flex flex-col items-center justify-center p-2 gap-y-2">
+			<div className="rl:relative rl:w-full rl:flex rl:flex-col rl:items-center rl:justify-center rl:p-2 rl:gap-y-2">
 				<VerticalRoulette />
 			</div>
 		);
@@ -54,14 +54,14 @@ export const Roulette = () => {
 
 	if (isTablet) {
 		return (
-			<div className="relative w-full flex flex-col items-center justify-center gap-y-2">
+			<div className="rl:relative rl:w-full rl:flex rl:flex-col rl:items-center rl:justify-center rl:gap-y-2">
 				<TabletRoulette />
 			</div>
 		);
 	}
 
 	return (
-		<div className="relative w-full flex flex-col items-center justify-center gap-y-2">
+		<div className="rl:relative rl:w-full rl:flex rl:flex-col rl:items-center rl:justify-center rl:gap-y-2">
 			<DesktopRoulette />
 		</div>
 	);

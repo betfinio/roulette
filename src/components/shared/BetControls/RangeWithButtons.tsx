@@ -119,8 +119,8 @@ export const RangeWithButtons: FC<IRangeWithButtonsProps> = ({ limits }) => {
 			<Button variant="secondary" {...decrementHandlers}>
 				<Minus />
 			</Button>
-			<div className="flex flex-col mb-4 w-full">
-				<div className="relative w-full flex items-center px-4">
+			<div className="rl:flex rl:flex-col rl:mb-4 rl:w-full">
+				<div className="rl:relative rl:w-full rl:flex rl:items-center rl:px-4">
 					<RouletteSlider minPrice={limits.min} maxPrice={limits.max} marks={marks} value={activeChipValue} setSliderValue={(amount) => change({ amount })} />
 				</div>
 			</div>

@@ -13,12 +13,12 @@ export const ExtraControls = () => {
 			<Button variant="secondary" onClick={() => double()}>
 				x2
 			</Button>
-			<Button variant="secondary" onClick={() => clearAll()} className="flex gap-2">
-				<CircleX className={'w-4 h-4'} />
+			<Button variant="secondary" onClick={() => clearAll()} className="rl:flex rl:gap-2">
+				<CircleX className={'rl:w-4 rl:h-4'} />
 				{t('clear')}
 			</Button>
-			<Button variant="secondary" onClick={() => undo()} className="flex gap-2">
-				<Undo2 className={'w-4 h-4'} />
+			<Button variant="secondary" onClick={() => undo()} className="rl:flex rl:gap-2">
+				<Undo2 className={'rl:w-4 rl:h-4'} />
 				{t('undo')}
 			</Button>
 		</>

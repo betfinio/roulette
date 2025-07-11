@@ -56,84 +56,86 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 		<motion.div
 			onClick={(e) => e.stopPropagation()}
 			className={
-				'roulette relative mx-auto text-foreground   text-base font-semibold bg-card w-full min-w-[90vw] sm:min-w-[500px] max-w-[600px] min-h-[300px] rounded-lg p-4 xs:px-1 sm:p-8'
+				' rl:relative rl:mx-auto rl:text-foreground   rl:text-base rl:font-semibold rl:bg-card rl:w-full rl:min-w-[90vw] rl:sm:min-w-[500px] rl:max-w-[600px] rl:min-h-[300px] rl:rounded-lg rl:p-4 rl:xs:px-1 rl:sm:p-8'
 			}
 		>
-			<div className={'flex items-center justify-between px-4 sm:px-0'}>
+			<div className={'rl:flex rl:items-center rl:justify-between rl:px-4 rl:sm:px-0'}>
 				<div>{t('bettingTicket')}</div>
 				<X
 					onClick={onClose}
-					className={'w-4 h-4 border border-current rounded-full cursor-pointer hover:text-red-roulette hover:border-red-roulette duration-200'}
+					className={
+						'rl:w-4 rl:h-4 rl:border rl:border-current rl:rounded-full rl:cursor-pointer rl:hover:text-red-roulette rl:hover:border-red-roulette rl:duration-200'
+					}
 				/>
 			</div>
 
-			<div className={'mt-8'}>
-				<div className={'text-center'}>{t('winning')}</div>
-				<div className={'flex items-center justify-center gap-3'}>
+			<div className={'rl:mt-8'}>
+				<div className={'rl:text-center'}>{t('winning')}</div>
+				<div className={'rl:flex rl:items-center rl:justify-center rl:gap-3'}>
 					<div
-						className={cn('font-semibold text-4xl text-tertiary-foreground flex gap-2', {
-							'text-green-roulette!': valueToNumber(selectedBet?.winAmount) > 0,
+						className={cn('rl:font-semibold rl:text-4xl rl:text-tertiary-foreground rl:flex rl:gap-2', {
+							'rl:text-green-roulette!': valueToNumber(selectedBet?.winAmount) > 0,
 						})}
 					>
 						{valueToNumber(selectedBet?.winAmount ?? 0n) > 0 && '+'}
-						<BetValue withIcon className={'gap-2'} value={valueToNumber(selectedBet?.winAmount)} iconClassName={'w-6 h-6'} />
+						<BetValue withIcon className={'rl:gap-2'} value={valueToNumber(selectedBet?.winAmount)} iconClassName={'rl:w-6 rl:h-6'} />
 					</div>
 				</div>
 			</div>
 
-			<div className={'mt-6 py-6 border-y border-border border-opacity-10'}>
-				<div className={'grid grid-cols-2 relative'}>
+			<div className={'rl:mt-6 rl:py-6 rl:border-y rl:border-border rl:border-opacity-10'}>
+				<div className={'rl:grid rl:grid-cols-2 rl:relative'}>
 					<div>
-						<div className={'text-center text-tertiary-foreground text-sm'}>{t('totalBet')}</div>
-						<div className={'flex mt-2 gap-1 items-center justify-center'}>
-							<div className={'text-base'}>
+						<div className={'rl:text-center rl:text-tertiary-foreground rl:text-sm'}>{t('totalBet')}</div>
+						<div className={'rl:flex rl:mt-2 rl:gap-1 rl:items-center rl:justify-center'}>
+							<div className={'rl:text-base'}>
 								<BetValue value={valueToNumber(selectedBet?.amount)} withIcon={true} />
 							</div>
 						</div>
 					</div>
 
-					<div className={'w-[1px] absolute left-[50%] -translate-x-[50%] h-full bg-border bg-opacity-10'} />
+					<div className={'rl:w-[1px] rl:absolute rl:left-[50%] rl:-translate-x-[50%] rl:h-full rl:bg-border rl:bg-opacity-10'} />
 
 					<div>
-						<div className={'text-center text-tertiary-foreground text-sm'}>{t('winNumber')}</div>
-						<div className={'flex mt-1 gap-1 items-center justify-center'}>
+						<div className={'rl:text-center rl:text-tertiary-foreground rl:text-sm'}>{t('winNumber')}</div>
+						<div className={'rl:flex rl:mt-1 rl:gap-1 rl:items-center rl:justify-center'}>
 							<div
-								className={cn(' min-w-[30px] min-h-[30px] rounded-lg flex justify-center font-semibold items-center text-xs', {
-									'bg-red-roulette': getColor(selectedBet?.winNumber ?? 0) === 'RED',
-									'bg-black-roulette': getColor(selectedBet?.winNumber ?? 0) === 'BLACK',
-									'bg-green-roulette': getColor(selectedBet?.winNumber ?? 0) === 'GREEN',
+								className={cn(' rl:min-w-[30px] rl:min-h-[30px] rl:rounded-lg rl:flex rl:justify-center rl:font-semibold rl:items-center rl:text-xs', {
+									'rl:bg-red-roulette': getColor(selectedBet?.winNumber ?? 0) === 'RED',
+									'rl:bg-black-roulette': getColor(selectedBet?.winNumber ?? 0) === 'BLACK',
+									'rl:bg-green-roulette': getColor(selectedBet?.winNumber ?? 0) === 'GREEN',
 								})}
 							>
-								{selectedBet?.winNumber === 42 ? <div className={'px-2'}>{t('waiting')}</div> : selectedBet?.winNumber}
+								{selectedBet?.winNumber === 42 ? <div className={'rl:px-2'}>{t('waiting')}</div> : selectedBet?.winNumber}
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div className={'mt-5 flex flex-col items-center'}>
-				<div className={'text-center'}>{t('betID')}</div>
+			<div className={'rl:mt-5 rl:flex rl:flex-col rl:items-center'}>
+				<div className={'rl:text-center'}>{t('betID')}</div>
 				<a
 					href={`${ETHSCAN}/address/${selectedBet?.bet}`}
-					className={'block text-center underline cursor-pointer hover:text-primary duration-300 px-4 '}
+					className={'rl:block rl:text-center rl:underline rl:cursor-pointer rl:hover:text-primary rl:duration-300 rl:px-4 '}
 					target={'_blank'}
 					rel="noreferrer"
 				>
 					{isMobile ? truncateEthAddress(selectedBet?.bet || ZeroAddress, 7) : selectedBet?.bet}
 				</a>
 
-				<div className={'text-center font-normal text-tertiary-foreground'}>
+				<div className={'rl:text-center rl:font-normal rl:text-tertiary-foreground'}>
 					{DateTime.fromMillis(Number(selectedBet?.created) * 1000).toFormat('yyyy-MM-dd, HH:mm:ss Z')} UTC
 				</div>
 			</div>
 
-			<div className={cn('flex items-end justify-center gap-2 mt-5', { hidden: transactionHash === undefined })}>
-				<div className={'text-tertiary-foreground font-semibold'}>{t('proofOfRandom')}</div>
-				<ShieldCheckIcon className={'text-green-roulette w-5 h-5'} />
+			<div className={cn('rl:flex rl:items-end rl:justify-center rl:gap-2 rl:mt-5', { hidden: transactionHash === undefined })}>
+				<div className={'rl:text-tertiary-foreground rl:font-semibold'}>{t('proofOfRandom')}</div>
+				<ShieldCheckIcon className={'rl:text-green-roulette rl:w-5 rl:h-5'} />
 				<a
 					href={`${ETHSCAN}/tx/${transactionHash}`}
 					target={'_blank'}
-					className={cn('block text-center underline cursor-pointer hover:text-primary duration-300', {
+					className={cn('rl:block rl:text-center rl:underline rl:cursor-pointer rl:hover:text-primary rl:duration-300', {
 						blur: isLoading,
 					})}
 					rel="noreferrer"
@@ -141,9 +143,9 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 					{truncateEthAddress(transactionHash || ZeroAddress)}
 				</a>
 			</div>
-			<div className={'text-xs mt-1 text-center '}>
+			<div className={'rl:text-xs rl:mt-1 rl:text-center '}>
 				<a
-					className={'text-tertiary-foreground hover:text-green-roulette duration-300 underline'}
+					className={'rl:text-tertiary-foreground rl:hover:text-green-roulette rl:duration-300 rl:underline'}
 					href="https://betfin.gitbook.io/betfin-public/proof-of-fairness/random-number-generation"
 					target={'_blank'}
 					rel="noreferrer"

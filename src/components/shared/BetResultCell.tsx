@@ -10,10 +10,10 @@ interface BetResultCellProps {
 export const BetResultCell: FC<BetResultCellProps> = ({ winNumber, inProgress }) => {
 	const { t } = useTranslation('roulette');
 	if (inProgress) {
-		return <div className="text-tertiary-foreground min-h-10 flex items-center">{t('table.waiting')}</div>;
+		return <div className="rl:text-tertiary-foreground rl:min-h-10 rl:flex rl:items-center">{t('table.waiting')}</div>;
 	}
 	if (winNumber === 42) {
-		return <div className={'text-muted-foreground h-10 flex justify-start items-center'}>Waiting</div>;
+		return <div className={'rl:text-muted-foreground rl:h-10 rl:flex rl:justify-start rl:items-center'}>Waiting</div>;
 	}
-	return <RouletteNumberIcon number={winNumber} className={cn('w-10 h-10  ')} />;
+	return <RouletteNumberIcon number={winNumber} className={cn('rl:w-10 rl:h-10  ')} />;
 };

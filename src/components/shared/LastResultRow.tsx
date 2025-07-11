@@ -15,10 +15,13 @@ export const LastResultRow: FC<ILastResultRowProps> = ({ result, isActive, index
 		return (
 			<motion.div
 				key={index}
-				className={cn('aspect-square rounded-lg flex justify-center items-center w-8  blur-xs animate-pulse col-start-2 pointer-none', {
-					'scale-130 origin-center   bg-accent': isActive,
-					'scale-100 origin-center opacity-50': !isActive,
-				})}
+				className={cn(
+					'rl:aspect-square rl:rounded-lg rl:flex rl:justify-center rl:items-center rl:w-8  rl:blur-xs rl:animate-pulse rl:col-start-2 rl:pointer-none',
+					{
+						'rl:scale-130 rl:origin-center   rl:bg-accent': isActive,
+						'rl:scale-100 rl:origin-center rl:opacity-50': !isActive,
+					},
+				)}
 				animate={{
 					x: ['0%', '-100%', '0%', '100%', '0%'],
 				}}
@@ -37,12 +40,12 @@ export const LastResultRow: FC<ILastResultRowProps> = ({ result, isActive, index
 	return (
 		<motion.div
 			key={index}
-			className={cn('aspect-square text-foreground rounded-lg flex justify-center items-center transition-all pointer-none ', {
-				'col-start-1 bg-red-roulette w-8': getColor(result.winNumber) === 'RED',
-				'col-start-2 bg-green-roulette w-8': getColor(result.winNumber) === 'GREEN',
-				'col-start-3 bg-black-roulette w-8': getColor(result.winNumber) === 'BLACK',
-				'scale-120 origin-center scale-center': isActive,
-				'scale-100 origin-center scale-center opacity-50': !isActive,
+			className={cn('rl:aspect-square rl:text-foreground rl:rounded-lg rl:flex rl:justify-center rl:items-center rl:transition-all rl:pointer-none ', {
+				'rl:col-start-1 rl:bg-red-roulette rl:w-8': getColor(result.winNumber) === 'RED',
+				'rl:col-start-2 rl:bg-green-roulette rl:w-8': getColor(result.winNumber) === 'GREEN',
+				'rl:col-start-3 rl:bg-black-roulette rl:w-8': getColor(result.winNumber) === 'BLACK',
+				'rl:scale-120 rl:origin-center rl:scale-center': isActive,
+				'rl:scale-100 rl:origin-center rl:scale-center rl:opacity-50': !isActive,
 			})}
 			{...SLIDE_DOWN_ANIMATION}
 		>

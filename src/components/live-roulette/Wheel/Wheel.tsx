@@ -160,17 +160,17 @@ export const Wheel = () => {
 	}, [status, wheelControls, lastNumber]);
 
 	return (
-		<div className="w-full flex flex-col relative max-w-2xl mx-8 lg:mx-auto drop-shadow-[0_0_18px_var(--wheel-shadow)] rounded-full">
+		<div className="rl:w-full rl:flex rl:flex-col rl:relative rl:max-w-2xl rl:mx-8 rl:lg:mx-auto rl:drop-shadow-[0_0_18px_var(--wheel-shadow)] rl:rounded-full">
 			{initialAnimationFinished && <WheelDetails />}
-			<motion.div className="w-full mt-0 relative max-w-3xl	aspect-square pb-10" animate={wheelControlsWrapper}>
-				<motion.div className={cn({ 'blur-md animate-pulse': !isBetsFetched })} animate={wheelControls}>
-					<div className="relative aspect-square w-full max-w-3xl text-background-light ">
-						<div className="absolute rounded-full top-[-6px] right-[-6px] bottom-[-6px] left-[-6px]]  " />
+			<motion.div className="rl:w-full rl:mt-0 rl:relative rl:max-w-3xl	rl:aspect-square rl:pb-10" animate={wheelControlsWrapper}>
+				<motion.div className={cn({ 'rl:blur-md rl:animate-pulse': !isBetsFetched })} animate={wheelControls}>
+					<div className="rl:relative rl:aspect-square rl:w-full rl:max-w-3xl rl:text-background-light ">
+						<div className="rl:absolute rl:rounded-full rl:top-[-6px] rl:right-[-6px] rl:bottom-[-6px] rl:left-[-6px]]  " />
 						<RouletteWheel />
-						<span className="absolute z-3 top-[12%] right-[12%] bottom-[12%] left-[12%] bg-center bg-cover bg-roulette-center " />
+						<span className="rl:absolute rl:z-3 rl:top-[12%] rl:right-[12%] rl:bottom-[12%] rl:left-[12%] rl:bg-center rl:bg-cover rl:bg-roulette-center " />
 					</div>
 				</motion.div>
-				<PlayIcon className={'absolute w-5 h-5 text-foreground z-5 bottom-6 rotate-[270deg] left-1/2 -translate-x-1/2'} />
+				<PlayIcon className={'rl:absolute rl:w-5 rl:h-5 rl:text-foreground rl:z-5 rl:bottom-6 rl:rotate-[270deg] rl:left-1/2 rl:-translate-x-1/2'} />
 			</motion.div>
 		</div>
 	);

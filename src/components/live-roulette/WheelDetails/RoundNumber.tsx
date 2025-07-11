@@ -21,16 +21,16 @@ export const RoundNumber: FC = () => {
 
 	return (
 		<>
-			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 20" className="w-full">
-				<text id="timerText" x="50%" y="50%" textAnchor="middle" className="fill-muted/50 text-xs" dy=".3em">
+			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 20" className="rl:w-full">
+				<text id="timerText" x="50%" y="50%" textAnchor="middle" className="rl:fill-muted/50 rl:text-xs" dy=".3em">
 					{t('round')} #{round}
 				</text>
 			</svg>
 
 			{addressCopied ? (
-				<CheckIcon className={'text-success w-[10%]'} />
+				<CheckIcon className={'rl:text-success rl:w-[10%]'} />
 			) : (
-				<CopyIcon className={'text-primary cursor-pointer w-[10%]'} onClick={handleCopyRoundAddress} />
+				<CopyIcon className={'rl:text-primary rl:cursor-pointer rl:w-[10%]'} onClick={handleCopyRoundAddress} />
 			)}
 		</>
 	);

@@ -1,25 +1,17 @@
 @import "@betfinio/components/globals.css";
 
-@import "tailwindcss";
+@import "tailwindcss" prefix(rl);
+
 @import "tw-animate-css";
-@config "../tailwind.config.ts";
 
 @theme {
-	--color-bonus: var(--bonus);
-	--color-primary: var(--primary);
-	--color-muted: var(--muted);
-	--color-success: var(--success);
-	--color-muted-foreground: var(--muted-foreground);
-	--color-foreground: var(--foreground);
-	--color-black-roulette: var(--black-roulette);
-	--color-green-roulette: var(--green-roulette);
-	--color-red-roulette: var(--red-roulette);
-	--roulette-center: url("./assets/roulette-center.svg");
-	--color-card: var(--card);
+	--color-black-roulette: var(--black);
+	--color-green-roulette: var(--green);
+	--color-red-roulette: var(--red);
 }
 
 @layer utilities {
-	.bg-roulette-center {
+	.rl\:bg-roulette-center {
 		background-image: var(--roulette-center);
 	}
 }
@@ -37,7 +29,6 @@
 :root {
 	--spinningAnimationSpeed: 30s;
 	--spinningSpeed: 9s;
-
 	--green: hsl(153 54% 48%);
 	--orange: hsl(0 86% 68%);
 	--red: hsl(346 71% 54%);
@@ -52,11 +43,7 @@
 	--silver: hsl(218 10% 63%);
 	--bronze: hsl(27 89% 59%);
 	--wheel-shadow: rgba(0, 172, 231, 0.45);
-
-	/* Roulette colors */
-	--black-roulette: var(--black);
-	--green-roulette: var(--green);
-	--red-roulette: var(--red);
+	--roulette-center: url("./assets/roulette-center.svg");
 }
 
 @layer base {

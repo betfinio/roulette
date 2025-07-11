@@ -67,11 +67,11 @@ export const BetChips: FC<BetChipsProps> = ({ positionId, winNumber }) => {
 
 	return (
 		<>
-			<TooltipContent side={'top'} className={'border border-border'}>
-				<div className={'flex flex-row items-center justify-between gap-1'}>
+			<TooltipContent side={'top'} className={'rl:border border-border'}>
+				<div className={'rl:flex rl:flex-row rl:items-center rl:justify-between gap-1'}>
 					My bets: <BetValue value={myBetsAmount} withIcon />
 				</div>
-				<div className={cn('flex flex-row items-center justify-between gap-1', otherBetsAmount === 0 && 'hidden')}>
+				<div className={cn('rl:flex rl:flex-row rl:items-center rl:justify-between rl:gap-1', otherBetsAmount === 0 && 'rl:hidden')}>
 					Other's bets: <BetValue value={otherBetsAmount} withIcon />
 				</div>
 			</TooltipContent>
@@ -85,10 +85,13 @@ export const BetChips: FC<BetChipsProps> = ({ positionId, winNumber }) => {
 				return (
 					<div
 						key={index}
-						className={cn('absolute pointer-events-none w-7 md:w-9  aspect-square border rounded-full animate-[ping_1s_linear_reverse] border-background ', {
-							'border-2 rounded-full animate-bounce border-primary': chip.player === undefined,
-							'after:animate-pulse after:bg-black/35 after:rounded-full after:absolute after:z-20 after:inset-0': isWinNumber,
-						})}
+						className={cn(
+							'rl:absolute rl:pointer-events-none rl:w-7 rl:md:w-9  rl:aspect-square rl:border rl:rounded-full rl:animate-[ping_1s_linear_reverse] rl:border-background ',
+							{
+								'rl:border-2 rl:rounded-full rl:animate-bounce rl:border-primary': chip.player === undefined,
+								'rl:after:animate-pulse rl:after:bg-black/35 rl:after:rounded-full rl:after:absolute rl:after:z-20 rl:after:inset-0': isWinNumber,
+							},
+						)}
 						style={{
 							zIndex,
 							transform: `translate(${xOffset}px, ${yOffset}px)`,
@@ -167,7 +170,7 @@ export const BetChips: FC<BetChipsProps> = ({ positionId, winNumber }) => {
 								d="M53.5122 22.1719C60.974 19.0035 68.9127 17.3993 77.1082 17.3993V6.06892e-05H76.9988C66.5933 -0.0130261 56.294 2.09051 46.7271 6.18255L53.5122 22.1719Z"
 								fill="currentColor"
 							/>
-							<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="#000" className="text-3xl font-semibold">
+							<text x="50%" y="50%" textAnchor="middle" dy=".3em" fill="#000" className="rl:text-3xl rl:font-semibold">
 								{millify(chip.amount, { precision: 1 })}
 							</text>
 						</svg>

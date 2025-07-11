@@ -16,8 +16,8 @@ export const DynamicTextSVG = ({ text }: { text: string }) => {
 	}, [text]);
 
 	return (
-		<svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBox} fill="none" className="w-full">
-			<text ref={textRef} x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="fill-foreground text-xl">
+		<svg xmlns="http://www.w3.org/2000/svg" viewBox={viewBox} fill="none" className="rl:w-full">
+			<text ref={textRef} x="50%" y="50%" textAnchor="middle" dominantBaseline="middle" className="rl:fill-foreground rl:text-xl">
 				{text}
 			</text>
 		</svg>
