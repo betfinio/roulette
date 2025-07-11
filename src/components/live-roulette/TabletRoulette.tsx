@@ -1,5 +1,5 @@
-import { motion } from 'motion/react';
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
+import { motion } from 'motion/react';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';

@@ -1,10 +1,10 @@
-import { LiroBetABI, LiveRouletteABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
+import logger from '@/src/config/logger';
+import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global';
+import { LiroBetABI, LiveRouletteABI, PartnerABI, SinglePlayerTableABI, valueToNumber } from '@betfinio/abi';
 import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
 import { type Address, encodeAbiParameters, parseAbiParameters } from 'viem';
 import type { Config } from 'wagmi';
-import logger from '@/src/config/logger';
-import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global';
 import { decodeBet, encodeBet } from '..';
 import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
 
@@ -97,7 +97,7 @@ export const doublePlace = async () => {
 		return acc;
 	}, {});
 	const newBets = Object.values(betsMap).reduce((acc, bets) => {
-		// biome-ignore lint/performance/noAccumulatingSpread: todo
+		// biome-ignore lint/performance/noAccumulatingSpread: <explanation>
 		return [...acc, ...bets];
 	}, []);
 	localStorage.setItem('bets', JSON.stringify(newBets));

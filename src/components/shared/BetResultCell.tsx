@@ -1,4 +1,5 @@
 import { cn } from '@betfinio/components';
+import { LoaderIcon } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import { RouletteNumberIcon } from './RouletteNumberIcon';

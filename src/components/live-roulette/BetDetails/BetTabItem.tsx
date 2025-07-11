@@ -1,3 +1,5 @@
+import { ETHSCAN } from '@/src/global';
+import type { PlayerInProgressBet } from '@/src/lib/live-roulette/types';
 import { truncateEthAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
@@ -5,8 +7,6 @@ import { useUsername } from 'betfinio_context/lib/query';
 import { motion } from 'motion/react';
 import type { FC } from 'react';
 import { useAccount } from 'wagmi';
-import { ETHSCAN } from '@/src/global';
-import type { PlayerInProgressBet } from '@/src/lib/live-roulette/types';
 
 interface IBetTabItemProps {
 	bet: PlayerInProgressBet;

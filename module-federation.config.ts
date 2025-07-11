@@ -1,4 +1,5 @@
 import { createModuleFederationConfig } from '@module-federation/rsbuild-plugin';
+import { dependencies } from './package.json';
 
 export default createModuleFederationConfig({
 	name: 'betfinio_roulette',
@@ -14,5 +15,34 @@ export default createModuleFederationConfig({
 	},
 	manifest: true,
 	dts: true,
-	shared: ['react', 'react-dom', '@tanstack/react-router', '@tanstack/react-query', 'i18next', 'react-i18next', 'wagmi'],
+	shared: {
+		react: {
+			singleton: true,
+			requiredVersion: dependencies.react,
+		},
+		'react-dom': {
+			singleton: true,
+			requiredVersion: dependencies['react-dom'],
+		},
+		'@tanstack/react-router': {
+			singleton: true,
+			requiredVersion: dependencies['@tanstack/react-router'],
+		},
+		'@tanstack/react-query': {
+			singleton: true,
+			requiredVersion: dependencies['@tanstack/react-query'],
+		},
+		i18next: {
+			singleton: true,
+			requiredVersion: dependencies.i18next,
+		},
+		'react-i18next': {
+			singleton: true,
+			requiredVersion: dependencies['react-i18next'],
+		},
+		wagmi: {
+			singleton: true,
+			requiredVersion: dependencies.wagmi,
+		},
+	},
 });

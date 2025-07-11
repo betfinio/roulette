@@ -1,6 +1,6 @@
+import { getColor } from '@/src/lib/roulette';
 import { cn } from '@betfinio/components';
 import type { FC } from 'react';
-import { getColor } from '@/src/lib/roulette';
 
 interface RouletteNumberIconProps extends React.SVGProps<SVGSVGElement> {
 	number: number;

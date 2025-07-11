@@ -1,18 +1,19 @@
+import { ETHSCAN } from '@/src/global.ts';
+import { useGetPlayerBets } from '@/src/lib/roulette/query';
+import type { PlayerBet } from '@/src/lib/roulette/types.ts';
 import { truncateEthAddress } from '@betfinio/abi';
+import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
+
+import { useVisibleTable } from '@/src/lib/shared/query';
+import { RoundStatus } from '@/src/lib/shared/types';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@betfinio/components/ui';
-import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { Search } from 'lucide-react';
 import { DateTime } from 'luxon';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ETHSCAN } from '@/src/global.ts';
-import { useGetPlayerBets } from '@/src/lib/roulette/query';
-import type { PlayerBet } from '@/src/lib/roulette/types.ts';
-import { useVisibleTable } from '@/src/lib/shared/query';
-import { RoundStatus } from '@/src/lib/shared/types';
 import { BetResultCell } from '../../shared/BetResultCell';
 import { RoundModal } from '../../shared/HistoryTable';
 import { WinAmountCell } from '../../shared/WinAmountCell';

@@ -1,8 +1,8 @@
-import { cn } from '@betfinio/components';
-import { Tooltip, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
-import type { FC, MouseEvent } from 'react';
 import { positionClasses } from '@/src/components/shared/utils.ts';
 import { useGetDebugMode } from '@/src/lib/shared/query';
+import { cn } from '@betfinio/components';
+import { Tooltip, TooltipProvider, TooltipTrigger } from '@betfinio/components/ui';
+import React, { type FC, type MouseEvent } from 'react';
 import { BetChips } from '../BetChip/BetChips';
 
 export type PositionType = 'center' | 'top' | 'left' | 'right' | 'bottom' | 'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight';

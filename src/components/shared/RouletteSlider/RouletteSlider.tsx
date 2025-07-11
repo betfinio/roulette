@@ -1,5 +1,5 @@
 import { Slider } from '@betfinio/components/ui';
-import type { FC } from 'react';
+import { type FC, useEffect, useState } from 'react';
 
 // Define the type for each mark (value and its position on the slider)
 type Mark = {
@@ -16,6 +16,7 @@ interface RouletteSliderProps {
 }
 
 const RouletteSlider: FC<RouletteSliderProps> = ({ minPrice, maxPrice, marks, value, setSliderValue }) => {
+	const [step, setStep] = useState(minPrice); // Default slider value (set to mid-range value)
 	// Default slider value (set to mid-range value)
 
 	// Calculate the position of each mark relative to the min/max range
@@ -41,7 +42,7 @@ const RouletteSlider: FC<RouletteSliderProps> = ({ minPrice, maxPrice, marks, va
 			<Slider
 				min={minPrice}
 				max={maxPrice}
-				step={minPrice}
+				step={step}
 				value={[value]}
 				onValueChange={([value]) => handleSliderChange(value)}
 				className="w-full h-2 bg-card-secondary/20 rounded-full relative"
