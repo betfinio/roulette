@@ -1,3 +1,8 @@
+import { ZeroAddress } from '@betfinio/abi';
+import { cn } from '@betfinio/components';
+import { BetValue } from '@betfinio/components/shared';
+import { motion } from 'motion/react';
+import { type FC, useEffect, useMemo, useRef, useState } from 'react';
 import {
 	useGetCurrentRound,
 	useGetSelectedRound,
@@ -8,12 +13,6 @@ import {
 import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { getColor } from '@/src/lib/roulette';
 import { useVisibleTable } from '@/src/lib/shared/query';
-import { ZeroAddress } from '@betfinio/abi';
-import { cn } from '@betfinio/components';
-import { BetValue } from '@betfinio/components/shared';
-import { motion } from 'motion/react';
-import { type FC, useEffect, useMemo, useRef, useState } from 'react';
-import { useAccount } from 'wagmi';
 import { RouletteNumberIcon } from '../../shared/RouletteNumberIcon';
 import { BackToGame } from './BackToGame';
 import { DynamicTextSVG } from './DynamicTextSVG';
@@ -26,18 +25,17 @@ export const WheelDetails: FC = () => {
 	const { table = ZeroAddress } = useVisibleTable();
 
 	const { state } = useLiveRouletteState();
-	const { address } = useAccount();
 	const { data: currentRound, isLoading, refetch: refetchCurrentRound } = useGetCurrentRound(table);
 	const {
 		round: selectedRound,
 		isRoundFinished,
 		roundHasBets: selectedRoundHasBets,
 		winNumber,
-		bankByRoundProps: { refetch: refetchBankByRound, isFetching: isBankByRoundLoading },
+		bankByRoundProps: { refetch: refetchBankByRound },
 		winNumberProps,
 		currentRoundBank,
 	} = useGetSelectedRound();
-	const { data: tableRoundBets, isLoading: isSelectedRoundBetsLoading } = useGetTableSelectedRoundBets(table, selectedRound);
+	const { isLoading: isSelectedRoundBetsLoading } = useGetTableSelectedRoundBets(table, selectedRound);
 	const { data: playerRounds = [] } = useTablePlayerRounds(table);
 
 	const playerStat = useMemo(() => {
@@ -73,6 +71,7 @@ export const WheelDetails: FC = () => {
 
 	const showBackToGame = isRoundFinished && rouletteIsNotSpinning && (showRoundIsOver || showYouWon || showWinNumber || showWaitingForSpin);
 
+	console.log('render', isLoading, isSelectedRoundBetsLoading, !rouletteIsNotSpinning, winNumberProps.isLoading);
 	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning || winNumberProps.isLoading) return null;
 
 	return (

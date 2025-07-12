@@ -1,8 +1,8 @@
-import { fetchTableBetByBlockHash } from '@/src/lib/roulette/api';
 import { ZeroAddress } from '@betfinio/abi';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
+import { fetchTableBetByBlockHash } from '@/src/lib/roulette/api';
 import { useVisibleTable } from '../../shared/query';
 import { fetchAllPlayersBets, fetchPlayerBets, fetchRouletteTableStats, fetchTransactionHashByBet } from '../gql';
 import type { WheelState } from '../types';

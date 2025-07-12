@@ -12,9 +12,6 @@ export default defineConfig({
 		cors: {
 			origin: '*',
 		},
-		headers: {
-			'Access-Control-Allow-Origin': '*',
-		},
 	},
 	dev: {
 		assetPrefix: `http://localhost:${PORT}`,
@@ -22,16 +19,14 @@ export default defineConfig({
 	html: {
 		title: 'Betfin Roulette',
 		favicon: './src/assets/favicon.svg',
-		template: './src/assets/index.html',
 	},
 	output: {
 		assetPrefix: process.env.PUBLIC_OUTPUT_URL,
 	},
-	plugins: [pluginReact(), pluginModuleFederation(moduleFederationConfig)],
+	plugins: [pluginReact(), pluginModuleFederation(moduleFederationConfig, {})],
 	tools: {
 		rspack: {
 			ignoreWarnings: [/Critical dependency: the request of a dependency is an expression/],
-
 			plugins: [TanStackRouterRspack()],
 		},
 	},

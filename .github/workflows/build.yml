@@ -13,6 +13,12 @@ concurrency:
 env:
   NODE_VERSION: 20
 
+permissions:
+  contents: write
+  pull-requests: write
+  packages: read
+  id-token: write
+
 jobs:
   setup:
     name: Setup and Build

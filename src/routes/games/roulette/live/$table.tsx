@@ -1,15 +1,13 @@
-import { VersionValidation } from '@/src/components/VersionValidation';
-import { LiveRoulette } from '@/src/components/live-roulette/LiveRoulette';
-import Watchers from '@/src/components/live-roulette/Watchers.tsx';
-import { PUBLIC_BRANCH, PUBLIC_DEPLOYED } from '@/src/global';
-import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
-import { fetchLiveRouletteTables } from '@/src/lib/live-roulette/gql';
-import { fetchTableByAddress } from '@/src/lib/shared/api';
 import { SonnerToaster } from '@betfinio/components/ui';
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { type Address, isAddress } from 'viem';
 import { useConfig } from 'wagmi';
+import { LiveRoulette } from '@/src/components/live-roulette/LiveRoulette';
+import Watchers from '@/src/components/live-roulette/Watchers.tsx';
+import { fetchCurrentRoundOfTable } from '@/src/lib/live-roulette/api';
+import { fetchLiveRouletteTables } from '@/src/lib/live-roulette/gql';
+import { fetchTableByAddress } from '@/src/lib/shared/api';
 
 export const Route = createFileRoute('/games/roulette/live/$table')({
 	component: RouletteLiveTable,
@@ -45,7 +43,7 @@ export function RouletteLiveTable() {
 
 			const isTableExist = await fetchTableByAddress(wagmiConfig, params.table as Address);
 			if (!isTableExist) {
-				navigate({ to: '/games/roulette' });
+				navigate({ to: '/not-found' });
 				return;
 			}
 
@@ -66,11 +64,10 @@ export function RouletteLiveTable() {
 	}, [params.table, search.round]);
 
 	return (
-		<div className="roulette">
+		<div className="roulette  ">
 			<Watchers />
 			<LiveRoulette />
 			<SonnerToaster />
-			<VersionValidation repository={'roulette'} branch={PUBLIC_BRANCH} current={PUBLIC_DEPLOYED} />
 		</div>
 	);
 }

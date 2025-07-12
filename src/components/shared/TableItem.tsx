@@ -1,11 +1,10 @@
+import { cn } from '@betfinio/components';
+import { isNaN as _isNaN } from 'lodash';
 import type React from 'react';
-
+import { useTranslation } from 'react-i18next';
 import type { IRouletteLanguageKeys } from '@/src/i18next';
 import { useCurrentRound } from '@/src/lib/live-roulette/query';
 import { useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
-import { cn } from '@betfinio/components';
-import { isNaN as _isNaN } from 'lodash';
-import { useTranslation } from 'react-i18next';
 import { BetPlacePoint, type PositionType } from './BetPlacePoint/BetPlacePoint';
 
 interface TableItemProps {

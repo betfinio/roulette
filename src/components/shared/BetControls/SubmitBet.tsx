@@ -1,9 +1,4 @@
-import { useCurrentRound, useLiveRouletteState } from '@/src/lib/live-roulette/query';
-import { WheelStatus } from '@/src/lib/live-roulette/types';
-import { useRouletteState } from '@/src/lib/roulette/query';
-import { getRequiredAllowance } from '@/src/lib/shared/api';
-import { useLocalBets, useSubmitBet, useVisibleTable } from '@/src/lib/shared/query';
-import { ZeroAddress, valueToNumber } from '@betfinio/abi';
+import { valueToNumber, ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { BetValue } from '@betfinio/components/shared';
 import { Button, toast } from '@betfinio/components/ui';
@@ -14,6 +9,11 @@ import { Loader } from 'lucide-react';
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
+import { useCurrentRound, useLiveRouletteState } from '@/src/lib/live-roulette/query';
+import { WheelStatus } from '@/src/lib/live-roulette/types';
+import { useRouletteState } from '@/src/lib/roulette/query';
+import { getRequiredAllowance } from '@/src/lib/shared/api';
+import { useLocalBets, useSubmitBet, useVisibleTable } from '@/src/lib/shared/query';
 
 export const SubmitBet: FC = () => {
 	const { t } = useTranslation('roulette');
@@ -73,16 +73,14 @@ export const SubmitBet: FC = () => {
 	}, [requested]);
 
 	return (
-		<>
-			<Button className="w-full uppercase text-xl px-4 relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>
-				{isSpinning && <Loader color={'black'} className={'animate-spin absolute'} />}
-				<div className={cn('uppercase', { invisible: isSpinning })}>
-					<div className="flex gap-2 w-32 justify-center text-base">
-						{t('submitBet')}
-						<BetValue iconClassName="rounded-full border border-border" withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
-					</div>
+		<Button className="w-full uppercase text-xl px-4 relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>
+			{isSpinning && <Loader color={'black'} className={'animate-spin absolute'} />}
+			<div className={cn('uppercase', { invisible: isSpinning })}>
+				<div className="flex gap-2 w-32 justify-center text-base">
+					{t('submitBet')}
+					<BetValue iconClassName="rounded-full border border-border" withIcon value={valueToNumber(BigInt(totalBet) * 10n ** 18n)} />
 				</div>
-			</Button>
-		</>
+			</div>
+		</Button>
 	);
 };

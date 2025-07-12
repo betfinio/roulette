@@ -1,4 +1,8 @@
+import { ZeroAddress } from '@betfinio/abi';
+import type { ExecutionResult } from 'graphql/execution';
+import type { Address } from 'viem';
 import {
+	execute,
 	GetRouletteAllPlayerBetsDocument,
 	type GetRouletteAllPlayerBetsQuery,
 	GetRoulettePlayerBetsDocument,
@@ -7,13 +11,9 @@ import {
 	type GetRouletteStatsByTableQuery,
 	GetTransactionHashByBetDocument,
 	type GetTransactionHashByBetQuery,
-	execute,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
 import type { PlayerBet } from '@/src/lib/roulette/types.ts';
-import { ZeroAddress } from '@betfinio/abi';
-import type { ExecutionResult } from 'graphql/execution';
-import type { Address } from 'viem';
 import type { IRouletteStat } from '../../shared/types';
 
 //This fetches my history

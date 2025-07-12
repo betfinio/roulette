@@ -1,8 +1,4 @@
-import WinNumber from '@/src/components/roulette/History/WinNumber.tsx';
-import { useGetSelectedRound, useTablePlayerRounds, useTableRounds } from '@/src/lib/live-roulette/query';
-import type { RoundBet } from '@/src/lib/live-roulette/types';
-import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
-import { ZeroAddress, valueToNumber } from '@betfinio/abi';
+import { valueToNumber, ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
@@ -12,6 +8,10 @@ import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 import { useEffect, useMemo, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import WinNumber from '@/src/components/roulette/History/WinNumber.tsx';
+import { useGetSelectedRound, useTablePlayerRounds, useTableRounds } from '@/src/lib/live-roulette/query';
+import type { RoundBet } from '@/src/lib/live-roulette/types';
+import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
 import { WinAmountCell } from '../../shared/WinAmountCell';
 
 const columnHelper = createColumnHelper<RoundBet>();
