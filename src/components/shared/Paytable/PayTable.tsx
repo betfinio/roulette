@@ -1,10 +1,10 @@
-import { useLimits } from '@/src/lib/shared/query';
 import { valueToNumber } from '@betfinio/abi';
 import { BetValue } from '@betfinio/components/shared';
 import { Link, X } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address } from 'viem';
+import { useLimits } from '@/src/lib/shared/query';
 
 interface IPaytableProps {
 	onClose: () => void;

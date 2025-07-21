@@ -1,7 +1,7 @@
-import { useCurrentInterval } from '@/src/lib/live-roulette/query';
-import { useVisibleTable } from '@/src/lib/shared/query';
 import { ZeroAddress } from '@betfinio/abi';
 import { useNavigate } from '@tanstack/react-router';
+import { useCurrentInterval } from '@/src/lib/live-roulette/query';
+import { useVisibleTable } from '@/src/lib/shared/query';
 
 export const BackToGame = () => {
 	const { table = ZeroAddress } = useVisibleTable();

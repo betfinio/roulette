@@ -1,15 +1,13 @@
+import { motion } from 'motion/react';
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
-
 import { MainTable } from '../shared/MainTable/MainTable';
 import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { BetDetails } from './BetDetails/BetDetails';
-import { LastResults } from './LastResults/LastResults';
-import { TableStat } from './TableStat';
-
-import { motion } from 'motion/react';
 import { Totals } from './BetDetails/Totals';
 import History from './History/HistoryTable';
+import { LastResults } from './LastResults/LastResults';
+import { TableStat } from './TableStat';
 import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {

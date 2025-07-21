@@ -1,3 +1,7 @@
+import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
+import { useQueryClient } from '@tanstack/react-query';
+import { useRef } from 'react';
+import { useAccount, useConfig, useWatchContractEvent } from 'wagmi';
 import { PUBLIC_LIRO_ADDRESS } from '@/src/global.ts';
 import {
 	useFetchTableBetsByBlockHash,
@@ -12,10 +16,6 @@ import { type PlayerInProgressBet, type PlayerRoundBets, type RoundBet, type Rou
 import { clearAllBets, fetchBetBitmaps, fetchBetInfo } from '@/src/lib/shared/api';
 import { useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
 import { type LocalBet, RoundStatus } from '@/src/lib/shared/types.ts';
-import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
-import { useQueryClient } from '@tanstack/react-query';
-import { useRef } from 'react';
-import { useAccount, useConfig, useWatchContractEvent } from 'wagmi';
 
 function Watchers() {
 	const queryClient = useQueryClient();
@@ -113,7 +113,7 @@ function Watchers() {
 					});
 
 					if (!roundInfo) return;
-					const { roundAllBets, roundPlayerBets, roundPlayersDetailedBets } = roundInfo;
+					const { roundAllBets, roundPlayerBets } = roundInfo;
 
 					// Populate all bets for the current round
 

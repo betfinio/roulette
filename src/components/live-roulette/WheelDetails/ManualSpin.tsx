@@ -1,8 +1,8 @@
-import { useCurrentInterval } from '@/src/lib/live-roulette/query';
-import { useManualSpin, useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
 import { Progress } from '@betfinio/components/ui';
 import { LoaderIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useCurrentInterval } from '@/src/lib/live-roulette/query';
+import { useManualSpin, useVisibleRound, useVisibleTable } from '@/src/lib/shared/query';
 
 const ManualSpin = () => {
 	const [timer, setTimer] = useState(0);

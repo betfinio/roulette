@@ -1,8 +1,8 @@
-import { GetLiveRouletteBitMapByRoundDocument, type GetLiveRouletteBitMapByRoundQuery, execute } from '@/.graphclient';
-import logger from '@/src/config/logger';
-import type { LocalBet } from '@/src/lib/shared/types.ts';
 import type { ExecutionResult } from 'graphql';
 import type { Address } from 'viem';
+import { execute, GetLiveRouletteBitMapByRoundDocument, type GetLiveRouletteBitMapByRoundQuery } from '@/.graphclient';
+import logger from '@/src/config/logger';
+import type { LocalBet } from '@/src/lib/shared/types.ts';
 import { decodeBet } from '..';
 
 export const fetchBetsBitMapAndAmountByRound = async (table: Address, round: number): Promise<LocalBet[]> => {
