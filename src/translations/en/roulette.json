@@ -104,6 +104,7 @@
 		"LT02": "Bet amount is below the minimum limit",
 		"LT03": "Bet amount is above the maximum limit",
 		"LT04": "Invalid bitmap",
+		"DS04": "Betting is disabled on Calculation Time. Please try again later",
 		"unknown": "Unknown error"
 	},
 	"placingBet": "Placing a bet",

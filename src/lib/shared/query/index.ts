@@ -175,7 +175,8 @@ export const useRouletteNumbersState = () => {
 };
 
 export const useSubmitBet = () => {
-	const { t: errors } = useTranslation('shared', { keyPrefix: 'errors' });
+	const { t: tErrors } = useTranslation('shared', { keyPrefix: 'errors' });
+	const { t: tLocalErrors } = useTranslation('roulette', { keyPrefix: 'errors' });
 	const { t } = useTranslation('roulette');
 	const config = useConfig();
 	const queryClient = useQueryClient();
@@ -188,8 +189,9 @@ export const useSubmitBet = () => {
 			if (e.cause.reason === 'LT02' || e.cause.reason === 'LT03') {
 				openPaytable(queryClient);
 			}
+			console.log(e);
 
-			toast.error(handleError(e, errors));
+			toast.error(handleError(e, tLocalErrors, tErrors));
 		},
 		onSuccess: async (data) => {
 			const promise = async () => {
