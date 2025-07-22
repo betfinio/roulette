@@ -32,9 +32,8 @@ export const TableRaceTrack = () => {
 								<DialogTitle className={'hidden'} />
 								<DialogDescription className={'hidden'} />
 								<div className="p-4">
-									{' '}
-									<Racetrack onPlace={() => setIsRacetrackOpen(false)} />{' '}
-								</div>{' '}
+									<Racetrack onPlace={() => setIsRacetrackOpen(false)} />
+								</div>
 							</DialogContent>
 						</Dialog>
 					</div>

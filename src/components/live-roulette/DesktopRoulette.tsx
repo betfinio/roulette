@@ -14,7 +14,7 @@ export const DesktopRoulette = () => {
 	const { isRoundFinished } = useGetSelectedRound();
 
 	return (
-		<div className="flex flex-col justify-between w-full grow mx-auto p-4 2xl:pr-0  gap-y-4">
+		<div className="flex flex-col justify-between w-full grow mx-auto py-4  gap-y-4">
 			{/* Conteúdo Principal no Desktop */}
 			<div className="flex gap-4">
 				<div className="relative flex-1 flex flex-col w-full ">

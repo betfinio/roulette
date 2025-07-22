@@ -73,7 +73,7 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 									});
 									onPlace?.();
 								}}
-								className={'border-none w-fit relative h-4 cursor-pointer text-sm'}
+								className={'border-none w-fit relative h-4 cursor-pointer text-[9px]'}
 							/>
 						))}
 					</div>

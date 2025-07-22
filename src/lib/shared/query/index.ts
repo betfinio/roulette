@@ -189,8 +189,7 @@ export const useSubmitBet = () => {
 			if (e.cause.reason === 'LT02' || e.cause.reason === 'LT03') {
 				openPaytable(queryClient);
 			}
-			// @ts-expect-error todo
-			toast.error(handleError(e, tLocalErrors, tErrors));
+			toast.error(handleError<'roulette', 'shared'>(e, tLocalErrors, tErrors));
 		},
 		onSuccess: async (data) => {
 			const promise = async () => {

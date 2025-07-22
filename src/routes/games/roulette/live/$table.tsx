@@ -64,7 +64,7 @@ export function RouletteLiveTable() {
 	}, [params.table, search.round]);
 
 	return (
-		<div className="roulette  ">
+		<div className="roulette">
 			<Watchers />
 			<LiveRoulette />
 			<SonnerToaster />

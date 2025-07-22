@@ -8,8 +8,7 @@ import Wheel from './Wheel/Wheel';
 
 export const DesktopRoulette = () => {
 	return (
-		<div className="flex flex-col justify-between w-full grow mx-auto p-4">
-			{/* Conteúdo Principal no Desktop */}
+		<div className="flex flex-col justify-between w-full grow mx-auto py-4">
 			<div className="relative flex-1 flex flex-col w-full ">
 				<div className="relative">
 					<BetStatusHeader />
@@ -19,11 +18,8 @@ export const DesktopRoulette = () => {
 					<div className="relative w-full h-full mx-auto flex items-start gap-4">
 						<div className="flex flex-col gap-4">
 							<LastResults />
-							{/* <TableRaceTrack/> */}
 							<TableRaceTrack />
 						</div>
-						{/* <ResultHistory /> */}
-
 						<Wheel />
 						<PlayerStat />
 					</div>
@@ -33,8 +29,6 @@ export const DesktopRoulette = () => {
 					<MainTable />
 				</div>
 			</div>
-
-			{/* BetHistory ao lado direito do conteúdo principal */}
 			<div className=" shrink-0 mt-4">
 				<History />
 			</div>

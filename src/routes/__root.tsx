@@ -14,9 +14,11 @@ export const Route = createRootRouteWithContext<IRootRouteContext>()({
 	component: () => (
 		<GlobalContextProvider>
 			<I18nextProvider i18n={i18n}>
-				<MockRoot>
-					<Outlet />
-				</MockRoot>
+				<div className="roulette max-w-screen-2xl mx-auto">
+					<MockRoot>
+						<Outlet />
+					</MockRoot>
+				</div>
 			</I18nextProvider>
 		</GlobalContextProvider>
 	),
