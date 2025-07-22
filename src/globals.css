@@ -17,7 +17,6 @@
 	}
 }
 
-
 @theme {
 	--color-bonus: var(--bonus);
 	--color-primary: var(--primary);
@@ -31,7 +30,6 @@
 	--roulette-center: url("./assets/roulette-center.svg");
 	--color-card: var(--card);
 }
-
 
 :root {
 	--spinningAnimationSpeed: 30s;
