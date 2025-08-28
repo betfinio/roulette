@@ -122,6 +122,6 @@
 	"round": "Round",
 	"betCount": "{count, plural, =0 {No bets} =1 {# bet} other {# bets}}",
 	"lastResults": "Last numbers",
-	"copiedCurrentRoundRef": "Copied current round reference",
+	"copiedCurrentRoundRef": "Copied to clipboard",
 	"lastNumbersTooltip": "Last 7 numbers on this table"
 }
