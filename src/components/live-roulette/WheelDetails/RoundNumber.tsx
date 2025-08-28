@@ -1,12 +1,11 @@
 import { toast } from '@betfinio/components/ui';
 import { CheckIcon, CopyIcon } from 'lucide-react';
-import { type FC, useId, useState } from 'react';
+import { type FC, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 
 export const RoundNumber: FC = () => {
 	const { t } = useTranslation('roulette');
-	const textId = useId();
 
 	const { round } = useGetSelectedRound();
 	const [addressCopied, setAddressCopied] = useState(false);
@@ -23,7 +22,7 @@ export const RoundNumber: FC = () => {
 	return (
 		<>
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 110 20" className="w-full">
-				<text id={textId} x="50%" y="50%" textAnchor="middle" className="fill-muted/50 text-xs" dy=".3em">
+				<text x="50%" y="50%" textAnchor="middle" className="fill-muted/50 text-xs" dy=".3em">
 					{t('round')} #{round}
 				</text>
 			</svg>

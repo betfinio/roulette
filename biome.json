@@ -8,7 +8,7 @@
 		}
 	},
 	"files": {
-		"includes": ["**", "!**/@mf-types/**", "!**/*.gen.ts"]
+		"includes": ["**", "!**/@mf-types", "!**/*.gen.ts"]
 	},
 	"vcs": {
 		"enabled": true,
