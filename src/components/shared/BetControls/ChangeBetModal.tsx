@@ -1,6 +1,6 @@
-import { Button, Dialog, DialogClose, DialogContent, toast } from '@betfinio/components/ui';
+import { Button, Dialog, DialogClose, DialogContent, type NumberFormatValues, NumericInput, toast } from '@betfinio/components/ui';
 import millify from 'millify';
-import { type ChangeEvent, type FC, useEffect, useState } from 'react';
+import { type FC, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useChangeChip } from '@/src/lib/shared/query';
 
@@ -15,9 +15,9 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 	const { t } = useTranslation('roulette', { keyPrefix: 'changeBetModal' });
 	const [value, setValue] = useState<number | string>(initialValue);
 	const { mutate: change } = useChangeChip();
-	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const inputValue = e.target.value;
-		if ((inputValue === '' || Number.isInteger(+inputValue)) && Number(+inputValue) >= 0) {
+	const handleChange = (values: NumberFormatValues) => {
+		const inputValue = values.value;
+		if (inputValue === '' || (Number.isInteger(+inputValue) && Number(+inputValue) >= 0)) {
 			setValue(inputValue === '' ? '' : Number(inputValue));
 		}
 	};
@@ -51,7 +51,7 @@ export const ChangeBetModal: FC<IChangeBetModalProps> = ({ initialValue, max, mi
 				<div className={' p-4 flex flex-col gap-2 text-foreground'}>
 					<h2 className={'text-sm text-foreground'}>{t('customAmountOfChip')}:</h2>
 					<div className={'flex gap-2 items-center'}>
-						<input type="number" className={'rounded-lg bg-transparent p-2 px-4 border border-border '} value={value} onChange={handleChange} />
+						<NumericInput className={'rounded-lg bg-transparent p-2 px-4 border border-border'} min={min} value={value} onValueChange={handleChange} />
 						<span className={''}>BET</span>
 					</div>
 					<DialogClose>
