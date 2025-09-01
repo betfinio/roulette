@@ -36,7 +36,7 @@ const ManualSpin = () => {
 	if (timer >= 0) {
 		return (
 			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 35" fill="none" className={'text-primary rounded-lg'}>
-				<text id="timerText" x="50%" y="15%" textAnchor="middle" fill={'currentColor'} className="text-[10px] cursor-pointer" dy=".3em">
+				<text x="50%" y="15%" textAnchor="middle" fill={'currentColor'} className="text-[10px] cursor-pointer" dy=".3em">
 					Waiting for spin
 				</text>
 				<foreignObject x={0} y={15} width={100} height={8}>
@@ -54,7 +54,7 @@ const ManualSpin = () => {
 			fill="none"
 			className={'bg-primary text-primary-foreground rounded-lg cursor-pointer'}
 		>
-			<text id="timerText" x="40%" y="50%" textAnchor="middle" fill={'currentColor'} className="text-xs cursor-pointer" dy=".3em">
+			<text x="40%" y="50%" textAnchor="middle" fill={'currentColor'} className="text-xs cursor-pointer" dy=".3em">
 				SPIN
 			</text>
 			{isPending ? (
@@ -76,7 +76,7 @@ const ManualSpin = () => {
 				</g>
 			)}
 			<defs>
-				<clipPath id="clip0_1_308723">
+				<clipPath>
 					<rect width="50" height="20" transform="translate(85)" />
 				</clipPath>
 			</defs>
