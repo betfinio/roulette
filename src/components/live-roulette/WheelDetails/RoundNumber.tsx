@@ -6,13 +6,14 @@ import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 
 export const RoundNumber: FC = () => {
 	const { t } = useTranslation('roulette');
+	const { t: tShared } = useTranslation('shared', { keyPrefix: 'clipboard' });
 
 	const { round } = useGetSelectedRound();
 	const [addressCopied, setAddressCopied] = useState(false);
 
 	const handleCopyRoundAddress = async () => {
 		await navigator.clipboard.writeText(location.href);
-		toast.info(t('copiedCurrentRoundRef'));
+		toast.info(tShared('copied'));
 		setAddressCopied(true);
 		setTimeout(() => {
 			setAddressCopied(false);
