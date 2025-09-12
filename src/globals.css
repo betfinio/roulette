@@ -1,8 +1,21 @@
-@import "@betfinio/components/globals.css";
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap");
 
-@import "tailwindcss";
+@layer components, theme, base, utilities;
+
+@import "@betfinio/components/globals.css" layer(components);
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
 @import "tw-animate-css";
-@config "../tailwind.config.ts";
+
+@layer utilities {
+	.roulette {
+		@tailwind utilities;
+		@import "@betfinio/components/globals.css";
+	}
+	.bg-roulette-center {
+		background-image: var(--roulette-center);
+	}
+}
 
 @theme {
 	--color-bonus: var(--bonus);
@@ -16,22 +29,6 @@
 	--color-red-roulette: var(--red-roulette);
 	--roulette-center: url("./assets/roulette-center.svg");
 	--color-card: var(--card);
-}
-
-@layer utilities {
-	.bg-roulette-center {
-		background-image: var(--roulette-center);
-	}
-}
-
-@layer base {
-	*,
-	::after,
-	::before,
-	::backdrop,
-	::file-selector-button {
-		border-color: var(--color-border, currentcolor);
-	}
 }
 
 :root {

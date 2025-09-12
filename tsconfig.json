@@ -12,6 +12,7 @@
 		"moduleResolution": "bundler",
 		"rootDir": "./",
 		"declaration": false,
+		"noCheck": true,
 		"useDefineForClassFields": true,
 		"allowImportingTsExtensions": true,
 		"paths": {

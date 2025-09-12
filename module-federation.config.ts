@@ -14,5 +14,5 @@ export default createModuleFederationConfig({
 	},
 	manifest: true,
 	dts: true,
-	shared: ['react', 'react-dom', '@tanstack/react-router', '@tanstack/react-query', 'i18next', 'react-i18next', 'wagmi'],
+	shared: ['react', 'react-dom', '@tanstack/react-query', 'i18next', 'react-i18next', 'wagmi', '@tanstack/react-router', '@tanstack/react-store'],
 });

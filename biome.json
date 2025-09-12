@@ -1,5 +1,5 @@
 {
-	"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
+	"$schema": "https://biomejs.dev/schemas/2.2.4/schema.json",
 	"assist": {
 		"actions": {
 			"source": {
@@ -8,7 +8,7 @@
 		}
 	},
 	"files": {
-		"includes": ["**", "!**/@mf-types/**", "!**/*.gen.ts"]
+		"includes": ["**", "!**/@mf-types", "!**/*.gen.ts"]
 	},
 	"vcs": {
 		"enabled": true,
@@ -30,7 +30,8 @@
 		"enabled": true,
 		"rules": {
 			"suspicious": {
-				"noArrayIndexKey": "off"
+				"noArrayIndexKey": "off",
+				"noUnknownAtRules": "off"
 			},
 			"a11y": {
 				"useKeyWithClickEvents": "off",

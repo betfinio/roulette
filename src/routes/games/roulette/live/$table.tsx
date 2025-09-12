@@ -1,5 +1,5 @@
 import { SonnerToaster } from '@betfinio/components/ui';
-import { createFileRoute, useNavigate } from '@tanstack/react-router';
+import { createFileRoute, useNavigate, useParams, useSearch } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { type Address, isAddress } from 'viem';
 import { useConfig } from 'wagmi';
@@ -14,9 +14,9 @@ export const Route = createFileRoute('/games/roulette/live/$table')({
 });
 
 export function RouletteLiveTable() {
-	const params = Route.useParams();
+	const params: { table: Address } = useParams({ strict: false });
+	const search: { round: number } = useSearch({ strict: false });
 	const navigate = useNavigate();
-	const search: { round: number } = Route.useSearch();
 	const wagmiConfig = useConfig();
 
 	useEffect(() => {
@@ -64,7 +64,7 @@ export function RouletteLiveTable() {
 	}, [params.table, search.round]);
 
 	return (
-		<div className="roulette  ">
+		<div className="roulette">
 			<Watchers />
 			<LiveRoulette />
 			<SonnerToaster />

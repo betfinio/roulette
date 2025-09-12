@@ -22,15 +22,7 @@ export const BackToGame = () => {
 
 	return (
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 25" fill="none" className={'border border-primary rounded-lg w-full'}>
-			<text
-				id="timerText"
-				x="50%"
-				y="50%"
-				textAnchor="middle"
-				className="fill-foreground hover:fill-primary text-xs cursor-pointer"
-				dy=".3em"
-				onClick={handleClick}
-			>
+			<text x="50%" y="50%" textAnchor="middle" className="fill-foreground hover:fill-primary text-xs cursor-pointer" dy=".3em" onClick={handleClick}>
 				Back To Game
 			</text>
 		</svg>
