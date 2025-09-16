@@ -13,6 +13,10 @@ export default createModuleFederationConfig({
 		'./style': './src/style',
 	},
 	manifest: true,
-	dts: true,
+	dts: {
+		consumeTypes: {
+			typesOnBuild: true,
+		},
+	},
 	shared: ['react', 'react-dom', '@tanstack/react-query', 'i18next', 'react-i18next', 'wagmi', '@tanstack/react-router', '@tanstack/react-store'],
 });
