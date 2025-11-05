@@ -50,7 +50,7 @@ function Watchers() {
 		onLogs: async (requestedLogs) => {
 			const requestedRound = requestedLogs[0].args.round;
 			updateRoundState(Number(requestedRound), { state: WheelStatus.Requested });
-			await queryClient.invalidateQueries({ queryKey: ['roulette'] });
+			// await queryClient.invalidateQueries({ queryKey: ['roulette'] });
 		},
 	});
 
