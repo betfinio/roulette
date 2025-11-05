@@ -18,7 +18,7 @@ import {
 	type GetLiveRouletteTablesQuery,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
-import type { IRouletteStat } from '../../shared/types';
+import { getRouletteStat } from '..';
 import type { PlayerInProgressBet, PlayerRoundBets, RouletteTable, RoundBet, RoundPlayerBet } from '../types';
 
 export const fetchTablePlayerRounds = async (player: Address, table?: Address) => {
@@ -64,12 +64,14 @@ export const fetchTableBets = async (table?: Address) => {
 };
 
 export const fetchSelectedTableRoundPlayers = async (table?: Address, round?: number) => {
+	console.log('fetchSelectedTableRoundPlayers', table, round);
 	if (table === undefined || round === undefined) return [];
 
 	const data: ExecutionResult<GetLiveRouletteTableSelectedRoundPlayersQuery> = await execute(GetLiveRouletteTableSelectedRoundPlayersDocument, {
 		table,
 		round,
 	});
+	console.log('fetchSelectedTableRoundPlayers data', data);
 	if (data.data) {
 		return data.data.playerRoundBetPlaceds_collection.map((players) => {
 			return {
@@ -128,25 +130,20 @@ export const fetchLiveRouletteTables = async (): Promise<RouletteTable[]> => {
 export const fetchLiveRouletteTableStats = async (table?: Address) => {
 	if (!table) return;
 	const data: ExecutionResult<GetLiveRouletteStatsByTableQuery> = await execute(GetLiveRouletteStatsByTableDocument, { table });
-	if (data.data) {
-		const hot = data.data.hotNumbers.map((num) => num.number);
-		const cold = data.data.coldNumbers.map((num) => num.number);
-		const odd = Number(data.data.rouletteStat[0].oddCount);
-		const even = Number(data.data.rouletteStat[0].evenCount);
-		const red = Number(data.data.rouletteStat[0].redCount);
-		const black = Number(data.data.rouletteStat[0].blackCount);
-		const totalRolls = Number(data.data.rouletteStat[0].totalRolls);
-		const rouletteStat: IRouletteStat = {
-			hot,
-			cold,
-			odd: Math.floor((odd / totalRolls) * 100),
-			even: Math.floor((even / totalRolls) * 100),
-			red: Math.floor((red / totalRolls) * 100),
-			black: Math.floor((black / totalRolls) * 100),
-			totalRolls,
-		};
+	try {
+		console.log('fetchLiveRouletteTableStats data', data);
+		if (data.data) {
+			const hot = data.data.hotNumbers.map((num) => num.number);
+			const cold = data.data.coldNumbers.map((num) => num.number);
 
-		return rouletteStat;
+			const rouletteStat = getRouletteStat(data.data.rouletteStat.map((num) => ({ count: Number(num.count), number: Number(num.number) })));
+			console.log('rouletteStat', rouletteStat);
+
+			return { ...rouletteStat, hot, cold };
+		}
+	} catch (error) {
+		console.error('fetchLiveRouletteTableStats error', error);
+		return;
 	}
 };
 

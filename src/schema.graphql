@@ -126,14 +126,9 @@ query GetLiveRouletteStatsByTable($table: Bytes) {
 		score
 		lastUpdated
 	}
-	rouletteStat: rouletteStats_collection(where: { table: $table }) {
-		id
-		totalRolls
-		evenCount
-		oddCount
-		zeroCount
-		redCount
-		blackCount
+	rouletteStat: rouletteNumbers(where: { table: $table }) {
+		number
+		count
 	}
 }
 
