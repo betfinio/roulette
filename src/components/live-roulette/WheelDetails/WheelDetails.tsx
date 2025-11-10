@@ -71,7 +71,6 @@ export const WheelDetails: FC = () => {
 
 	const showBackToGame = isRoundFinished && rouletteIsNotSpinning && (showRoundIsOver || showYouWon || showWinNumber || showWaitingForSpin);
 
-	console.log('render', isLoading, isSelectedRoundBetsLoading, !rouletteIsNotSpinning, winNumberProps.isLoading);
 	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning || winNumberProps.isLoading) return null;
 
 	return (

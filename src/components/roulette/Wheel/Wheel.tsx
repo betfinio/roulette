@@ -35,7 +35,6 @@ export const Wheel = () => {
 	};
 
 	useEffect(() => {
-		console.log('status', status, lastNumber, wheelNumbers);
 		if (status === 'standby') {
 			const currentAngle = getAngleForNumber(lastNumber);
 			wheelControls.start({
@@ -49,8 +48,6 @@ export const Wheel = () => {
 					ease: 'linear',
 				},
 			});
-
-			console.log('standby');
 
 			wheelControlsWrapper.start({
 				marginTop: '-50%',
