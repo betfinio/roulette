@@ -22,6 +22,12 @@ export default defineConfig({
 	},
 	output: {
 		assetPrefix: process.env.PUBLIC_OUTPUT_URL,
+		filenameHash: false,
+	},
+	performance: {
+		chunkSplit: {
+			strategy: 'split-by-module',
+		},
 	},
 	plugins: [pluginReact(), pluginModuleFederation(moduleFederationConfig, {})],
 	tools: {

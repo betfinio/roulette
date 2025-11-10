@@ -64,14 +64,14 @@ export const fetchTableBets = async (table?: Address) => {
 };
 
 export const fetchSelectedTableRoundPlayers = async (table?: Address, round?: number) => {
-	console.log('fetchSelectedTableRoundPlayers', table, round);
+	logger.info('fetchSelectedTableRoundPlayers', table, round);
 	if (table === undefined || round === undefined) return [];
 
 	const data: ExecutionResult<GetLiveRouletteTableSelectedRoundPlayersQuery> = await execute(GetLiveRouletteTableSelectedRoundPlayersDocument, {
 		table,
 		round,
 	});
-	console.log('fetchSelectedTableRoundPlayers data', data);
+	logger.success('fetchSelectedTableRoundPlayers data', data);
 	if (data.data) {
 		return data.data.playerRoundBetPlaceds_collection.map((players) => {
 			return {
@@ -131,13 +131,13 @@ export const fetchLiveRouletteTableStats = async (table?: Address) => {
 	if (!table) return;
 	const data: ExecutionResult<GetLiveRouletteStatsByTableQuery> = await execute(GetLiveRouletteStatsByTableDocument, { table });
 	try {
-		console.log('fetchLiveRouletteTableStats data', data);
+		logger.success('fetchLiveRouletteTableStats data', data);
 		if (data.data) {
 			const hot = data.data.hotNumbers.map((num) => num.number);
 			const cold = data.data.coldNumbers.map((num) => num.number);
 
 			const rouletteStat = getRouletteStat(data.data.rouletteStat.map((num) => ({ count: Number(num.count), number: Number(num.number) })));
-			console.log('rouletteStat', rouletteStat);
+			logger.success('rouletteStat', rouletteStat);
 
 			return { ...rouletteStat, hot, cold };
 		}
