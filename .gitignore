@@ -30,6 +30,4 @@ src/gql/
 
 .graphclient/
 
-.npmrc
-
 @mf-types/
