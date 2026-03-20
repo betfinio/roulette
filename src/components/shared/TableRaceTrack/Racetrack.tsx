@@ -41,9 +41,9 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 								key={num}
 								className={cn('w-7 h-7  border-transparent transition-all duration-300 border-2 flex items-center justify-center text-xs rounded-md ', {
 									'border-bonus': isNumberHovered(num),
-									'bg-red-roulette': getColor(num) === 'RED',
-									'bg-black-roulette': getColor(num) === 'BLACK',
-									'bg-green-roulette': getColor(num) === 'GREEN',
+									'bg-[var(--red)]': getColor(num) === 'RED',
+									'bg-[var(--black)]': getColor(num) === 'BLACK',
+									'bg-[var(--green)]': getColor(num) === 'GREEN',
 								})}
 							>
 								{num}
@@ -103,9 +103,9 @@ const Racetrack: React.FC<RacetrackProps> = ({ onPlace }) => {
 									'w-[28px] h-[28px]  outline border-transparent transition-all duration-300 border-2  flex items-center justify-center text-xs rounded-md ',
 									{
 										'border-bonus': isNumberHovered(num),
-										'bg-red-roulette': getColor(num) === 'RED',
-										'bg-black-roulette': getColor(num) === 'BLACK',
-										'bg-green-roulette': getColor(num) === 'GREEN',
+										'bg-[var(--red)]': getColor(num) === 'RED',
+										'bg-[var(--black)]': getColor(num) === 'BLACK',
+										'bg-[var(--green)]': getColor(num) === 'GREEN',
 									},
 								)}
 							>

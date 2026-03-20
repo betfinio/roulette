@@ -18,7 +18,7 @@ const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 			<X
 				onClick={onClose}
 				className={
-					'absolute top-4 right-4 rounded-full  text-foreground border border-foreground w-6 h-6 p-1 cursor-pointer hover:border-red-roulette hover:text-red-roulette duration-300'
+					'absolute top-4 right-4 rounded-full  text-foreground border border-foreground w-6 h-6 p-1 cursor-pointer hover:border-[var(--red)] hover:text-[var(--red)] duration-300'
 				}
 			/>
 			<h2 className={'text-primary font-semibold text-lg'}>{t('payTable.paytable')}</h2>
@@ -35,7 +35,7 @@ const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 						<div className={'text-success flex flex-row gap-1 items-center'}>
 							<BetValue value={valueToNumber(limit.min)} withIcon />
 						</div>
-						<div className={'text-red-roulette flex flex-row gap-1 items-center'}>
+						<div className={'text-[var(--red)] flex flex-row gap-1 items-center'}>
 							<BetValue value={valueToNumber(limit.max)} withIcon />
 						</div>
 					</div>

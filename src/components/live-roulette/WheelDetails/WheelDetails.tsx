@@ -97,9 +97,9 @@ export const WheelDetails: FC = () => {
 				{showWinNumber && (
 					<div
 						className={cn('w-[10%] flex justify-center items-center mx-auto border md:border-2 border-white/50 rounded-lg md:rounded-2xl md:mb-2', {
-							'bg-green-roulette': getColor(Number(winNumber)) === 'GREEN',
-							'bg-red-roulette': getColor(Number(winNumber)) === 'RED',
-							'bg-black-roulette': getColor(Number(winNumber)) === 'BLACK',
+							'bg-[var(--green)]': getColor(Number(winNumber)) === 'GREEN',
+							'bg-[var(--red)]': getColor(Number(winNumber)) === 'RED',
+							'bg-[var(--black)]': getColor(Number(winNumber)) === 'BLACK',
 						})}
 					>
 						<RouletteNumberIcon number={Number(winNumber)} className={'w-full'} />

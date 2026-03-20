@@ -28,7 +28,7 @@ export const TableRaceTrack = () => {
 					</div>
 					<div className="col-span-10 flex justify-center">
 						<Dialog open={isRacetrackOpen} onOpenChange={setIsRacetrackOpen}>
-							<DialogContent className="roulette">
+							<DialogContent>
 								<DialogTitle className={'hidden'} />
 								<DialogDescription className={'hidden'} />
 								<div className="p-4">

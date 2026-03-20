@@ -51,7 +51,7 @@ export const BetStatusHeaderVertical: FC = () => {
 	};
 	const currentInterval = liveRouletteTables.find((t) => t.address === table)?.interval;
 	return (
-		<div className="roulette">
+		<div>
 			<div id={BET_STATUS_HEADER} className="p-3 lg:p-4 mb-0 border border-border rounded-md flex bg-background-lighter items-center gap-2">
 				<Dialog>
 					<DialogTrigger asChild>
@@ -107,7 +107,7 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 
 	return (
-		<div id={BET_STATUS_HEADER} className="roulette text-foreground  flex   justify-between h-full  mx-auto rounded-b-md px-4 py-2">
+		<div id={BET_STATUS_HEADER} className="text-foreground flex justify-between h-full mx-auto rounded-b-md px-4 py-2">
 			<div className="space-y-2">
 				<div>
 					<div>{t('winningPool')}</div>

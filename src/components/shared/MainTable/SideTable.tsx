@@ -17,11 +17,11 @@ export const sideItemsConfig = {
 	},
 	Red: {
 		centerSelection: getRed(),
-		className: 'bg-red-roulette',
+		className: 'bg-[var(--red)]',
 	},
 	Black: {
 		centerSelection: getBlack(),
-		className: 'bg-black-roulette',
+		className: 'bg-[var(--black)]',
 	},
 	Odd: {
 		centerSelection: numbersVertical.filter((n) => n % 2 !== 0),

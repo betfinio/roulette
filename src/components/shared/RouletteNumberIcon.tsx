@@ -7,9 +7,9 @@ interface RouletteNumberIconProps extends React.SVGProps<SVGSVGElement> {
 }
 export const RouletteNumberIcon: FC<RouletteNumberIconProps> = ({ number, ...props }) => {
 	const color = {
-		'text-red-roulette': getColor(number) === 'RED',
-		'text-black-roulette': getColor(number) === 'BLACK',
-		'text-green-roulette': getColor(number) === 'GREEN',
+		'text-[var(--red)]': getColor(number) === 'RED',
+		'text-[var(--black)]': getColor(number) === 'BLACK',
+		'text-[var(--green)]': getColor(number) === 'GREEN',
 	};
 	return (
 		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" {...props}>
