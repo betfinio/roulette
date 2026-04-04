@@ -85,6 +85,7 @@ async function checkAuth(): Promise<boolean> {
 /**
  * Parse content as env vars. Tries JSON first, then .env format.
  */
+// biome-ignore lint/suspicious/noExplicitAny: dynamic JSON content from 1Password notes
 function parseEnvContent(content: string): Record<string, any> {
 	// Try JSON first
 	try {
@@ -113,6 +114,7 @@ function parseEnvContent(content: string): Record<string, any> {
  * Fetch a 1Password item and extract env vars from it.
  * Supports: individual fields on the item, or notes content (JSON/.env format).
  */
+// biome-ignore lint/suspicious/noExplicitAny: dynamic JSON content from 1Password notes
 async function fetchNote(itemName: string, vault: string): Promise<Record<string, any>> {
 	console.log(`📡 Fetching: ${itemName}`);
 
@@ -155,6 +157,7 @@ async function fetchNote(itemName: string, vault: string): Promise<Record<string
  * Merge two configuration objects. Environment config overrides shared config.
  * Special handling for PUBLIC_FEATURE_FLAGS (deep merge).
  */
+// biome-ignore lint/suspicious/noExplicitAny: dynamic JSON content from 1Password notes
 function mergeConfigs(shared: Record<string, any>, environment: Record<string, any>): Record<string, any> {
 	const merged = { ...shared };
 
@@ -172,6 +175,7 @@ function mergeConfigs(shared: Record<string, any>, environment: Record<string, a
 /**
  * Process .env.example template and fill in values from merged config.
  */
+// biome-ignore lint/suspicious/noExplicitAny: dynamic JSON content from 1Password notes
 async function processTemplate(mergedConfig: Record<string, any>): Promise<string> {
 	const templateFile = Bun.file('.env.example');
 	if (!(await templateFile.exists())) {

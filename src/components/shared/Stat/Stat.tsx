@@ -46,10 +46,12 @@ export const Stat: FC<IStatProps> = ({ tableOrPlayerStat, isLoading }) => {
 		return { ...tableOrPlayerStat, hot, cold };
 	}, [tableOrPlayerStat]);
 
+	const isEmpty = !isLoading && !tableOrPlayerStat;
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: '50%' }}
-			animate={{ opacity: 1, x: 0 }}
+			animate={{ opacity: isEmpty ? 0 : 1, x: isEmpty ? '50%' : 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
 			className={cn('bg-card mt-4 p-2 rounded-lg border w-[122px] h-[286px] flex flex-col items-center  border-border tabular-nums shrink-0 gap-2', {

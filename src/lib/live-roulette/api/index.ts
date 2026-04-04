@@ -1,193 +1,120 @@
-import { LiveRouletteABI, MultiPlayerTableABI, ZeroAddress } from '@betfinio/abi';
-import { readContract } from '@wagmi/core';
-import { getBlockByTimestamp } from 'betfinio_context/lib/gql';
+import type { QueryClient } from '@tanstack/react-query';
+import { readContract, simulateContract, writeContract } from '@wagmi/core';
 import { type Address, parseAbiItem } from 'viem';
-import { getBlockNumber, getContractEvents, getLogs } from 'viem/actions';
+import { getBlockNumber, getLogs } from 'viem/actions';
 import type { Config } from 'wagmi';
-import logger from '@/src/config/logger';
-import { PUBLIC_LIRO_ADDRESS } from '@/src/global';
-import { fetchBetInfo } from '../../shared/api';
-import { RoundStatus } from '../../shared/types';
-import { fetchSelectedTableRoundWinNumer } from '../gql';
-import type { PlayerInProgressBet, RoundBet, RoundPlayerBet, WheelStatus } from '../types';
+import { MULTIPLAYER_INTERVAL } from '@/src/global';
+import { HouseMultiplayerGameABI } from '@/src/lib/abi';
+import { WheelStatus } from '../types';
+
+const randomnessFulfilledEvent = parseAbiItem('event RandomnessFulfilled(uint256 indexed requestId, uint256 indexed contextId, uint256 randomWord)');
+
+/** `BaseGame.RoundStatus` on-chain (see betfin-core BaseGame.sol, HouseMultiplayerGame.sol) */
+function mapChainRoundEnumToWheelStatus(chainStatus: number): WheelStatus {
+	switch (chainStatus) {
+		case 0:
+			return WheelStatus.NotExist;
+		case 1:
+			return WheelStatus.Created;
+		case 2:
+			return WheelStatus.Requested;
+		case 3:
+			return WheelStatus.ResultReadyAwaitingSettlement;
+		case 4:
+			return WheelStatus.Finished;
+		case 5:
+			return WheelStatus.Refunded;
+		default:
+			return WheelStatus.NotExist;
+	}
+}
+
+function toNumber(v: bigint | number): number {
+	return typeof v === 'bigint' ? Number(v) : v;
+}
+
+/** Same as RouletteMultiplayerStrategy: winning European pocket is `randomWord % 37`. */
+export function vrfWordToRouletteWinNumber(randomWord: bigint): number {
+	return Number(randomWord % 37n);
+}
+
+export function cacheVrfWinNumberForRound(queryClient: QueryClient, table: Address, roundId: number, randomWord: bigint) {
+	const n = vrfWordToRouletteWinNumber(randomWord);
+	queryClient.setQueryData(['roulette', 'round', 'winNumber', table, roundId], BigInt(n));
+}
+
+/** When round is `ResultReady`, VRF word is in `RandomnessFulfilled` logs (not exposed on `getRound`). */
+export async function fetchMultiplayerVrfWinNumberFromLogs(config: Config, game: Address, roundId: number): Promise<number | null> {
+	const client = config.getClient();
+	const latest = await getBlockNumber(client);
+	const roundBig = BigInt(roundId);
+	const ranges = [50_000n, 200_000n, 1_000_000n] as const;
+	for (const span of ranges) {
+		const fromBlock = latest > span ? latest - span : 0n;
+		try {
+			const logs = await getLogs(client, {
+				address: game,
+				event: randomnessFulfilledEvent,
+				args: { contextId: roundBig },
+				fromBlock,
+				toBlock: latest,
+			});
+			const last = logs[logs.length - 1];
+			const word = last?.args.randomWord;
+			if (word !== undefined) return vrfWordToRouletteWinNumber(word);
+		} catch {
+			// RPC may reject wide ranges; try next span
+		}
+	}
+	return null;
+}
 
 export const fetchCurrentRound = (interval: number) => {
 	if (interval === 0) return 0;
 	return Math.floor(Date.now() / 1000 / interval);
 };
 
-export const fetchCurrentRoundOfTable = async (config: Config, table?: Address) => {
-	if (!table) return;
-
-	const interval = await readContract(config, {
-		abi: MultiPlayerTableABI,
-		address: table,
-		functionName: 'interval',
-	});
-
-	// Calculate the current round based on the current timestamp
-	const now = Math.floor(Date.now() / 1000); // Current time in seconds
-	const round = BigInt(Math.floor(now / Number(interval ?? 1n))); // Calculate the current round
-
-	const roundBank = await readContract(config, {
-		abi: MultiPlayerTableABI,
-		address: table,
-		functionName: 'getRoundBank',
-		args: [round],
-	});
-
+export const fetchCurrentRoundOfTable = async (_config: Config, _table?: Address) => {
+	const interval = MULTIPLAYER_INTERVAL;
+	const now = Math.floor(Date.now() / 1000);
+	const round = BigInt(Math.floor(now / interval));
 	return {
 		round,
-		interval,
-		roundHasBets: roundBank > 0n,
+		interval: BigInt(interval),
+		roundHasBets: false, // determined by subgraph query
 	};
 };
 
-export const fetchTableBetsByBlockHash = async (config: Config, blockHash: Address, table?: Address, round?: bigint, playerAddress?: Address) => {
-	if (!table) return;
-	const logs = await getLogs(config.getClient(), {
-		address: table,
-		event: parseAbiItem('event BetEnded(address indexed bet, uint256 indexed round, uint256 value, uint256 winAmount)'),
-		args: {
-			round: round,
-		},
-		blockHash: blockHash,
-	});
-
-	const roundAllBets: RoundBet = {
-		amount: BigInt(0),
-		winAmount: BigInt(0),
-		created: BigInt(0),
-		round: Number(round),
-		winNumber: -1,
-		status: RoundStatus.FINISHED,
-	};
-
-	let roundPlayerBets: RoundPlayerBet | null = null;
-	const roundPlayersDetailedBets: PlayerInProgressBet[] = [];
-
-	// Iterate over each log entry
-	for (const log of logs) {
-		const betAddress = log.args.bet as Address;
-		const winNumber = log.args.value;
-
-		// Fetch bet info
-		const betInfo = await fetchBetInfo(config, betAddress);
-
-		// Extract values from bet info
-		const [player, , amount, winAmount, , created] = betInfo;
-
-		// Update totals
-		roundAllBets.amount += amount;
-		roundAllBets.winAmount += winAmount;
-		roundAllBets.created = created;
-		roundAllBets.winNumber = Number(winNumber);
-		if (player === playerAddress) {
-			if (roundPlayerBets) {
-				roundPlayerBets.amount += amount;
-				roundPlayerBets.winAmount += winAmount;
-				roundPlayerBets.created = created;
-				roundPlayerBets.winNumber = Number(winNumber);
-			} else {
-				roundPlayerBets = {
-					amount,
-					round: Number(round),
-					created,
-					winNumber: Number(winNumber),
-					winAmount,
-					player,
-					status: RoundStatus.FINISHED,
-				};
-			}
-		}
-		roundPlayersDetailedBets.push({
-			amount,
-			created,
-			winAmount,
-			player,
-			bet: betAddress,
-			chips: [],
-		});
+/** Authoritative round status when subgraph lags (e.g. still "spinning" while VRF is fulfilled on-chain). */
+export async function fetchMultiplayerRoundWheelStatusFromChain(
+	config: Config,
+	table: Address,
+	round: number,
+): Promise<{ wheelStatus: WheelStatus; chainRoundStatus: number } | null> {
+	try {
+		const tuple = (await readContract(config, {
+			abi: HouseMultiplayerGameABI,
+			address: table,
+			functionName: 'getRound',
+			args: [BigInt(round)],
+		})) as readonly [readonly Address[], bigint, bigint, bigint, bigint | number];
+		const chainRoundStatus = toNumber(tuple[4]);
+		return { wheelStatus: mapChainRoundEnumToWheelStatus(chainRoundStatus), chainRoundStatus };
+	} catch {
+		return null;
 	}
-	return { roundAllBets, roundPlayerBets, roundPlayersDetailedBets };
-};
+}
 
-export const fetchBankByRound = async (config: Config, table?: Address, round?: number) => {
-	if (!table || !round) return;
-	logger.start('fetchBankByRound', table, round);
-	const roundBank = await readContract(config, {
-		abi: MultiPlayerTableABI,
+/** Contract cap on bets processed per `settleRound` call; further payouts need another tx + click. */
+export const MULTIPLAYER_SETTLE_BATCH = 50n;
+
+/** One wallet signature per call — settles up to `MULTIPLAYER_SETTLE_BATCH` bets on this round. */
+export async function settleMultiplayerRound(config: Config, table: Address, roundId: number): Promise<void> {
+	const { request } = await simulateContract(config, {
+		abi: HouseMultiplayerGameABI,
 		address: table,
-		functionName: 'getRoundBank',
-		args: [BigInt(round)],
+		functionName: 'settleRound',
+		args: [BigInt(roundId), MULTIPLAYER_SETTLE_BATCH],
 	});
-
-	return Number(roundBank);
-};
-
-export const fetchRoundStatus = async (config: Config, table?: Address, round?: number) => {
-	if (!table || !round) return;
-	const roundStatus = await readContract(config, {
-		abi: MultiPlayerTableABI,
-		address: table,
-		functionName: 'roundStatus',
-		args: [BigInt(round)],
-	});
-
-	return Number(roundStatus) as WheelStatus;
-};
-
-export const fetchWinNumber = async (config: Config, tableAddress?: Address, round?: number) => {
-	logger.start('fetchWinNumber', tableAddress, round);
-	if (!tableAddress || !round) return 42n;
-
-	const interval = await readContract(config, {
-		abi: MultiPlayerTableABI,
-		address: tableAddress,
-		functionName: 'interval',
-	});
-
-	const startTime = Number(interval * BigInt(round));
-	const startBlock = await getBlockByTimestamp(startTime);
-	let endBlock = startBlock + 9999n;
-
-	const currentBlock = await getBlockNumber(config.getClient());
-	if (currentBlock >= endBlock) {
-		const winNumber = await fetchSelectedTableRoundWinNumer(tableAddress, round);
-		logger.success('fetchWinNumber from graph', tableAddress, round, winNumber);
-		return winNumber ?? 42n;
-	}
-
-	if (currentBlock < endBlock) {
-		endBlock = currentBlock;
-	}
-
-	const randomGeneratedData = await getContractEvents(config.getClient(), {
-		abi: LiveRouletteABI,
-		address: PUBLIC_LIRO_ADDRESS,
-		eventName: 'RandomGenerated',
-		args: {
-			table: tableAddress,
-			round: BigInt(round),
-			player: ZeroAddress,
-		},
-		fromBlock: startBlock,
-		toBlock: endBlock,
-	});
-
-	if (randomGeneratedData.length === 0) {
-		return 42n;
-	}
-	logger.success('fetchWinNumber from blockchain', tableAddress, round, randomGeneratedData[0].args.value);
-	return randomGeneratedData[0].args.value;
-};
-
-export const fetchTableInterval = async (config: Config, table?: Address) => {
-	if (!table || table === ZeroAddress) return 0;
-	const interval = await readContract(config, {
-		abi: MultiPlayerTableABI,
-		address: table,
-		functionName: 'interval',
-	});
-	return Number(interval);
-};
+	await writeContract(config, request);
+}

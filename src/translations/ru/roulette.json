@@ -1,4 +1,7 @@
 {
+	"settleRound": "Завершить раунд",
+	"settleRoundPending": "Завершение…",
+	"settleRoundHint": "Выигрышное число окончательно. Расчёт может вызвать любой (оплачивается gas).",
 	"winningPool": "Выигрышный пул",
 	"title": "Live roulette",
 	"copiedCurrentRoundRef": "Скопировано в буфер обмена"

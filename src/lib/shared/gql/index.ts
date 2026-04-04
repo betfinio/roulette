@@ -7,12 +7,12 @@ import { decodeBet } from '..';
 
 export const fetchBetsBitMapAndAmountByRound = async (table: Address, round: number): Promise<LocalBet[]> => {
 	logger.start('fetch all bets by round and table', table, round);
-	const data: ExecutionResult<GetLiveRouletteBitMapByRoundQuery> = await execute(GetLiveRouletteBitMapByRoundDocument, { table, round });
+	const data: ExecutionResult<GetLiveRouletteBitMapByRoundQuery> = await execute(GetLiveRouletteBitMapByRoundDocument, { gameAddress: table, roundId: round });
 	if (data.data) {
-		logger.success('fetched all bets by round and table', data.data.chips);
-		return data.data.chips.flatMap((bet) => {
+		logger.success('fetched all bets by round and table', data.data.bets);
+		return data.data.bets.flatMap((bet) => {
 			return bet.chips
-				.map((chip) => ({ amount: BigInt(chip.amount), bitmap: BigInt(chip.bitMap), player: chip.player as Address }))
+				.map((chip) => ({ amount: BigInt(chip.amount), bitmap: BigInt(chip.bitmap), player: bet.player as Address }))
 				.map(decodeBet)
 				.map((bet) => ({ ...bet }));
 		});

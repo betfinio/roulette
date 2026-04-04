@@ -1,4 +1,7 @@
 {
+	"settleRound": "Vyrovnat kolo",
+	"settleRoundPending": "Vyrovnávání…",
+	"settleRoundHint": "Výherní číslo je konečné. Vyrovnání může zavolat kdokoli (platí se gas).",
 	"winningPool": "Vítězný bazén",
 	"title": "Live roulette",
 	"copiedCurrentRoundRef": "Zkopírováno do schránky"

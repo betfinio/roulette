@@ -12,7 +12,7 @@ import WinNumber from '@/src/components/roulette/History/WinNumber.tsx';
 import { useGetSelectedRound, useTablePlayerRounds, useTableRounds } from '@/src/lib/live-roulette/query';
 import type { RoundBet } from '@/src/lib/live-roulette/types';
 import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
-import { WinAmountCell } from '../../shared/WinAmountCell';
+import { LiveHistoryWinCell } from './LiveHistoryWinCell';
 
 const columnHelper = createColumnHelper<RoundBet>();
 const TABLE_ID = 'All Bets Table';
@@ -68,9 +68,10 @@ export const AllBetsTable = () => {
 				</span>
 			),
 		}),
-		columnHelper.accessor('winAmount', {
+		columnHelper.display({
+			id: 'win',
 			header: t('win'),
-			cell: (props) => <WinAmountCell inProgress={props.row.original.status === 1} amount={props.row.original.winAmount} />,
+			cell: (props) => <LiveHistoryWinCell row={props.row.original} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
@@ -87,9 +88,10 @@ export const AllBetsTable = () => {
 				</span>
 			),
 		}),
-		columnHelper.accessor('winAmount', {
+		columnHelper.display({
+			id: 'win',
 			header: t('win'),
-			cell: (props) => <WinAmountCell inProgress={props.row.original.status === 1} amount={props.row.original.winAmount} />,
+			cell: (props) => <LiveHistoryWinCell row={props.row.original} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),

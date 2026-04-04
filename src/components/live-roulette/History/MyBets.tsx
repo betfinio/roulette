@@ -2,55 +2,31 @@ import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
-import { Button } from '@betfinio/components/ui';
 import { Link, useNavigate } from '@tanstack/react-router';
 import type { Table } from '@tanstack/react-table';
 import { type ColumnDef, createColumnHelper } from '@tanstack/react-table';
-import { Loader } from 'lucide-react';
 import { DateTime } from 'luxon';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useGetCurrentRound, useGetSelectedRound, useTablePlayerRounds } from '@/src/lib/live-roulette/query';
+import { useGetSelectedRound, useTablePlayerRounds } from '@/src/lib/live-roulette/query';
 import type { RoundPlayerBet } from '@/src/lib/live-roulette/types';
-import { useManualSpin, useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
-import { RoundStatus } from '@/src/lib/shared/types';
-import { BetResultCell } from '../../shared/BetResultCell';
-import { WinAmountCell } from '../../shared/WinAmountCell';
+import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
+import { LiveHistoryResultCell } from './LiveHistoryResultCell';
+import { LiveHistoryWinCell } from './LiveHistoryWinCell';
 
 const columnHelper = createColumnHelper<RoundPlayerBet>();
 
 export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const { t: tShared } = useTranslation('shared', { keyPrefix: 'tables' });
-	const { t: TPure } = useTranslation('roulette');
 	const navigate = useNavigate();
 	const { table = ZeroAddress } = useVisibleTable();
 	const { data: bets = [], isLoading } = useTablePlayerRounds(table);
 	const { isVertical } = useMediaQuery();
 	const { scrollToHeader } = useScrollToHeader();
 	const { round = 0 } = useGetSelectedRound();
-	const { mutateAsync: spinManually } = useManualSpin();
-	const { data } = useGetCurrentRound(table);
 
 	const tableRef = useRef<Table<RoundPlayerBet>>(null);
-
-	const isRoundCreated = (status: number) => status === RoundStatus.CREATED;
-	const isPassedRound = (round: number) => round < Number(data?.round ?? Number.NEGATIVE_INFINITY);
-	const handleManualSpin = (round: number) => {
-		spinManually(
-			{
-				table,
-				round: BigInt(round),
-			},
-			{
-				onSuccess: () => {
-					setSpinningRounds([...spinningRounds, round]);
-				},
-			},
-		);
-	};
-
-	const [spinningRounds, setSpinningRounds] = useState<number[]>([]);
 
 	const columns = [
 		columnHelper.accessor('round', {
@@ -77,41 +53,14 @@ export const MyBetsTable = () => {
 				</span>
 			),
 		}),
-		columnHelper.accessor('winAmount', {
+		columnHelper.display({
+			id: 'win',
 			header: t('win'),
-			cell: (props) => <WinAmountCell inProgress={props.row.original.status === 1} amount={props.row.original.winAmount} />,
+			cell: (props) => <LiveHistoryWinCell row={props.row.original} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => {
-				const roundCreated = isRoundCreated(props.row.original.status);
-				const roundHasPassed = isPassedRound(props.row.original.round);
-				const interval = Number(data?.interval ?? 0);
-				const roundFinishedPlusDelayTimestamp = props.row.original.round * interval + interval + 60;
-				const now = DateTime.now().toSeconds();
-				const roundHasPassedPlusDelay = roundHasPassed && roundFinishedPlusDelayTimestamp < now && props.row.original.status === RoundStatus.CREATED;
-
-				const isManuallySpining = spinningRounds.includes(props.row.original.round);
-				return (
-					<div>
-						{!roundHasPassedPlusDelay && <BetResultCell inProgress={roundCreated} winNumber={props.row.original.winNumber} />}
-						{roundHasPassedPlusDelay && (
-							<Button
-								disabled={isManuallySpining}
-								onClick={(e) => {
-									if (roundHasPassed) {
-										e.stopPropagation();
-										handleManualSpin(props.row.original.round);
-									}
-								}}
-							>
-								{isManuallySpining && <Loader color={'black'} className={'animate-spin absolute'} />}
-								<div className={cn('uppercase', { invisible: isManuallySpining })}>{TPure('spin')}</div>
-							</Button>
-						)}
-					</div>
-				);
-			},
+			cell: (props) => <LiveHistoryResultCell row={props.row.original} />,
 		}),
 	] as ColumnDef<RoundPlayerBet>[];
 	const columnsMobile = [
@@ -132,33 +81,14 @@ export const MyBetsTable = () => {
 				</span>
 			),
 		}),
-		columnHelper.accessor('winAmount', {
+		columnHelper.display({
+			id: 'win',
 			header: t('win'),
-			cell: (props) => <WinAmountCell inProgress={props.row.original.status === 1} amount={props.row.original.winAmount} />,
+			cell: (props) => <LiveHistoryWinCell row={props.row.original} />,
 		}),
 		columnHelper.accessor('winNumber', {
 			header: t('result'),
-			cell: (props) => {
-				const roundCreated = isRoundCreated(props.row.original.status);
-				const roundHasPassed = isPassedRound(props.row.original.round);
-				const interval = Number(data?.interval ?? 0);
-				const roundFinishedPlusDelayTimestamp = props.row.original.round * interval + interval + 60;
-				const now = DateTime.now().toSeconds();
-				const roundHasPassedPlusDelay = roundHasPassed && roundFinishedPlusDelayTimestamp < now && props.row.original.status === RoundStatus.CREATED;
-
-				const isManuallySpining = spinningRounds.includes(props.row.original.round);
-				return (
-					<div>
-						{!roundHasPassedPlusDelay && <BetResultCell inProgress={roundCreated} winNumber={props.row.original.winNumber} />}
-						{roundHasPassedPlusDelay && (
-							<Button disabled={isManuallySpining} onClick={() => roundHasPassed && handleManualSpin(props.row.original.round)}>
-								{isManuallySpining && <Loader color={'black'} className={'animate-spin absolute'} />}
-								<div className={cn('uppercase', { invisible: isManuallySpining })}>{TPure('spin')}</div>
-							</Button>
-						)}
-					</div>
-				);
-			},
+			cell: (props) => <LiveHistoryResultCell row={props.row.original} />,
 		}),
 	] as ColumnDef<RoundPlayerBet>[];
 

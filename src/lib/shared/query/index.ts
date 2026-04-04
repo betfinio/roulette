@@ -8,18 +8,17 @@ import type { Address, WriteContractErrorType, WriteContractReturnType } from 'v
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useConfig } from 'wagmi';
 import { BET_STATUS_HEADER } from '@/src/components/shared/BetStatusHeader/BetStatusHeader';
+import { SINGLE_PLAYER_GAME, SINGLE_PLAYER_STRATEGY } from '@/src/global';
 import { fetchBetsBitMapAndAmountByRound } from '@/src/lib/shared/gql';
 import {
 	changeChip,
 	clearAllBets,
 	doublePlace,
-	fetchBetInfo,
 	fetchChipsByPosition,
 	fetchDebugMode,
 	fetchLimits,
 	fetchLocalBets,
 	fetchSelectedChip,
-	fetchSinglePlayerAddress,
 	manualSpin,
 	place,
 	submitBet,
@@ -54,13 +53,13 @@ export const useLocalBets = () => {
 	});
 };
 
-export const useLimits = (table?: Address) => {
+export const useLimits = (_table?: Address) => {
 	const config = useConfig();
 	return useQuery({
-		queryKey: ['roulette', 'limits', table],
-		queryFn: () => fetchLimits(config, table),
+		queryKey: ['roulette', 'limits'],
+		queryFn: () => fetchLimits(config, SINGLE_PLAYER_STRATEGY),
 		refetchOnWindowFocus: false,
-		enabled: !!table,
+		staleTime: Number.POSITIVE_INFINITY,
 	});
 };
 
@@ -209,10 +208,10 @@ export const useSubmitBet = () => {
 };
 
 export const useSinglePlayerTable = () => {
-	const config = useConfig();
 	return useQuery({
 		queryKey: ['roulette', 'single', 'table'],
-		queryFn: () => fetchSinglePlayerAddress(config),
+		queryFn: () => SINGLE_PLAYER_GAME,
+		staleTime: Number.POSITIVE_INFINITY,
 		refetchOnWindowFocus: false,
 	});
 };
@@ -257,17 +256,9 @@ export const useManualSpin = (roundId?: number | bigint) => {
 	const config = useConfig();
 	return useMutation({
 		mutationKey: ['roulette', 'manualSpin', roundId ? roundId.toString() : 'global'],
-		mutationFn: (e: { table: Address; round: bigint }) => manualSpin(config, e.table, e.round),
+		mutationFn: (e: { table: Address; round: bigint }) => manualSpin(config, e.round),
 		onSuccess: async (data) => {
 			await waitForTransactionReceipt(config.getClient(), { hash: data });
 		},
-	});
-};
-
-export const useBetInfo = () => {
-	const config = useConfig();
-	return useMutation({
-		mutationKey: ['roulette', 'bet', 'info'],
-		mutationFn: (bet: Address) => fetchBetInfo(config, bet),
 	});
 };

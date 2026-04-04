@@ -9,6 +9,7 @@ import { AlertCircle, ChartBarIcon, CircleAlert, CircleHelp, Menu } from 'lucide
 import { type FC, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address } from 'viem';
+import { SettleRound } from '@/src/components/live-roulette/WheelDetails/SettleRound';
 import { DYNAMIC_STAKING, ROULETTE_TUTORIAL } from '@/src/global';
 import { useGetLiveRouletteTables } from '@/src/lib/live-roulette/query';
 import { usePaytable, useVisibleTable } from '@/src/lib/shared/query';
@@ -90,7 +91,7 @@ interface IBetStatusHeaderVerticalDetailsProps {
 	onCloseDrawer: () => void;
 }
 export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsProps> = ({ onCloseDrawer }) => {
-	const { table } = useVisibleTable();
+	const { table, isSingle } = useVisibleTable();
 
 	const { data: winningPool = 0n } = useBalance(DYNAMIC_STAKING);
 	const { maximize } = useChatbot();
@@ -107,49 +108,56 @@ export const BetStatusHeaderVerticalDetail: FC<IBetStatusHeaderVerticalDetailsPr
 	const { isOpen: isPaytableOpen, openPaytable, closePaytable } = usePaytable();
 
 	return (
-		<div id={BET_STATUS_HEADER} className="text-foreground flex justify-between h-full mx-auto rounded-b-md px-4 py-2">
-			<div className="space-y-2">
-				<div>
-					<div>{t('winningPool')}</div>
-					<div className="font-semibold">
-						<BetValue withIcon value={winningPool} />
+		<div id={BET_STATUS_HEADER} className="text-foreground flex flex-col gap-3 mx-auto rounded-b-md px-4 py-2">
+			<div className="flex justify-between h-full w-full">
+				<div className="space-y-2">
+					<div>
+						<div>{t('winningPool')}</div>
+						<div className="font-semibold">
+							<BetValue withIcon value={winningPool} />
+						</div>
+					</div>
+					<div>
+						<div>{t('maxPayout')}</div>
+						<div className="font-semibold">
+							<BetValue withIcon value={valueToNumber(maxPayout)} />
+						</div>
 					</div>
 				</div>
-				<div>
-					<div>{t('maxPayout')}</div>
-					<div className="font-semibold">
-						<BetValue withIcon value={valueToNumber(maxPayout)} />
+				<div className="gap-2 justify-around flex flex-col">
+					<div className="flex items-center gap-x-2">
+						<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
+							<DialogTitle hidden />
+							<DialogContent>
+								<Paytable table={table} onClose={closePaytable} />
+							</DialogContent>
+						</Dialog>
+						<Button onClick={openPaytable} variant={'ghost'} className={'text-foreground text-base flex items-center gap-x-2'}>
+							<CircleHelp className={'w-6 h-6'} />
+							{t('paytable')}
+						</Button>
 					</div>
-				</div>
-			</div>
-			<div className=" gap-2 justify-around  flex flex-col">
-				<div className="flex items-center gap-x-2">
-					<Dialog open={isPaytableOpen} onOpenChange={closePaytable}>
-						<DialogTitle hidden />
-						<DialogContent>
-							<Paytable table={table} onClose={closePaytable} />
-						</DialogContent>
-					</Dialog>
-					<Button onClick={openPaytable} variant={'ghost'} className={'text-foreground text-base flex items-center gap-x-2'}>
-						<CircleHelp className={'w-6 h-6'} />
-						{t('paytable')}
+					<a
+						target={'_blank'}
+						href={ROULETTE_TUTORIAL}
+						className={'flex gap-2 items-center justify-center cursor-pointer text-foreground px-4 whitespace-nowrap'}
+						rel="noreferrer"
+					>
+						<AlertCircle className={'w-6 h-6'} />
+						<div>{t('howToPlay')}</div>
+					</a>
+
+					<Button onClick={handleReport} variant={'link'} className={'text-primary text-base flex justify-start items-center gap-x-2'}>
+						<CircleAlert className={'w-6'} />
+						<div>{t('report')}</div>
 					</Button>
 				</div>
-				<a
-					target={'_blank'}
-					href={ROULETTE_TUTORIAL}
-					className={'flex gap-2  items-center justify-center cursor-pointer text-foreground px-4 whitespace-nowrap'}
-					rel="noreferrer"
-				>
-					<AlertCircle className={'w-6 h-6'} />
-					<div>{t('howToPlay')}</div>
-				</a>
-
-				<Button onClick={handleReport} variant={'link'} className={' text-primary  text-base flex justify-start items-center  gap-x-2'}>
-					<CircleAlert className={'w-6'} />
-					<div>{t('report')}</div>
-				</Button>
 			</div>
+			{!isSingle && (
+				<div className="pt-3 border-t border-border w-full flex justify-center">
+					<SettleRound className="max-w-md" />
+				</div>
+			)}
 		</div>
 	);
 };

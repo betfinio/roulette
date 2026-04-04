@@ -1,22 +1,18 @@
 import { ZeroAddress } from '@betfinio/abi';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import type { Address } from 'viem';
 import { useAccount, useConfig } from 'wagmi';
+import { MULTIPLAYER_INTERVAL } from '@/src/global';
 import { useVisibleRound, useVisibleTable } from '../../shared/query';
-import {
-	fetchBankByRound,
-	fetchCurrentRound,
-	fetchCurrentRoundOfTable,
-	fetchRoundStatus,
-	fetchTableBetsByBlockHash,
-	fetchTableInterval,
-	fetchWinNumber,
-} from '../api';
+import { fetchCurrentRound, fetchCurrentRoundOfTable, fetchMultiplayerRoundWheelStatusFromChain, fetchMultiplayerVrfWinNumberFromLogs } from '../api';
 import {
 	fetchLiveRouletteTableStats,
 	fetchLiveRouletteTables,
+	fetchRoundBank,
+	fetchRoundStatus,
 	fetchSelectedTableRoundPlayers,
+	fetchSelectedTableRoundWinNumer,
 	fetchTableBets,
 	fetchTablePlayerRounds,
 	fetchTableSelectedRoundBets,
@@ -51,6 +47,7 @@ export const useLiveRouletteState = () => {
 
 	return { state, updateState, updateRoundState };
 };
+
 export const useTablePlayerRounds = (table?: Address) => {
 	const { address = ZeroAddress } = useAccount();
 
@@ -82,30 +79,31 @@ export const useTableRounds = (table?: Address) => {
 };
 
 export const useGetCurrentRound = (table?: Address) => {
-	const config = useConfig();
 	return useQuery({
 		queryKey: ['roulette', 'currentRound', table],
-		queryFn: () => fetchCurrentRoundOfTable(config, table),
+		queryFn: () => fetchCurrentRoundOfTable(null as never, table),
 		refetchOnWindowFocus: false,
 		enabled: !!table,
 	});
 };
 
-export const useCurrentInterval = (table: Address) => {
-	const config = useConfig();
+/**
+ * Returns the multiplayer round interval from env — no contract call needed.
+ */
+export const useCurrentInterval = (_table: Address) => {
 	return useQuery({
-		queryKey: ['roulette', table, 'currentInterval'],
-		queryFn: () => fetchTableInterval(config, table),
+		queryKey: ['roulette', 'currentInterval'],
+		queryFn: () => MULTIPLAYER_INTERVAL,
+		staleTime: Number.POSITIVE_INFINITY,
 	});
 };
 
-export const useCurrentRound = (table: Address) => {
-	const { data: interval = 0 } = useCurrentInterval(table);
+export const useCurrentRound = (_table: Address) => {
 	return useQuery<number>({
-		queryKey: ['roulette', table, 'currentRound'],
-		queryFn: () => fetchCurrentRound(interval),
+		queryKey: ['roulette', 'currentRound'],
+		queryFn: () => fetchCurrentRound(MULTIPLAYER_INTERVAL),
 		refetchInterval: (query) => {
-			if (fetchCurrentRound(interval) === query.state.data) return false;
+			if (fetchCurrentRound(MULTIPLAYER_INTERVAL) === query.state.data) return false;
 			return 300;
 		},
 	});
@@ -124,7 +122,7 @@ export const useGetSelectedRound = () => {
 	return {
 		round,
 		isRoundFinished,
-		roundHasBets: (currentRoundBank ?? 0) > 0,
+		roundHasBets: (currentRoundBank ?? 0n) > 0n,
 		roundStatus: status,
 		winNumber,
 		winNumberProps,
@@ -133,16 +131,6 @@ export const useGetSelectedRound = () => {
 		currentRoundProps,
 		currentRoundBank,
 	};
-};
-
-export const useFetchTableBetsByBlockHash = () => {
-	const config = useConfig();
-	const { address = ZeroAddress } = useAccount();
-	const { table } = useVisibleTable();
-	return useMutation({
-		mutationKey: ['roulette', 'bets', 'blockHash'],
-		mutationFn: ({ blockHash, round }: { blockHash: Address; round: bigint }) => fetchTableBetsByBlockHash(config, blockHash, table, round, address),
-	});
 };
 
 export const useGetTableRoundPlayers = (table?: Address, round?: number) => {
@@ -174,10 +162,9 @@ export const useGetTableSelectedRoundBets = (table?: Address, round?: number) =>
 };
 
 export const useGetBankByRound = (table?: Address, round?: number) => {
-	const config = useConfig();
 	return useQuery({
 		queryKey: ['roulette', 'bank', table, Number(round)],
-		queryFn: () => fetchBankByRound(config, table, round),
+		queryFn: () => fetchRoundBank(table, round),
 		refetchOnWindowFocus: false,
 		enabled: !!table && !!round,
 		staleTime: Number.POSITIVE_INFINITY,
@@ -188,7 +175,15 @@ export const useGetRoundStatus = (table?: Address, round?: number) => {
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['roulette', 'round', 'status', table, Number(round)],
-		queryFn: () => fetchRoundStatus(config, table, round),
+		queryFn: async () => {
+			const fromGraph = await fetchRoundStatus(table, round);
+			if (!table || round === undefined) return fromGraph;
+			const fromChain = await fetchMultiplayerRoundWheelStatusFromChain(config, table, round);
+			if (fromChain === null) return fromGraph;
+			if (fromChain.chainRoundStatus === 3) return WheelStatus.ResultReadyAwaitingSettlement;
+			if (fromGraph === WheelStatus.Requested && fromChain.wheelStatus !== WheelStatus.Requested) return fromChain.wheelStatus;
+			return fromGraph;
+		},
 		refetchOnWindowFocus: false,
 		enabled: !!table && !!round,
 		staleTime: Number.POSITIVE_INFINITY,
@@ -199,9 +194,19 @@ export const useGetWinNumber = (table?: Address, round?: number) => {
 	const config = useConfig();
 	return useQuery({
 		queryKey: ['roulette', 'round', 'winNumber', table, Number(round)],
-		queryFn: () => fetchWinNumber(config, table, round),
+		queryFn: async () => {
+			const fromGraph = await fetchSelectedTableRoundWinNumer(table, round);
+			if (!table || round === undefined) return fromGraph;
+			if (fromGraph !== 42n) return fromGraph;
+			const chain = await fetchMultiplayerRoundWheelStatusFromChain(config, table, round);
+			if (chain?.chainRoundStatus !== 3) return fromGraph;
+			const fromLogs = await fetchMultiplayerVrfWinNumberFromLogs(config, table, round);
+			if (fromLogs === null) return fromGraph;
+			return BigInt(fromLogs);
+		},
 		refetchOnWindowFocus: false,
 		staleTime: Number.POSITIVE_INFINITY,
+		enabled: !!table && round !== undefined,
 	});
 };
 

@@ -1,9 +1,7 @@
 import { ZeroAddress } from '@betfinio/abi';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import type { Address } from 'viem';
-import { useAccount, useConfig } from 'wagmi';
-import { fetchTableBetByBlockHash } from '@/src/lib/roulette/api';
-import { useVisibleTable } from '../../shared/query';
+import { useAccount } from 'wagmi';
 import { fetchAllPlayersBets, fetchPlayerBets, fetchRouletteTableStats, fetchTransactionHashByBet } from '../gql';
 import type { WheelState } from '../types';
 
@@ -41,15 +39,6 @@ export const useGetAllPlayersBets = (table?: Address) => {
 	});
 };
 
-export const useFetchTableBetByBlockHash = () => {
-	const config = useConfig();
-	const { table } = useVisibleTable();
-	return useMutation({
-		mutationKey: ['roulette', 'bet', 'blockHash'],
-		mutationFn: (blockHash: Address) => fetchTableBetByBlockHash(config, blockHash, table),
-	});
-};
-
 export const useGetTransactionHashByBet = (bet: Address) => {
 	return useQuery({
 		queryKey: ['roulette', 'bet', 'transactionHash', bet],
@@ -66,7 +55,7 @@ export const useGetRouletteTableStats = () => {
 		queryKey,
 		...useQuery({
 			queryKey,
-			queryFn: () => fetchRouletteTableStats(playerAddress),
+			queryFn: () => fetchRouletteTableStats(),
 			refetchOnWindowFocus: false,
 			staleTime: Number.POSITIVE_INFINITY,
 		}),

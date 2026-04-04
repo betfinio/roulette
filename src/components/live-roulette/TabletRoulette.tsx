@@ -1,8 +1,6 @@
-import { motion } from 'motion/react';
 import { useGetSelectedRound } from '@/src/lib/live-roulette/query';
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 import { MainTable } from '../shared/MainTable/MainTable';
-import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import { BetDetails } from './BetDetails/BetDetails';
 import { Totals } from './BetDetails/Totals';
 import History from './History/HistoryTable';
@@ -15,7 +13,6 @@ export const TabletRoulette = () => {
 
 	return (
 		<div className="flex flex-col justify-between w-full grow mx-auto p-3">
-			{/* Conteúdo Principal no Desktop */}
 			<div className="relative flex-1 flex flex-col w-full ">
 				<div className="relative">
 					<BetStatusHeader />
@@ -24,13 +21,7 @@ export const TabletRoulette = () => {
 					<div className="absolute inset-0 bg-linear-to-b from-gradientDarkStart via-gradientDarkMid to-gradientDarkEnd z-10 pointer-events-none" />
 					<div className="relative w-full h-full mx-auto flex items-start gap-4">
 						<div className="flex flex-col gap-2 relative z-50">
-							{/* <ResultHistory /> */}
 							<LastResults />
-							{!isRoundFinished && (
-								<motion.div initial={{ opacity: 0, x: '-50%' }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 2 }}>
-									<TableRaceTrack />
-								</motion.div>
-							)}
 						</div>
 						<Wheel />
 						<TableStat />
@@ -38,7 +29,7 @@ export const TabletRoulette = () => {
 				</div>
 
 				<div className="mx-auto max-w-5xl flex w-full">
-					<MainTable hideBetControls={isRoundFinished} />
+					<MainTable hideBetControls={isRoundFinished} showLiveSettle />
 				</div>
 			</div>
 			<div className="relative  mt-4">
@@ -47,8 +38,6 @@ export const TabletRoulette = () => {
 			<div className="  mt-4">
 				<Totals />
 			</div>
-
-			{/* BetHistory ao lado direito do conteúdo principal */}
 			<div className=" shrink-0 mt-4">
 				<History />
 			</div>

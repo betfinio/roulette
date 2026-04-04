@@ -1,5 +1,6 @@
 import { useMediaQuery } from '@betfinio/components/hooks';
 import type { FC } from 'react';
+import { SettleRound } from '@/src/components/live-roulette/WheelDetails/SettleRound';
 import { BetControls } from '../BetControls/BetControls';
 import { ExtraItems } from './ExtraItems';
 import { RouletteNumbersGrid } from './RouletteNumbersGrid';
@@ -8,8 +9,10 @@ import { ZeroItem } from './ZeroItem';
 
 interface MainTableProps {
 	hideBetControls?: boolean;
+	/** Live multiplayer: show settle CTA on the betting layout (not on the wheel). */
+	showLiveSettle?: boolean;
 }
-export const MainTable: FC<MainTableProps> = ({ hideBetControls }) => {
+export const MainTable: FC<MainTableProps> = ({ hideBetControls, showLiveSettle }) => {
 	const { isVertical } = useMediaQuery();
 
 	if (isVertical) {
@@ -31,6 +34,11 @@ export const MainTable: FC<MainTableProps> = ({ hideBetControls }) => {
 						</div>
 					</div>
 				</div>
+				{showLiveSettle && (
+					<div className="w-full flex justify-center px-2 pt-1">
+						<SettleRound className="max-w-md" />
+					</div>
+				)}
 				{!hideBetControls && <BetControls />}
 			</div>
 		);
@@ -57,6 +65,11 @@ export const MainTable: FC<MainTableProps> = ({ hideBetControls }) => {
 				</div>
 			</div>
 
+			{showLiveSettle && (
+				<div className="w-full flex justify-center px-2 pt-1">
+					<SettleRound className="max-w-md" />
+				</div>
+			)}
 			{!hideBetControls && <BetControls />}
 		</div>
 	);

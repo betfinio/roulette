@@ -4,7 +4,8 @@ import { Link, X } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address } from 'viem';
-import { useLimits } from '@/src/lib/shared/query';
+import { SettleRound } from '@/src/components/live-roulette/WheelDetails/SettleRound';
+import { useLimits, useVisibleTable } from '@/src/lib/shared/query';
 
 interface IPaytableProps {
 	onClose: () => void;
@@ -13,6 +14,7 @@ interface IPaytableProps {
 const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 	const { data: limits = [] } = useLimits(table);
 	const { t } = useTranslation('roulette');
+	const { isSingle } = useVisibleTable();
 	return (
 		<div className={'roulette bg-card games rounded-lg p-4 w-full text-foreground relative'}>
 			<X
@@ -52,6 +54,11 @@ const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 					<Link width={12} />
 				</a>
 			</div>
+			{!isSingle && (
+				<div className="mt-6 pt-4 border-t border-border flex flex-col items-center">
+					<SettleRound className="max-w-md" />
+				</div>
+			)}
 		</div>
 	);
 };

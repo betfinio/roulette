@@ -14,9 +14,10 @@ export interface LocalBet {
 
 export interface SpinParams {
 	bets: LocalBet[];
-	table: Address; //table address
-	roundNumber: bigint; //round number
-	playerAddress: Address; //player address
+	playerAddress: Address;
+	gameAddress: Address;
+	/** House multiplayer only: must match `block.timestamp / INTERVAL` when the tx executes */
+	multiplayerRoundId?: bigint;
 }
 
 export interface Limit {

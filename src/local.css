@@ -1,20 +1,20 @@
 :root {
-    --black: hsl(199 21% 15%);
-    --green: hsl(153 54% 48%);
-    --red: hsl(346 71% 54%);
-    --orange: hsl(0 86% 68%);
-    --purple: hsl(300 100% 32%);
-    --purple-lighter: hsl(291 81% 71%);
-    --yellow: hsl(47 100% 50%);
-    --blue: hsl(195 100% 46%);
-    --blue-purple: hsl(233 82% 71%);
-    --blue-shiny: hsl(245 100% 70%);
-    --gold: hsl(46 93% 46%);
-    --silver: hsl(218 10% 63%);
-    --bronze: hsl(27 89% 59%);
-    --wheel-shadow: rgba(0, 172, 231, 0.45);
+	--black: hsl(199 21% 15%);
+	--green: hsl(153 54% 48%);
+	--red: hsl(346 71% 54%);
+	--orange: hsl(0 86% 68%);
+	--purple: hsl(300 100% 32%);
+	--purple-lighter: hsl(291 81% 71%);
+	--yellow: hsl(47 100% 50%);
+	--blue: hsl(195 100% 46%);
+	--blue-purple: hsl(233 82% 71%);
+	--blue-shiny: hsl(245 100% 70%);
+	--gold: hsl(46 93% 46%);
+	--silver: hsl(218 10% 63%);
+	--bronze: hsl(27 89% 59%);
+	--wheel-shadow: rgba(0, 172, 231, 0.45);
 }
 
 .bg-roulette-center {
-    background-image: url("./assets/roulette-center.svg");
+	background-image: url("./assets/roulette-center.svg");
 }
