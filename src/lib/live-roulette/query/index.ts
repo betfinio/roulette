@@ -19,6 +19,10 @@ import {
 } from '../gql';
 import { type RouletteTable, type WheelState, WheelStatus } from '../types';
 
+function isLiveTableAddress(table?: Address): table is Address {
+	return Boolean(table && table !== ZeroAddress);
+}
+
 export const useLiveRouletteState = () => {
 	const { table } = useVisibleTable();
 	const { roundStatus, round } = useGetSelectedRound();
@@ -58,8 +62,8 @@ export const useTablePlayerRounds = (table?: Address) => {
 			queryKey,
 			queryFn: () => fetchTablePlayerRounds(address, table),
 			refetchOnWindowFocus: false,
-			enabled: !!table,
-			staleTime: Number.POSITIVE_INFINITY,
+			enabled: isLiveTableAddress(table),
+			staleTime: 60_000,
 		}),
 	};
 };
@@ -72,8 +76,8 @@ export const useTableRounds = (table?: Address) => {
 			queryKey,
 			queryFn: () => fetchTableBets(table),
 			refetchOnWindowFocus: false,
-			enabled: !!table,
-			staleTime: Number.POSITIVE_INFINITY,
+			enabled: isLiveTableAddress(table),
+			staleTime: 60_000,
 		}),
 	};
 };
@@ -83,7 +87,7 @@ export const useGetCurrentRound = (table?: Address) => {
 		queryKey: ['roulette', 'currentRound', table],
 		queryFn: () => fetchCurrentRoundOfTable(null as never, table),
 		refetchOnWindowFocus: false,
-		enabled: !!table,
+		enabled: isLiveTableAddress(table),
 	});
 };
 
@@ -141,7 +145,7 @@ export const useGetTableRoundPlayers = (table?: Address, round?: number) => {
 			queryKey,
 			queryFn: () => fetchSelectedTableRoundPlayers(table, round),
 			refetchOnWindowFocus: false,
-			enabled: !!table && !!round,
+			enabled: isLiveTableAddress(table) && round !== undefined,
 			staleTime: Number.POSITIVE_INFINITY,
 		}),
 	};
@@ -155,7 +159,7 @@ export const useGetTableSelectedRoundBets = (table?: Address, round?: number) =>
 			queryKey,
 			queryFn: () => fetchTableSelectedRoundBets(table, round),
 			refetchOnWindowFocus: false,
-			enabled: !!table && !!round,
+			enabled: isLiveTableAddress(table) && round !== undefined,
 			staleTime: Number.POSITIVE_INFINITY,
 		}),
 	};
@@ -166,7 +170,7 @@ export const useGetBankByRound = (table?: Address, round?: number) => {
 		queryKey: ['roulette', 'bank', table, Number(round)],
 		queryFn: () => fetchRoundBank(table, round),
 		refetchOnWindowFocus: false,
-		enabled: !!table && !!round,
+		enabled: isLiveTableAddress(table) && round !== undefined,
 		staleTime: Number.POSITIVE_INFINITY,
 	});
 };
@@ -185,7 +189,7 @@ export const useGetRoundStatus = (table?: Address, round?: number) => {
 			return fromGraph;
 		},
 		refetchOnWindowFocus: false,
-		enabled: !!table && !!round,
+		enabled: isLiveTableAddress(table) && round !== undefined,
 		staleTime: Number.POSITIVE_INFINITY,
 	});
 };
@@ -206,7 +210,7 @@ export const useGetWinNumber = (table?: Address, round?: number) => {
 		},
 		refetchOnWindowFocus: false,
 		staleTime: Number.POSITIVE_INFINITY,
-		enabled: !!table && round !== undefined,
+		enabled: isLiveTableAddress(table) && round !== undefined,
 	});
 };
 
@@ -228,6 +232,7 @@ export const useLiveRouletteTableStats = (table?: Address) => {
 			queryFn: () => fetchLiveRouletteTableStats(table),
 			refetchOnWindowFocus: false,
 			staleTime: Number.POSITIVE_INFINITY,
+			enabled: isLiveTableAddress(table),
 		}),
 	};
 };

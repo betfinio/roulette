@@ -1,4 +1,3 @@
-import { ZeroAddress } from '@betfinio/abi';
 import { cn } from '@betfinio/components';
 import { useMediaQuery } from '@betfinio/components/hooks';
 import { BetValue, DataTable } from '@betfinio/components/shared';
@@ -20,7 +19,7 @@ export const MyBetsTable = () => {
 	const { t } = useTranslation('roulette', { keyPrefix: 'table' });
 	const { t: tShared } = useTranslation('shared', { keyPrefix: 'tables' });
 	const navigate = useNavigate();
-	const { table = ZeroAddress } = useVisibleTable();
+	const { table } = useVisibleTable();
 	const { data: bets = [], isLoading } = useTablePlayerRounds(table);
 	const { isVertical } = useMediaQuery();
 	const { scrollToHeader } = useScrollToHeader();

@@ -69,8 +69,11 @@ export const Roulette = () => {
 
 			updateState({ state: 'landing', result: winNumber, bet });
 
+			// Defer refetch so subgraph can index; immediate refetch can overwrite Wheel.tsx optimistic `setQueryData` with stale rows.
 			setTimeout(() => {
-				queryClient.refetchQueries({ queryKey: ['roulette', 'bet', 'stat', address] });
+				void queryClient.invalidateQueries({ queryKey: ['roulette', 'bets', 'player', address] });
+				void queryClient.invalidateQueries({ queryKey: ['roulette', 'bets', 'player', 'all'] });
+				void queryClient.invalidateQueries({ queryKey: ['roulette', 'bet', 'stat', address] });
 			}, 5000);
 		},
 	});
@@ -78,12 +81,13 @@ export const Roulette = () => {
 	const lastShownBet = useRef<Address>(undefined);
 	const lastStatus = useRef<typeof status>(undefined);
 	useEffect(() => {
-		if (status === 'landed' && bets[0].bet.toLowerCase() !== lastShownBet.current?.toLowerCase()) {
-			toast(<RouletteResultToast rouletteBet={bets[0]} />, { classNames: { content: '!w-full' } });
+		const latest = bets[0];
+		if (status === 'landed' && latest && latest.bet.toLowerCase() !== lastShownBet.current?.toLowerCase()) {
+			toast(<RouletteResultToast rouletteBet={latest} />, { classNames: { content: '!w-full' } });
 
-			const hasWon = bets[0].amount < bets[0].winAmount;
-			hasWon && shootConfetti();
-			lastShownBet.current = bets[0].bet;
+			const hasWon = latest.amount < latest.winAmount;
+			if (hasWon) shootConfetti();
+			lastShownBet.current = latest.bet;
 			lastStatus.current = status;
 		}
 
@@ -91,7 +95,7 @@ export const Roulette = () => {
 			scrollToHeader();
 			lastStatus.current = status;
 		}
-	}, [wheelStateData]);
+	}, [bets, status, scrollToHeader]);
 
 	useEffect(() => {
 		if (!lastShownBet.current && bets[0]) {

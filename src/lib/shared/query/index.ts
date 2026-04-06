@@ -1,6 +1,7 @@
+import { ZeroAddress } from '@betfinio/abi';
 import { toast } from '@betfinio/components/ui';
 import { type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useParams, useSearch } from '@tanstack/react-router';
+import { useLocation, useMatches, useParams, useSearch } from '@tanstack/react-router';
 import { getTransactionLink, handleError } from 'betfinio_context/lib/helpers';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +9,7 @@ import type { Address, WriteContractErrorType, WriteContractReturnType } from 'v
 import { waitForTransactionReceipt } from 'viem/actions';
 import { useConfig } from 'wagmi';
 import { BET_STATUS_HEADER } from '@/src/components/shared/BetStatusHeader/BetStatusHeader';
-import { SINGLE_PLAYER_GAME, SINGLE_PLAYER_STRATEGY } from '@/src/global';
+import { MULTIPLAYER_GAME, SINGLE_PLAYER_GAME, SINGLE_PLAYER_STRATEGY } from '@/src/global';
 import { fetchBetsBitMapAndAmountByRound } from '@/src/lib/shared/gql';
 import {
 	changeChip,
@@ -46,9 +47,10 @@ export const usePaytable = () => {
 };
 
 export const useLocalBets = () => {
+	const { isSingle } = useVisibleTable();
 	return useQuery({
-		queryKey: ['roulette', 'local', 'bets', 'all'],
-		queryFn: fetchLocalBets,
+		queryKey: ['roulette', 'local', 'bets', 'all', isSingle],
+		queryFn: () => fetchLocalBets(isSingle),
 		refetchOnWindowFocus: false,
 	});
 };
@@ -74,38 +76,42 @@ export const usePlace = () => {
 	const queryClient = useQueryClient();
 	const { t } = useTranslation('roulette', { keyPrefix: 'errors' });
 	const { data: chip = 0 } = useSelectedChip();
+	const { isSingle } = useVisibleTable();
 	return useMutation<void, Error, ChipPlaceProps>({
 		mutationKey: ['roulette', 'place'],
-		mutationFn: (e) => place(e, chip, t),
+		mutationFn: (e) => place(e, chip, t, isSingle),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
 		onError: (e) => toast.error(e.message),
 	});
 };
 export const useUnplace = () => {
 	const queryClient = useQueryClient();
+	const { isSingle } = useVisibleTable();
 	return useMutation<void, Error, ChipPlaceProps>({
 		mutationKey: ['roulette', 'unplace'],
-		mutationFn: (e) => unplace(e),
+		mutationFn: (e) => unplace(e, isSingle),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
 		onError: (e) => toast.error(e.message),
 	});
 };
 export const useDoublePlace = () => {
 	const queryClient = useQueryClient();
+	const { isSingle } = useVisibleTable();
 
 	return useMutation({
 		mutationKey: ['roulette', 'doublePlace'],
-		mutationFn: doublePlace,
+		mutationFn: () => doublePlace(isSingle),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
 	});
 };
 
 export const useUndoPlace = () => {
 	const queryClient = useQueryClient();
+	const { isSingle } = useVisibleTable();
 
 	return useMutation({
 		mutationKey: ['roulette', 'undoPlace'],
-		mutationFn: undoPlace,
+		mutationFn: () => undoPlace(isSingle),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
 	});
 };
@@ -118,9 +124,10 @@ export const useChangeChip = () => {
 	});
 };
 export const useLocalChipsForPosition = (position: string) => {
+	const { isSingle } = useVisibleTable();
 	return useQuery({
-		queryKey: ['roulette', 'local', 'bets', position],
-		queryFn: () => fetchChipsByPosition(position),
+		queryKey: ['roulette', 'local', 'bets', position, isSingle],
+		queryFn: () => fetchChipsByPosition(position, isSingle),
 		refetchOnWindowFocus: false,
 	});
 };
@@ -134,9 +141,10 @@ export const useGetDebugMode = () => {
 
 export const useClearAllBets = () => {
 	const queryClient = useQueryClient();
+	const { isSingle } = useVisibleTable();
 	return useMutation({
 		mutationKey: ['roulette', 'clear', 'bets'],
-		mutationFn: () => clearAllBets(),
+		mutationFn: () => clearAllBets(isSingle),
 		onSettled: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] }),
 	});
 };
@@ -216,15 +224,43 @@ export const useSinglePlayerTable = () => {
 	});
 };
 
+const LIVE_TABLE_ROUTE_ID = '/games/roulette/live/$table' as const;
+const SINGLE_PLAYER_ROUTE_IDS = new Set(['/games/roulette/single', '/games/roulette/single/']);
+
+function isSinglePlayerRoulettePath(pathname: string): boolean {
+	return SINGLE_PLAYER_ROUTE_IDS.has(pathname);
+}
+
 export const useVisibleTable = () => {
+	const matches = useMatches();
 	const params = useParams({ strict: false });
+	const { pathname } = useLocation();
 	const { data: single, isLoading } = useSinglePlayerTable();
-	const table: Address | undefined = useMemo(() => {
-		return (params.table || single) as Address;
-	}, [params, single]);
+
+	const liveTableMatch = useMemo(() => matches.find((m) => m.routeId === LIVE_TABLE_ROUTE_ID), [matches]);
+
+	const onSinglePath = isSinglePlayerRoulettePath(pathname);
+
+	const table = useMemo((): Address => {
+		// Single-player UI must always use the house game — ignore stale `table` params from other routes (e.g. MF host paths).
+		if (onSinglePath) return single ?? SINGLE_PLAYER_GAME ?? ZeroAddress;
+
+		const fromLive = liveTableMatch?.params?.table as Address | undefined;
+		const fromLoose = params.table as Address | undefined;
+		const fromRoute = fromLive || fromLoose;
+		if (fromRoute && fromRoute !== ZeroAddress) return fromRoute;
+
+		// On live multiplayer route, subgraph + contracts use PUBLIC_MULTIPLAYER_GAME_ADDRESS — never fall back to single-player.
+		if (liveTableMatch && MULTIPLAYER_GAME && MULTIPLAYER_GAME !== ZeroAddress) return MULTIPLAYER_GAME;
+
+		return single ?? SINGLE_PLAYER_GAME ?? ZeroAddress;
+	}, [liveTableMatch, onSinglePath, params.table, single]);
+
+	const isSingle = onSinglePath;
+
 	return {
-		isSingle: table === single,
-		table: table,
+		isSingle,
+		table,
 		isLoading,
 	};
 };

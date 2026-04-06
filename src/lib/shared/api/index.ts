@@ -7,19 +7,38 @@ import { CoreABI, HouseMultiplayerGameABI, RouletteSinglePlayerStrategyABI } fro
 import { encodeBet } from '..';
 import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
 
-export const fetchLocalBets = (): LocalBet[] => {
-	const data = localStorage.getItem('bets');
+/** Previously one key for both modes — caused live chips to appear on single-player board and vice versa. */
+const LEGACY_BETS_KEY = 'bets';
 
-	if (!data) {
-		return [];
+export function localBetsStorageKey(isSingle: boolean): string {
+	return isSingle ? 'betfin:roulette:local-bets:single' : 'betfin:roulette:local-bets:live';
+}
+
+function readLocalBetsRaw(isSingle: boolean): LocalBet[] {
+	const key = localBetsStorageKey(isSingle);
+	const data = localStorage.getItem(key);
+	if (data) return JSON.parse(data) as LocalBet[];
+	const legacy = localStorage.getItem(LEGACY_BETS_KEY);
+	if (legacy) {
+		try {
+			localStorage.setItem(key, legacy);
+			localStorage.removeItem(LEGACY_BETS_KEY);
+			return JSON.parse(legacy) as LocalBet[];
+		} catch {
+			return [];
+		}
 	}
-	return JSON.parse(data) as LocalBet[];
-};
-export const fetchChipsByPosition = (position: string) => {
-	const bets = fetchLocalBets();
+	return [];
+}
 
-	return bets.filter((bet) => bet.item === position);
-};
+function writeLocalBetsRaw(isSingle: boolean, bets: LocalBet[]) {
+	localStorage.setItem(localBetsStorageKey(isSingle), JSON.stringify(bets));
+}
+
+export const fetchLocalBets = (isSingle: boolean): LocalBet[] => readLocalBetsRaw(isSingle);
+
+export const fetchChipsByPosition = (position: string, isSingle: boolean) => fetchLocalBets(isSingle).filter((bet) => bet.item === position);
+
 export const fetchSelectedChip = async (): Promise<number> => {
 	return Number(localStorage.getItem('chip') || 10000);
 };
@@ -51,10 +70,10 @@ export const fetchLimits = async (config: Config, strategyAddress?: Address) => 
 	});
 };
 
-export const place = async (params: ChipPlaceProps, chip: number, t: TFunction<'roulette', 'errors'>) => {
-	const old = fetchLocalBets();
+export const place = async (params: ChipPlaceProps, chip: number, t: TFunction<'roulette', 'errors'>, isSingle: boolean) => {
+	const old = fetchLocalBets(isSingle);
 	if (params.numbers.length === 0) {
-		localStorage.setItem('bets', JSON.stringify([]));
+		writeLocalBetsRaw(isSingle, []);
 		return;
 	}
 	if (chip === 0) {
@@ -66,13 +85,13 @@ export const place = async (params: ChipPlaceProps, chip: number, t: TFunction<'
 		item: params.item,
 	} as LocalBet;
 	const newBets = [...old, newBet];
-	localStorage.setItem('bets', JSON.stringify(newBets));
+	writeLocalBetsRaw(isSingle, newBets);
 };
 
-export const unplace = async (params: ChipPlaceProps) => {
-	const old = fetchLocalBets();
+export const unplace = async (params: ChipPlaceProps, isSingle: boolean) => {
+	const old = fetchLocalBets(isSingle);
 	if (params.numbers.length === 0) {
-		localStorage.setItem('bets', JSON.stringify([]));
+		writeLocalBetsRaw(isSingle, []);
 		return;
 	}
 	const { item } = params;
@@ -82,10 +101,11 @@ export const unplace = async (params: ChipPlaceProps) => {
 		return;
 	}
 	const newBets = [...old.filter((e) => e.item !== item)];
-	localStorage.setItem('bets', JSON.stringify(newBets));
+	writeLocalBetsRaw(isSingle, newBets);
 };
-export const doublePlace = async () => {
-	const bets = fetchLocalBets();
+
+export const doublePlace = async (isSingle: boolean) => {
+	const bets = fetchLocalBets(isSingle);
 	const betsMap = [...bets, ...bets].reduce((acc: Record<string, LocalBet[]>, val) => {
 		if (acc[val.item]) {
 			acc[val.item].push(val);
@@ -98,16 +118,17 @@ export const doublePlace = async () => {
 		// biome-ignore lint/performance/noAccumulatingSpread: todo
 		return [...acc, ...bets];
 	}, []);
-	localStorage.setItem('bets', JSON.stringify(newBets));
-};
-export const clearAllBets = async () => {
-	localStorage.setItem('bets', JSON.stringify([]));
+	writeLocalBetsRaw(isSingle, newBets);
 };
 
-export const undoPlace = async () => {
-	const bets = fetchLocalBets();
+export const clearAllBets = async (isSingle: boolean) => {
+	writeLocalBetsRaw(isSingle, []);
+};
+
+export const undoPlace = async (isSingle: boolean) => {
+	const bets = fetchLocalBets(isSingle);
 	bets.pop();
-	localStorage.setItem('bets', JSON.stringify(bets));
+	writeLocalBetsRaw(isSingle, bets);
 };
 
 export const submitBet = async (params: SpinParams, config: Config) => {
@@ -163,8 +184,8 @@ export const setDebugMode = async (nextDebug: boolean) => {
 	localStorage.setItem('roulette-debug', JSON.stringify(nextDebug));
 };
 
-export const getRequiredAllowance = (): number => {
-	const bets = JSON.parse(localStorage.getItem('bets') || '[]');
+export const getRequiredAllowance = (isSingle: boolean): number => {
+	const bets = fetchLocalBets(isSingle);
 	return bets.reduce((acc: number, val: { amount: number }) => {
 		return acc + val.amount;
 	}, 0);

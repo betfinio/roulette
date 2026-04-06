@@ -30,7 +30,6 @@ export function RouletteLiveTable() {
 					navigate({
 						to: '/games/roulette/live/$table',
 						params: { table: table.address },
-						search: { round: 0 },
 						replace: true,
 					});
 					return;
@@ -46,7 +45,8 @@ export function RouletteLiveTable() {
 				return;
 			}
 
-			if (!search.round) {
+			// Omit round until resolved; 0 was wrongly used as a placeholder after interval shorthand and blocks fetch
+			if (search.round === undefined || search.round === null || search.round === 0) {
 				const round = await fetchCurrentRoundOfTable(null as never, params.table as Address);
 				navigate({
 					to: '/games/roulette/live/$table',

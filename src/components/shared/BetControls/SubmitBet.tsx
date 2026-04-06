@@ -58,10 +58,10 @@ export const SubmitBet: FC = () => {
 			multiplayerRoundId: isSingle ? undefined : BigInt(fetchCurrentRound(MULTIPLAYER_INTERVAL)),
 		};
 
-		if (valueToNumber(allowance) < Number(getRequiredAllowance())) {
+		if (valueToNumber(allowance) < Number(getRequiredAllowance(isSingle))) {
 			requestAllowance?.({
 				type: 'bet',
-				amount: BigInt(getRequiredAllowance()) * 10n ** 18n,
+				amount: BigInt(getRequiredAllowance(isSingle)) * 10n ** 18n,
 				spender: CORE_ADDRESS,
 				execute: () => submitBetAsync(betParams),
 			});

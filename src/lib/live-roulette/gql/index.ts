@@ -89,7 +89,11 @@ export const fetchTablePlayerRounds = async (player: Address, table?: Address) =
 	if (table === undefined) return [];
 
 	logger.start('fetching bets by player', player);
-	const data: ExecutionResult<GetLiveRoulettePlayerTableBetsQuery> = await execute(GetLiveRoulettePlayerTableBetsDocument, { player, gameAddress: table });
+	const data: ExecutionResult<GetLiveRoulettePlayerTableBetsQuery> = await execute(GetLiveRoulettePlayerTableBetsDocument, {
+		player: player.toLowerCase() as Address,
+		gameAddress: table.toLowerCase() as Address,
+		last: 1000,
+	});
 	logger.success('fetching bets by player', data.data?.bets.length);
 	if (data.data) {
 		return data.data.bets.map((bet) => {
@@ -112,7 +116,10 @@ export const fetchTablePlayerRounds = async (player: Address, table?: Address) =
 export const fetchTableBets = async (table?: Address) => {
 	if (!table) return [];
 	logger.start('fetching rounds by table', table);
-	const data: ExecutionResult<GetLiveRouletteTableRoundsQuery> = await execute(GetLiveRouletteTableRoundsDocument, { gameAddress: table, first: 1000 });
+	const data: ExecutionResult<GetLiveRouletteTableRoundsQuery> = await execute(GetLiveRouletteTableRoundsDocument, {
+		gameAddress: table.toLowerCase() as Address,
+		first: 1000,
+	});
 	logger.success('fetching rounds by table', data.data?.rounds.length);
 	if (data.data?.rounds) {
 		return data.data.rounds.map((round) => {

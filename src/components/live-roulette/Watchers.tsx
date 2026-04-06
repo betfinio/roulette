@@ -238,19 +238,20 @@ function Watchers() {
 					status: RoundStatus.CREATED,
 				};
 
-				// Optimistically update table rounds list
-				const updatedRounds: RoundBet[] = rounds.some((r: RoundBet) => r.round === roundBet.round)
-					? rounds.map((r: RoundBet) => (r.round === roundBet.round ? { ...r, amount: r.amount + amount } : r))
-					: [roundBet, ...rounds];
+				// Merge against TanStack cache so we never overwrite subgraph history with stale hook state
+				const priorRounds = queryClient.getQueryData<RoundBet[]>(tableRoundsQueryKey) ?? rounds;
+				const updatedRounds: RoundBet[] = priorRounds.some((r: RoundBet) => r.round === roundBet.round)
+					? priorRounds.map((r: RoundBet) => (r.round === roundBet.round ? { ...r, amount: r.amount + amount } : r))
+					: [roundBet, ...priorRounds];
 				queryClient.setQueryData(tableRoundsQueryKey, updatedRounds);
 
 				const roundPlayerBet: RoundPlayerBet = { ...roundBet, player };
 
-				// Optimistically update player rounds list
 				if (player.toLowerCase() === address.toLowerCase()) {
-					const updatedPlayerRound: RoundPlayerBet[] = playerRounds.some((r: RoundPlayerBet) => r.round === roundPlayerBet.round)
-						? playerRounds.map((r: RoundPlayerBet) => (r.round === roundPlayerBet.round ? { ...r, amount: r.amount + amount } : r))
-						: [roundPlayerBet, ...playerRounds];
+					const priorPlayerRounds = queryClient.getQueryData<RoundPlayerBet[]>(playerRoundsQueryKey) ?? playerRounds;
+					const updatedPlayerRound: RoundPlayerBet[] = priorPlayerRounds.some((r: RoundPlayerBet) => r.round === roundPlayerBet.round)
+						? priorPlayerRounds.map((r: RoundPlayerBet) => (r.round === roundPlayerBet.round ? { ...r, amount: r.amount + amount } : r))
+						: [roundPlayerBet, ...priorPlayerRounds];
 					queryClient.setQueryData(playerRoundsQueryKey, updatedPlayerRound);
 				}
 
@@ -266,18 +267,16 @@ function Watchers() {
 				// Only update the per-round bet panel, players panel, and board overlay when
 				// this bet belongs to the currently viewed round — prevents cross-round contamination.
 				if (eventRound === visibleRound) {
-					// Optimistically update selected-round bet panel
-					const updatedTableSelectedRoundBets: PlayerInProgressBet[] = tableSelectedRoundBets?.length
-						? [...tableSelectedRoundBets, playerInProgressBet]
-						: [playerInProgressBet];
+					const priorSelected = queryClient.getQueryData<PlayerInProgressBet[]>(tableSelectedRoundBetsQueryKey) ?? tableSelectedRoundBets ?? [];
+					const updatedTableSelectedRoundBets: PlayerInProgressBet[] = [...priorSelected, playerInProgressBet];
 					queryClient.setQueryData(tableSelectedRoundBetsQueryKey, updatedTableSelectedRoundBets);
 
-					// Optimistically update selected-round players panel
-					const updatedTableRoundPlayers: PlayerRoundBets[] = tableRoundPlayers.some((p: PlayerRoundBets) => p.player.toLowerCase() === player.toLowerCase())
-						? tableRoundPlayers.map((p: PlayerRoundBets) =>
+					const priorPlayers = queryClient.getQueryData<PlayerRoundBets[]>(tableRoundPlayersQueryKey) ?? tableRoundPlayers;
+					const updatedTableRoundPlayers: PlayerRoundBets[] = priorPlayers.some((p: PlayerRoundBets) => p.player.toLowerCase() === player.toLowerCase())
+						? priorPlayers.map((p: PlayerRoundBets) =>
 								p.player.toLowerCase() === player.toLowerCase() ? { ...p, amount: p.amount + amount, betCounts: p.betCounts + 1 } : p,
 							)
-						: [...tableRoundPlayers, { player, amount, betCounts: 1, created }];
+						: [...priorPlayers, { player, amount, betCounts: 1, created }];
 					queryClient.setQueryData(tableRoundPlayersQueryKey, updatedTableRoundPlayers);
 
 					// Update roulette board overlay with decoded chip positions
@@ -286,7 +285,7 @@ function Watchers() {
 				}
 
 				if (player.toLowerCase() === address.toLowerCase()) {
-					await clearAllBets();
+					await clearAllBets(false);
 					await queryClient.invalidateQueries({ queryKey: ['roulette', 'local', 'bets'] });
 				}
 			};

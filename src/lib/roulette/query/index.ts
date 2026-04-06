@@ -23,7 +23,7 @@ export const useRouletteState = () => {
 export const useGetPlayerBets = (table?: Address) => {
 	const { address = ZeroAddress } = useAccount();
 	return useQuery({
-		queryKey: ['roulette', 'bets', 'player', address],
+		queryKey: ['roulette', 'bets', 'player', address, table],
 		queryFn: () => fetchPlayerBets(address, table),
 		refetchOnWindowFocus: false,
 		enabled: !!table,
