@@ -2,7 +2,7 @@ import { cn } from '@betfinio/components';
 import { useQueryClient } from '@tanstack/react-query';
 import { PlayIcon } from 'lucide-react';
 import { motion, useAnimation } from 'motion/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useGetSelectedRound, useGetTableSelectedRoundBets, useLiveRouletteState, useTablePlayerRounds, useTableRounds } from '@/src/lib/live-roulette/query';
 import { type WheelState, WheelStatus } from '@/src/lib/live-roulette/types';
 import { getWheelNumbers } from '@/src/lib/roulette';
@@ -16,10 +16,14 @@ export const Wheel = () => {
 	const { state: wheelStateData, updateState } = useLiveRouletteState();
 	const status = wheelStateData.data.state;
 	const { table } = useVisibleTable();
-	const { roundStatusProps, winNumberProps, round: selectedRound } = useGetSelectedRound();
+	const { roundStatusProps, winNumberProps, round: selectedRound, winNumber } = useGetSelectedRound();
 	const { isFetched: isBetsFetched, data: rounds = [], queryKey: tableRoundsQueryKey } = useTableRounds(table);
 	const { data: playerRounds = [], queryKey: playerRoundQueryKey } = useTablePlayerRounds(table);
 	const lastNumber = rounds.find((tableRound) => tableRound.round === selectedRound)?.winNumber || 0;
+	const effectiveLastNumber = useMemo(() => {
+		if (winNumber !== undefined && winNumber !== 42n) return Number(winNumber);
+		return lastNumber;
+	}, [winNumber, lastNumber]);
 	const { queryKey: tableSelectedRoundBetsQueryKey } = useGetTableSelectedRoundBets(table, selectedRound);
 
 	// Animation control
@@ -38,7 +42,7 @@ export const Wheel = () => {
 
 	useEffect(() => {
 		if (status === WheelStatus.Created || status === WheelStatus.NotExist) {
-			const currentAngle = getAngleForNumber(lastNumber);
+			const currentAngle = getAngleForNumber(effectiveLastNumber);
 			wheelControls.start({
 				rotate: [
 					currentAngle % 360, // Start at the current angle
@@ -140,8 +144,8 @@ export const Wheel = () => {
 					ease: 'linear',
 				},
 			});
-		} else if (status === WheelStatus.Finished) {
-			const stopAngle = getAngleForNumber(lastNumber) || 0;
+		} else if (status === WheelStatus.ResultReadyAwaitingSettlement || status === WheelStatus.Finished) {
+			const stopAngle = getAngleForNumber(effectiveLastNumber) || 0;
 			wheelControlsWrapper
 				.start({
 					marginTop: '-30%',
@@ -157,7 +161,7 @@ export const Wheel = () => {
 				rotate: [-stopAngle + 180],
 			});
 		}
-	}, [status, wheelControls, lastNumber]);
+	}, [status, wheelControls, effectiveLastNumber]);
 
 	return (
 		<div className="w-full flex flex-col relative max-w-2xl mx-8 lg:mx-auto drop-shadow-[0_0_18px_var(--wheel-shadow)] rounded-full">

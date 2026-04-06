@@ -4,5 +4,5 @@ import { Stat } from '../shared/Stat/Stat';
 export const PlayerStat = () => {
 	const { data: playerStat, isLoading: isPlayerStatLoading } = useGetRouletteTableStats();
 
-	return <Stat tableOrPlayerStat={playerStat} isLoading={isPlayerStatLoading} />;
+	return <Stat tableOrPlayerStat={playerStat ?? undefined} isLoading={isPlayerStatLoading} />;
 };

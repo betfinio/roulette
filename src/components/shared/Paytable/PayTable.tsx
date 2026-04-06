@@ -4,7 +4,8 @@ import { Link, X } from 'lucide-react';
 import type { FC } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { Address } from 'viem';
-import { useLimits } from '@/src/lib/shared/query';
+import { SettleRound } from '@/src/components/live-roulette/WheelDetails/SettleRound';
+import { useLimits, useVisibleTable } from '@/src/lib/shared/query';
 
 interface IPaytableProps {
 	onClose: () => void;
@@ -13,12 +14,13 @@ interface IPaytableProps {
 const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 	const { data: limits = [] } = useLimits(table);
 	const { t } = useTranslation('roulette');
+	const { isSingle } = useVisibleTable();
 	return (
 		<div className={'roulette bg-card games rounded-lg p-4 w-full text-foreground relative'}>
 			<X
 				onClick={onClose}
 				className={
-					'absolute top-4 right-4 rounded-full  text-foreground border border-foreground w-6 h-6 p-1 cursor-pointer hover:border-red-roulette hover:text-red-roulette duration-300'
+					'absolute top-4 right-4 rounded-full  text-foreground border border-foreground w-6 h-6 p-1 cursor-pointer hover:border-[var(--red)] hover:text-[var(--red)] duration-300'
 				}
 			/>
 			<h2 className={'text-primary font-semibold text-lg'}>{t('payTable.paytable')}</h2>
@@ -35,7 +37,7 @@ const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 						<div className={'text-success flex flex-row gap-1 items-center'}>
 							<BetValue value={valueToNumber(limit.min)} withIcon />
 						</div>
-						<div className={'text-red-roulette flex flex-row gap-1 items-center'}>
+						<div className={'text-[var(--red)] flex flex-row gap-1 items-center'}>
 							<BetValue value={valueToNumber(limit.max)} withIcon />
 						</div>
 					</div>
@@ -52,6 +54,11 @@ const Paytable: FC<IPaytableProps> = ({ onClose, table }) => {
 					<Link width={12} />
 				</a>
 			</div>
+			{!isSingle && (
+				<div className="mt-6 pt-4 border-t border-border flex flex-col items-center">
+					<SettleRound className="max-w-md" />
+				</div>
+			)}
 		</div>
 	);
 };

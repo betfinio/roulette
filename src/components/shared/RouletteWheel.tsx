@@ -37,9 +37,9 @@ export const RouletteWheel = () => {
 								points={`${x1},${y1} ${x2},${y2} ${xCenter},${yCenter}`}
 								fill="currentColor"
 								className={cn({
-									'text-red-roulette': getColor(+number) === 'RED',
-									'text-black-roulette': getColor(+number) === 'BLACK',
-									'text-green-roulette': getColor(+number) === 'GREEN',
+									'text-[var(--red)]': getColor(+number) === 'RED',
+									'text-[var(--black)]': getColor(+number) === 'BLACK',
+									'text-[var(--green)]': getColor(+number) === 'GREEN',
 								})}
 							/>
 

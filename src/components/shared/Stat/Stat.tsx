@@ -46,10 +46,12 @@ export const Stat: FC<IStatProps> = ({ tableOrPlayerStat, isLoading }) => {
 		return { ...tableOrPlayerStat, hot, cold };
 	}, [tableOrPlayerStat]);
 
+	const isEmpty = !isLoading && !tableOrPlayerStat;
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: '50%' }}
-			animate={{ opacity: 1, x: 0 }}
+			animate={{ opacity: isEmpty ? 0 : 1, x: isEmpty ? '50%' : 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
 			className={cn('bg-card mt-4 p-2 rounded-lg border w-[122px] h-[286px] flex flex-col items-center  border-border tabular-nums shrink-0 gap-2', {
@@ -69,7 +71,7 @@ export const Stat: FC<IStatProps> = ({ tableOrPlayerStat, isLoading }) => {
 					</TooltipProvider>
 				</div>
 				<div className="flex justify-center items-center rounded-md p-1 gap-4">
-					<div className="flex flex-col items-center bg-red-roulette rounded-md w-8   py-1">
+					<div className="flex flex-col items-center bg-[var(--red)] rounded-md w-8   py-1">
 						{hot.map((num, index) => (
 							<div className="py-1" key={index}>
 								{num}
@@ -90,7 +92,7 @@ export const Stat: FC<IStatProps> = ({ tableOrPlayerStat, isLoading }) => {
 			<motion.div {...SLIDE_DOWN_ANIMATION} className="mb-2">
 				<h3 className=" text-xs text-center">{t('playerStat.redAndBlack')}</h3>
 				<div className="flex justify-center text-xs items-center gap-4">
-					<div className="flex flex-col items-center w-8 bg-red-roulette rounded-md py-2   border border-border">{red}%</div>
+					<div className="flex flex-col items-center w-8 bg-[var(--red)] rounded-md py-2   border border-border">{red}%</div>
 
 					<div className="flex flex-col items-center w-8 py-2  border border-border rounded-md">{black}%</div>
 				</div>

@@ -2,7 +2,6 @@ import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { queryClient, wagmiConfig } from 'betfinio_context/config';
 import ReactDOM from 'react-dom/client';
 import { routeTree } from './routeTree.gen';
-import './local.css';
 import './globals.css';
 
 export const router = createRouter({

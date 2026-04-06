@@ -13,6 +13,7 @@ import {
 import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { getColor } from '@/src/lib/roulette';
 import { useVisibleTable } from '@/src/lib/shared/query';
+import { RoundStatus } from '@/src/lib/shared/types';
 import { RouletteNumberIcon } from '../../shared/RouletteNumberIcon';
 import { BackToGame } from './BackToGame';
 import { DynamicTextSVG } from './DynamicTextSVG';
@@ -31,8 +32,8 @@ export const WheelDetails: FC = () => {
 		isRoundFinished,
 		roundHasBets: selectedRoundHasBets,
 		winNumber,
+		roundStatus,
 		bankByRoundProps: { refetch: refetchBankByRound },
-		winNumberProps,
 		currentRoundBank,
 	} = useGetSelectedRound();
 	const { isLoading: isSelectedRoundBetsLoading } = useGetTableSelectedRoundBets(table, selectedRound);
@@ -40,12 +41,14 @@ export const WheelDetails: FC = () => {
 
 	const playerStat = useMemo(() => {
 		if (!playerRounds || winNumber === 42n) return;
-		const playerRound = playerRounds.find((round) => round.round === selectedRound);
+		const playerRound = playerRounds.find((r) => r.round === selectedRound);
+		if (!playerRound) return;
 
-		const hasWon = playerRound && playerRound?.winAmount > 0n;
-		const winAmount = playerRound?.winAmount ?? 0n;
+		const settled = playerRound.status === RoundStatus.FINISHED || playerRound.roundSubgraphStatus === 'settled';
+		const hasWon = settled && playerRound.winAmount > 0n;
+		const winAmount = playerRound.winAmount ?? 0n;
 
-		return { playerHasWon: hasWon, playerHasBets: !!playerRound, winAmount: winAmount };
+		return { playerHasWon: hasWon, playerHasBets: true, winAmount };
 	}, [playerRounds, winNumber, selectedRound]);
 
 	const handleExpiration = async () => {
@@ -55,28 +58,41 @@ export const WheelDetails: FC = () => {
 
 	const { timeLeft, isReady, isExpired } = useRoundCountdown(selectedRound, Number(currentRound?.interval), handleExpiration);
 
-	const rouletteIsNotSpinning = state.data.state !== WheelStatus.Requested && state.data.state !== WheelStatus.Landing;
+	/** Hide overlay only during fast VRF spin; show during landing + result_ready + settled */
+	const pastFastSpin = state.data.state !== WheelStatus.Requested;
+	/** Wheel motion finished (no fast spin, no landing tween) — for win messaging / round-over */
+	const rouletteCalm = state.data.state !== WheelStatus.Requested && state.data.state !== WheelStatus.Landing;
 	const rouletteStatusStandBy = state.data.state === WheelStatus.NotExist || state.data.state === WheelStatus.Created;
 	const roundHasBets = selectedRoundHasBets;
-	const showTimer = !isRoundFinished && isReady && !isExpired && rouletteIsNotSpinning;
-	const showRoundNumber = rouletteIsNotSpinning && !!selectedRound;
+	const displayWinNumber = winNumber !== 42n ? Number(winNumber) : state.data.result != null ? state.data.result : undefined;
+	const resultDigitsKnown = displayWinNumber !== undefined && !Number.isNaN(displayWinNumber);
+
+	const showTimer = !isRoundFinished && isReady && !isExpired && pastFastSpin;
+	const showRoundNumber = pastFastSpin && !!selectedRound;
 	const showWaitingForSpin =
-		roundHasBets && isRoundFinished && winNumber === 42n && ![WheelStatus.Finished, WheelStatus.Requested, WheelStatus.Landing].includes(state.data.state);
+		roundHasBets &&
+		isRoundFinished &&
+		winNumber === 42n &&
+		![WheelStatus.Finished, WheelStatus.Requested, WheelStatus.Landing, WheelStatus.ResultReadyAwaitingSettlement].includes(state.data.state);
 
-	const showRoundIsOver = isRoundFinished && rouletteIsNotSpinning && !roundHasBets && currentRoundBank !== undefined;
+	const showRoundIsOver = isRoundFinished && rouletteCalm && !roundHasBets && currentRoundBank !== undefined;
 
-	const showYouWon = isRoundFinished && rouletteIsNotSpinning && !rouletteStatusStandBy && playerStat?.playerHasBets && playerStat.playerHasWon;
+	const roundSettledOnChainOrGraph = roundStatus === WheelStatus.Finished || roundStatus === WheelStatus.Refunded;
 
-	const showWinNumber = rouletteIsNotSpinning && isRoundFinished && winNumber !== 42n;
+	const showYouWon =
+		isRoundFinished && rouletteCalm && !rouletteStatusStandBy && roundSettledOnChainOrGraph && playerStat?.playerHasBets && playerStat.playerHasWon;
 
-	const showBackToGame = isRoundFinished && rouletteIsNotSpinning && (showRoundIsOver || showYouWon || showWinNumber || showWaitingForSpin);
+	const showWinNumber = pastFastSpin && isRoundFinished && resultDigitsKnown;
 
-	if (isLoading || isSelectedRoundBetsLoading || !rouletteIsNotSpinning || winNumberProps.isLoading) return null;
+	const awaitingSettlement = roundStatus === WheelStatus.ResultReadyAwaitingSettlement;
+	const showBackToGame = isRoundFinished && pastFastSpin && (showRoundIsOver || showYouWon || showWinNumber || showWaitingForSpin || awaitingSettlement);
+
+	if (isLoading || isSelectedRoundBetsLoading || !pastFastSpin) return null;
 
 	return (
 		<div className="absolute inset-0 flex items-center justify-center">
 			<motion.div
-				key={state.data.state + winNumber.toString()}
+				key={`${state.data.state}-${displayWinNumber ?? winNumber.toString()}`}
 				className="w-full h-full flex mt-[15%] md:mt-[20%] flex-col  z-20 text-center  text-foreground    "
 				initial={{ opacity: 0, scale: 0.5 }}
 				animate={{ opacity: 1, scale: 1 }}
@@ -94,15 +110,15 @@ export const WheelDetails: FC = () => {
 					</div>
 				)}
 				{/* Round Number */}
-				{showWinNumber && (
+				{showWinNumber && displayWinNumber !== undefined && (
 					<div
 						className={cn('w-[10%] flex justify-center items-center mx-auto border md:border-2 border-white/50 rounded-lg md:rounded-2xl md:mb-2', {
-							'bg-green-roulette': getColor(Number(winNumber)) === 'GREEN',
-							'bg-red-roulette': getColor(Number(winNumber)) === 'RED',
-							'bg-black-roulette': getColor(Number(winNumber)) === 'BLACK',
+							'bg-[var(--green)]': getColor(displayWinNumber) === 'GREEN',
+							'bg-[var(--red)]': getColor(displayWinNumber) === 'RED',
+							'bg-[var(--black)]': getColor(displayWinNumber) === 'BLACK',
 						})}
 					>
-						<RouletteNumberIcon number={Number(winNumber)} className={'w-full'} />
+						<RouletteNumberIcon number={displayWinNumber} className={'w-full'} />
 					</div>
 				)}
 				{/*  Waiting For Spin */}

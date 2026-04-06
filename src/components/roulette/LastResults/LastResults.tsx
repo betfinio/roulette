@@ -24,10 +24,12 @@ export const LastResults = () => {
 
 	const lastSeven = useMemo(() => numbers.slice(0, 7).reverse(), [numbers]);
 
+	const isEmpty = isBetsFetched && playerBets.length === 0;
+
 	return (
 		<motion.div
 			initial={{ opacity: 0, x: '-50%' }}
-			animate={{ opacity: 1, x: 0 }}
+			animate={{ opacity: isEmpty ? 0 : 1, x: isEmpty ? '-50%' : 0 }}
 			exit={{ opacity: 0, x: 20 }}
 			transition={{ duration: 2 }}
 			className={'bg-card rounded-lg p-2 mt-4 border border-border shrink-0 w-[122px]'}
