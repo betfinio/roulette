@@ -24,7 +24,7 @@ export const VerticalRoulette = () => {
 			</div>
 
 			<div className={'w-full flex flex-col gap-y-6 mb-8'}>
-				<MainTable hideBetControls={isRoundFinished} />
+				<MainTable hideBetControls={isRoundFinished} showLiveSettle />
 				<div className="relative  ">
 					<BetDetails />
 					<div className="  mt-2">

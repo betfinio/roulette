@@ -9,7 +9,9 @@ import { Loader } from 'lucide-react';
 import { type FC, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAccount } from 'wagmi';
-import { useCurrentRound, useLiveRouletteState } from '@/src/lib/live-roulette/query';
+import { CORE_ADDRESS, MULTIPLAYER_INTERVAL } from '@/src/global';
+import { fetchCurrentRound } from '@/src/lib/live-roulette/api';
+import { useLiveRouletteState } from '@/src/lib/live-roulette/query';
 import { WheelStatus } from '@/src/lib/live-roulette/types';
 import { useRouletteState } from '@/src/lib/roulette/query';
 import { getRequiredAllowance } from '@/src/lib/shared/api';
@@ -19,20 +21,20 @@ export const SubmitBet: FC = () => {
 	const { t } = useTranslation('roulette');
 
 	const { isSingle, table } = useVisibleTable();
-	const { data: currentRound = 0 } = useCurrentRound(table);
 
 	const { address = ZeroAddress } = useAccount();
 	const { data: isMember = false } = useIsMember(address);
-	const { requestAllowance, setResult, requested } = useAllowanceModal();
-	const { mutate: submitBet, isPending, isSuccess, data } = useSubmitBet();
-	const { data: allowance = 0n } = useAllowance(address);
+	const { requestAllowance, setResult } = useAllowanceModal();
+	const { mutate: submitBet, mutateAsync: submitBetAsync, isPending, isSuccess, data } = useSubmitBet();
+	const { data: allowance = 0n } = useAllowance(address, CORE_ADDRESS);
 	const { state: rouletteWheelStateData } = useRouletteState();
 	const { state: liveRouletteWheelStateData } = useLiveRouletteState();
 	const rouletteWheelState = rouletteWheelStateData.data;
 	const liveRouletteWheelState = liveRouletteWheelStateData.data;
 	const { data: bets = [] } = useLocalBets();
-	const isSpinning =
-		isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested);
+	const liveViewingSettlingRound =
+		!isSingle && (liveRouletteWheelState.state === WheelStatus.Requested || liveRouletteWheelState.state === WheelStatus.ResultReadyAwaitingSettlement);
+	const isSpinning = isPending || (isSingle && rouletteWheelState.state === 'spinning') || (!isSingle && liveViewingSettlingRound);
 
 	const totalBet = bets.reduce((acc, bet) => acc + bet.amount, 0);
 
@@ -47,30 +49,31 @@ export const SubmitBet: FC = () => {
 		}
 
 		if (isSingle && rouletteWheelState.state === 'spinning') return;
-		if (!isSingle && liveRouletteWheelState.state === WheelStatus.Requested) return;
+		if (!isSingle && liveViewingSettlingRound) return;
 
-		if (valueToNumber(allowance) < Number(getRequiredAllowance())) {
-			toast.error(t('pleaseIncreaseAllowance'));
-			requestAllowance?.('bet', BigInt(getRequiredAllowance()) * 10n ** 18n);
+		const betParams = {
+			bets: _.cloneDeep(bets),
+			gameAddress: table || ZeroAddress,
+			playerAddress: address,
+			multiplayerRoundId: isSingle ? undefined : BigInt(fetchCurrentRound(MULTIPLAYER_INTERVAL)),
+		};
+
+		if (valueToNumber(allowance) < Number(getRequiredAllowance(isSingle))) {
+			requestAllowance?.({
+				type: 'bet',
+				amount: BigInt(getRequiredAllowance(isSingle)) * 10n ** 18n,
+				spender: CORE_ADDRESS,
+				execute: () => submitBetAsync(betParams),
+			});
 			return;
 		}
-		submitBet({
-			bets: _.cloneDeep(bets),
-			roundNumber: isSingle ? 0n : BigInt(currentRound),
-			table: isSingle ? ZeroAddress : table || ZeroAddress,
-			playerAddress: address,
-		});
+		submitBet(betParams);
 	};
 	useEffect(() => {
 		if (data && isSuccess) {
 			setResult?.(data);
 		}
 	}, [isSuccess, data, setResult]);
-	useEffect(() => {
-		if (requested) {
-			handleSpin();
-		}
-	}, [requested]);
 
 	return (
 		<Button className="w-full uppercase text-xl px-4 relative" onClick={handleSpin} disabled={isSpinning || address === undefined}>

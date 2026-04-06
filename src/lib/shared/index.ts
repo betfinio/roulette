@@ -70,7 +70,11 @@ export function mergeAndSummarize(objects: LocalBet[]): LocalBet[] {
 	const mergedMap: Map<string, LocalBet> = new Map();
 
 	for (const obj of objects) {
-		const existing = mergedMap.get(obj.item);
+		// Same layout can have bets from multiple players — key must include player so we don't clobber `player`
+		const playerKey = typeof obj.player === 'string' ? obj.player.toLowerCase() : '';
+		const key = `${obj.item}\0${playerKey}`;
+
+		const existing = mergedMap.get(key);
 
 		if (existing) {
 			// Merge the amounts and retain unique numbers
@@ -79,7 +83,7 @@ export function mergeAndSummarize(objects: LocalBet[]): LocalBet[] {
 			existing.player = obj.player;
 		} else {
 			// Add new entry
-			mergedMap.set(obj.item, { ...obj });
+			mergedMap.set(key, { ...obj });
 		}
 	}
 

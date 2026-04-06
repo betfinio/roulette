@@ -4,59 +4,133 @@ import {
 	execute,
 	GetLiveRoulettePlayerTableBetsDocument,
 	type GetLiveRoulettePlayerTableBetsQuery,
+	GetLiveRouletteRoundBetsStatusSampleDocument,
+	type GetLiveRouletteRoundBetsStatusSampleQuery,
 	GetLiveRouletteRoundWinNumberDocument,
 	type GetLiveRouletteRoundWinNumberQuery,
 	GetLiveRouletteStatsByTableDocument,
 	type GetLiveRouletteStatsByTableQuery,
-	GetLiveRouletteTableAllBetsDocument,
-	type GetLiveRouletteTableAllBetsQuery,
+	GetLiveRouletteTableRoundsDocument,
+	type GetLiveRouletteTableRoundsQuery,
 	GetLiveRouletteTableSelectedRoundBetsDocument,
 	type GetLiveRouletteTableSelectedRoundBetsQuery,
 	GetLiveRouletteTableSelectedRoundPlayersDocument,
 	type GetLiveRouletteTableSelectedRoundPlayersQuery,
-	GetLiveRouletteTablesDocument,
-	type GetLiveRouletteTablesQuery,
 } from '@/.graphclient';
 import logger from '@/src/config/logger';
+import { MULTIPLAYER_GAME, MULTIPLAYER_INTERVAL } from '@/src/global';
+import { RoundStatus } from '../../shared/types';
 import { getRouletteStat } from '..';
 import type { PlayerInProgressBet, PlayerRoundBets, RouletteTable, RoundBet, RoundPlayerBet } from '../types';
+import { WheelStatus } from '../types';
+
+/** Same sentinel as `BetResultCell` / wheel UI — winning pocket not known yet */
+export const LIVE_ROULETTE_WIN_UNKNOWN = 42;
+
+function winStringFromGraphValue(v: unknown): string | undefined {
+	if (v === undefined || v === null) return undefined;
+	const s = String(v).trim();
+	return s === '' ? undefined : s;
+}
+
+/** Resolved bet `result` wins over `Round.winNumber` (used when VRF wrote round but bets not settled). */
+export function multiplayerHistoryDisplayWinNumber(result: unknown, roundWinNumber: unknown): number {
+	const rs = winStringFromGraphValue(result);
+	const rw = winStringFromGraphValue(roundWinNumber);
+	if (rs !== undefined) {
+		const n = Number(rs);
+		if (!Number.isNaN(n)) return n;
+	}
+	if (rw !== undefined) {
+		const n = Number(rw);
+		if (!Number.isNaN(n)) return n;
+	}
+	return LIVE_ROULETTE_WIN_UNKNOWN;
+}
+
+/** Map subgraph `Round.status` to bet-style status for UI tables / LastResults */
+function mapRoundEntityStatusToRoundStatus(status: string): RoundStatus {
+	switch (status?.toLowerCase()) {
+		case 'settled':
+		case 'resolved':
+			return RoundStatus.FINISHED;
+		case 'cancelled':
+			return RoundStatus.REFUNDED;
+		default:
+			return RoundStatus.CREATED;
+	}
+}
+
+const mapStringStatusToRoundStatus = (status: string): RoundStatus => {
+	switch (status) {
+		case 'resolved':
+		case 'settled':
+			return RoundStatus.FINISHED;
+		case 'refunded':
+		case 'cancelled':
+			return RoundStatus.REFUNDED;
+		default:
+			return RoundStatus.CREATED;
+	}
+};
+
+export const fetchLiveRouletteTables = (): RouletteTable[] => {
+	if (!MULTIPLAYER_GAME) return [];
+	return [
+		{
+			address: MULTIPLAYER_GAME,
+			interval: BigInt(MULTIPLAYER_INTERVAL),
+			id: MULTIPLAYER_GAME,
+		},
+	];
+};
 
 export const fetchTablePlayerRounds = async (player: Address, table?: Address) => {
 	if (table === undefined) return [];
 
 	logger.start('fetching bets by player', player);
-	const data: ExecutionResult<GetLiveRoulettePlayerTableBetsQuery> = await execute(GetLiveRoulettePlayerTableBetsDocument, { player, table });
-	logger.success('fetching bets by player', data.data?.playerRoundBetPlaceds_collection.length);
+	const data: ExecutionResult<GetLiveRoulettePlayerTableBetsQuery> = await execute(GetLiveRoulettePlayerTableBetsDocument, {
+		player: player.toLowerCase() as Address,
+		gameAddress: table.toLowerCase() as Address,
+		last: 1000,
+	});
+	logger.success('fetching bets by player', data.data?.bets.length);
 	if (data.data) {
-		return data.data.playerRoundBetPlaceds_collection.map((bet) => {
+		return data.data.bets.map((bet) => {
 			return {
 				amount: BigInt(bet.amount),
 				created: bet.blockTimestamp,
-				winAmount: BigInt(bet.winAmount ?? 42n),
-				winNumber: Number(bet.winNumber),
+				winAmount: bet.payout != null && String(bet.payout) !== '' ? BigInt(typeof bet.payout === 'bigint' ? bet.payout : String(bet.payout)) : 0n,
+				winNumber: multiplayerHistoryDisplayWinNumber(bet.result, bet.round?.winNumber),
 				player: bet.player as Address,
-				round: Number(bet.round),
-				status: Number(bet.status),
+				round: Number(bet.roundId),
+				status: mapStringStatusToRoundStatus(bet.status),
+				roundSubgraphStatus: bet.round?.status ?? null,
 			} as RoundPlayerBet;
 		});
 	}
 	return [];
 };
 
+/** One `RoundBet`-shaped row per on-chain round (not per player bet). Matches Watchers optimistic cache. */
 export const fetchTableBets = async (table?: Address) => {
 	if (!table) return [];
-	logger.start('fetching bets by table', table);
-	const data: ExecutionResult<GetLiveRouletteTableAllBetsQuery> = await execute(GetLiveRouletteTableAllBetsDocument, { table, first: 1000 });
-	logger.success('fetching bets by table', data.data?.roundBetPlaceds_collection.length);
-	if (data.data) {
-		return data.data.roundBetPlaceds_collection.map((bet) => {
+	logger.start('fetching rounds by table', table);
+	const data: ExecutionResult<GetLiveRouletteTableRoundsQuery> = await execute(GetLiveRouletteTableRoundsDocument, {
+		gameAddress: table.toLowerCase() as Address,
+		first: 1000,
+	});
+	logger.success('fetching rounds by table', data.data?.rounds.length);
+	if (data.data?.rounds) {
+		return data.data.rounds.map((round) => {
 			return {
-				amount: BigInt(bet.amount),
-				created: bet.blockTimestamp,
-				winAmount: BigInt(bet.winAmount ?? 42n),
-				winNumber: Number(bet.winNumber),
-				status: Number(bet.status),
-				round: Number(bet.round),
+				amount: BigInt(round.totalBetAmount),
+				created: round.started,
+				winAmount: BigInt(round.totalPayout),
+				winNumber: multiplayerHistoryDisplayWinNumber(undefined, round.winNumber),
+				status: mapRoundEntityStatusToRoundStatus(round.status),
+				round: Number(round.roundId),
+				roundSubgraphStatus: round.status,
 			} as RoundBet;
 		});
 	}
@@ -68,17 +142,17 @@ export const fetchSelectedTableRoundPlayers = async (table?: Address, round?: nu
 	if (table === undefined || round === undefined) return [];
 
 	const data: ExecutionResult<GetLiveRouletteTableSelectedRoundPlayersQuery> = await execute(GetLiveRouletteTableSelectedRoundPlayersDocument, {
-		table,
-		round,
+		gameAddress: table,
+		roundId: round,
 	});
 	logger.success('fetchSelectedTableRoundPlayers data', data);
 	if (data.data) {
-		return data.data.playerRoundBetPlaceds_collection.map((players) => {
+		return data.data.bets.map((bet) => {
 			return {
-				amount: BigInt(players.amount),
-				betCounts: Number(players.betsCount),
-				created: players.blockTimestamp,
-				player: players.player as Address,
+				amount: BigInt(bet.amount),
+				betCounts: Number(bet.chips.length),
+				created: bet.blockTimestamp,
+				player: bet.player as Address,
 			} as PlayerRoundBets;
 		});
 	}
@@ -87,49 +161,28 @@ export const fetchSelectedTableRoundPlayers = async (table?: Address, round?: nu
 export const fetchTableSelectedRoundBets = async (table?: Address, round?: number) => {
 	if (table === undefined || round === undefined) return [];
 
-	const data: ExecutionResult<GetLiveRouletteTableSelectedRoundBetsQuery> = await execute(GetLiveRouletteTableSelectedRoundBetsDocument, { table, round });
+	const data: ExecutionResult<GetLiveRouletteTableSelectedRoundBetsQuery> = await execute(GetLiveRouletteTableSelectedRoundBetsDocument, {
+		gameAddress: table,
+		roundId: round,
+	});
 	if (data.data) {
-		return data.data.playerRoundSingleBetPlaceds_collection.map((bet) => {
+		return data.data.bets.map((bet) => {
 			return {
 				amount: BigInt(bet.amount),
-				bet: bet.bet as Address,
+				bet: bet.betAddress as Address,
 				created: bet.blockTimestamp,
 				player: bet.player as Address,
-				chips: bet.chips.map((chip) => ({ bitMap: Number(chip.bitMap) })),
-				winAmount: BigInt(bet.winAmount),
+				chips: bet.chips.map((chip) => ({ bitMap: Number(chip.bitmap) })),
+				winAmount: BigInt(bet.payout ?? 0n),
 			} as PlayerInProgressBet;
 		});
 	}
 	return [];
 };
 
-export const fetchLiveRouletteTables = async (): Promise<RouletteTable[]> => {
-	const data: ExecutionResult<GetLiveRouletteTablesQuery> = await execute(GetLiveRouletteTablesDocument, {});
-	if (data.data) {
-		const uniqueIntervals = new Set<bigint>(); // To track unique intervals
-
-		return data.data.tables
-			.map((table) => {
-				return {
-					address: table.address,
-					interval: table.interval,
-					id: table.id,
-				} as RouletteTable;
-			})
-			.filter((table) => {
-				if (!uniqueIntervals.has(table.interval)) {
-					uniqueIntervals.add(table.interval);
-					return true;
-				}
-				return false;
-			})
-			.filter((table) => (import.meta.env.PUBLIC_ENVIRONMENT === 'development' ? true : BigInt(table.interval) === 90n || BigInt(table.interval) === 180n));
-	}
-	return [];
-};
 export const fetchLiveRouletteTableStats = async (table?: Address) => {
 	if (!table) return;
-	const data: ExecutionResult<GetLiveRouletteStatsByTableQuery> = await execute(GetLiveRouletteStatsByTableDocument, { table });
+	const data: ExecutionResult<GetLiveRouletteStatsByTableQuery> = await execute(GetLiveRouletteStatsByTableDocument, { gameAddress: table });
 	try {
 		logger.success('fetchLiveRouletteTableStats data', data);
 		if (data.data) {
@@ -147,15 +200,79 @@ export const fetchLiveRouletteTableStats = async (table?: Address) => {
 	}
 };
 
+export const fetchRoundBank = async (table?: Address, round?: number): Promise<bigint> => {
+	if (table === undefined || round === undefined) return 0n;
+	const data: ExecutionResult<GetLiveRouletteRoundWinNumberQuery> = await execute(GetLiveRouletteRoundWinNumberDocument, {
+		gameAddress: table,
+		roundId: round,
+	});
+	const totalBetAmount = (data?.data?.rounds[0] as { totalBetAmount?: string } | undefined)?.totalBetAmount;
+	return totalBetAmount ? BigInt(totalBetAmount) : 0n;
+};
+
+function liveBetRowImpliesRoundFinished(row: { status?: string | null; result?: unknown }): boolean {
+	const s = row.status?.toLowerCase();
+	if (s === 'settled' || s === 'resolved') return true;
+	const r = row.result;
+	if (r === undefined || r === null) return false;
+	if (typeof r === 'bigint') return true;
+	if (typeof r === 'number') return !Number.isNaN(r);
+	return String(r) !== '';
+}
+
+async function fetchRoundHasFinishedEvidenceFromBets(table: Address, round: number): Promise<boolean> {
+	const res: ExecutionResult<GetLiveRouletteRoundBetsStatusSampleQuery> = await execute(GetLiveRouletteRoundBetsStatusSampleDocument, {
+		gameAddress: table,
+		roundId: round,
+	});
+	const rows = res.data?.bets ?? [];
+	return rows.some(liveBetRowImpliesRoundFinished);
+}
+
+export const fetchRoundStatus = async (table?: Address, round?: number): Promise<WheelStatus> => {
+	if (table === undefined || round === undefined) return WheelStatus.NotExist;
+	const data: ExecutionResult<GetLiveRouletteRoundWinNumberQuery> = await execute(GetLiveRouletteRoundWinNumberDocument, {
+		gameAddress: table,
+		roundId: round,
+	});
+	const roundRow = data?.data?.rounds[0];
+	const status = roundRow?.status;
+	const winNumberRaw = roundRow?.winNumber;
+	const winNumberIndexed = winNumberRaw !== undefined && winNumberRaw !== null && String(winNumberRaw) !== '';
+	// Indexer may lag updating rounds.status while winNumber is already written
+	const treatSpinningAsFinished = status === 'spinning' && winNumberIndexed;
+
+	let treatSpinningAsFinishedFromBets = false;
+	if (status === 'spinning' && !treatSpinningAsFinished && table !== undefined && round !== undefined)
+		treatSpinningAsFinishedFromBets = await fetchRoundHasFinishedEvidenceFromBets(table, round);
+
+	if (treatSpinningAsFinished || treatSpinningAsFinishedFromBets) return WheelStatus.Finished;
+
+	switch (status) {
+		case 'open':
+			return WheelStatus.Created;
+		case 'spinning':
+			return WheelStatus.Requested;
+		case 'result_ready':
+			return WheelStatus.ResultReadyAwaitingSettlement;
+		case 'settled':
+		case 'resolved':
+			return WheelStatus.Finished;
+		case 'cancelled':
+			return WheelStatus.Refunded;
+		default:
+			return WheelStatus.NotExist;
+	}
+};
+
 export const fetchSelectedTableRoundWinNumer = async (table?: Address, round?: number) => {
 	if (table === undefined || round === undefined) return 42n;
 
 	const data: ExecutionResult<GetLiveRouletteRoundWinNumberQuery> = await execute(GetLiveRouletteRoundWinNumberDocument, {
-		table,
-		round,
+		gameAddress: table,
+		roundId: round,
 	});
-	if (data?.data?.roundBetPlaceds_collection[0].winNumber) {
-		const winNumber = data.data.roundBetPlaceds_collection[0].winNumber;
-		return BigInt(winNumber);
-	}
+	const winRaw = data?.data?.rounds[0]?.winNumber;
+	if (winRaw !== undefined && winRaw !== null && String(winRaw) !== '') return BigInt(winRaw);
+	return 42n; // sentinel: round not yet settled
 };

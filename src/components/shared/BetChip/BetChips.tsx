@@ -51,11 +51,11 @@ export const BetChips: FC<BetChipsProps> = ({ positionId, winNumber }) => {
 	const localBets = mergeAndSummarize(localChips);
 
 	const allChips = useMemo(() => {
-		if (Number(currentRound) === Number(round)) {
+		if (isSingle || Number(currentRound) === Number(round)) {
 			return [...otherBets, ...myBets, ...localBets];
 		}
 		return [...otherBets, ...myBets];
-	}, [otherBets, myBets, localBets, round, currentRound]);
+	}, [otherBets, myBets, localBets, round, currentRound, isSingle]);
 
 	if (allChips.length === 0) return null;
 

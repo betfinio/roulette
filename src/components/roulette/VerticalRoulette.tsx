@@ -1,7 +1,6 @@
 import BetStatusHeader from '../shared/BetStatusHeader/BetStatusHeader';
 import History from '../shared/HistoryTable';
 import { MainTable } from '../shared/MainTable/MainTable';
-import { TableRaceTrack } from '../shared/TableRaceTrack/TableRaceTrack';
 import Wheel from './Wheel/Wheel';
 
 export const VerticalRoulette = () => {
@@ -18,10 +17,8 @@ export const VerticalRoulette = () => {
 					</div>
 				</div>
 			</div>
-			<TableRaceTrack />
 			<div className={' w-full flex flex-col gap-y-6 mb-8'}>
 				<MainTable />
-
 				<History />
 			</div>
 		</div>

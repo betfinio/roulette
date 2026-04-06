@@ -27,6 +27,8 @@ export interface RoundBet {
 	winNumber: number;
 	winAmount: bigint;
 	status: RoundStatus;
+	/** Subgraph `Round.status` (multiplayer): e.g. spinning, result_ready, settled */
+	roundSubgraphStatus?: string | null;
 }
 
 //this is the player's summary of the round (can be in Progress)
@@ -52,6 +54,8 @@ export enum WheelStatus {
 	JustFinished = 2.75, //operational status, just to extend smart contract status
 	Finished = 3,
 	Refunded = 4,
+	/** On-chain `RoundStatus.ResultReady` — VRF done (`randomWord % 37` is final); `settleRound` still needed for payouts */
+	ResultReadyAwaitingSettlement = 6,
 }
 
 export interface RouletteTable {

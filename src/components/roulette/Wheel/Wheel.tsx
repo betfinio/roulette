@@ -91,7 +91,7 @@ export const Wheel = () => {
 
 					const updatedBets = bets.filter((b) => b.bet.toLowerCase() !== bet?.bet.toLowerCase());
 
-					queryClient.setQueryData(['roulette', 'bets', 'player', address], [bet, ...updatedBets], {
+					queryClient.setQueryData(['roulette', 'bets', 'player', address, table], [bet, ...updatedBets], {
 						updatedAt: Date.now(),
 					});
 					updateState({ state: 'landed' } as WheelState);

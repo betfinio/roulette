@@ -25,7 +25,7 @@ export const ZeroItem: FC = () => {
 			isVertical={isVertical}
 			winNumber={Number(winNumber)}
 			className={cn(
-				`bg-green-roulette w-full ${zeroClassName} border-[3px] border-transparent transition-all duration-300`,
+				`bg-[var(--green)] w-full ${zeroClassName} border-[3px] border-transparent transition-all duration-300`,
 
 				{
 					'border-bonus': isNumberHovered(0) && !isDebugMode,

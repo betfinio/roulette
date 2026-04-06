@@ -38,9 +38,9 @@ export const LastResultRow: FC<ILastResultRowProps> = ({ result, isActive, index
 		<motion.div
 			key={index}
 			className={cn('aspect-square text-foreground rounded-lg flex justify-center items-center transition-all pointer-none ', {
-				'col-start-1 bg-red-roulette w-8': getColor(result.winNumber) === 'RED',
-				'col-start-2 bg-green-roulette w-8': getColor(result.winNumber) === 'GREEN',
-				'col-start-3 bg-black-roulette w-8': getColor(result.winNumber) === 'BLACK',
+				'col-start-1 bg-[var(--red)] w-8': getColor(result.winNumber) === 'RED',
+				'col-start-2 bg-[var(--green)] w-8': getColor(result.winNumber) === 'GREEN',
+				'col-start-3 bg-[var(--black)] w-8': getColor(result.winNumber) === 'BLACK',
 				'scale-120 origin-center scale-center': isActive,
 				'scale-100 origin-center scale-center opacity-50': !isActive,
 			})}

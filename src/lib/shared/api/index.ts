@@ -1,32 +1,50 @@
-import { LiroBetABI, LiveRouletteABI, PartnerABI, SinglePlayerTableABI } from '@betfinio/abi';
-import { multicall, readContract, simulateContract, writeContract } from '@wagmi/core';
+import { multicall, simulateContract, writeContract } from '@wagmi/core';
 import type { TFunction } from 'i18next';
-import { type Address, encodeAbiParameters, parseAbiParameters } from 'viem';
+import { type Address, encodeAbiParameters, parseAbiParameters, zeroAddress } from 'viem';
 import type { Config } from 'wagmi';
-import logger from '@/src/config/logger';
-import { PARTNER, PUBLIC_LIRO_ADDRESS } from '@/src/global';
-import { decodeBet, encodeBet } from '..';
+import { CORE_ADDRESS, MULTIPLAYER_GAME } from '@/src/global';
+import { CoreABI, HouseMultiplayerGameABI, RouletteSinglePlayerStrategyABI } from '@/src/lib/abi';
+import { encodeBet } from '..';
 import type { ChipPlaceProps, LocalBet, SpinParams } from '../types';
 
-export const fetchLocalBets = (): LocalBet[] => {
-	const data = localStorage.getItem('bets');
+/** Previously one key for both modes — caused live chips to appear on single-player board and vice versa. */
+const LEGACY_BETS_KEY = 'bets';
 
-	if (!data) {
-		return [];
+export function localBetsStorageKey(isSingle: boolean): string {
+	return isSingle ? 'betfin:roulette:local-bets:single' : 'betfin:roulette:local-bets:live';
+}
+
+function readLocalBetsRaw(isSingle: boolean): LocalBet[] {
+	const key = localBetsStorageKey(isSingle);
+	const data = localStorage.getItem(key);
+	if (data) return JSON.parse(data) as LocalBet[];
+	const legacy = localStorage.getItem(LEGACY_BETS_KEY);
+	if (legacy) {
+		try {
+			localStorage.setItem(key, legacy);
+			localStorage.removeItem(LEGACY_BETS_KEY);
+			return JSON.parse(legacy) as LocalBet[];
+		} catch {
+			return [];
+		}
 	}
-	return JSON.parse(data) as LocalBet[];
-};
-export const fetchChipsByPosition = (position: string) => {
-	const bets = fetchLocalBets();
+	return [];
+}
 
-	return bets.filter((bet) => bet.item === position);
-};
+function writeLocalBetsRaw(isSingle: boolean, bets: LocalBet[]) {
+	localStorage.setItem(localBetsStorageKey(isSingle), JSON.stringify(bets));
+}
+
+export const fetchLocalBets = (isSingle: boolean): LocalBet[] => readLocalBetsRaw(isSingle);
+
+export const fetchChipsByPosition = (position: string, isSingle: boolean) => fetchLocalBets(isSingle).filter((bet) => bet.item === position);
+
 export const fetchSelectedChip = async (): Promise<number> => {
 	return Number(localStorage.getItem('chip') || 10000);
 };
 
-export const fetchLimits = async (config: Config, table?: Address) => {
-	if (!table) return [];
+export const fetchLimits = async (config: Config, strategyAddress?: Address) => {
+	if (!strategyAddress) return [];
 	const keys: { key: string; value: bigint; label?: string }[] = [
 		{ key: 'STRAIGHT', value: 1n },
 		{ key: 'SPLIT', value: 3n },
@@ -38,25 +56,24 @@ export const fetchLimits = async (config: Config, table?: Address) => {
 		{ key: 'BASIC', value: BigInt(45812984490), label: 'ODD/EVEN' },
 		{ key: 'BASIC', value: BigInt(524286), label: 'LOW/HIGH' },
 	];
-	const data = await multicall(config, {
-		contracts: keys.map((key) => ({
-			abi: SinglePlayerTableABI,
-			address: table,
-			functionName: 'limits',
-			args: [key.key],
-		})),
-	});
-
-	return data.map((e, i) => {
-		const result = e.result as unknown as [bigint, bigint, bigint];
-		return { title: keys[i].label || keys[i].key, payout: Number(result[2]), min: result[0], max: result[1] };
+	const contracts = keys.flatMap((k) => [
+		{ abi: RouletteSinglePlayerStrategyABI, address: strategyAddress, functionName: 'minBets' as const, args: [k.value] },
+		{ abi: RouletteSinglePlayerStrategyABI, address: strategyAddress, functionName: 'maxBets' as const, args: [k.value] },
+		{ abi: RouletteSinglePlayerStrategyABI, address: strategyAddress, functionName: 'payouts' as const, args: [k.value] },
+	]);
+	const data = await multicall(config, { contracts });
+	return keys.map((k, i) => {
+		const min = (data[i * 3].result ?? 0n) as bigint;
+		const max = (data[i * 3 + 1].result ?? 0n) as bigint;
+		const payout = Number(data[i * 3 + 2].result ?? 0n);
+		return { title: k.label || k.key, payout, min, max };
 	});
 };
 
-export const place = async (params: ChipPlaceProps, chip: number, t: TFunction<'roulette', 'errors'>) => {
-	const old = fetchLocalBets();
+export const place = async (params: ChipPlaceProps, chip: number, t: TFunction<'roulette', 'errors'>, isSingle: boolean) => {
+	const old = fetchLocalBets(isSingle);
 	if (params.numbers.length === 0) {
-		localStorage.setItem('bets', JSON.stringify([]));
+		writeLocalBetsRaw(isSingle, []);
 		return;
 	}
 	if (chip === 0) {
@@ -68,13 +85,13 @@ export const place = async (params: ChipPlaceProps, chip: number, t: TFunction<'
 		item: params.item,
 	} as LocalBet;
 	const newBets = [...old, newBet];
-	localStorage.setItem('bets', JSON.stringify(newBets));
+	writeLocalBetsRaw(isSingle, newBets);
 };
 
-export const unplace = async (params: ChipPlaceProps) => {
-	const old = fetchLocalBets();
+export const unplace = async (params: ChipPlaceProps, isSingle: boolean) => {
+	const old = fetchLocalBets(isSingle);
 	if (params.numbers.length === 0) {
-		localStorage.setItem('bets', JSON.stringify([]));
+		writeLocalBetsRaw(isSingle, []);
 		return;
 	}
 	const { item } = params;
@@ -84,10 +101,11 @@ export const unplace = async (params: ChipPlaceProps) => {
 		return;
 	}
 	const newBets = [...old.filter((e) => e.item !== item)];
-	localStorage.setItem('bets', JSON.stringify(newBets));
+	writeLocalBetsRaw(isSingle, newBets);
 };
-export const doublePlace = async () => {
-	const bets = fetchLocalBets();
+
+export const doublePlace = async (isSingle: boolean) => {
+	const bets = fetchLocalBets(isSingle);
 	const betsMap = [...bets, ...bets].reduce((acc: Record<string, LocalBet[]>, val) => {
 		if (acc[val.item]) {
 			acc[val.item].push(val);
@@ -100,20 +118,21 @@ export const doublePlace = async () => {
 		// biome-ignore lint/performance/noAccumulatingSpread: todo
 		return [...acc, ...bets];
 	}, []);
-	localStorage.setItem('bets', JSON.stringify(newBets));
-};
-export const clearAllBets = async () => {
-	localStorage.setItem('bets', JSON.stringify([]));
+	writeLocalBetsRaw(isSingle, newBets);
 };
 
-export const undoPlace = async () => {
-	const bets = fetchLocalBets();
+export const clearAllBets = async (isSingle: boolean) => {
+	writeLocalBetsRaw(isSingle, []);
+};
+
+export const undoPlace = async (isSingle: boolean) => {
+	const bets = fetchLocalBets(isSingle);
 	bets.pop();
-	localStorage.setItem('bets', JSON.stringify(bets));
+	writeLocalBetsRaw(isSingle, bets);
 };
 
 export const submitBet = async (params: SpinParams, config: Config) => {
-	const { bets, playerAddress, roundNumber, table } = params;
+	const { bets, playerAddress, gameAddress } = params;
 	const uniquesBets: Record<string, LocalBet> = {};
 	for (const bet of bets) {
 		const key = bet.item.toString();
@@ -128,23 +147,24 @@ export const submitBet = async (params: SpinParams, config: Config) => {
 	const preparedBets = newBets.flatMap(encodeBet);
 
 	const totalAmount = newBets.reduce((sum, bet) => sum + BigInt(bet.amount) * 10n ** 18n, 0n);
-	const data = encodeAbiParameters(parseAbiParameters(['struct Bet {uint256 amount; uint256 bitmap;}', 'Bet[] bets, address, uint256, address']), [
-		preparedBets, // Array of bets, matching Library.Bet[]
-		table,
-		roundNumber,
-		playerAddress,
-	]);
+
+	const isMultiplayer = gameAddress.toLowerCase() === MULTIPLAYER_GAME.toLowerCase();
+	// Single-player strategy: abi.decode(data, (SubBet[])). Multiplayer: (uint256 roundId, SubBet[]).
+	const data = isMultiplayer
+		? encodeAbiParameters(parseAbiParameters(['uint256', '(uint256 amount, uint256 bitmap)[]']), [params.multiplayerRoundId ?? 0n, preparedBets])
+		: encodeAbiParameters(parseAbiParameters(['(uint256 amount, uint256 bitmap)[]']), [preparedBets]);
+
 	await simulateContract(config, {
-		abi: PartnerABI,
-		address: PARTNER,
-		functionName: 'placeBet',
-		args: [PUBLIC_LIRO_ADDRESS, totalAmount, data],
+		abi: CoreABI,
+		address: CORE_ADDRESS,
+		functionName: 'bet',
+		args: [playerAddress, playerAddress, gameAddress, totalAmount, data, zeroAddress],
 	});
-	return await writeContract(config, {
-		abi: PartnerABI,
-		address: PARTNER,
-		functionName: 'placeBet',
-		args: [PUBLIC_LIRO_ADDRESS, totalAmount, data],
+	return writeContract(config, {
+		abi: CoreABI,
+		address: CORE_ADDRESS,
+		functionName: 'bet',
+		args: [playerAddress, playerAddress, gameAddress, totalAmount, data, zeroAddress],
 	});
 };
 
@@ -164,83 +184,24 @@ export const setDebugMode = async (nextDebug: boolean) => {
 	localStorage.setItem('roulette-debug', JSON.stringify(nextDebug));
 };
 
-export const getRequiredAllowance = (): number => {
-	const bets = JSON.parse(localStorage.getItem('bets') || '[]');
+export const getRequiredAllowance = (isSingle: boolean): number => {
+	const bets = fetchLocalBets(isSingle);
 	return bets.reduce((acc: number, val: { amount: number }) => {
 		return acc + val.amount;
 	}, 0);
 };
 
-export const fetchTableByAddress = async (config: Config, address: Address) => {
-	logger.info('fetchTableByAddress', { address });
-	const result = await readContract(config, {
-		abi: LiveRouletteABI,
-		address: PUBLIC_LIRO_ADDRESS,
-		functionName: 'tables',
-		args: [address],
-	});
-	logger.info('fetchTableByAddress result', { result });
-	return result;
-};
-
-export const manualSpin = async (config: Config, table: Address, round: bigint) => {
+export const manualSpin = async (config: Config, roundId: bigint) => {
 	await simulateContract(config, {
-		abi: LiveRouletteABI,
-		address: PUBLIC_LIRO_ADDRESS,
+		abi: HouseMultiplayerGameABI,
+		address: MULTIPLAYER_GAME,
 		functionName: 'spin',
-		args: [table, round],
+		args: [roundId],
 	});
 	return writeContract(config, {
-		abi: LiveRouletteABI,
-		address: PUBLIC_LIRO_ADDRESS,
+		abi: HouseMultiplayerGameABI,
+		address: MULTIPLAYER_GAME,
 		functionName: 'spin',
-		args: [table, round],
+		args: [roundId],
 	});
-};
-
-export const fetchBetsBitMapAndAmount = async (config: Config, betAddress: Address) => {
-	const result = await readContract(config, {
-		abi: LiroBetABI,
-		address: betAddress,
-		functionName: 'getBets',
-	});
-
-	return result[0].map((res, index) => ({ amount: res, bitmap: result[1][index] })).map(decodeBet);
-};
-
-export const fetchSinglePlayerAddress = async (config: Config): Promise<Address> => {
-	const table = await readContract(config, {
-		abi: LiveRouletteABI,
-		address: PUBLIC_LIRO_ADDRESS,
-		functionName: 'singlePlayerTable',
-	});
-	return table.toLowerCase() as Address;
-};
-
-export const fetchBetInfo = async (config: Config, betAddress: Address) => {
-	return readContract(config, {
-		abi: LiroBetABI,
-		address: betAddress,
-		functionName: 'getBetInfo',
-		args: [],
-	});
-};
-
-export const fetchBetBitmaps = async (config: Config, betAddress: Address): Promise<LocalBet[]> => {
-	const [amounts, bitmaps] = await readContract(config, {
-		abi: LiroBetABI,
-		address: betAddress,
-		functionName: 'getBets',
-	});
-	const player = await readContract(config, {
-		abi: LiroBetABI,
-		address: betAddress,
-		functionName: 'getPlayer',
-	});
-
-	const bets: LocalBet[] = bitmaps.map((bitmap, index) => {
-		return decodeBet({ bitmap: bitmap, amount: amounts[index], player: player });
-	});
-
-	return bets;
 };

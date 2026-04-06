@@ -63,7 +63,7 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 				<div>{t('bettingTicket')}</div>
 				<X
 					onClick={onClose}
-					className={'w-4 h-4 border border-current rounded-full cursor-pointer hover:text-red-roulette hover:border-red-roulette duration-200'}
+					className={'w-4 h-4 border border-current rounded-full cursor-pointer hover:text-[var(--red)] hover:border-[var(--red)] duration-200'}
 				/>
 			</div>
 
@@ -72,7 +72,7 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 				<div className={'flex items-center justify-center gap-3'}>
 					<div
 						className={cn('font-semibold text-4xl text-tertiary-foreground flex gap-2', {
-							'text-green-roulette!': valueToNumber(selectedBet?.winAmount) > 0,
+							'text-[var(--green)]!': valueToNumber(selectedBet?.winAmount) > 0,
 						})}
 					>
 						{valueToNumber(selectedBet?.winAmount ?? 0n) > 0 && '+'}
@@ -99,9 +99,9 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 						<div className={'flex mt-1 gap-1 items-center justify-center'}>
 							<div
 								className={cn(' min-w-[30px] min-h-[30px] rounded-lg flex justify-center font-semibold items-center text-xs', {
-									'bg-red-roulette': getColor(selectedBet?.winNumber ?? 0) === 'RED',
-									'bg-black-roulette': getColor(selectedBet?.winNumber ?? 0) === 'BLACK',
-									'bg-green-roulette': getColor(selectedBet?.winNumber ?? 0) === 'GREEN',
+									'bg-[var(--red)]': getColor(selectedBet?.winNumber ?? 0) === 'RED',
+									'bg-[var(--black)]': getColor(selectedBet?.winNumber ?? 0) === 'BLACK',
+									'bg-[var(--green)]': getColor(selectedBet?.winNumber ?? 0) === 'GREEN',
 								})}
 							>
 								{selectedBet?.winNumber === 42 ? <div className={'px-2'}>{t('waiting')}</div> : selectedBet?.winNumber}
@@ -129,7 +129,7 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 
 			<div className={cn('flex items-end justify-center gap-2 mt-5', { hidden: transactionHash === undefined })}>
 				<div className={'text-tertiary-foreground font-semibold'}>{t('proofOfRandom')}</div>
-				<ShieldCheckIcon className={'text-green-roulette w-5 h-5'} />
+				<ShieldCheckIcon className={'text-[var(--green)] w-5 h-5'} />
 				<a
 					href={`${ETHSCAN}/tx/${transactionHash}`}
 					target={'_blank'}
@@ -143,7 +143,7 @@ export const RoundModal: FC<IRoundModalProps> = ({ selectedBet, onClose }) => {
 			</div>
 			<div className={'text-xs mt-1 text-center '}>
 				<a
-					className={'text-tertiary-foreground hover:text-green-roulette duration-300 underline'}
+					className={'text-tertiary-foreground hover:text-[var(--green)] duration-300 underline'}
 					href="https://betfin.gitbook.io/betfin-public/proof-of-fairness/random-number-generation"
 					target={'_blank'}
 					rel="noreferrer"

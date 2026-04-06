@@ -1,49 +1,20 @@
 import { useMediaQuery } from '@betfinio/components/hooks';
-import { toast } from '@betfinio/components/ui';
-import { useEffect, useMemo, useRef } from 'react';
-import { useGetSelectedRound, useLiveRouletteState, useTablePlayerRounds } from '@/src/lib/live-roulette/query';
+import { useEffect } from 'react';
+import { useLiveRouletteState } from '@/src/lib/live-roulette/query';
 import { WheelStatus } from '@/src/lib/live-roulette/types';
-import { shootConfetti } from '@/src/lib/roulette/utils';
-import { useScrollToHeader, useVisibleTable } from '@/src/lib/shared/query';
-import { RouletteResultToast } from '../RouletteResultToast';
 import { DesktopRoulette } from './DesktopRoulette';
 import { TabletRoulette } from './TabletRoulette';
 import { VerticalRoulette } from './VerticalRoulette';
 
 export const LiveRoulette = () => {
 	const { isTablet, isVertical } = useMediaQuery();
-	const { table } = useVisibleTable();
-	const { scrollToHeader } = useScrollToHeader();
-	const { round } = useGetSelectedRound();
-
-	const { data: playerRounds, isRefetching } = useTablePlayerRounds(table);
 
 	const { state: wheelStateData, updateState } = useLiveRouletteState();
 	const status = wheelStateData.data.state;
 
-	const lastStatus = useRef<typeof status>(undefined);
-
-	const selectedRound = useMemo(() => {
-		return playerRounds?.find((playerRound) => playerRound.round === round);
-	}, [playerRounds, round]);
-
 	useEffect(() => {
-		if (status === WheelStatus.JustFinished && selectedRound) {
-			toast(<RouletteResultToast rouletteBet={selectedRound} />, { classNames: { content: '!w-full' } });
-
-			const hasWon = selectedRound.winAmount > 0n;
-			hasWon && shootConfetti();
-
-			lastStatus.current = status;
-
-			updateState({ state: WheelStatus.Finished });
-		}
-
-		if (status === WheelStatus.Requested && lastStatus.current !== status) {
-			scrollToHeader();
-			lastStatus.current = status;
-		}
-	}, [status, isRefetching, selectedRound]);
+		if (status === WheelStatus.JustFinished) updateState({ state: WheelStatus.Finished });
+	}, [status, updateState]);
 
 	if (isVertical) {
 		return (
