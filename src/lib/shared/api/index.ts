@@ -40,7 +40,8 @@ export const fetchLocalBets = (isSingle: boolean): LocalBet[] => readLocalBetsRa
 export const fetchChipsByPosition = (position: string, isSingle: boolean) => fetchLocalBets(isSingle).filter((bet) => bet.item === position);
 
 export const fetchSelectedChip = async (): Promise<number> => {
-	return Number(localStorage.getItem('chip') || 10000);
+	const stored = Number(localStorage.getItem('chip'));
+	return Number.isFinite(stored) && stored > 0 ? stored : 10000;
 };
 
 export const fetchLimits = async (config: Config, strategyAddress?: Address) => {
