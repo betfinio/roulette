@@ -40,7 +40,8 @@ export const fetchLocalBets = (isSingle: boolean): LocalBet[] => readLocalBetsRa
 export const fetchChipsByPosition = (position: string, isSingle: boolean) => fetchLocalBets(isSingle).filter((bet) => bet.item === position);
 
 export const fetchSelectedChip = async (): Promise<number> => {
-	return Number(localStorage.getItem('chip') || 10000);
+	const stored = Number(localStorage.getItem('chip'));
+	return Number.isFinite(stored) && stored > 0 ? stored : 10000;
 };
 
 export const fetchLimits = async (config: Config, strategyAddress?: Address) => {
@@ -56,17 +57,18 @@ export const fetchLimits = async (config: Config, strategyAddress?: Address) => 
 		{ key: 'BASIC', value: BigInt(45812984490), label: 'ODD/EVEN' },
 		{ key: 'BASIC', value: BigInt(524286), label: 'LOW/HIGH' },
 	];
-	const contracts = keys.flatMap((k) => [
-		{ abi: RouletteSinglePlayerStrategyABI, address: strategyAddress, functionName: 'minBets' as const, args: [k.value] },
-		{ abi: RouletteSinglePlayerStrategyABI, address: strategyAddress, functionName: 'maxBets' as const, args: [k.value] },
-		{ abi: RouletteSinglePlayerStrategyABI, address: strategyAddress, functionName: 'payouts' as const, args: [k.value] },
-	]);
+	// Use getBitmapPayout (resolves any valid bet bitmap to its type), not the raw minBets/maxBets/payouts
+	// mappings — those are keyed by each type's canonical bitmap, which for STRAIGHT is not `1n`, so they return 0.
+	const contracts = keys.map((k) => ({
+		abi: RouletteSinglePlayerStrategyABI,
+		address: strategyAddress,
+		functionName: 'getBitmapPayout' as const,
+		args: [k.value],
+	}));
 	const data = await multicall(config, { contracts });
 	return keys.map((k, i) => {
-		const min = (data[i * 3].result ?? 0n) as bigint;
-		const max = (data[i * 3 + 1].result ?? 0n) as bigint;
-		const payout = Number(data[i * 3 + 2].result ?? 0n);
-		return { title: k.label || k.key, payout, min, max };
+		const [payout, min, max] = (data[i].result ?? [0n, 0n, 0n]) as readonly [bigint, bigint, bigint];
+		return { title: k.label || k.key, payout: Number(payout), min, max };
 	});
 };
 

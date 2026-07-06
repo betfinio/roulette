@@ -70,6 +70,7 @@ export const useSelectedChip = () =>
 		queryKey: ['roulette', 'chip'],
 		queryFn: fetchSelectedChip,
 		refetchOnWindowFocus: false,
+		staleTime: Number.POSITIVE_INFINITY,
 	});
 
 export const usePlace = () => {
@@ -120,7 +121,9 @@ export const useChangeChip = () => {
 	return useMutation<void, Error, { amount: number }>({
 		mutationKey: ['roulette', 'chip'],
 		mutationFn: changeChip,
-		onSuccess: () => queryClient.invalidateQueries({ queryKey: ['roulette', 'chip'] }),
+		onMutate: ({ amount }) => {
+			queryClient.setQueryData(['roulette', 'chip'], amount);
+		},
 	});
 };
 export const useLocalChipsForPosition = (position: string) => {
