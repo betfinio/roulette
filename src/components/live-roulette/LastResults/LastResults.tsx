@@ -20,11 +20,11 @@ export const LastResults = () => {
 
 	const { data: tableBets = [], isFetched: isBetsFetched } = useTableRounds(table);
 	const numbers = useMemo(() => {
-		const hasBets = tableBets.length > 0;
-		const hasResults = hasBets && tableBets.some((r) => r.status === RoundStatus.FINISHED);
-		if (hasResults) {
-			return tableBets.map((r) => ({
-				winNumber: r.status === RoundStatus.FINISHED ? r.winNumber : -1,
+		// Only finished rounds have a real result — rounds still waiting (CREATED) must not appear here.
+		const finishedRounds = tableBets.filter((r) => r.status === RoundStatus.FINISHED);
+		if (finishedRounds.length > 0) {
+			return finishedRounds.map((r) => ({
+				winNumber: r.winNumber,
 				status: r.status,
 				round: r.round,
 			}));

@@ -19,13 +19,12 @@ export const BetControls = () => {
 
 	const { data: limitsRaw = [] } = useLimits(table);
 	const limits = useMemo(() => {
-		if (limitsRaw.length > 0) {
-			return {
-				min: Math.min(...limitsRaw.map((limit) => valueToNumber(limit.min))),
-				max: Math.max(...limitsRaw.map((limit) => valueToNumber(limit.max))),
-			};
+		const mins = limitsRaw.map((limit) => valueToNumber(limit.min)).filter((value) => value > 0);
+		const maxs = limitsRaw.map((limit) => valueToNumber(limit.max)).filter((value) => value > 0);
+		if (mins.length === 0 || maxs.length === 0) {
+			return { min: 10000, max: 1000000 };
 		}
-		return { min: 10000, max: 1000000 };
+		return { min: Math.min(...mins), max: Math.max(...maxs) };
 	}, [limitsRaw]);
 
 	if (isVertical) {
